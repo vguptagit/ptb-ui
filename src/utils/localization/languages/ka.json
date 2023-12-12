@@ -1,0 +1,11 @@
+{
+    "message.simple": "ಒಂದು ಸರಳ ಸಂದೇಶ.",
+    "message.argument": "ನಮಸ್ತೆ, {name}! 👋",
+    "message.plural": "{count, plural, one {# item} other {# items}}",
+    "message.select": "{gender, select, male {Mr} female {Mrs} other {User}}",
+    "message.text-format": "Hi, <b>John</b>!",
+    "message.number-format": "Formatted number: {num, number, ::K}",
+    "message.currency-format": "Formatted currency: {amount, number, ::currency/USD}",
+    "home.title": "ಸಂಪನ್ಮೂಲಗಳು"
+  }
+  

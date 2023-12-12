@@ -1,0 +1,31 @@
+.nav-tabs {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.tab-label {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.tab-label.active {
+    background-color: #f0f0f0; /* Change this to your desired active tab background color */
+}
+
+.close-tab {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.close-tab i {
+    margin-left: 4px;
+}

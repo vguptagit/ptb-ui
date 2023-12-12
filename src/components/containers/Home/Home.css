@@ -1,0 +1,6 @@
+.border-right{
+    border-right: 1px solid #dee2e6;
+}
+.scree-height{
+    min-height: calc(100vh - 60px);
+}
