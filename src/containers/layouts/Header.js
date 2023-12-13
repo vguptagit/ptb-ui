@@ -7,7 +7,9 @@ const Header = () => {
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container fluid>
-                <Navbar.Brand href="#home">Pearson Test Builder</Navbar.Brand>
+                <Navbar.Brand href="#home">
+                    {/* <img src='PSO_BIG.D.png' height='30' alt='' loading='lazy' /> */}
+                    Pearson Test Builder</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
