@@ -1,12 +1,16 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom/client';
-import { HashRouter } from "react-router-dom";
+import ReactDOM from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Loader from './components/common/loader/Loader';
 
+// Add FontAwesome styles
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <Suspense fallback={<Loader />}>
     <React.StrictMode>

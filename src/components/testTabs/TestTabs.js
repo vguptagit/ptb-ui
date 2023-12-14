@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './TestTabs.css'; // Import your CSS file
+import { FormattedMessage } from 'react-intl';
 
 const TestTabs = () => {
     const [tabs, setTabs] = useState([{ id: 1, label: 'Untitled' }]);
     const [nextTabId, setNextTabId] = useState(2);
-
-    useEffect(() => {
-        // Add the FontAwesome link dynamically
-        const link = document.createElement('link');
-        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
-        link.rel = 'stylesheet';
-        link.integrity = 'sha384-....'; // Replace with the actual integrity value
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
-
-        return () => {
-            // Cleanup: remove the added link when the component is unmounted
-            document.head.removeChild(link);
-        };
-    }, []);
 
     const addTab = () => {
         const newTabs = [...tabs, { id: nextTabId, label: `Untitled ${nextTabId}` }];
@@ -34,7 +20,7 @@ const TestTabs = () => {
 
     return (
         <>
-            <h4>Create or Edit tests</h4>
+            <h4><FormattedMessage id="testtabs.title" /></h4>
 
             <ul className="nav nav-tabs">
                 <li className="nav-item">

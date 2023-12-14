@@ -6,5 +6,6 @@
     "message.text-format": "Hi, <b>John</b>!",
     "message.number-format": "Formatted number: {num, number, ::K}",
     "message.currency-format": "Formatted currency: {amount, number, ::currency/USD}",
-    "home.title": "Resources"
+    "home.title": "Resources",
+    "testtabs.title": "Create or Edit tests"
 }
