@@ -15,7 +15,12 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.App-header .bg-body-tertiary {
+  background-color: #282c34 !important;
+}
+.App-header .navbar-brand , .App-header .nav-link, .App-header .nav-link.show{
+  color: #fff;
+}
 /* .App-header {
   background-color: #282c34;
   min-height: 50px;

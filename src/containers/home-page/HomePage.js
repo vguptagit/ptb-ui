@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import "./Home.css";
-import ResourceTab from "./ResourceTab";
-import TestTabs from "./testTabs/TestTabs.js";
+import "./HomePage.css";
+import ResourceTab from "../../components/ResourceTab";
+import TestTabs from "../../components/testTabs/TestTabs";
 
-const Home = () => {
+const HomePage = () => {
     return (
         <>
             <div class="row scree-height">
@@ -18,4 +18,4 @@ const Home = () => {
         </>
     );
 }
-export default Home;
+export default HomePage;
