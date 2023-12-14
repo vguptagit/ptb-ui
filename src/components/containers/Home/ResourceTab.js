@@ -18,10 +18,10 @@ const ResourceTab = () => {
                         <NavLink eventKey="#/home/questions">Your Questions</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink eventKey="#">Question Banks</NavLink>
+                        <NavLink eventKey="#/questionbanks">Question Banks</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink eventKey="#" >Custom Question</NavLink>
+                        <NavLink eventKey="#">Custom Question</NavLink>
                     </NavItem>
                 </Nav>
 
@@ -32,8 +32,8 @@ const ResourceTab = () => {
                     <TabPane eventKey="#/home/questions">
                         <p>Your Questions </p>
                     </TabPane>
-                    <TabPane eventKey="#/questions banks">
-                        <p>Content for questions banks goes here</p>
+                    <TabPane eventKey="#/questionbanks">
+                        <p>Content for Question Banks goes here</p>
                     </TabPane>
                     <TabPane eventKey="#">
                         <p>Content for Custom Question goes here</p>
