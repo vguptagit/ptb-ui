@@ -19,7 +19,7 @@ const TestTabs = () => {
     };
 
     return (
-        <>
+        <div className="tab-container">
             <h4><FormattedMessage id="testtabs.title" /></h4>
 
             <ul className="nav nav-tabs">
@@ -37,7 +37,7 @@ const TestTabs = () => {
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     );
 };
 
