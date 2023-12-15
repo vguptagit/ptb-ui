@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import "./HomePage.css";
+import "./HomePage.scss";
 import ResourceTab from "../../components/ResourceTab";
 import TestTabs from "../../components/testTabs/TestTabs";
 

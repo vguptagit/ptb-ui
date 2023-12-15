@@ -1,4 +1,5 @@
-import './App.css';
+import './styles/App.scss';
+
 import AppRoutes from './routes/Router';
 import { IntlProvider} from "react-intl";
 import { initLocale, localeMessages } from './utils/localization/Localization';

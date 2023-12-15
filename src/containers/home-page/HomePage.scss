@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+.border-right {
+    border-right: 1px solid $gray-400;
+}
+
+.scree-height {
+    min-height: calc(100vh - 60px);
+}
+
+.App-header .bg-body-tertiary {
+    background-color: $black !important;
+}
+
+.App-header .navbar-brand,
+.App-header .nav-link,
+.App-header .nav-link.show {
+    color: $white;
+}
