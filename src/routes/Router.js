@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import HomePage from "../containers/home-page/HomePage.js";
-import StartPage from "../containers/start-page/StartPage.js";
-import TestsPage from "../containers/TestsPage.js";
-import QuestionsPage from "../containers/QuestionsPage.js";
-import NoPage from "../containers/NoPage.js";
-import FullLayout from '../containers/layouts/FullLayout.js';
-import CustomQuestions from '../containers/CustomQuestions.js';
-import QuestionBanks from '../containers/QuestionBanks.js';
+import HomePage from "../pages/home-page/HomePage.js";
+import StartPage from "../pages/start-page/StartPage.js";
+import TestsPage from "../pages/TestsPage.js";
+import QuestionsPage from "../pages/QuestionsPage.js";
+import NoPage from "../pages/NoPage.js";
+import FullLayout from '../pages/layouts/FullLayout.js';
+import CustomQuestions from '../pages/CustomQuestions.js';
+import QuestionBanks from '../pages/QuestionBanks.js';
 
 const AppRoutes = (
     <Routes>
