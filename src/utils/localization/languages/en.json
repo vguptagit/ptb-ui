@@ -7,5 +7,7 @@
     "message.number-format": "Formatted number: {num, number, ::K}",
     "message.currency-format": "Formatted currency: {amount, number, ::currency/USD}",
     "home.title": "Resources",
-    "testtabs.title": "Create or Edit tests"
+    "testtabs.title": "Create or Edit tests",
+    "profile.setting": "Settings",
+    "profile.signout": "Sign Out"
 }
