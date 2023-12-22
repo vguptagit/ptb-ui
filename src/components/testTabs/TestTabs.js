@@ -1,6 +1,9 @@
+// TestTabs.js
 import React, { useState } from 'react';
 import './TestTabs.css'; // Import your CSS file
 import { FormattedMessage } from 'react-intl';
+import QuestionBanksTips from './QuestionsBanksTips/QuestionsBanksTips';
+
 
 const TestTabs = () => {
     const [tabs, setTabs] = useState([{ id: 1, label: 'Untitled' }]);
@@ -37,6 +40,13 @@ const TestTabs = () => {
                     </li>
                 ))}
             </ul>
+                    
+             <div>
+                     
+           <QuestionBanksTips />
+
+            </div>
+
         </div>
     );
 };

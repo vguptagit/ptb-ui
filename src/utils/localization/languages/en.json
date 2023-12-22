@@ -9,5 +9,9 @@
     "home.title": "Resources",
     "testtabs.title": "Create or Edit tests",
     "profile.setting": "Settings",
-    "profile.signout": "Sign Out"
+    "profile.signout": "Sign Out",
+    "questionbanks.tips":" Questions Banks Tips",
+    "questionbanks.instructions.edit" :"To edit one of your tests, drag it here",
+    "questionbanks.instructions.create" : "To create a new test, open Question Banks or Custom Questions and drag questions here",
+    "questionbanks.instructions.automatic" : "To create a test automatically from selected topics, select the Test Wizard"
 }

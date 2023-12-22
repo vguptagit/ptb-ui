@@ -12,6 +12,9 @@ function App() {
       <div className="App">
         <div>
           {AppRoutes}
+          {/* <QuestionBanksTips>
+
+          </QuestionBanksTips> */}
         </div>
       </div>
     </IntlProvider>
