@@ -16,6 +16,7 @@ const AppRoutes = (
         <Route path="/" element={<FullLayout />} >
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<HomePage />} >
+                <Route path="/home" element={<Navigate to="/home/tests" />} />
                 <Route path="/home/tests" element={<TestsPage />} />
                 <Route path="/home/questions" element={<QuestionsPage />} />
                 <Route path="/home/questionbanks" element={<QuestionBanks />} />

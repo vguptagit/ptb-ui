@@ -2,21 +2,24 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Button } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import "./profile.css";
+import { useAuth } from "../../context/AuthContext";
 
 const Profile = () => {
+  const { user, logout } = useAuth();
+
   return (
     <NavDropdown
       title={
         <span>
-          <i className="bi bi-person-fill"></i> Suresh
+          <i className="bi bi-person-fill"></i> {user.name}
         </span>
       }
       id="nav-dropdown"
       className="profile-dropdown"
     >
-      
-      <NavDropdown.Item className="profile-name">Suresh kiran Pearson</NavDropdown.Item>
-      <NavDropdown.Item className="profile-email">sureshkiran12345@gmail.com</NavDropdown.Item>
+
+      <NavDropdown.Item className="profile-name">{user.name}</NavDropdown.Item>
+      <NavDropdown.Item className="profile-email">{user.email}</NavDropdown.Item>
       <NavDropdown.Divider />
       <div className="d-flex justify-content-center align-items-center">
         <Button
@@ -30,8 +33,8 @@ const Profile = () => {
       <div className="d-flex justify-content-center align-items-center">
         <Button
           variant="primary"
-          href="#signout"
           className="button-signout"
+          onClick={logout}
         >
           <FormattedMessage id="profile.signout" />
         </Button>
