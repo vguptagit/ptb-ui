@@ -9,18 +9,26 @@ import QuestionBanksTips from './QuestionsBanksTips/QuestionsBanksTips';
 
 
 const TestTabs = () => {
-    const { tests, selectedTest, addTest, deleteTest } = useAppContext();
+    const { tests, selectedTest, addTest, deleteTest, dispatchEvent } = useAppContext();
     const [newTest, setNewTest] = useState(new Test());
 
     const handleAddNewTestTab = () => {
         const testTab = new Test();
         testTab.title = `Untitled ${tests.length + 1}`;
         if (testTab.title) {
-            addTest(testTab);
+            dispatchEvent("ADD_TEST", { test: testTab });
+            dispatchEvent("SELECT_TEST", testTab);
+
+            // addTest(testTab);
             setNewTest(new Test());
         }
     };
-
+    const handleNodeSelect = (item) => {
+        dispatchEvent("SELECT_TEST", item);
+    };
+    const handleRemoveTest = (e, item) => {
+        dispatchEvent("REMOVE_TEST", { 'test': item });
+    };
 
     const [tabs, setTabs] = useState([{ id: 1, label: 'Untitled' }]);
 
@@ -71,10 +79,10 @@ const TestTabs = () => {
                         <button className="nav-link add-tab" onClick={handleAddNewTestTab}>+</button>
                     </li>
                     {tests.map(test => (
-                        <li className="nav-item" key={test.id}>
+                        <li className="nav-item" key={test.id} onClick={() => { handleNodeSelect(test) }}>
                             <div className={`tab-label${test.id === tabs.length ? ' active' : ''}`}>
                                 <span>{test.title}</span>
-                                <button className="close-tab" onClick={(e) => removeTab(e, test)}>
+                                <button className="close-tab" onClick={(e) => handleRemoveTest(e, test)}>
                                     <i className="fas fa-times"></i>
                                 </button>
                             </div>

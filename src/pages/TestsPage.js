@@ -1,20 +1,23 @@
 import { useAppContext } from "../context/AppContext";
 
 const Tests = () => {
-    const { tests, selectedTest, selectTest } = useAppContext();
+    const { tests, dispatchEvent } = useAppContext();
 
     const handleNodeSelect = (item) => {
-        selectTest(item);
+        dispatchEvent("SELECT_TEST",item);
     };
 
     return (
         <>
             Tests
             <div>
+
                 <h2>Test List</h2>
                 <ul>
                     {tests.map((item, index) => (
-                        <li key={index} onClick={()=>{handleNodeSelect(item)}}>{item.title}</li>
+                        <li key={index} onClick={() => { handleNodeSelect(item) }}>
+                            {item.title}
+                        </li>
                     ))}
                 </ul>
             </div>
