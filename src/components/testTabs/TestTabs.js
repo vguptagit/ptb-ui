@@ -54,10 +54,10 @@ const TestTabs = () => {
     }, [])
     return (
         <div className="tab-container">
-            <div class="d-flex bd-highlight mb-3">
-                <div class="me-auto p-2 bd-highlight"><h4><FormattedMessage id="testtabs.title" /></h4></div>
+            <div className="d-flex bd-highlight mb-3">
+                <div className="me-auto p-2 bd-highlight"><h4><FormattedMessage id="testtabs.title" /></h4></div>
 
-                <div class="p-2 bd-highlight">
+                <div className="p-2 bd-highlight">
                     <Button variant="primary">
                         <FormattedMessage id="profile.setting" />
                     </Button>
@@ -89,7 +89,7 @@ const TestTabs = () => {
                         </li>
                     ))}
                 </ul>
-                <QuestionBanksTips />
+                {/* <QuestionBanksTips /> */}
             </div>
 
         </div>

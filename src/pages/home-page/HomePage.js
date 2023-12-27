@@ -12,12 +12,12 @@ const HomePage = () => {
     }, [])
     return (
         <>
-            <div class="row scree-height">
-                <div class="col border-right">
+            <div className="row scree-height">
+                <div className="col panel panel-left">
                     <ResourceTab />
                     <Outlet />
                 </div>
-                <div class="col">
+                <div className="col panel panel-right">
                     <TestTabs />
                     <TestCreate />
                      

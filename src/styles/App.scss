@@ -6,18 +6,31 @@
 $primary-color: #ff5722;
 $font-family: 'Arial', sans-serif;
 
-h4 {
-  color: $gray-500;
-}
 
 .container-xxl {
   margin: 0 auto;
-  
+  background-color: $bg-gray;
+
+  .panel {
+    padding: 0;
+    background-color: $white;
+  }
+
+  .panel-left {
+    margin: 0 5px;
+    border-right: 10px solid $border-gray;
+
+  }
+
+  .panel-right {
+    margin: 0px;
+  }
 }
 
-.tab-container{
-  background-color: $gray-100;
+.tab-container {
+  background-color: $bg-gray;
 }
+
 .header {
   background-color: $primary;
   color: white;
@@ -30,4 +43,3 @@ h4 {
   padding: 1rem;
   font-family: $font-family;
 }
-

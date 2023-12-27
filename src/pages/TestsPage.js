@@ -4,15 +4,14 @@ const Tests = () => {
     const { tests, dispatchEvent } = useAppContext();
 
     const handleNodeSelect = (item) => {
-        dispatchEvent("SELECT_TEST",item);
+        dispatchEvent("SELECT_TEST", item);
     };
 
     return (
         <>
-            Tests
+            <h2>Test List</h2>
             <div>
 
-                <h2>Test List</h2>
                 <ul>
                     {tests.map((item, index) => (
                         <li key={index} onClick={() => { handleNodeSelect(item) }}>

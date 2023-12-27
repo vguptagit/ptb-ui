@@ -3,7 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { useAppContext } from "../context/AppContext";
 import Test from "../entities/Test.Entity";
 
-const TestCreate = React.memo(() => {
+const TestCreate = () => {
     const { dispatchEvent, selectedTest } = useAppContext();
     const [newTest, setNewTest] = useState(new Test());
     const inputRef = useRef(null);
@@ -45,9 +45,9 @@ const TestCreate = React.memo(() => {
                 {selectedTest.title}
                 <form onSubmit={handleSubmit}>
                     <label>
-                        Title TestCreate:
-                        <input type="text" name="title" value={selectedTest.title} onChange={handleInputChange} />
-                        {/* <input type="text" name="title"   onChange={handleInputChange} ref={inputRef} /> */}
+                        Title:
+                        {/* <input type="text" name="title" value={selectedTest.title} onChange={handleInputChange} /> */}
+                        <input type="text" name="title" value={selectedTest.title} onChange={handleInputChange} ref={inputRef} />
                     </label>
                      
                     <br />
@@ -56,6 +56,6 @@ const TestCreate = React.memo(() => {
             </div>
         </div>
     );
-});
+};
 
 export default TestCreate;
