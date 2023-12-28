@@ -10,6 +10,7 @@
 
 .nav-item {
     margin-right: 10px;
+    margin-bottom: 2px;
 }
 
 .tab-label {
@@ -17,7 +18,7 @@
     display: flex;
     align-items: center;
     background-color: #f0f0f0;
-    padding: 5px 6px; /* Adjusted padding to reduce space between "Untitled" and close button */
+    padding: 6px 6px; /* Adjusted padding to reduce space between "Untitled" and close button */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -59,6 +60,10 @@
 .fa-plus {
     color: white; /* Customize the plus icon color */
     width: 14px; /* Adjusted width to make the plus icon appear as a rectangle */
+}
+
+.btn-test{
+    margin-right: 2px;
 }
 
 /* Additional styles as needed */

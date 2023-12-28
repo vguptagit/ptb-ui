@@ -6,7 +6,7 @@ const ResourceTab = () => {
     return (
         <div className="tab-container">
             <div>
-                <h4>
+                <h4 className="p-1">
                     <FormattedMessage id="home.title" />
                 </h4>
             </div>
