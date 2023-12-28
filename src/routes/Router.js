@@ -5,7 +5,7 @@ import TestsPage from "../pages/TestsPage.js";
 import QuestionsPage from "../pages/QuestionsPage.js";
 import NoPage from "../pages/NoPage.js";
 import FullLayout from '../pages/layouts/FullLayout.js';
-import CustomQuestions from '../pages/CustomQuestions.js';
+import CustomQuestionsPage from '../pages/CustomQuestionsPage.js';
 import QuestionBanks from '../pages/QuestionBanks.js';
 import LoginPage from '../pages/LoginPage.js';
 
@@ -20,7 +20,7 @@ const AppRoutes = (
                 <Route path="/home/tests" element={<TestsPage />} />
                 <Route path="/home/questions" element={<QuestionsPage />} />
                 <Route path="/home/questionbanks" element={<QuestionBanks />} />
-                <Route path="/home/customquestions" element={<CustomQuestions />} />
+                <Route path="/home/customquestions" element={<CustomQuestionsPage />} />
             </Route>
             <Route path="/start" element={<StartPage />} />
             <Route path="*" element={<NoPage />} />
