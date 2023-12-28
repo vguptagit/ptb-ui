@@ -1,0 +1,63 @@
+.profile-dropdown {
+
+    .dropdown-menu.show {
+        min-width: 220px;
+        margin-left: -115px;
+        line-height: 1em;
+        border-radius: 5px;
+    }
+
+    .profile-name {
+        margin-left: 36px;
+        font-weight: bold;
+    }
+
+    .profile-email {
+        margin-left: 35px;
+    }
+
+    .button-setting {
+        margin-left: -91px;
+        margin-bottom: -50px;
+    }
+
+    .button-signout {
+        margin-left: 96px;
+        margin-top: 6px;
+    }
+
+    .navlink {
+        text-decoration: none;
+        margin-left: 6px;
+    }
+
+    .profile-name,
+    .profile-email {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .profile-name:hover,
+    .profile-email:hover {
+        background-color: transparent;
+    }
+
+    .dropdown-menu.show::after {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 5px;
+        border-color: transparent transparent #fff;
+        margin-left: 162px;
+        transition: transform 0.3s ease;
+        transform-origin: center bottom;
+    }
+
+    .dropdown-menu.show.show::after {
+        transform: rotate(0deg) translateY(-131px);
+    }
+
+
+}

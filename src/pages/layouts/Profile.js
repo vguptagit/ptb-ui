@@ -1,7 +1,7 @@
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Button } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
-import "./profile.css";
+import "./profile.scss";
 import { useAuth } from "../../context/AuthContext";
 
 const Profile = () => {
