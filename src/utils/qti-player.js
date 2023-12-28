@@ -1,3 +1,4 @@
+import $ from 'jquery';
 var QTISettings = {};
 
 QTISettings.enableShuffle = true;
@@ -3036,7 +3037,7 @@ QTI.replaceImage = function(qtiNode){
 	images.each(function(){
 		var url = $(this).attr("src");
 		var splittedUrl = url.split("/")
-		fileName = splittedUrl[splittedUrl.length - 1]
+		var fileName = splittedUrl[splittedUrl.length - 1]
 		fileName = fileName.split("?")[0]
 		qtiNodeHTML = qtiNodeHTML.replace($(this).get(0).outerHTML,"<u contenteditable='false' url='" + url + "'><i>" + fileName + "</i></u>")
 	})
