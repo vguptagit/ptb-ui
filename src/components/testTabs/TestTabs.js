@@ -3,32 +3,25 @@ import './TestTabs.css'; // Import your CSS file
 import { FormattedMessage } from 'react-intl';
 import { useAppContext } from "../../context/AppContext";
 import Test from "../../entities/Test.Entity";
-import { Button } from 'react-bootstrap';
-import QuestionBanksTips from './QuestionsBanksTips/QuestionsBanksTips';
-
-
+import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 const TestTabs = () => {
-    const { tests, selectedTest, addTest, deleteTest, dispatchEvent } = useAppContext();
+    const { tests, addTest, deleteTest } = useAppContext();
     const [newTest, setNewTest] = useState(new Test());
 
     const handleAddNewTestTab = () => {
         const testTab = new Test();
         testTab.title = `Untitled ${tests.length + 1}`;
         if (testTab.title) {
-            dispatchEvent("ADD_TEST", { test: testTab });
-            dispatchEvent("SELECT_TEST", testTab);
-
-            // addTest(testTab);
+            addTest(testTab);
             setNewTest(new Test());
         }
     };
-    const handleNodeSelect = (item) => {
-        dispatchEvent("SELECT_TEST", item);
-    };
-    const handleRemoveTest = (e, item) => {
-        dispatchEvent("REMOVE_TEST", { 'test': item });
-    };
+
 
     const [tabs, setTabs] = useState([{ id: 1, label: 'Untitled' }]);
 
@@ -50,48 +43,41 @@ const TestTabs = () => {
 
     useEffect(() => {
         setTabs(tests);
-        console.log(selectedTest);
+
     }, [])
     return (
         <div className="tab-container">
-            <div className="d-flex bd-highlight mb-3">
-                <div className="me-auto p-2 bd-highlight"><h4><FormattedMessage id="testtabs.title" /></h4></div>
-
-                <div className="p-2 bd-highlight">
-                    <Button variant="primary">
-                        <FormattedMessage id="profile.setting" />
-                    </Button>
-                    <Button variant="primary">
-                        <FormattedMessage id="profile.setting" />
-                    </Button>
-                    <Button variant="primary">
-                        <FormattedMessage id="profile.setting" />
-                    </Button>
-                    <Button variant="primary">
-                        <FormattedMessage id="profile.setting" />
-                    </Button>
+            <div className="d-flex justify-content-between">
+                <h4 className="p-3"><FormattedMessage id="testtabs.title" /></h4>
+                <div className="m-1">
+                    <Button className="m-1 btn"><i class="fa-solid fa-wand-magic-sparkles"></i><FormattedMessage id="testtabs.testwizard" /></Button>
+                    <ButtonGroup>
+                    <DropdownButton id="dropdown-item-button" title="Save">
+                        <Dropdown.Item href="#"><FormattedMessage id="testtabs.save" /></Dropdown.Item>
+                        <Dropdown.Item href="#"><FormattedMessage id="testtabs.saveas" /></Dropdown.Item>
+                    </DropdownButton>
+                        <div className="d-flex justify-content-center">
+                            <Button><FormattedMessage id="testtabs.print" /></Button>
+                            <Button><FormattedMessage id="testtabs.export" /></Button>
+                        </div>
+                    </ButtonGroup>
                 </div>
             </div>
-
-            <div>
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <button className="nav-link add-tab" onClick={handleAddNewTestTab}>+</button>
+            <ul className="nav nav-tabs">
+                <li className="nav-item">
+                    <button className="nav-link add-tab" onClick={handleAddNewTestTab}>+</button>
+                </li>
+                {tests.map(test => (
+                    <li className="nav-item" key={test.id}>
+                        <div className={`tab-label${test.id === tabs.length ? ' active' : ''}`}>
+                            <span>{test.title}</span>
+                            <button className="close-tab" onClick={(e) => removeTab(e, test)}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
                     </li>
-                    {tests.map(test => (
-                        <li className="nav-item" key={test.id} onClick={() => { handleNodeSelect(test) }}>
-                            <div className={`tab-label${test.id === tabs.length ? ' active' : ''}`}>
-                                <span>{test.title}</span>
-                                <button className="close-tab" onClick={(e) => handleRemoveTest(e, test)}>
-                                    <i className="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-                {/* <QuestionBanksTips /> */}
-            </div>
-
+                ))}
+            </ul>
         </div>
     );
 };
