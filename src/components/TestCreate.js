@@ -35,7 +35,7 @@ const TestCreate = () => {
         console.log('TestCreate useEffect', selectedTest);
     }, [])
     return (
-        <div className="test-container">
+        <div className="test-container p-1">
             <div>
                 <h3>
                     Test Create
@@ -51,7 +51,7 @@ const TestCreate = () => {
                     </label>
                      
                     <br />
-                    <button type="submit">Submit</button>
+                    <button type="submit" className="m-1">Submit</button>
                 </form>
             </div>
         </div>
