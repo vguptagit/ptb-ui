@@ -48,17 +48,17 @@ const TestTabs = () => {
     return (
         <div className="tab-container">
             <div className="d-flex justify-content-between">
-                <h4 className="p-3"><FormattedMessage id="testtabs.title" /></h4>
-                <div className="m-1">
-                    <Button className="m-1 btn"><i class="fa-solid fa-wand-magic-sparkles"></i><FormattedMessage id="testtabs.testwizard" /></Button>
+                <h4 className="p-1"><FormattedMessage id="testtabs.title" /></h4>
+                <div className="p-1">
+                    <Button className="btn-test"><i class="fa-solid fa-wand-magic-sparkles"></i><FormattedMessage id="testtabs.testwizard" /></Button>
                     <ButtonGroup>
-                    <DropdownButton id="dropdown-item-button" title="Save">
+                    <DropdownButton id="dropdown-item-button" title="Save" className="btn-test">
                         <Dropdown.Item href="#"><FormattedMessage id="testtabs.save" /></Dropdown.Item>
                         <Dropdown.Item href="#"><FormattedMessage id="testtabs.saveas" /></Dropdown.Item>
                     </DropdownButton>
                         <div className="d-flex justify-content-center">
-                            <Button><FormattedMessage id="testtabs.print" /></Button>
-                            <Button><FormattedMessage id="testtabs.export" /></Button>
+                            <Button className="btn-test"><FormattedMessage id="testtabs.print" /></Button>
+                            <Button className="btn-test"><FormattedMessage id="testtabs.export" /></Button>
                         </div>
                     </ButtonGroup>
                 </div>
