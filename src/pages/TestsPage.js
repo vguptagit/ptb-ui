@@ -8,8 +8,8 @@ const Tests = () => {
     };
 
     return (
-        <>
-            <h2>Test List</h2>
+        <div className="p-1">
+            <h3>Test List</h3>
             <div>
 
                 <ul>
@@ -20,7 +20,7 @@ const Tests = () => {
                     ))}
                 </ul>
             </div>
-        </>
+        </div>
     );
 }
 export default Tests;
