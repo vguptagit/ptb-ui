@@ -1,0 +1,141 @@
+@import "../../styles/variables";
+
+.qstn-header{
+    font-family: Helvetica Neue Light;
+	font-weight: normal !important;
+    font-size: 12px;
+    margin: 0 0px 5px 0px;
+	background-color: #f8f8f8;
+}
+
+.printViewContainer {
+	font-size: 14px;
+	font-family: Helvetica Neue Light;
+	padding-left: 4px;
+}
+
+.printViewContainer .printView {
+	display: inline-block;
+}
+
+.printViewContainer .editView, .printViewContainer #crtAnsSpace {
+	/* float: left; */
+	display: none;
+}
+
+li[qstnTemplate='true'] .radio span.tick, li[qstnTemplate='true'] .checkbox span.tick
+	{
+	visibility: hidden !important;
+}
+
+li[qstntemplate='true'] .qti-simpleChoice .radio, li[printmode='true'] .qti-simpleChoice .checkbox {
+    margin-bottom: 4px;
+}
+
+li[qstntemplate='true'] .printViewContainer .optionLabelView {
+    display: inline-block;
+    padding-left: 10px;
+    max-width: 100% !important;
+    vertical-align: inherit;
+    cursor: move;
+}
+
+li[qstntemplate='true'] .matchOptionContainer {
+	width: 95%;
+}
+
+li[qstntemplate='true'] .matchingOption {
+    min-width: 30%;
+    float: left;
+}
+
+li[qstntemplate='true'] .matchRight {
+	min-width: 70%;
+}
+li[qstntemplate=true] .printViewContainer  .qti-blockquote .matchIndex {
+	font-weight: normal;
+	font-size: 14px;
+}
+.printViewContainer .mOptionLabel {
+	padding-left: 6px;
+}
+
+li[printmode='true'] .matchingOption {
+	width: 48%;
+	padding-right: 6px;
+	display: block;
+	float: left;
+}
+
+.rightMatchingOption {
+	width: 50%;
+	display: block;
+	float: right;
+}
+
+.divider {
+    background-color: #E8E8E8;
+    border-left: 1px solid #D0d0d0;
+    border-right: 1px solid #D0d0d0;
+    position: absolute;
+    z-index: 9;
+    height: 100%;
+    width: 10px;
+}
+
+li[qstntemplate='true'] .qti-itemBody>div.optionLabelView {
+	display: inline-block;
+	width: 100%;
+	vertical-align: middle;
+	background-color: #E0E0E0 !important;
+	border-bottom: 1px solid #D0D0D0 !important;
+	height: 41px;
+	line-height: 41px;
+	font-size: 14px;
+}
+
+li[qstntemplate='true'] .qti-itemBody:first-child blockquote>div.optionLabelView,
+	li[qstntemplate='true'][quiztype='FillInTheBlanks'] .qti-itemBody>blockquote>div.optionLabelView
+	{
+	display: inline-block;
+	width: 100%;
+	vertical-align: middle;
+	background-color: #E0E0E0;
+	border-bottom: 1px solid #D0D0D0;
+	height: 41px;
+	line-height: 41px;
+	font-size: 14px;
+}
+
+li[qstntemplate='true'] .qti-itemBody>blockquote:first-child>div.optionLabelView
+	{
+	display: inline-block;
+	width: 100%;
+	vertical-align: middle;
+	background-color: #E0E0E0 !important;
+	border-bottom: 1px solid #D0D0D0 !important;
+	height: 41px;
+	line-height: 41px;
+	font-size: 14px;
+}
+
+.plusIconQT {
+	line-height: 28px;
+	margin-right: 5px;
+	font-size: 14px;
+	border: 0;
+	background: transparent;
+}
+
+.newTest-close {
+	position: absolute;
+	z-index: 1;
+	top: 5px;
+	right: 7px;
+	cursor: pointer;
+	font-size: 8px;
+}
+
+.newTest-close:hover {
+	color: #4d4d4d;
+}
