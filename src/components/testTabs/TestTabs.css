@@ -3,23 +3,21 @@
 /* Base styles for the navigation tabs */
 .nav-tabs {
     list-style: none;
-    padding: 0;
+    padding: 0 px;
     display: flex;
     align-items: center;
 }
 
 .nav-item {
     margin-right: 10px;
-    margin-bottom: 2px;
 }
 
 .tab-label {
     position: relative;
     display: flex;
     align-items: center;
-    background-color: #f0f0f0;
-    padding: 6px 6px; /* Adjusted padding to reduce space between "Untitled" and close button */
-    border: 1px solid #ccc;
+    /* background-color: #f0f0f0; */
+    padding: 1px 10px; /* Increased padding */
     border-radius: 5px;
 }
 
@@ -32,38 +30,33 @@
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 3px; /* Adjusted margin to reduce space between "Untitled" and the close button */
+    position: absolute; 
+    top: -9px; /* Adjusted top position */
+    right: -22px; /* Adjusted right position */
+    font-size: 5px;
 }
 
 .fa-times {
-    color: black; /* Customize the close icon color */
-    font-size: 12px; /* Adjust the font size to make the close icon smaller */
-    position: relative;
-    top: -5px; /* Adjusted top position */
-    left: -1px; /* Adjusted left position to move the close button to the right */
+    color: black;
+    font-size: 14px; /* Increased font size */
 }
 
 /* Styles for the plus button */
 .add-tab {
-    background-color: #d8d8d8; /* Light greyish color for the plus button */
+    background-color: #d3d3d3; /* Light grey background color */
     border: none;
     cursor: pointer;
-    padding: 4px 8px; /* Adjusted padding for the button */
-    margin: 0; /* Removed any default margin */
-    border-radius: 8px; /* Increased border-radius for a more rounded appearance */
+    padding: 1px 10px; /* Adjusted padding for the button */
+    border-radius: 5px;
 }
 
 .add-tab:hover {
-    background-color: #b0b0b0; /* Darker greyish color on hover */
+    background-color: #c0c0c0;
 }
 
 .fa-plus {
-    color: white; /* Customize the plus icon color */
-    width: 14px; /* Adjusted width to make the plus icon appear as a rectangle */
+    color: rgb(182, 178, 178);
+    font-size: 30px; /* Increased font size */
+    background-color: lightgray;
 }
 
-.btn-test{
-    margin-right: 2px;
-}
-
-/* Additional styles as needed */

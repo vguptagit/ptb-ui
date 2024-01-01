@@ -11,13 +11,12 @@ const QuestionBanksTips = () => {
             </h5>
 
             <div className="container">
-                <h6><FormattedMessage id="questionbanks.instructions.edit" /></h6>
-                <h6><FormattedMessage id="questionbanks.instructions.create" /></h6>
-                <h6><FormattedMessage id="questionbanks.instructions.automatic" /></h6>
+                <h6 className="bold-text"><FormattedMessage id="questionbanks.instructions.edit" /></h6>
+                <h6 className="bold-text"><FormattedMessage id="questionbanks.instructions.create" /></h6>
+                <h6 className="bold-text"><FormattedMessage id="questionbanks.instructions.automatic" /></h6>
             </div>
         </div>
     );
 };
 
 export default QuestionBanksTips;
-
