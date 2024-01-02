@@ -1,4 +1,4 @@
-import './styles/App.scss';
+import './styles/App.css';
 
 import AppRoutes from './routes/Router';
 import { IntlProvider } from "react-intl";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import "./HomePage.scss";
+import "./HomePage.css";
 import ResourceTab from "../../components/ResourceTab";
 import TestTabs from "../../components/testTabs/TestTabs";
 import TestCreate from "../../components/TestCreate";

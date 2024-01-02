@@ -1,19 +1,16 @@
-@import "../../styles/variables";
-
- 
 
 .scree-height {
     min-height: calc(100vh - 60px);
 }
 
 .App-header .bg-body-tertiary {
-    background-color: $black !important;
+    background-color: #000 !important;
 }
 
 .App-header .navbar-brand,
 .App-header .nav-link,
 .App-header .nav-link.show {
-    color: $white;
+    color: #fff;
 }
 
 .divider {
