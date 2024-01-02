@@ -4,7 +4,20 @@
 /* 
 $white: #fff !default;
 $bg-gray: #f8f9fa !default;
-$border-gray: #E8E8E8 !default; */
+$border-gray: #E8E8E8 !default; 
+
+$primary-color: #ff5722;
+$font-family: 'Arial', sans-serif;
+
+$primary: #009efb;
+$info: #604dcf;
+$danger: #f62d51;
+$success: #39c449;
+$warning: #ffbc34;
+$dark: #343a40;
+$light: #eaf2fb;
+$secondary: #35363b;
+*/
 
 .container-xxl {
   margin: 0 auto;
@@ -31,14 +44,14 @@ $border-gray: #E8E8E8 !default; */
 }
 
 .header {
-  background-color: $primary;
+  background-color: #009efb;;
   color: white;
   padding: 1rem;
-  font-family: $font-family;
+  font-family: 'Arial', sans-serif;
   text-align: center;
 }
 
 .content {
   padding: 1rem;
-  font-family: $font-family;
+  font-family: 'Arial', sans-serif;
 }
