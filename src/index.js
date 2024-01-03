@@ -5,7 +5,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Loader from './components/common/loader/Loader';
-
+import 'react-toastify/dist/ReactToastify.css';
 // Add FontAwesome styles
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
