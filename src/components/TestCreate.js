@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useAppContext } from "../context/AppContext";
 import Test from "../entities/Test.Entity";
+import QuestionsBanksTips from './testTabs/QuestionsBanksTips/QuestionsBanksTips';
 
 const TestCreate = () => {
     const { dispatchEvent, selectedTest } = useAppContext();
@@ -53,6 +54,7 @@ const TestCreate = () => {
                     <br />
                     <button type="submit" className="m-1">Submit</button>
                 </form>
+                <QuestionsBanksTips />
             </div>
         </div>
     );

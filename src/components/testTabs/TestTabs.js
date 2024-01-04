@@ -8,7 +8,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css'; // Import the CSS file
-import QuestionsBanksTips from './QuestionsBanksTips/QuestionsBanksTips';
 
 const TestTabs = () => {
     const { tests, addTest, deleteTest } = useAppContext();
@@ -94,15 +93,6 @@ const TestTabs = () => {
                     </Nav.Item>
                 ))}
             </Nav>
-            
-
-            {/* Place the fragment here */}
-            <div>
-                <>
-                    <QuestionsBanksTips />
-                </>
-            </div>
-
         </div>
     );
 };

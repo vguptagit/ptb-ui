@@ -7,7 +7,7 @@ import TestCreate from "../../components/TestCreate";
 
 const HomePage = () => {
     console.log('HomePage on load');
-     
+
     useEffect(() => {
     }, [])
     return (
@@ -15,12 +15,15 @@ const HomePage = () => {
             <div className="row scree-height">
                 <div className="col panel panel-left">
                     <ResourceTab />
-                    <Outlet />
+                    <div className="container-resource">
+                        <Outlet />
+                    </div>
                 </div>
                 <div className="col panel panel-right">
                     <TestTabs />
-                    <TestCreate />
-                     
+                    <div className="container-test">
+                        <TestCreate />
+                    </div>
                 </div>
             </div>
         </>
