@@ -54,10 +54,10 @@ const TestTabs = () => {
                             </Dropdown.Item>
                         </DropdownButton>
                         <div className="d-flex justify-content-center">
-                            <Button className="btn-test mr-1">
+                            <Button className="btn-test mr-1" disabled>
                                 <FormattedMessage id="testtabs.print" />
                             </Button>
-                            <Button className="btn-test mr-1">
+                            <Button className="btn-test mr-1" disabled>
                                 <FormattedMessage id="testtabs.export" />
                             </Button>
                         </div>
@@ -67,9 +67,8 @@ const TestTabs = () => {
 
 
             <Nav variant="tabs"  >
-
                 <Nav.Item>
-                    <Nav.Link href="#" onClick={handleAddNewTestTab}>
+                    <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
                         <i className="fa-solid fa-plus"></i>
                     </Nav.Link>
                 </Nav.Item>
