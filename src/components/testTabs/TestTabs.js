@@ -49,12 +49,12 @@ const TestTabs = () => {
                     <FormattedMessage id="testtabs.title" />
                 </h4>
                 <div className="p-1">
-                    <Button className="btn-test">
+                    <Button className="btn-test mr-1">
                         <i className="fa-solid fa-wand-magic-sparkles"></i>
                         <FormattedMessage id="testtabs.testwizard" />
                     </Button>
                     <ButtonGroup>
-                        <DropdownButton id="dropdown-item-button" title="Save" className="btn-test">
+                        <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mr-1">
                             <Dropdown.Item href="#">
                                 <FormattedMessage id="testtabs.save" />
                             </Dropdown.Item>
@@ -63,10 +63,10 @@ const TestTabs = () => {
                             </Dropdown.Item>
                         </DropdownButton>
                         <div className="d-flex justify-content-center">
-                            <Button className="btn-test">
+                            <Button className="btn-test mr-1">
                                 <FormattedMessage id="testtabs.print" />
                             </Button>
-                            <Button className="btn-test">
+                            <Button className="btn-test mr-1">
                                 <FormattedMessage id="testtabs.export" />
                             </Button>
                         </div>
@@ -81,12 +81,12 @@ const TestTabs = () => {
                         +
                     </Nav.Link>
                 </Nav.Item>
-                {tests.map(test => (
+                {tests.map((test, index) => (
                     <Nav.Item key={test.id}>
-                        <Nav.Link  className={test.id === tabs.length ? 'active' : ''}>
-                            <div className={`tab-label${test.id === tabs.length ? ' active' : ''}`}>
-                                <span>{test.title}</span>
-                                <Button className="close-tab" onClick={e => removeTab(e, test)}>
+                        <Nav.Link  className={index === tabs.length+1 ? 'active' : ''}>
+                            <div className={`tab-label${index === tabs.length+1 ? ' active' : ''}`}>
+                                <span>{test.title}{index}{tests.length}</span>
+                                <Button className="close-tab" variant="link" onClick={e => removeTab(e, test)}>
                                     <i className="fas fa-times"></i>
                                 </Button>
                             </div>
