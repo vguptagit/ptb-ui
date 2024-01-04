@@ -10,25 +10,19 @@ import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css'; // Import the CSS file
 
 const TestTabs = () => {
-    const { tests, addTest, deleteTest } = useAppContext();
-    const [newTest, setNewTest] = useState(new Test());
+    const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
+
+    const handleNodeSelect = (item) => {
+        dispatchEvent("SELECT_TEST", item);
+    };
 
     const handleAddNewTestTab = () => {
         const testTab = new Test();
         testTab.title = `Untitled ${tests.length + 1}`;
         if (testTab.title) {
             addTest(testTab);
-            setNewTest(new Test());
         }
-    };
-
-    const [tabs, setTabs] = useState([{ id: 1, label: 'Untitled' }]);
-    const [nextTabId, setNextTabId] = useState(2);
-
-    const addTab = () => {
-        const newTabs = [...tabs, { id: nextTabId, label: `Untitled ${nextTabId}` }];
-        setTabs(newTabs);
-        setNextTabId(nextTabId + 1);
+        dispatchEvent("SELECT_TEST", testTab);
     };
 
     const removeTab = (e, testSelected) => {
@@ -36,9 +30,7 @@ const TestTabs = () => {
         deleteTest(testSelected);
     };
 
-    useEffect(() => {
-        setTabs(tests);
-    }, [tests]);
+
 
     return (
 
@@ -74,17 +66,18 @@ const TestTabs = () => {
             </div>
 
 
-            <Nav variant="tabs" defaultActiveKey={`#/${tabs.length > 0 ? tabs[0].id : ''}`}>
+            <Nav variant="tabs"  >
+
                 <Nav.Item>
                     <Nav.Link href="#" onClick={handleAddNewTestTab}>
-                        +
+                        <i className="fa-solid fa-plus"></i>
                     </Nav.Link>
                 </Nav.Item>
                 {tests.map((test, index) => (
                     <Nav.Item key={test.id}>
-                        <Nav.Link  className={index === tabs.length+1 ? 'active' : ''}>
-                            <div className={`tab-label${index === tabs.length+1 ? ' active' : ''}`}>
-                                <span>{test.title}{index}{tests.length}</span>
+                        <Nav.Link onClick={() => { handleNodeSelect(test) }} className={selectedTest.id == test.id ? 'active' : ''}>
+                            <div className='tab-label' >
+                                <span>{test.title}</span>
                                 <Button className="close-tab" variant="link" onClick={e => removeTab(e, test)}>
                                     <i className="fas fa-times"></i>
                                 </Button>
