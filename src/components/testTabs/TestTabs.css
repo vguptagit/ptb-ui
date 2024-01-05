@@ -9,7 +9,7 @@
 }
 
 .nav-item {
-    margin-right: 10px;
+    margin-right: -2px;
 }
 
 .tab-label {
@@ -54,4 +54,11 @@
     background-color: #c0c0c0;
 }
 
- 
+.tabs-and-buttons-container {
+    width: 618px;
+}
+
+.three-dots{
+    border: none;
+    background: none
+}
