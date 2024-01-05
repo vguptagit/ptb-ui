@@ -1,7 +1,12 @@
+
+
+
 const QuestionBanks = () => {
+    
+
     return (
         <>
-            Question Banks
+           <div><h4>QuestionBank works!</h4></div>
         </>
     );
 }
