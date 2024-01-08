@@ -1,12 +1,12 @@
 .question-banks-tips-container {
     position: relative;
     background-color: #f5f5f5; /* Light greyish background color */
-    padding: 20px; /* Adjust as needed for spacing */
+    padding: 33px; /* Adjust as needed for spacing */
     width: 96.33%; /* Set your desired width */
     margin: 14px; /* Adjust margin as needed */
     margin-left: 10px;
     margin-right: 20px;
-    border-radius: 12px; /* Add rounded corners if desired */
+    border-radius: 16px; /* Add rounded corners if desired */
 }
 
 .question-banks-tips-container::after {
