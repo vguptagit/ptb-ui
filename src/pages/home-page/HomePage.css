@@ -26,4 +26,24 @@
     height: calc(90vh - 85px);
     overflow: auto;
 }
- 
+.button-container {
+    display: flex;
+    gap: 10px; /* Adjusted gap between buttons */
+    align-items: center;
+    justify-content: flex-start; /* Changed to align buttons closer */
+    padding: 10px;
+    background-color: #ddd; /* Light grey background color */
+}
+
+.button-style {
+    padding: 10px 12px;
+    background-color: #ddd; /* Light grey background color */
+    color: black; /* Adjust text color as needed */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-style:hover {
+    background-color: #ddd; /* Darker grey on hover */
+}
