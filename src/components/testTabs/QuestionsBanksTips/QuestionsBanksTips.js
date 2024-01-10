@@ -7,7 +7,6 @@ const QuestionBanksTips = () => {
         <div className="question-banks-tips-container">
             <h5>
                 <i className="far fa-lightbulb light-orange"></i>
-                <FormattedMessage id="questionbanks.tips" />
             </h5>
 
             <div className="container">

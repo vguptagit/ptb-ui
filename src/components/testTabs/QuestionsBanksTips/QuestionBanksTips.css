@@ -1,12 +1,13 @@
 .question-banks-tips-container {
     position: relative;
-    background-color: #f5f5f5; /* Light greyish background color */
-    padding: 33px; /* Adjust as needed for spacing */
-    width: 96.33%; /* Set your desired width */
-    margin: 14px; /* Adjust margin as needed */
-    margin-left: 10px;
-    margin-right: 20px;
-    border-radius: 16px; /* Add rounded corners if desired */
+    background-color: #f5f5f5;
+    padding: 19px;
+    width: 97.33%;
+    margin: 15px;
+    margin-left: 8px;
+    margin-right: 90px;
+    border-radius: 0px;
+    margin-top: 9px;
 }
 
 .question-banks-tips-container::after {
@@ -31,16 +32,27 @@
 
 .container {
     text-align: left;
-    margin-top: 3px;
-    margin-left: 34px;
-    max-width: 440px;
+    margin-top: -71px;
+    margin-left: 4px;
+    max-width: 580px;
+    margin-right: 25px;
+    padding: 12px;
 }
 
-
 .far.fa-lightbulb {
-    color: #fff; /* Set the color of the lightbulb icon to white */
-    background-color: #ffa500; /* Light orange color for the circular background */
-    padding: 7px; /* Adjust as needed for padding inside the circle */
-    border-radius: 50%; /* Make the element circular */
-    margin-right: 10px; /* Adjust as needed for spacing between icon and text */
+    color: #fff;
+    background-color: #ffa500;
+    padding: 7px;
+    border-radius: 90%;
+    margin-right: 0px;
+    margin-left: -8px;
+    margin-top: -9px;
+}
+
+.bold-text {
+    font-weight: 499px;
+    margin: 18px;
+    font-size: 14px;
+    padding: 0px;
+    margin-bottom: -4px;
 }
