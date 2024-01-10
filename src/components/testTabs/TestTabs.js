@@ -12,10 +12,13 @@ import './TestTabs.css'; // Import the CSS file
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
+  const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
 
   useEffect(() => {
-    setShowAdditionalButtons(tests.length >= 4);
-  }, [tests.length]);
+    const ellipsisItems = tests.slice(4); // Items to be displayed in the ellipsis dropdown from the fifth tab onwards
+    setShowAdditionalButtons(true);
+    setEllipsisDropdownItems(ellipsisItems); 
+  }, [tests]);
 
   const handleNodeSelect = (item) => {
     dispatchEvent('SELECT_TEST', item);
@@ -31,12 +34,14 @@ const TestTabs = () => {
   const removeTab = (e, testSelected) => {
     e.preventDefault();
     deleteTest(testSelected);
-    setShowAdditionalButtons(tests.length >= 4);
+   
   };
 
   const sampleButton = () => {
-      alert("Button Clicked");
-  }
+    alert("Button Clicked");
+  };
+
+  
 
   return (
     <div className="tab-container">
@@ -88,27 +93,40 @@ const TestTabs = () => {
             </Nav.Link>
           </Nav.Item>
           {tests.map((test, index) => (
-            <Nav.Item key={test.id}>
-              <Nav.Link
-                onClick={() => { handleNodeSelect(test) }}
-                className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
-              >
-                <div className='tab-label'>
-                  <span>{test.title}</span>
-                  <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
-                    <i className="fas fa-times"></i>
-                  </Button>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
+            index < 4 ? ( // Display tabs 1-4 in the main UI
+              <Nav.Item key={test.id}>
+                <Nav.Link
+                  onClick={() => { handleNodeSelect(test) }}
+                  className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
+                >
+                  <div className='tab-label'>
+                    <span>{test.title}</span>
+                    <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                      <i className="fas fa-times"></i>
+                    </Button>
+                  </div>
+                </Nav.Link>
+              </Nav.Item>
+            ) : null
           ))}
-          {selectedTest && (
-            <Nav.Item className='three-dots-link'>
-              <Nav.Link>
-              <button type="button" className="three-dots" onClick={sampleButton}><FaEllipsis /></button>
-              </Nav.Link>
-            </Nav.Item>
-          )}
+          
+          <Nav.Item className='three-dots-link'>
+            <Dropdown alignRight>
+              <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
+              <i class="fa-solid fa-ellipsis"></i>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {ellipsisDropdownItems.map((test, index) => (
+                  <Dropdown.Item
+                    key={test.id}
+                    onClick={() => handleNodeSelect(test)}
+                  >
+                    {test.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Nav.Item>
         </Nav>
       </div>
     </div>
