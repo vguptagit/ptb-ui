@@ -8,7 +8,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css'; // Import the CSS file
-import { FaEllipsis } from "react-icons/fa6";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
