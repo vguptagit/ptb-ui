@@ -1,12 +1,11 @@
-
-
+import TreeView from "./tree-view/TreeView";
 
 const QuestionBanks = () => {
     
 
     return (
         <>
-           <div><h4>QuestionBank works!</h4></div>
+           <div><TreeView /></div>
         </>
     );
 }
