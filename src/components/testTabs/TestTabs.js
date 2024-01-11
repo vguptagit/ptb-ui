@@ -54,16 +54,7 @@ const TestTabs = () => {
             <i className="fa-solid fa-wand-magic-sparkles"></i>
             <FormattedMessage id="testtabs.testwizard" />
           </Button>
-          {showAdditionalButtons && (
-            <div className="d-flex justify-content-center">
-              <Button className="btn-test mr-1">
-                <FormattedMessage id="testtabs.print" />
-              </Button>
-              <Button className="btn-test mr-1">
-                <FormattedMessage id="testtabs.export" />
-              </Button>
-            </div>
-          )}
+           
           <ButtonGroup>
             <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mr-1">
               <Dropdown.Item href="#">
