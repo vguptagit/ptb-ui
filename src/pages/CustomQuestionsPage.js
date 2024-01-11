@@ -1,36 +1,18 @@
 import { useEffect } from "react";
 import QTI from "../utils/qti-player";
 import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
+import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemplatesPage.js';
 
 const CustomQuestionsPage = () => {
-    const questionTemplates = CustomQuestionBanksService.questionTemplates();
-
-    function getQuestionHtmlTemplate(questionTemplate) {
-        return {
-           __html: questionTemplate.textHTML    };
-     }; 
-
-
+    
     useEffect(() => {
-        console.log('questionTemplates', questionTemplates);
+       
     }, [])
 
-
     return (
-        <>
-            Custom Questions page
-
-              <ul >
-                {questionTemplates.map((questionTemplate, index) =>
-                
-                    <li  key={index}>{questionTemplate.quizType}
-                    
-                    <div dangerouslySetInnerHTML={getQuestionHtmlTemplate(questionTemplate)} ></div>
-                    
-                    </li>
-                )}
-            </ul>
-        </>
+        <div>
+            <QuestionTemplatesPage></QuestionTemplatesPage>
+        </div>
     );
 }
 export default CustomQuestionsPage;

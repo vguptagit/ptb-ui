@@ -22,7 +22,6 @@ const AppRoutes = (
                 <Route path="/home/questions" element={<QuestionsPage />} />
                 <Route path="/home/questionbanks" element={<QuestionBanks />} />
                 <Route path="/home/customquestions" element={<CustomQuestionsPage />} />
-                <Route path="/home/questiontemplates" element={<QuestionTemplatesPage />} />
             </Route>
             <Route path="/start" element={<StartPage />} />
             <Route path="*" element={<NoPage />} />
