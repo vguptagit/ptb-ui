@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body, #root {
+    height: 100%;
+  }
+  
+  .treeview {
+    height: 100%;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  .treeview > ul {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 30px 15px;
+  }
+  
+  .tree-node {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid white;
+    background-color: #F8F8F8;
+  }
+  
+  .tree-node span {
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .tree-node.custom-style {
+    background-color: #E0E0E0;
+    font-weight: bold;
+  }
+  
+  
