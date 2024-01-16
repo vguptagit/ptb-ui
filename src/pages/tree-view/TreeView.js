@@ -5,7 +5,8 @@ import SampleData from "./sample_data.json";
 import "./TreeView.css";
 
 function TreeView() {
-  const [treeData] = useState(SampleData);
+  const [treeData, setTreeData] = useState(SampleData);
+  const handleDrop = (newTree) => setTreeData(newTree);
 
   return (
     <div className="treeview">
@@ -21,9 +22,10 @@ function TreeView() {
               {node.text}
             </div>
           )}
-          dragPreviewRender={() => null}
-          onDrop={() => {}}
-          disableDragAndDrop
+          dragPreviewRender={(monitorProps) => (
+            <div>{monitorProps.item.text}</div>
+          )}
+          onDrop={handleDrop}
         />
       </DndProvider>
     </div>
