@@ -14,7 +14,7 @@ const LoginPage = () => {
         user.name ='Pearson user'; 
         user.email ='Pearson_User@pearson.com'; 
         login(user);
-        navigate('/home');
+        navigate('/welcomescreen');
     }
     useEffect(() => {
     }, [])
