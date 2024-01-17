@@ -17,7 +17,7 @@ const TestTabs = () => {
   useEffect(() => {
     const ellipsisItems = tests.slice(4); // Items to be displayed in the ellipsis dropdown from the fifth tab onwards
     setShowAdditionalButtons(true);
-    setEllipsisDropdownItems(ellipsisItems); 
+    setEllipsisDropdownItems(ellipsisItems);
   }, [tests]);
 
   const handleNodeSelect = (item) => {
@@ -33,6 +33,7 @@ const TestTabs = () => {
 
   const removeTab = (e, testSelected) => {
     e.preventDefault();
+    e.stopPropagation(); // Stop the event from propagating to parent elements
     deleteTest(testSelected);
    
   };
@@ -84,7 +85,7 @@ const TestTabs = () => {
             </Nav.Link>
           </Nav.Item>
           {tests.map((test, index) => (
-            index < 4 ? ( // Display tabs 1-4 in the main UI
+            index < 4 ? (
               <Nav.Item key={test.id}>
                 <Nav.Link
                   onClick={() => { handleNodeSelect(test) }}
@@ -92,32 +93,44 @@ const TestTabs = () => {
                 >
                   <div className='tab-label'>
                     <span>{test.title}</span>
-                    <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
-                      <i className="fas fa-times"></i>
-                    </Button>
+                    {/* Conditionally render the close button */}
+                    {test.title !== 'Untitled 1' && (
+                      <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                        <i className="fas fa-times"></i>
+                      </Button>
+                    )}
                   </div>
                 </Nav.Link>
               </Nav.Item>
             ) : null
           ))}
-          
-          <Nav.Item className='three-dots-link'>
-            <Dropdown alignRight>
-              <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
-              <i class="fa-solid fa-ellipsis"></i>
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {ellipsisDropdownItems.map((test, index) => (
-                  <Dropdown.Item
-                    key={test.id}
-                    onClick={() => handleNodeSelect(test)}
-                  >
-                    {test.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav.Item>
+          {tests.length > 4 && (
+            <Nav.Item className='three-dots-link ms-auto'>
+              <Dropdown alignRight>
+                <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
+                  <i className="fa-solid fa-ellipsis"></i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {ellipsisDropdownItems.map((test, index) => (
+                    <Dropdown.Item
+                      key={test.id}
+                      onClick={() => handleNodeSelect(test)}
+                    >
+                      <div className='tab-label'>
+                        <span>{test.title}</span>
+                        {/* Conditionally render the close button */}
+                        {test.title !== 'Untitled 1' && (
+                          <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                            <i className="fas fa-times"></i>
+                          </Button>
+                        )}
+                      </div>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav.Item>
+          )}
         </Nav>
       </div>
     </div>
