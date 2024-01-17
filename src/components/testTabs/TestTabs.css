@@ -55,7 +55,7 @@
 }
 
 .tabs-and-buttons-container {
-    width: 618px;
+    width: 101.8%;
 }
 
 .three-dots{
@@ -79,5 +79,5 @@
   }
 
   .tabs-and-buttons-container i.fa-solid.fa-ellipsis {
-    padding-right: 21px;
-}
+    padding-right: 22px;
+  }
