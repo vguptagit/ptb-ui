@@ -18,7 +18,7 @@ function Testing() {
     //End Confirmation popup
 
     //this if for toast
-    const notify = (type) => () => Toastify({ 'message': "information for the user", 'type': type });
+    const notify = (type, message) => () => Toastify({ 'message': message, 'type': type });
 
     return (
         <>
@@ -27,22 +27,22 @@ function Testing() {
                     <div class="col-sm">
                         <Button
                             variant="info"
-                            className="button-setting" onClick={notify("Info")}>Info</Button>
+                            className="button-setting" onClick={notify("Info","info message")}>Info</Button>
                     </div>
                     <div class="col-sm">
                         <Button
                             variant="success"
-                            className="button-setting" onClick={notify("success")}>Success</Button>
+                            className="button-setting" onClick={notify("success","success message")}>Success</Button>
                     </div>
                     <div class="col-sm">
                         <Button
                             variant="warning"
-                            className="button-setting" onClick={notify("warn")}>Warning</Button>
+                            className="button-setting" onClick={notify("warn","warn message")}>Warning</Button>
                     </div>
                     <div class="col-sm">
                         <Button
                             variant="danger"
-                            className="button-setting" onClick={notify("error")}>Error</Button>
+                            className="button-setting" onClick={notify("error","error message")}>Error</Button>
                     </div>
                 </div>
                 <div className="row">
