@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     /* background-color: #f0f0f0; */
-    padding: 1px 10px; /* Increased padding */
+    padding: 1px 10px; 
     border-radius: 5px;
 }
 
@@ -61,4 +61,23 @@
 .three-dots{
     border: none;
     background: none
+}
+/* Add these styles to TestTabs.css */
+  
+  .additional-tabs-dropdown {
+    background-color: white; /* Change the background color of the dropdown */
+    color: black; /* Change the text color of the dropdown items */
+  }
+  
+.custom-dropdown-btn {
+    background-color: white !important; /* Use !important to override Bootstrap styles */
+    color: black !important; /* Use !important to override Bootstrap styles */
+  }
+  
+  .tabs-and-buttons-container .dropdown-toggle::after{
+    display: none;
+  }
+
+  .tabs-and-buttons-container i.fa-solid.fa-ellipsis {
+    padding-right: 21px;
 }
