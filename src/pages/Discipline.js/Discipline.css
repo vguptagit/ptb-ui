@@ -1,0 +1,38 @@
+.container {
+    margin-top: 3rem;
+  }
+  
+  .btn-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .input-group {
+    width: 300px;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .result-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+  }
+  
+  .result-list li {
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .selected {
+    background-color: #eee;
+  }
+  

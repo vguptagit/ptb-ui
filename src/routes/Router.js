@@ -9,6 +9,7 @@ import CustomQuestionsPage from '../pages/CustomQuestionsPage.js';
 import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemplatesPage.js';
 import QuestionBanks from '../pages/QuestionBanks.js';
 import LoginPage from '../pages/LoginPage.js';
+import Discipline from '../pages/Discipline.js/Discipline.js';
 
 const AppRoutes = (
     <Routes>
@@ -23,6 +24,7 @@ const AppRoutes = (
                 <Route path="/home/questionbanks" element={<QuestionBanks />} />
                 <Route path="/home/customquestions" element={<CustomQuestionsPage />} />
                 <Route path="/home/questiontemplates" element={<QuestionTemplatesPage />} />
+                <Route path="/home/discipline" element={<Discipline />} />
             </Route>
             <Route path="/start" element={<StartPage />} />
             <Route path="*" element={<NoPage />} />
