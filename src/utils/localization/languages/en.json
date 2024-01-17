@@ -18,5 +18,7 @@
     "questionbanks.tips":" Questions Banks Tips",
     "questionbanks.instructions.edit" :"To Create a new test, select questions in Question Banks or Custom Questions, then click on the pencil icon or drag or drop the questions here.",
     "questionbanks.instructions.create" : "To edit one of your tests, open Your Tests and drag test here.",
-    "questionbanks.instructions.automatic" : "To create a test automatically from selected topics, select the Test Wizard button."
+    "questionbanks.instructions.automatic" : "To create a test automatically from selected topics, select the Test Wizard button.",
+    "yourtests.addfolder":"Add folder",
+    "yourtests.import":"Import"
 }
