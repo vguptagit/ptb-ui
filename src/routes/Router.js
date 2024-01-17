@@ -10,6 +10,7 @@ import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemp
 import QuestionBanks from '../pages/QuestionBanks.js';
 import LoginPage from '../pages/LoginPage.js';
 import Discipline from '../pages/Discipline.js/Discipline.js';
+import WelcomeScreen from '../pages/welcome-screen/WelcomeScreen.js';
 
 const AppRoutes = (
     <Routes>
@@ -28,6 +29,7 @@ const AppRoutes = (
             </Route>
             <Route path="/start" element={<StartPage />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/welcomescreen" element={<WelcomeScreen />} />
         </Route>
     </Routes>
 );
