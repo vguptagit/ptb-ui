@@ -10,11 +10,6 @@
   .treeview {
     height: 100%;
   }
-  
-  ul {
-    list-style: none;
-  }
-  
   .treeview > ul {
     box-sizing: border-box;
     height: 100%;
