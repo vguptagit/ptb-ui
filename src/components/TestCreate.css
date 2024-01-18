@@ -1,0 +1,19 @@
+/* styles.css */
+
+.test-container {
+    padding: 1rem;
+}
+
+.test-container h3 {
+    margin-top: -11px;
+}
+
+.test-container label {
+    display: block;
+    margin-bottom: -20px;
+}
+
+.test-container input {
+    width: 85%;
+    margin-left: 8px
+}
