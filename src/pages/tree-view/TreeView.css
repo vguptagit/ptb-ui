@@ -1,38 +1,43 @@
-* {
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body, #root {
-    height: 100%;
-  }
-  
-  .treeview {
-    height: 100%;
-  }
-  .treeview > ul {
-    box-sizing: border-box;
-    height: 100%;
-    padding: 30px 15px;
-  }
-  
-  .tree-node {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    padding: 5px;
-    border: 1px solid white;
-    background-color: #F8F8F8;
-  }
-  
-  .tree-node span {
-    cursor: pointer;
-    margin-right: 5px;
-  }
-  
-  .tree-node.custom-style {
-    background-color: #E0E0E0;
-    font-weight: bold;
-  }
-  
-  
+.treeview {
+height: 100%;
+
+ul {
+  list-style: none;
+}
+}
+
+.treeview > ul {
+box-sizing: border-box;
+height: 100%;
+padding: 5px 0px;
+}
+
+.tree-node {
+display: flex;
+align-items: center;
+margin-bottom: 5px;
+padding: 10px;
+background-color: #F8F8F8;
+font-size: 14px;
+color: #4D4D4D;
+line-height: 1em;
+}
+
+.tree-node span {
+cursor: pointer;
+margin-right: 10px;
+}
+
+
+.tree-node.custom-style {
+background: #E0E0E0;
+height: 40px;
+border-bottom: 1px solid #D0D0D0;
+font-family: Helvetica, sans-serif; 
+font-size: 14px;
+color: #4D4D4D;
+line-height: 1em;
+width: auto;
+max-width: 100%; 
+}
+

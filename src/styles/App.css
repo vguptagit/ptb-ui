@@ -19,6 +19,10 @@ $light: #eaf2fb;
 $secondary: #35363b;
 */
 
+html, body, #root {
+  font-family: Helvetica, sans-serif;
+}
+
 .container-xxl {
   margin: 0 auto;
   background-color: #f8f9fa;
