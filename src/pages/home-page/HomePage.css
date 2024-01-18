@@ -31,19 +31,20 @@
     gap: 10px; /* Adjusted gap between buttons */
     align-items: center;
     justify-content: flex-start; /* Changed to align buttons closer */
-    padding: 10px;
+    padding: 3px;
     background-color: #ddd; /* Light grey background color */
 }
 
-.button-style {
-    padding: 10px 12px;
-    background-color: #ddd; /* Light grey background color */
-    color: black; /* Adjust text color as needed */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+ 
+ 
+
+
+
+.align-items-center {
+    background-color: rgb(44, 136, 241);
+    padding-left: 26px;
 }
 
-.button-style:hover {
-    background-color: #ddd; /* Darker grey on hover */
-}
+
+
+
