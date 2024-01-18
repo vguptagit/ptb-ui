@@ -1,0 +1,44 @@
+.discipline.btn-container {
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.discipline.btn-primary {
+  margin-bottom: 20px;
+}
+
+.discipline.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.discipline.input-group {
+  position: relative;
+  width: 100%;
+  transition: none;
+}
+
+.discipline.search-input {
+  min-width: 200px;
+  width: 100%;
+  transition: none;
+}
+
+.discipline.result-list {
+  width: 98%;
+  list-style: none;
+  padding: 0;
+  margin: 10px;
+  position: relative;
+}
+
+.discipline.result-list li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.discipline.selected {
+  background-color: #eee;
+}
