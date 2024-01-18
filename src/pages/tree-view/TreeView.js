@@ -5,8 +5,22 @@ import SampleData from "./sample_data.json";
 import "./TreeView.css";
 
 function TreeView() {
-  const [treeData, setTreeData] = useState(SampleData);
-  const handleDrop = (newTree) => setTreeData(newTree);
+  const [treeData] = useState(SampleData);
+
+  const renderNode = (node, { isOpen, onToggle }) => (
+    <div className={`tree-node ${node.text === 'Add Questions Banks' ? 'custom-style' : ''}`}>
+      {node.droppable && (
+        <span onClick={onToggle}>
+          {node.text === 'Add Questions Banks' ? (
+            "+"
+          ) : (
+            isOpen ? <i class="bi bi-caret-down-fill"></i> : <i class="bi bi-caret-right-fill"></i>
+          )}
+        </span>
+      )}
+      {node.text}
+    </div>
+  );
 
   return (
     <div className="treeview">
@@ -14,18 +28,9 @@ function TreeView() {
         <Tree
           tree={treeData}
           rootId={0}
-          render={(node, { isOpen, onToggle }) => (
-            <div className={`tree-node ${node.text === 'Add Questions Banks' ? 'custom-style' : ''}`}>
-              {node.droppable && (
-                <span onClick={onToggle}>{isOpen ? "+" : "+"}</span>
-              )}
-              {node.text}
-            </div>
-          )}
-          dragPreviewRender={(monitorProps) => (
-            <div>{monitorProps.item.text}</div>
-          )}
-          onDrop={handleDrop}
+          render={renderNode}
+          dragPreviewRender={() => null}
+          onDrop={() => {}}
         />
       </DndProvider>
     </div>
