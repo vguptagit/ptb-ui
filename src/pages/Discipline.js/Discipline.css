@@ -1,31 +1,32 @@
-.btn-container {
+.discipline.btn-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+
 }
 
-.btn-primary {
+.discipline.btn-primary {
   margin-bottom: 20px;
 }
 
-.search-container {
+.discipline.search-container {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
 
-.input-group {
+.discipline.input-group {
   position: relative;
   width: 100%;
   transition: none;
 }
 
-.search-input {
+.discipline.search-input {
   min-width: 200px;
   width: 100%;
   transition: none;
 }
 
-.result-list {
+.discipline.result-list {
   width: 98%;
   list-style: none;
   padding: 0;
@@ -33,11 +34,11 @@
   position: relative;
 }
 
-.result-list li {
+.discipline.result-list li {
   padding: 5px;
   cursor: pointer;
 }
 
-.selected {
+.discipline.selected {
   background-color: #eee;
 }

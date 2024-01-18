@@ -63,28 +63,28 @@ const Discipline = () => {
   };
 
   return (
-    <div className="container">
-      <div className="d-flex justify-content-between mt-3">
+    <div className="discipline-container">
+      <div className="discipline d-flex justify-content-between mt-3">
         <LeftContent />
-        <div className="search-container">
-          <button className="btn btn-primary" onClick={handleNext}>Next</button>
-          <div className="input-group rounded">
+        <div className="discipline search-container">
+          <button className=" discipline btn btn-primary" onClick={handleNext}>Next</button>
+          <div className=" discipline input-group rounded">
             <input
               type="search"
               width="100%"
-              className="form-control rounded search-input"
+              className=" discipline form-control rounded search-input"
               placeholder="Search Discipline"
               aria-label="Search"
               aria-describedby="search-addon"
               value={searchTerm}
               onChange={handleSearch}
             />
-            <span className="input-group-text border-0" id="search-addon">
+            <span className="discipline input-group-text border-0" id="search-addon">
               <i className="fas fa-search"></i>
             </span>
           </div>
 
-          <ul className="result-list mt-3">
+          <ul className=" discipline result-list mt-3">
             {searchResults.map((item, index) => (
               <li
                 key={index}
