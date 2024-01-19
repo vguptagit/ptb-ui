@@ -2,11 +2,14 @@ import { Button } from "react-bootstrap";
 import { useState } from "react"
 import Toastify from "./Toastify";
 import Confirmation from './Confirmation'
+import Loader from "../common/loader/Loader";
 
 function Testing() {
     //This if for Confirmation popup
     const [confirmShow, setConfirmShow] = useState(false);
     const handleConfirmation = () => setConfirmShow(true);
+    const [loader, setLoader] = useState(false);
+    const handleLoader = () => setLoader(!loader);
 
     const handleConfirmYes = () => {
         setConfirmShow(false)
@@ -48,9 +51,13 @@ function Testing() {
                 <div className="row">
                     <div class="col-sm" style={{ padding: "10px" }}>
                         <Button
-                            variant="info"
+                             variant="primary"
                             onClick={handleConfirmation}>Confirmation</Button>
                         {confirmShow && <Confirmation show={confirmShow} handleYes={handleConfirmYes} handleCancel={handleConfirmCancel} ></Confirmation>}
+                    </div>
+                    <div class="col-sm" style={{ padding: "10px" }}>
+                        <Button onClick={handleLoader} variant="primary">Show Loader</Button>
+                        {loader && <Loader show={loader}/>}
                     </div>
                 </div>
             </div>
