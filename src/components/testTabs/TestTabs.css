@@ -1,83 +1,40 @@
-/* TestTabs.css */
+/* styles.css */
 
-/* Base styles for the navigation tabs */
-.nav-tabs {
-    list-style: none;
-    padding: 0 px;
+.test-container {
+    padding: 1rem;
     display: flex;
-    align-items: center;
+    flex-direction: column;
 }
 
-.nav-item {
-    margin-right: -2px;
+.test-container h3 {
+    margin-top: -11px;
 }
 
-.tab-label {
-    position: relative;
-    display: flex;
-    align-items: center;
-    /* background-color: #f0f0f0; */
-    padding: 1px 10px; 
-    border-radius: 5px;
+.test-container label {
+    display: block;
+    margin-bottom: -20px;
 }
 
-.tab-label.active {
-    background-color: #e0e0e0;
+.test-container input .test-container .addfolder-container {
+    width: 85%; /* Make the input fields take up the full width */
+    margin-top: 8px;
 }
 
-/* Styles for the close button */
-.close-tab {
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: absolute; 
-    top: -9px; /* Adjusted top position */
-    right: -22px; /* Adjusted right position */
-    font-size: 5px;
+.ml-2 {
+    margin-top: 2px;
 }
 
-.fa-times {
+input.rounded.form-control {
+    margin-left: -14px;
+    margin-top: -5px;
+}
+
+button.close-tab.btn.btn-link {
+    margin-top: -13px;
     color: black;
-    font-size: 14px; /* Increased font size */
 }
+ 
 
-/* Styles for the plus button */
-.add-tab {
-    background-color: #d3d3d3; /* Light grey background color */
-    border: none;
-    cursor: pointer;
-    padding: 1px 10px; /* Adjusted padding for the button */
-    border-radius: 5px;
+#dropdown-ellipsis.dropdown-toggle::after{
+display: none;
 }
-
-.add-tab:hover {
-    background-color: #c0c0c0;
-}
-
-.tabs-and-buttons-container {
-    width: 100%;
-}
-
-.three-dots{
-    border: none;
-    background: none
-}
-/* Add these styles to TestTabs.css */
-  
-  .additional-tabs-dropdown {
-    background-color: white; /* Change the background color of the dropdown */
-    color: black; /* Change the text color of the dropdown items */
-  }
-  
-.custom-dropdown-btn {
-    background-color: white !important; /* Use !important to override Bootstrap styles */
-    color: black !important; /* Use !important to override Bootstrap styles */
-  }
-  
-  .tabs-and-buttons-container .dropdown-toggle::after{
-    display: none;
-  }
-
-  .tabs-and-buttons-container i.fa-solid.fa-ellipsis {
-    padding-right: 22px;
-  }

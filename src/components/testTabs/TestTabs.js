@@ -7,7 +7,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
-import './TestTabs.css'; // Import the CSS file
+import './TestTabs.css';
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
@@ -15,7 +15,7 @@ const TestTabs = () => {
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
 
   useEffect(() => {
-    const ellipsisItems = tests.slice(4); // Items to be displayed in the ellipsis dropdown from the fifth tab onwards
+    const ellipsisItems = tests.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
   }, [tests]);
@@ -33,7 +33,14 @@ const TestTabs = () => {
 
   const removeTab = (e, testSelected) => {
     e.preventDefault();
-    e.stopPropagation(); // Stop the event from propagating to parent elements
+    e.stopPropagation();
+
+    if (selectedTest && selectedTest.id === testSelected.id) {
+      const index = tests.findIndex((test) => test.id === testSelected.id);
+      const newSelectedTest = tests[index - 1] || tests.find((test) => test.title.startsWith('Untitled'));
+      dispatchEvent('SELECT_TEST', newSelectedTest);
+    }
+
     deleteTest(testSelected);
    
   };
@@ -42,14 +49,13 @@ const TestTabs = () => {
     alert("Button Clicked");
   };
 
-  
 
   return (
     <div className="tab-container">
       <div className="d-flex justify-content-between">
-        <h2 className="create-or-edit-test p-1">
+        <h4 className="p-1">
           <FormattedMessage id="testtabs.title" />
-        </h2>
+        </h4>
         <div className="p-1">
           <Button className="btn-test mr-1">
             <i className="fa-solid fa-wand-magic-sparkles"></i>
@@ -105,7 +111,7 @@ const TestTabs = () => {
             ) : null
           ))}
           {tests.length > 4 && (
-            <Nav.Item className='three-dots-link ms-auto'>
+            <Nav.Item className='three-dots-link'>
               <Dropdown alignRight>
                 <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
                   <i className="fa-solid fa-ellipsis"></i>

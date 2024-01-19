@@ -8,7 +8,7 @@ const QuestionBanksTips = () => {
             <div className="jumbotron">
                 <i className="far fa-lightbulb light-orange"></i>
                 
-                <div className="container">
+                <div className="qbcontainer">
                     <p className="bold-text"><FormattedMessage id="questionbanks.instructions.edit" /></p>
                     <p className="bold-text"><FormattedMessage id="questionbanks.instructions.create" /></p>
                     <p className="bold-text"><FormattedMessage id="questionbanks.instructions.automatic" /></p>
@@ -17,5 +17,6 @@ const QuestionBanksTips = () => {
         </div>
     );
 };
+
 
 export default QuestionBanksTips;
