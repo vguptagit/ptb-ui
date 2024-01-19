@@ -77,7 +77,7 @@ const Discipline = () => {
   return (
     <div className="discipline-container">
       {loading ? (
-        <Loader />
+        <Loader  show="true"/>
       ) : (
         <>
           <div className="top-container">
