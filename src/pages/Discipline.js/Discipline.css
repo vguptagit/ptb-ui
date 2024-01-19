@@ -55,7 +55,7 @@ justify-content: space-around;
   padding: 0;
   margin: 10px;
   position: relative;
-  height: calc(90vh - 85px);
+  height: calc(77vh - 85px);
     overflow: auto;
 }
 
