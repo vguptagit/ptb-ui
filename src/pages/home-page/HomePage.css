@@ -10,7 +10,7 @@
 .App-header .navbar-brand,
 .App-header .nav-link,
 .App-header .nav-link.show {
-    color: #fff;
+    color: #fff !important;
 }
 
 .divider {
@@ -35,16 +35,6 @@
     background-color: #ddd; /* Light grey background color */
 }
 
- 
- 
-
-
-
-.align-items-center {
-    background-color: rgb(44, 136, 241);
-    padding-left: 26px;
+.resource-tab, .create-or-edit-test, .saved-folders, .test-list{
+    font-size: 24px;
 }
-
-
-
-

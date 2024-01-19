@@ -14,9 +14,8 @@ const QuestBanks = () => {
           <i className="fa-solid fa-plus"></i>&nbsp;
           <FormattedMessage id="questionbanks.addquestionsbanks" />
         </Button>
-        
       </div>
-      </div>
+    </div>
   );
 };
 

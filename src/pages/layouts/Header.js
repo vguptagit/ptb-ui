@@ -2,14 +2,17 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Profile from './Profile';
+import { FormattedMessage } from "react-intl";
 
 const Header = () => {
     return (
-      <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
+      <Navbar expand="lg" className="bg-body-tertiary">
         <Container fluid>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand>
             {/* <img src='PSO_BIG.D.png' height='30' alt='' loading='lazy' /> */}
-            Pearson Test Builder
+            <h1 className='pearson-heading'>
+              <FormattedMessage id="pearsonheader.title" />
+            </h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

@@ -1,27 +1,29 @@
     .profile-dropdown .dropdown-menu.show {
         min-width: 220px;
-        margin-left: -115px;
+        margin-left: -99px;
         line-height: 1em;
         border-radius: 5px;
+        padding-bottom: 0px;
     }
 
     .profile-dropdown .profile-name {
-        margin-left: 36px;
+        text-align: center;
         font-weight: bold;
+        margin-right: 10px;
     }
 
     .profile-dropdown .profile-email {
-        margin-left: 35px;
+        text-align: center;
+        margin-right: 10px;
     }
 
     .profile-dropdown .button-setting {
         margin-left: -91px;
-        margin-bottom: -50px;
+        margin-bottom: -38px;
     }
 
     .profile-dropdown .button-signout {
         margin-left: 96px;
-        margin-top: 6px;
     }
 
     .profile-dropdown .navlink {
