@@ -6,9 +6,9 @@ const ResourceTab = () => {
     return (
         <div className="tab-container">
             <div>
-                <h4 className="p-1">
+                <h2 className="resource-tab p-1">
                     <FormattedMessage id="home.title" />
-                </h4>
+                </h2>
             </div>
             <div>
                 <Nav variant="tabs" defaultActiveKey="#/home/tests">

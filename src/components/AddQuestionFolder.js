@@ -32,7 +32,6 @@ const QuestionFolder = () => {
           <i className="fa-solid fa-plus"></i>&nbsp;
           <FormattedMessage id="yourquestions.addquestionfolder" />
         </Button>
-        
       </div>
       {showTextBox && (
         <div className="d-flex align-items-center p-1">
@@ -56,7 +55,7 @@ const QuestionFolder = () => {
         </div>
       )}
 <div>
-        <h4>Saved Folders:</h4>
+        {/* <h2  className='saved-folders p-1'>Saved Folders:</h2> */}
         <ul>
           {savedFolders.map((folder, index) => (
             <li key={index}>{folder}</li>

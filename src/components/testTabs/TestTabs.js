@@ -47,9 +47,9 @@ const TestTabs = () => {
   return (
     <div className="tab-container">
       <div className="d-flex justify-content-between">
-        <h4 className="p-1">
+        <h2 className="create-or-edit-test p-1">
           <FormattedMessage id="testtabs.title" />
-        </h4>
+        </h2>
         <div className="p-1">
           <Button className="btn-test mr-1">
             <i className="fa-solid fa-wand-magic-sparkles"></i>

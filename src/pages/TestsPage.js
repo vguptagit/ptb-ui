@@ -1,6 +1,7 @@
 import { useAppContext } from "../context/AppContext";
 import TestFolder from "../components/AddTestFolder";
 import React from 'react';
+import { FormattedMessage } from "react-intl";
 
 const Tests = () => {
   const { tests, dispatchEvent } = useAppContext();
@@ -15,7 +16,9 @@ const Tests = () => {
       
       <TestFolder/>
       
-      <h3>Test List</h3>
+      <h2 className="test-list p-1">
+        <FormattedMessage id="testlist.title" />
+      </h2>
       <div>
         <ul>
           {tests.map((item, index) => (
