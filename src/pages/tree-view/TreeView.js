@@ -8,14 +8,10 @@ function TreeView() {
   const [treeData] = useState(SampleData);
 
   const renderNode = (node, { isOpen, onToggle }) => (
-    <div className={`tree-node ${node.text === 'Add Questions Banks' ? 'custom-style' : ''}`}>
+    <div className={`tree-node`}>
       {node.droppable && (
         <span onClick={onToggle}>
-          {node.text === 'Add Questions Banks' ? (
-            "+"
-          ) : (
-            isOpen ? <i class="bi bi-caret-down-fill"></i> : <i class="bi bi-caret-right-fill"></i>
-          )}
+          {isOpen ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-right-fill"></i>}
         </span>
       )}
       {node.text}
