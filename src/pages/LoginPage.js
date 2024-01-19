@@ -1,14 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import Loader from "../components/common/loader/Loader";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import User from '../entities/User.Entity';
 
 // Login and session logic goes here.
 const LoginPage = () => {
     const { isAuthenticated, user, login, logout } = useAuth();
-    const [loader, setLoader] = useState(false);
-    const handleLoader = () => setLoader(!loader);
 
     const navigate = useNavigate();
     const handleLogin = () => {
@@ -31,8 +28,6 @@ const LoginPage = () => {
             ) : (
                 <button onClick={handleLogin}>Login</button>
             )}
-            <button onClick={handleLoader}>Show Loader</button>
-            {loader && <Loader show={loader}/>}
         </>
     );
 }
