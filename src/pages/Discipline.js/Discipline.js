@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
@@ -6,25 +6,24 @@ import './Discipline.css';
 const LeftContent = () => {
   return (
     <div className="left-content">
-      <h3><FormattedMessage id="discipline.steps.1" /></h3>
-      <p><b><FormattedMessage id="discipline.steps.2" /></b></p>
+     
+    
       <ul>
         <li><FormattedMessage id="discipline.steps.3" /></li>
         <li><FormattedMessage id="discipline.steps.4" /></li>
         <li><FormattedMessage id="discipline.steps.5" /></li>
-        <li><FormattedMessage id="discipline.steps.6" /></li>
       </ul>
-    </div >
+    </div>
   );
 };
-
 
 const Discipline = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [allData, setAllData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+
   const handleNext = () => {
     navigate("/home");
   };
@@ -55,40 +54,55 @@ const Discipline = () => {
     );
 
     setSearchResults(filteredResults);
-    console.log(document.querySelector('.search-input').offsetWidth);
   };
 
   const handleSelectItem = (item) => {
-    setSelectedItem(item);
+    setSelectedItems((prevSelectedItems) => {
+      if (prevSelectedItems.includes(item)) {
+        const newSelectedItems = prevSelectedItems.filter((selectedItem) => selectedItem !== item);
+        console.log("Deselected:", item);
+        console.log("Selected items:", newSelectedItems);
+        return newSelectedItems;
+      } else {
+        const newSelectedItems = [...prevSelectedItems, item];
+        console.log("Selected:", item);
+        console.log("Selected items:", newSelectedItems);
+        return newSelectedItems;
+      }
+    });
   };
 
   return (
     <div className="discipline-container">
-      <div className="discipline d-flex justify-content-between mt-3">
+      <div className="top-container">
+      <p><b><FormattedMessage id="discipline.steps.2" /></b></p>
+        <button className="discipline btn btn-primary" onClick={handleNext}>Next</button>
+      </div>
+      <div className="discipline d-flex justify-content-between">
         <LeftContent />
         <div className="discipline search-container">
-          <button className=" discipline btn btn-primary" onClick={handleNext}>Next</button>
-          <div className=" discipline input-group rounded">
+          <div className="discipline input-group rounded">
             <input
               type="search"
               width="100%"
-              className=" discipline form-control rounded search-input"
+              className="discipline form-control rounded search-input"
               placeholder="Search Discipline"
               aria-label="Search"
               aria-describedby="search-addon"
               value={searchTerm}
               onChange={handleSearch}
             />
-            <span className="discipline input-group-text border-0" id="search-addon">
-              <i className="fas fa-search"></i>
-            </span>
+            <div className="discipline input-group-append">
+              <span className="discipline input-group-text border-0" id="search-addon">
+                <i className="fas fa-search"></i>
+              </span>
+            </div>
           </div>
-
-          <ul className=" discipline result-list mt-3">
+          <ul className="discipline result-list mt-3">
             {searchResults.map((item, index) => (
               <li
                 key={index}
-                className={item === selectedItem ? "selected" : ""}
+                className={`result-item ${selectedItems.includes(item) ? "selected" : ""}`}
                 onClick={() => handleSelectItem(item)}
               >
                 {item}
