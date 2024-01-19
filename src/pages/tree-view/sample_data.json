@@ -1,11 +1,5 @@
 [
     {
-      "id": 1,
-      "parent": 0,
-      "droppable": true,
-      "text": "Add Questions Banks"
-    },
-    {
       "id": 2,
       "parent": 0,
       "droppable": true,
