@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
 import QuestionsBanksTips from './testTabs/QuestionsBanksTips/QuestionsBanksTips';
 import "./TestCreate.css"; // Import the CSS file
+// import Essay from "./questions/Essay";
 
 const TestCreate = () => {
     const { selectedTest } = useAppContext();
@@ -22,6 +23,7 @@ const TestCreate = () => {
                 </label>
                 <br />
                 <QuestionsBanksTips />
+                {/* <Essay></Essay> */}
             </div>
         </div>
     );

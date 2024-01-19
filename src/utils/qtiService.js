@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import QTI from './qti-player';
 
 var QtiService = function() {
 
@@ -8,7 +9,7 @@ var QtiService = function() {
     }
 
     var getQtiJsonModal = function(qtiXML, quizType) {
-        var xml = jQuery.parseXML(qtiXML);			
+        var xml = $.parseXML(qtiXML);			
 
         var qtiModel = {};			
 
@@ -434,6 +435,7 @@ var QtiService = function() {
     }
 
     var questionIndex = [ "A) ", "B) ", "C) ", "D) ", "E) ","F) ","G) ","H) ","I) ", "J) ","K) ","L) ","M) ","N) ", "O) ","P) ","Q) ","R) "];
+    var questionPlainIndex = [ "A) ", "B) ", "C) ", "D) ", "E) ","F) ","G) ","H) ","I) ", "J) ","K) ","L) ","M) ","N) ", "O) ","P) ","Q) ","R) "];
 
     this.getQuestionIndex = function(index) {			
         return questionIndex[index];
@@ -562,7 +564,7 @@ var QtiService = function() {
 
     this.getQtiXML = function(node) {
 
-        var xml = jQuery.parseXML(node.data);	
+        var xml = $.parseXML(node.data);	
         var quizType = node.quizType;				
         node.qtiModel.Caption = replaceImageFromJsonContent(node.qtiModel.Caption);
         var qstnCaption = node.qtiModel.Caption;
@@ -770,6 +772,6 @@ var QtiService = function() {
     }
 
 
-}
+};
 
 export default QtiService;
