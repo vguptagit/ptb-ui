@@ -1,15 +1,29 @@
 .discipline.btn-container {
-  display: flex;
-  justify-content: space-around;
+display: flex;
+background-color: #F8F8F8;
+color: #4D4D4D;
+line-height: 1em;
+justify-content: space-around;
 
 }
 
-.discipline.btn-primary {
+
+.top-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F8F8F8;
+  color: #4D4D4D;
+  line-height: 1em;
+  padding: 10px;
+  border-bottom: 1px solid #D0D0D0;
   margin-bottom: 20px;
 }
 
 .discipline.search-container {
+  width:55%;
   display: flex;
+  margin-right: 10px;
   flex-direction: column;
   align-items: flex-end;
 }
@@ -17,7 +31,16 @@
 .discipline.input-group {
   position: relative;
   width: 100%;
-  transition: none;
+}
+
+.discipline.input-group-append {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .discipline.search-input {
@@ -32,13 +55,20 @@
   padding: 0;
   margin: 10px;
   position: relative;
+  height: calc(90vh - 85px);
+    overflow: auto;
 }
 
 .discipline.result-list li {
   padding: 5px;
   cursor: pointer;
+  border-bottom: 1px solid #D0D0D0; 
 }
 
-.discipline.selected {
-  background-color: #eee;
+.discipline.result-list li:last-child {
+  border-bottom: none;
+}
+
+.discipline.result-list li.selected {
+  background-color: #ddd;
 }

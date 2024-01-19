@@ -24,11 +24,10 @@
     "yourtests.addfolder":"Add folder",
     "yourtests.import":"Import",
     "discipline.steps.1":"Setup",
-    "discipline.steps.2":"Step 1 of 3:Choose your discipline",
+    "discipline.steps.2":" 1 of 3:Choose your discipline",
     "discipline.steps.3":"Pick the discipline(s) on the right in which you create.",
-    "discipline.steps.4":"Publisher questionbanks in the descipline",
-    "discipline.steps.5":"Can select multiple Discipline",
-    "discipline.steps.6":"To deselect it, select it again",
+    "discipline.steps.4":"This will make the questions banks in these descipline available to you",
+    "discipline.steps.5":"Can select more than one discipline by clicking.Tap again to deselect",
     "yourquestions.addquestionfolder":"Add Question Folder",
     "questionbanks.addquestionsbanks":"Add Questions Banks"
 }
