@@ -12,11 +12,10 @@ const Tests = () => {
 
  
   return (
-    <div className="p-1">
-      
+    <>
       <TestFolder/>
       
-      <h2 className="test-list p-1">
+      {/* <h2 className="test-list p-1">
         <FormattedMessage id="testlist.title" />
       </h2>
       <div>
@@ -27,10 +26,9 @@ const Tests = () => {
             </li>
           ))}
         </ul>
-      </div>
-      
-    </div>
-  );
+      </div> */}
+      </>
+  );  
 };
 
 export default Tests;
