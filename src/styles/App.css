@@ -21,7 +21,6 @@ $secondary: #35363b;
 
 html, body, #root {
   font-family: Helvetica, sans-serif;
-  overflow: hidden;
 }
 
 .container-xxl {
@@ -168,3 +167,5 @@ html, body, #root {
 .py-5 { padding-top:3rem!important;padding-bottom:3rem!important; }
 
 .color-black { color: #000 !important;}
+
+.pearson-heading{ font-size: 20px;}
