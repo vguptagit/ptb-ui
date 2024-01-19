@@ -21,6 +21,7 @@ $secondary: #35363b;
 
 html, body, #root {
   font-family: Helvetica, sans-serif;
+  overflow: hidden;
 }
 
 .container-xxl {
