@@ -13,12 +13,25 @@ const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
+  const [selectedTestTitle, setSelectedTestTitle] = useState('');
 
   useEffect(() => {
     const ellipsisItems = tests.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
-  }, [tests]);
+
+    // Select the "Untitled 1" tab by default if no test is already selected
+    if (!selectedTest) {
+      const untitled1Test = tests.find((test) => test.title === 'Untitled 1');
+      dispatchEvent('SELECT_TEST', untitled1Test);
+    }
+
+  }, [tests, selectedTest, dispatchEvent]);
+
+  useEffect(() => {
+    // Update the selectedTestTitle when the selectedTest changes
+    setSelectedTestTitle(selectedTest ? selectedTest.title : '');
+  }, [selectedTest]);
 
   const handleNodeSelect = (item) => {
     dispatchEvent('SELECT_TEST', item);
@@ -42,7 +55,6 @@ const TestTabs = () => {
     }
 
     deleteTest(testSelected);
-   
   };
 
   const sampleButton = () => {
@@ -52,18 +64,18 @@ const TestTabs = () => {
 
   return (
     <div className="tab-container">
-      <div className="d-flex justify-content-between">
+      <div className="d-flex flex-column flex-sm-row justify-content-between">
         <h4 className="p-1">
           <FormattedMessage id="testtabs.title" />
         </h4>
-        <div className="p-1">
+        <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
           <Button className="btn-test mr-1">
             <i className="fa-solid fa-wand-magic-sparkles"></i>
             <FormattedMessage id="testtabs.testwizard" />
           </Button>
-           
-          <ButtonGroup>
-            <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mr-1">
+
+          <ButtonGroup className="mt-2 mt-sm-0 ml-sm-2 flex-column flex-sm-row">
+            <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1">
               <Dropdown.Item href="#">
                 <FormattedMessage id="testtabs.save" />
               </Dropdown.Item>
@@ -71,15 +83,15 @@ const TestTabs = () => {
                 <FormattedMessage id="testtabs.saveas" />
               </Dropdown.Item>
             </DropdownButton>
-            <div className="d-flex justify-content-center">
-              <Button className="btn-test mr-1" disabled>
+            <DropdownButton id="dropdown-item-button" title="Print" className="btn-test">
+              <Dropdown.Item href="#" disabled>
                 <FormattedMessage id="testtabs.print" />
-              </Button>
-              <Button className="btn-test mr-1" disabled>
-                <FormattedMessage id="testtabs.export" />
-              </Button>
-            </div>
+              </Dropdown.Item>
+            </DropdownButton>
           </ButtonGroup>
+          <Button className="btn-test mt-2 mt-sm-0" disabled>
+            <FormattedMessage id="testtabs.export" />
+          </Button>
         </div>
       </div>
 
