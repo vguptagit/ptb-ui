@@ -1,8 +1,6 @@
-.discipline.btn-container {
-display: flex;
-background-color: #F8F8F8;
+.discipline-container {
+background-color: #FFFF;
 color: #4D4D4D;
-line-height: 1em;
 justify-content: space-around;
 
 }
@@ -40,7 +38,7 @@ justify-content: space-around;
   bottom: 0;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0px 10px 5px;
 }
 
 .discipline.search-input {
@@ -50,7 +48,7 @@ justify-content: space-around;
 }
 
 .discipline.result-list {
-  width: 98%;
+  width: 100%;
   list-style: none;
   padding: 0;
   margin: 10px;
@@ -70,5 +68,7 @@ justify-content: space-around;
 }
 
 .discipline.result-list li.selected {
-  background-color: #ddd;
+   background-color: #007FA9;
+   Box-Shadow: 3px - Inset top, #006A8D;
+   Color: #FFFFFF
 }
