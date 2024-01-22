@@ -1,8 +1,6 @@
-.discipline.btn-container {
-display: flex;
-background-color: #F8F8F8;
+.discipline-container {
+background-color: #FFFF;
 color: #4D4D4D;
-line-height: 1em;
 justify-content: space-around;
 
 }
