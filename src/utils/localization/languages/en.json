@@ -29,5 +29,6 @@
     "discipline.steps.4":"This will make the questions banks in these descipline available to you",
     "discipline.steps.5":"Can select more than one discipline by clicking.Tap again to deselect",
     "yourquestions.addquestionfolder":"Add Question Folder",
-    "questionbanks.addquestionsbanks":"Add Questions Banks"
+    "questionbanks.addquestionsbanks":"Add Questions Banks",
+    "testName": "Test Name"
 }

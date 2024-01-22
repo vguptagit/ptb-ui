@@ -2,6 +2,8 @@
 
 .test-container {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .test-container h3 {
@@ -13,7 +15,17 @@
     margin-bottom: -20px;
 }
 
-.test-container input {
-    width: 85%;
-    margin-left: 8px
+.test-container input .test-container .addfolder-container {
+    width: 85%; /* Make the input fields take up the full width */
+    margin-top: 8px;
 }
+
+.ml-21 {
+    margin-top: 2px;
+}
+
+input.rounded.form-control {
+    margin-left: -14px;
+    margin-top: -5px;
+}
+
