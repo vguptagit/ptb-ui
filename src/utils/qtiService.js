@@ -1,20 +1,22 @@
 import $ from 'jquery';
 import QTI from './qti-player';
 
-var QtiService = function() {
+var QtiService = {};
+QTI.initialized = false;
 
-    this.getQtiModel = function(qtiXML, quizType) {
-        var qtiModel = getQtiJsonModal(qtiXML, quizType);
+
+    QtiService.getQtiModel = function(qtiXML, quizType) {
+        var qtiModel = QtiService.getQtiJsonModal(qtiXML, quizType);
         return qtiModel;
     }
 
-    var getQtiJsonModal = function(qtiXML, quizType) {
+    QtiService.getQtiJsonModal = function(qtiXML, quizType) {
         var xml = $.parseXML(qtiXML);			
 
         var qtiModel = {};			
 
         qtiModel.QstnSectionTitle =  QuestionPrefilledModal[quizType].qstnSectionTitle;
-        qtiModel.Caption=  getQuestionCaption(xml);
+        qtiModel.Caption=  QtiService.getQuestionCaption(xml);
         qtiModel.PrintCaption = QuestionPrefilledModal[quizType].printCaption;
         qtiModel.EditCaption = QuestionPrefilledModal[quizType].editCaption;
 
@@ -23,26 +25,26 @@ var QtiService = function() {
         case 'MultipleChoice':
         case 'MultipleResponse':
         case 'TrueFalse':					
-            qtiModel.Options = getQuestionOptions(xml, quizType);
+            qtiModel.Options = QtiService.getQuestionOptions(xml, quizType);
             qtiModel.PrintOption = QuestionPrefilledModal[quizType].printOption;
             qtiModel.EditOption = QuestionPrefilledModal[quizType].editOption;
-            qtiModel.CorrectAnswer = getQuestionCorrectAnswers(xml, quizType);
-            qtiModel.Orientation = getQuestionOrientation(xml)=="horizontal"?false:true;			
+            qtiModel.CorrectAnswer = QtiService.getQuestionCorrectAnswers(xml, quizType);
+            qtiModel.Orientation = QtiService.getQuestionOrientation(xml)=="horizontal"?false:true;			
 
             break;
 
         case 'Essay':	
-            qtiModel.Caption = getEssayCaption(xml);										
+            qtiModel.Caption = QtiService.getEssayCaption(xml);										
             qtiModel.PrintRecommendedAnswer = QuestionPrefilledModal[quizType].printRecommendedAnswer;
             qtiModel.EditRecommendedAnswer = QuestionPrefilledModal[quizType].editRecommendedAnswer;
-            qtiModel.RecommendedAnswer = getEssayRecommendedAnswer(xml);		
-            qtiModel.EssayPageSize = getEssayPageSize(xml);
+            qtiModel.RecommendedAnswer = QtiService.getEssayRecommendedAnswer(xml);		
+            qtiModel.EssayPageSize = QtiService.getEssayPageSize(xml);
 
             break;
 
         case 'Matching':	
 
-            qtiModel.Options = getQuestionOptions(xml, quizType);
+            qtiModel.Options = QtiService.getQuestionOptions(xml, quizType);
             qtiModel.PrintOption = QuestionPrefilledModal[quizType].printOption;
             qtiModel.printMatchingOption = QuestionPrefilledModal[quizType].printMatchingOption;					
             qtiModel.editOption_Column_A1 = QuestionPrefilledModal[quizType].editOption_Column_A1;
@@ -52,12 +54,12 @@ var QtiService = function() {
             break;
 
         case 'FillInBlanks':		
-            qtiModel.FbCaption = getFBQuestionCaption(xml);		
-            qtiModel.Caption = getFbCaptionHTML(qtiModel.FbCaption);						
-            qtiModel.CorrectAnswerHtml = getFBCorrectAnswersHtml(xml);		
+            qtiModel.FbCaption = QtiService.getFBQuestionCaption(xml);		
+            qtiModel.Caption = QtiService.getFbCaptionHTML(qtiModel.FbCaption);						
+            qtiModel.CorrectAnswerHtml = QtiService.getFBCorrectAnswersHtml(xml);		
             qtiModel.PrintOption = QuestionPrefilledModal[quizType].printOption;									
             //qtiModel.CorrectAnswer = getFBCorrectAnswers(xml);	
-            qtiModel.BlankSize = getFBQuestionBlankSize(xml);		
+            qtiModel.BlankSize = QtiService.getFBQuestionBlankSize(xml);		
 
             break;
         }			
@@ -67,12 +69,12 @@ var QtiService = function() {
     
     
             
-    var getFBQuestionBlankSize = function(xml) {
+    QtiService.getFBQuestionBlankSize = function(xml) {
         var blankSize = $(xml).find('itemBody').find("textEntryInteraction").attr("expectedLength");				
         return typeof(blankSize)=='undefined'?"20":blankSize;
     }
 
-    var getFBCorrectAnswers = function(qtiXML) {
+    QtiService.getFBCorrectAnswers = function(qtiXML) {
         var correctAnswerList = [];			
         $(qtiXML).find('responseDeclaration').each(function(i, e) {
             correctAnswerList.push($(this)[0].children[0].children[0].attributes['mapKey'].nodeValue);
@@ -80,7 +82,7 @@ var QtiService = function() {
         return correctAnswerList;
     }
     
-    var getFBQuestionCaption = function(xml) {
+    QtiService.getFBQuestionCaption = function(xml) {
         var caption=[];	
         var txtContent;
         var item;
@@ -106,7 +108,7 @@ var QtiService = function() {
         return caption;
     }
 
-    var getFBCorrectAnswersHtml = function(qtiXML) {
+    QtiService.getFBCorrectAnswersHtml = function(qtiXML) {
         var correctAnswerList = [];		
         var correctAnswers = '';
     
@@ -124,7 +126,7 @@ var QtiService = function() {
     }
     
     // to render Caption of Fill in the blank which contains html content
-    var getFbCaptionHTML = function(Caption) {
+    QtiService.getFbCaptionHTML = function(Caption) {
         var FbCaption = "";
 
         var textEntryInteraction = '<button data-ng-if="(caption.type==2)" id="RESPONSE_$index" onkeydown="return getSpanId(this,event)" class="blankFIBButton">'+
@@ -148,11 +150,11 @@ var QtiService = function() {
         return FbCaption;
     }
     
-    var getQuestionCaption = function(xml) {
-        return getSerializedXML($(xml).find('itemBody').find('p').eq(0));
+    QtiService.getQuestionCaption = function(xml) {
+        return QtiService.getSerializedXML($(xml).find('itemBody').find('p').eq(0));
     }
 
-    var getEssayPageSize = function(xml) {
+    QtiService.getEssayPageSize = function(xml) {
         var nodeEssayPageSize = '0';
         if($(xml).find('itemBody').find("extendedTextInteraction").length > 0)
             nodeEssayPageSize = $(xml).find('itemBody').find("extendedTextInteraction").eq(0).attr("expectedLines");
@@ -160,21 +162,21 @@ var QtiService = function() {
         return nodeEssayPageSize;
     }
 
-    var getEssayCaption = function(xml) {			
-        return getSerializedXML($(xml).find('itemBody').find('blockquote').find('p').eq(0));
+    QtiService.getEssayCaption = function(xml) {			
+        return QtiService.getSerializedXML($(xml).find('itemBody').find('blockquote').find('p').eq(0));
     }
 
-    var getEssayRecommendedAnswer = function(xml) {	
+    QtiService.getEssayRecommendedAnswer = function(xml) {	
         var recommendedAnswer = "";
          $(xml).find('responseDeclaration').each(function(i, e){
-                recommendedAnswer = this.textContent;                
+                recommendedAnswer = this.actualContenttextContent;                
           });
         var element = $('<div></div>');
         $(element).append(recommendedAnswer);			
         return $(element)[0].textContent;
     }
 
-    var jsonReplaceUL = function(content) {
+    QtiService.jsonReplaceUL = function(content) {
         var htmlText = content.trim().replace(/&nbsp;/, " ");
         var element = $('<p></p>');
         $(element).append(htmlText);
@@ -192,26 +194,26 @@ var QtiService = function() {
 
     
 
-    var getQuestionOptions = function(xml, quizType) {
+    QtiService.getQuestionOptions = function(xml, quizType) {
         var optionList = [];
         switch (quizType) {
         case 'MultipleChoice':
         case 'MultipleResponse':
         case 'TrueFalse':
-            optionList = getSimpleChoices(xml);
+            optionList = QtiService.getSimpleChoices(xml);
             break;
         case 'Essay':
             break;
         case 'FillInBlanks':
             break;
         case 'Matching':
-            optionList = getMacthingOptions(xml);
+            optionList = QtiService.getMacthingOptions(xml);
             break;
         }
         return optionList;
     }
 
-    var getInlineChoice = function(qtiXML){
+    QtiService.getInlineChoice = function(qtiXML){
         var rightColumnOptions=[];
         $(qtiXML).find('itemBody').find('blockquote').each(function(i, e){
             var leftOptionIdentifier=$(this).find("inlineChoiceInteraction").attr("responseIdentifier");
@@ -235,18 +237,18 @@ var QtiService = function() {
         return rightColumnOptions;
     }
 
-    var getInlineChoiceInteraction = function(qtiXML){
+    QtiService.getInlineChoiceInteraction = function(qtiXML){
         var leftColumnOptions=[];			
         $(qtiXML).find('itemBody').find('blockquote').each(function(i, e) {
             $(this).find("p").find('inlineChoiceInteraction').remove();
-            leftColumnOptions.push(getSerializedXML($(this).find("p").eq(0)));
+            leftColumnOptions.push(QtiService.getSerializedXML($(this).find("p").eq(0)));
         });				
         return leftColumnOptions;
     }
 
-    var getMacthingOptions = function(qtiXML){				
-        var rightColumnOptions=getInlineChoice(qtiXML);		
-        var leftColumnOptions=getInlineChoiceInteraction(qtiXML);
+    QtiService.getMacthingOptions = function(qtiXML){				
+        var rightColumnOptions=QtiService.getInlineChoice(qtiXML);		
+        var leftColumnOptions=QtiService.getInlineChoiceInteraction(qtiXML);
         var optionList = [];
         for (var i in leftColumnOptions) {
             for (var j in rightColumnOptions) {
@@ -260,7 +262,7 @@ var QtiService = function() {
         return optionList;
     }
 
-    var getQuestionOrientation = function(qtiXML) {
+    QtiService.getQuestionOrientation = function(qtiXML) {
         var optionsView = '';
         if($(qtiXML).find('itemBody').find('choiceInteraction').attr('orientation')){
             optionsView =$(qtiXML).find('itemBody').find('choiceInteraction').attr('orientation');
@@ -268,15 +270,15 @@ var QtiService = function() {
         return optionsView.toLowerCase();
     }
 
-    var getQuestionCorrectAnswers = function(qtiXML, quizType) {
+    QtiService.getQuestionCorrectAnswers = function(qtiXML, quizType) {
         var correctAnswerList = [];
         switch (quizType) {
         case 'MultipleChoice':
         case 'TrueFalse':
-            correctAnswerList = getMultipleChoiceCorrectAnswer(qtiXML);
+            correctAnswerList = QtiService.getMultipleChoiceCorrectAnswer(qtiXML);
             break;
         case 'MultipleResponse':
-            correctAnswerList = getMultipleResponseCorrectAnswer(qtiXML);
+            correctAnswerList = QtiService.getMultipleResponseCorrectAnswer(qtiXML);
             break;
         case 'Essay':
             break;
@@ -288,16 +290,16 @@ var QtiService = function() {
         return correctAnswerList;
     }
 
-    var getSimpleChoices = function(qtiXML) {
+    QtiService.getSimpleChoices = function(qtiXML) {
         var optionList = [];
         $(qtiXML).find('itemBody').find('choiceInteraction').find(
         "simpleChoice").each(function(i, e) {
-            optionList.push(getSerializedXML($(this)));
+            optionList.push(QtiService.getSerializedXML($(this)));
         });
         return optionList;
     }
 
-    var getMultipleChoiceCorrectAnswer = function(qtiXML) {
+    QtiService.getMultipleChoiceCorrectAnswer = function(qtiXML) {
         var correctAnswerIndex ;
         $(qtiXML).find('setOutcomeValue[identifier="SCORE"] baseValue')
         .each(function(i, e) {
@@ -312,7 +314,7 @@ var QtiService = function() {
         return correctAnswerIndex;
     }
 
-    var getMultipleResponseCorrectAnswer = function(qtiXML) {
+    QtiService.getMultipleResponseCorrectAnswer = function(qtiXML) {
         var correctAnswerList = [];
         var responseAnswerList = [];
         $(qtiXML).find('responseDeclaration mapEntry').each(
@@ -336,7 +338,7 @@ var QtiService = function() {
         return responseAnswerList;
     }
 
-    var getSerializedXML = function(qtiNode) {
+    QtiService.getSerializedXML = function(qtiNode) {
         var serializedQtiNode = '';
         var serializedText = '';
         var xmlChildren = qtiNode.eq(0).get(0).childNodes;
@@ -437,14 +439,14 @@ var QtiService = function() {
     var questionIndex = [ "A) ", "B) ", "C) ", "D) ", "E) ","F) ","G) ","H) ","I) ", "J) ","K) ","L) ","M) ","N) ", "O) ","P) ","Q) ","R) "];
     var questionPlainIndex = [ "A) ", "B) ", "C) ", "D) ", "E) ","F) ","G) ","H) ","I) ", "J) ","K) ","L) ","M) ","N) ", "O) ","P) ","Q) ","R) "];
 
-    this.getQuestionIndex = function(index) {			
+    QtiService.getQuestionIndex = function(index) {			
         return questionIndex[index];
     }
-    this.getQuestionPlainIndex = function(index) {			
+    QtiService.getQuestionPlainIndex = function(index) {			
         return questionPlainIndex[index];
     }
 
-    this.replaceImage = function(content) {
+    var replaceImage = function(content) {
         return replaceImageFromJsonContent(content);
     }
     
@@ -562,7 +564,7 @@ var QtiService = function() {
     }
 
 
-    this.getQtiXML = function(node) {
+    QtiService.getQtiXML = function(node) {
 
         var xml = $.parseXML(node.data);	
         var quizType = node.quizType;				
@@ -760,7 +762,7 @@ var QtiService = function() {
     
     //decoding the encoded char to special char &quot; ==> '"'
     //eg: html editor encoding the double qoute to encoded char (&quot;)
-    this.decodingEncodeChar = function(text){
+    var decodingEncodeChar = function(text){
         var chars = ['"']; 
         var codes = [/&quot;/g];
 
@@ -770,8 +772,5 @@ var QtiService = function() {
         
         return text;
     }
-
-
-};
 
 export default QtiService;
