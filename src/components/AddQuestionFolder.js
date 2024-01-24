@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 
-
 const QuestionFolder = () => {
     const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState('');
@@ -26,7 +25,7 @@ const QuestionFolder = () => {
   };
 
   return (
-    <div className="p-1">
+    <div className="p-2">
       <div className="button-container">
         <Button className="color-black" variant="outline-light" onClick={handleAddQuestionFolderClick}>
           <i className="fa-solid fa-plus"></i>&nbsp;
@@ -34,7 +33,7 @@ const QuestionFolder = () => {
         </Button>
       </div>
       {showTextBox && (
-        <div className="d-flex align-items-center p-1">
+        <div className="d-flex align-items-center mt-2">
           <div className="flex-grow-1 mr-2">
             <Form.Control
               type="text"

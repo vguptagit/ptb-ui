@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const TestFolder = () => {
     const [showTextBox, setShowTextBox] = useState(false);
@@ -26,19 +27,21 @@ const TestFolder = () => {
   };
 
   return (
-    <div className="p-1">
+    <div className="p-2">
       <div className="button-container">
-        <Button className="color-black" variant="outline-light" onClick={handleAddFolderClick}>
-          <i className="fa-solid fa-plus"></i>&nbsp;
-          <FormattedMessage id="yourtests.addfolder" />
-        </Button>
-        <Button className="color-black" variant="outline-light">
-          <i className="fa-solid fa-download"></i>&nbsp;
-          <FormattedMessage id="yourtests.import" />
-        </Button>
+        <OverlayTrigger placement="bottom" overlay={<Tooltip id="add-folder">Add new folder</Tooltip>}>
+          <Button className="color-black" variant="outline-light" onClick={handleAddFolderClick}>
+            <i className="fa-solid fa-plus"></i>&ensp;
+            <FormattedMessage id="yourtests.addfolder" />
+          </Button>
+        </OverlayTrigger>
+          <Button className="color-black" variant="outline-light">
+            <i className="fa-solid fa-download"></i>&ensp;
+            <FormattedMessage id="yourtests.import" />
+          </Button>
       </div>
       {showTextBox && (
-        <div className="d-flex align-items-center p-1">
+        <div className="d-flex align-items-center mt-2">
           <div className="flex-grow-1 mr-2">
             <Form.Control
               type="text"

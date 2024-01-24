@@ -18,7 +18,7 @@ const QuestionTemplatesPage = () => {
 
 
     return (
-        <div className="p-1">
+        <div className="p-2">
               <ul>
                 {questionTemplates.map((questionTemplate, index) =>
                     <li  qstntemplate={questionTemplate.qstnTemplate.toString()}  className="row qstn-header myLI12"   key={index}>
