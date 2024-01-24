@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
+import Discipline_data from "./Discipline_data.json";
 
 const LeftContent = () => {
   return (
@@ -25,15 +26,13 @@ const Discipline = () => {
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
-    navigate("/home");
+    navigate("/booktab");
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-        const data = await response.json();
-        const titles = data.map(item => item.title);
+       const titles = (Discipline_data);
         setAllData(titles);
         setSearchResults(titles);
         setLoading(false);
