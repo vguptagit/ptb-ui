@@ -28,6 +28,11 @@
     "discipline.steps.3":"Pick the discipline(s) on the right in which you create.",
     "discipline.steps.4":"This will make the question banks in these discipline available to you",
     "discipline.steps.5":"Can select more than one discipline by clicking.Tap again to deselect",
+    "booktab.steps.1":"2 of 3:Choose Your Textbook or Topics",
+    "booktab.steps.2":"Pick the Textbook or Topics on the right from which you create tests",
+    "booktab.steps.3":"Topics are question banks drawn from multiple resourses",
+    "booktab.steps.4":"You can select more than one Textbook by clicking,tap again to deselect",
+
     "yourquestions.addquestionfolder":"Add Question Folder",
     "questionbanks.addquestionsbanks":"Add Questions Banks",
     "testName": "Test Name"
