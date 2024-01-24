@@ -2,7 +2,7 @@ import axios from "axios";
 
 const httpInterceptor = axios.create({
     headers:{
-        
+        "Accept" : "application/json",
     }
 });
 

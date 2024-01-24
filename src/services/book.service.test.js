@@ -1,4 +1,4 @@
-import httpInterceptor from "../ajaxHelper/ajaxHelper";
+import httpInterceptor from "../httpHelper/httpHelper";
 import { getAllBooks } from "./book.service";
 
 describe("books api", ()=>{
