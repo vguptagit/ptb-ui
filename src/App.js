@@ -6,6 +6,8 @@ import { initLocale, localeMessages } from './utils/localization/Localization';
 import { AuthProvider } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import { ToastContainer } from 'react-toastify';
+import { DndProvider } from 'react-dnd';
+import { MultiBackend, getBackendOptions } from '@minoru/react-dnd-treeview';
 
 function App() {
   return (
@@ -13,11 +15,13 @@ function App() {
       <AuthProvider>
         <AppProvider>
           <IntlProvider locale={initLocale} messages={localeMessages}>
-            <div className="App">
-              <div>
-                {AppRoutes}
+          <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+              <div className="App">
+                <div>
+                  {AppRoutes}
+                </div>
               </div>
-            </div>
+          </DndProvider>
           </IntlProvider>
         </AppProvider>
       </AuthProvider>

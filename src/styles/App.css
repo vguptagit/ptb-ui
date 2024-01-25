@@ -188,6 +188,29 @@ html, body, #root {
 .px-5 { padding-right:3rem!important;padding-left:3rem!important; }
 .py-5 { padding-top:3rem!important;padding-bottom:3rem!important; }
 
-.color-black { color: #000 !important;}
+.color-black { 
+  color: #000 !important;
+  border: none !important;
+}
+
+.color-black:hover { 
+  background-color: #ddd !important;
+}
 
 .pearson-heading{ font-size: 20px;}
+
+.btn-primary{ 
+  --bs-btn-bg: #007fa9 !important; 
+  --bs-btn-border-color: #006a8d !important;
+  --bs-btn-hover-bg: #006a8d !important;
+  --bs-btn-hover-border-color: #006a8d !important;
+  --bs-btn-active-bg: #007fa9 !important;
+  --bs-btn-active-border-color: #006a8d !important;
+  --bs-btn-disabled-color: #eef8fc;
+  --bs-btn-disabled-bg: #a0d1e1;
+  --bs-btn-disabled-border-color: #a0d1e1;
+}
+
+.text-box{
+  background-color: #007fa9;
+}
