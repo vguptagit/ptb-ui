@@ -133,7 +133,7 @@ const Booktab = () => {
                 type="search"
                 width="100%"
                 className="booktab form-control rounded search-input"
-                placeholder="Search Booktab"
+                placeholder="Search Books"
                 aria-label="Search"
                 aria-describedby="search-addon"
                 value={searchTerm}
