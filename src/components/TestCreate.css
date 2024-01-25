@@ -12,7 +12,7 @@
 
 .test-container label {
     display: block;
-    margin-bottom: -20px;
+    margin-bottom: -2px;
 }
 
 .test-container input .test-container .addfolder-container {
@@ -27,5 +27,25 @@
 input.rounded.form-control {
     margin-left: 0px;
     margin-top: 0px;
+}
+
+.editmode {
+  overflow: auto;
+  height: calc(74vh - 85px);
+}
+
+#example-collapse-text {
+ margin-bottom: 26px;
+}
+
+.savelink {
+    text-decoration: none;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.deletelink {
+    text-decoration: none;
+    font-weight: bold;
 }
 
