@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import './Booktab.css';
 import { DndProvider } from "react-dnd";
 import { Tree, MultiBackend, getBackendOptions } from "@minoru/react-dnd-treeview";
-import SampleData from "../tree-view/sample_data.json";
+import BooktabData from "./Booktab_data.json";
 import Loader from "../../components/common/loader/Loader";
 
 
@@ -21,7 +21,7 @@ const LeftContent = () => {
 };
 
 const TreeView = ({ searchTerm, selectedItems, onSelectItem }) => {
-    const [treeData, setTreeData] = useState(SampleData);
+    const [treeData, setTreeData] = useState(BooktabData);
   
     
     const filteredTreeData = useMemo(() => {
