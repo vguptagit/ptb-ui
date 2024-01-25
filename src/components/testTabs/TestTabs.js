@@ -78,9 +78,8 @@ const TestTabs = () => {
             </Button>
           </OverlayTrigger>
 
-
           <ButtonGroup className="mt-2 mt-sm-0 ml-sm-2 flex-column flex-sm-row">
-            <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1">
+            <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
               <Dropdown.Item href="#">
                 <FormattedMessage id="testtabs.save" />
               </Dropdown.Item>
@@ -88,7 +87,7 @@ const TestTabs = () => {
                 <FormattedMessage id="testtabs.saveas" />
               </Dropdown.Item>
             </DropdownButton>
-            <DropdownButton id="dropdown-item-button" title="Print" className="btn-test">
+            <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mr-1">
               <Dropdown.Item href="#" disabled>
                 <FormattedMessage id="testtabs.print" />
               </Dropdown.Item>

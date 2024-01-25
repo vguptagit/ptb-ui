@@ -197,8 +197,20 @@ html, body, #root {
   background-color: #ddd !important;
 }
 
-.rounded{
-  background-color: #F5F5F5 !important;
+.pearson-heading{ font-size: 20px;}
+
+.btn-primary{ 
+  --bs-btn-bg: #007fa9 !important; 
+  --bs-btn-border-color: #006a8d !important;
+  --bs-btn-hover-bg: #006a8d !important;
+  --bs-btn-hover-border-color: #006a8d !important;
+  --bs-btn-active-bg: #007fa9 !important;
+  --bs-btn-active-border-color: #006a8d !important;
+  --bs-btn-disabled-color: #eef8fc;
+  --bs-btn-disabled-bg: #a0d1e1;
+  --bs-btn-disabled-border-color: #a0d1e1;
 }
 
-.pearson-heading{ font-size: 20px;}
+.text-box{
+  background-color: #007fa9;
+}

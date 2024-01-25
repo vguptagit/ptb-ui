@@ -41,7 +41,7 @@ const TestFolder = () => {
           </Button>
       </div>
       {showTextBox && (
-        <div className="d-flex align-items-center mt-2">
+        <div className="text-box d-flex align-items-center p-2">
           <div className="flex-grow-1 mr-2">
             <Form.Control
               type="text"
