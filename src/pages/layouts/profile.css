@@ -48,7 +48,7 @@
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0 5px 5px;
+        border-width: 0;
         border-color: transparent transparent #fff;
         margin-left: 162px;
         transition: transform 0.3s ease;
