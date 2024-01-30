@@ -1,10 +1,11 @@
-
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
+import { saveUserQuestionFolder } from '../services/userfolder.service';
+import Toastify from './common/Toastify';
 
-const QuestionFolder = () => {
-    const [showTextBox, setShowTextBox] = useState(false);
+const QuestionFolder = ({ userId }) => {
+  const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [savedFolders, setSavedFolders] = useState([]);
 
@@ -12,17 +13,36 @@ const QuestionFolder = () => {
     setShowTextBox(true);
   };
 
-
   const handleTextBoxClose = () => {
     setShowTextBox(false);
   };
 
-  const handleSaveFolder = () => {
+  const handleSaveFolder = async () => {
     if (folderName.trim() !== '') {
-      setSavedFolders([...savedFolders, folderName]);
-      setFolderName('');
+      const newFolderData = {
+        parentId: "",
+        sequence: 1,
+        title: folderName
+      };
+  
+      try {
+        const savedFolder = await saveUserQuestionFolder(newFolderData, userId);
+        setSavedFolders([...savedFolders, savedFolder.title]);
+        setFolderName('');
+        setShowTextBox(false);
+        Toastify({ message: 'Folder saved successfully', type: 'success' });
+        console.log('Saved Folder:', savedFolder);
+      } catch (error) {
+        console.error('Error saving folder:', error);
+        if (error.message.response.request.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save folder', type: 'error' });
+        }
+      }
     }
   };
+  
 
   return (
     <div className="p-2">
@@ -44,7 +64,14 @@ const QuestionFolder = () => {
             />
           </div>
           <div className="d-flex">
-            <Button onClick={handleSaveFolder} className="btn" style={{ color: 'black', backgroundColor: 'white' }}>
+            <Button
+              onClick={handleSaveFolder}
+              className="btn"
+              style={{
+                color: 'black',
+                backgroundColor: 'white',
+              }}
+            >
               <i className="fa-solid fa-check"></i>
             </Button>
             <Button onClick={handleTextBoxClose} className="btn ml-2" style={{ color: 'black', backgroundColor: 'white' }}>
@@ -53,17 +80,8 @@ const QuestionFolder = () => {
           </div>
         </div>
       )}
-<div>
-        {/* <h2  className='saved-folders p-1'>Saved Folders:</h2> */}
-        <ul>
-          {savedFolders.map((folder, index) => (
-            <li key={index}>{folder}</li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
 
 export default QuestionFolder;
-
