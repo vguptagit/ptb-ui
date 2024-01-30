@@ -76,4 +76,5 @@ a#dropdown-ellipsis {
 button.btn.btn-primary.btn.btn-primary {
     color: black;
     background-color: white;
+    margin-left: 10px !important;
 }
