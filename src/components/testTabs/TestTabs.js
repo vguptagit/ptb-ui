@@ -92,7 +92,7 @@ const TestTabs = () => {
         </h4>
         <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-wizard">Test Creation Wizard</Tooltip>}>
-            <Button className="btn-test mr-1">
+            <Button className="btn-test mr-1"  id="btn-test-wizard">
               <i className="fa-solid fa-wand-magic-sparkles"></i>
               <FormattedMessage id="testtabs.testwizard" />
             </Button>
