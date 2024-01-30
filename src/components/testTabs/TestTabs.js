@@ -42,7 +42,27 @@ const TestTabs = () => {
   const handleAddNewTestTab = () => {
     const newTest = new Test();
     newTest.title = `Untitled ${tests.length + 1}`;
+
+    // Check if there is only one tab and it is "Untitled 1"
+    if (tests.length === 1 && tests[0].title === 'Untitled 1') {
+      // If it's "Untitled 1", add a closing tab for "Untitled 1"
+      const untitled1Test = new Test();
+      untitled1Test.title = 'Untitled 1';
+      addTest(untitled1Test);
+    }
+
+    // Check if "Untitled 2" tab exists, if not, add it
+    const untitled2Exists = tests.some((test) => test.title === 'Untitled 2');
+    if (!untitled2Exists) {
+      const untitled2Test = new Test();
+      untitled2Test.title = 'Untitled 2';
+      addTest(untitled2Test);
+    }
+
+   // Add the new test
     addTest(newTest);
+
+    // Select the new test
     dispatchEvent('SELECT_TEST', newTest);
   };
 
@@ -66,7 +86,7 @@ const TestTabs = () => {
 
   return (
     <div className="tab-container">
-      <div className="d-flex flex-column flex-sm-row justify-content-between">
+    <div className="d-flex flex-column flex-sm-row justify-content-between">
         <h4 className="p-1">
           <FormattedMessage id="testtabs.title" />
         </h4>
@@ -78,26 +98,32 @@ const TestTabs = () => {
             </Button>
           </OverlayTrigger>
 
-          <ButtonGroup className="mt-2 mt-sm-0 ml-sm-2 flex-column flex-sm-row">
-            <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-              <Dropdown.Item href="#">
-                <FormattedMessage id="testtabs.save" />
-              </Dropdown.Item>
-              <Dropdown.Item href="#">
-                <FormattedMessage id="testtabs.saveas" />
-              </Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mr-1">
-              <Dropdown.Item href="#" disabled>
-                <FormattedMessage id="testtabs.print" />
-              </Dropdown.Item>
-            </DropdownButton>
-          </ButtonGroup>
-          <Button className="btn-test mt-2 mt-sm-0" disabled>
-            <FormattedMessage id="testtabs.export" />
-          </Button>
+          <div className="d-flex flex-column flex-sm-row align-items-start">
+            <ButtonGroup className="mt-2 mt-sm-0 flex-sm-row">
+              <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                <Dropdown.Item href="#">
+                  <FormattedMessage id="testtabs.save" />
+                </Dropdown.Item>
+                <Dropdown.Item href="#">
+                  <FormattedMessage id="testtabs.saveas" />
+                </Dropdown.Item>
+              </DropdownButton>
+
+              <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                <Dropdown.Item href="#" disabled>
+                  <FormattedMessage id="testtabs.print" />
+                </Dropdown.Item>
+              </DropdownButton>
+            </ButtonGroup>
+            
+            {/* Adjusted margin classes for the "Export" button */}
+            <Button className="btn-test mt-1 mt-sm-0" disabled>
+              <FormattedMessage id="testtabs.export" />
+            </Button>
+          </div>
         </div>
       </div>
+
 
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
@@ -118,7 +144,7 @@ const TestTabs = () => {
                   <div className='tab-label'>
                     <span>{test.title}</span>
                     {/* Conditionally render the close button */}
-                    {test.title !== 'Untitled 1' && (
+                    {test.title.startsWith('Untitled') && tests.length > 1 && (
                       <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
                         <i className="fas fa-times"></i>
                       </Button>
@@ -143,7 +169,7 @@ const TestTabs = () => {
                       <div className='tab-label'>
                         <span>{test.title}</span>
                         {/* Conditionally render the close button */}
-                        {test.title !== 'Untitled 1' && (
+                        {test.title.startsWith('Untitled') && tests.length > 1 && (
                           <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
                             <i className="fas fa-times"></i>
                           </Button>
