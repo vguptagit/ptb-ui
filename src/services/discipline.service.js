@@ -1,7 +1,6 @@
-import config from "../config/Config";
 import httpInterceptor from "../httpHelper/httpHelper";
 
-const url = process.env.REACT_APP_API_URL
+const url = 'http://localhost:8080' //need to make this configurable
 
 export const getAllDisciplines = () => {
     return httpInterceptor

@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
-import getAllDisciplines from "../../services/discipline.service";
-// import { getAllDisciplines } from "../../services/discipline.service";
-
+import Discipline_data from "./Discipline_data.json";
 
 const LeftContent = () => {
   return (
@@ -34,10 +32,9 @@ const Discipline = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiData = await getAllDisciplines();
-        console.log("api data",apiData)
-        setAllData(apiData);
-        setSearchResults(apiData);
+       const titles = (Discipline_data);
+        setAllData(titles);
+        setSearchResults(titles);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -51,6 +48,8 @@ const Discipline = () => {
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
+    const inputWidth = Math.max(200, e.target.scrollWidth);
+    document.querySelector('.search-input').style.minWidth = inputWidth + 'px';
     const filteredResults = allData.filter(item =>
       item.toLowerCase().includes(term.toLowerCase())
     );
@@ -59,11 +58,17 @@ const Discipline = () => {
   };
 
   const handleSelectItem = (item) => {
-    setSelectedItems(prevSelectedItems => {
+    setSelectedItems((prevSelectedItems) => {
       if (prevSelectedItems.includes(item)) {
-        return prevSelectedItems.filter(selectedItem => selectedItem !== item);
+        const newSelectedItems = prevSelectedItems.filter((selectedItem) => selectedItem !== item);
+        console.log("Deselected:", item);
+        console.log("Selected items:", newSelectedItems);
+        return newSelectedItems;
       } else {
-        return [...prevSelectedItems, item];
+        const newSelectedItems = [...prevSelectedItems, item];
+        console.log("Selected:", item);
+        console.log("Selected items:", newSelectedItems);
+        return newSelectedItems;
       }
     });
   };
@@ -71,7 +76,7 @@ const Discipline = () => {
   return (
     <div className="discipline-container">
       {loading ? (
-        <Loader show="true"/>
+        <Loader  show="true"/>
       ) : (
         <>
           <div className="top-container">

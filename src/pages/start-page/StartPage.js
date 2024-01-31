@@ -1,4 +1,4 @@
-import  config  from "../../config/Config";
+import { config } from "../../config/Constants";
 
 const Start = () => {
     var url = config.url.API_URL;
