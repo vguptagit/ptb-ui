@@ -1,18 +1,18 @@
 import config from "../config/Config";
 import httpInterceptor from "../httpHelper/httpHelper";
 
-const getAllDisciplines = async () => {
-    try {
-        const response = await httpInterceptor.get(`http://localhost:8080/disciplines`);
-        console.log("API Response:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("API Error:", error);
-        throw {
-            type: "error",
-            message: error
-        };
-    }
-};
+const url = process.env.REACT_APP_API_URL
 
-export default getAllDisciplines;
+export const getAllDisciplines = () => {
+    return httpInterceptor
+        .get(`${url}/disciplines`)
+        .then((response) =>{
+            return response?.data;
+        })
+        .catch((error)=>{
+            Promise.reject({
+                type: "error",
+                message : error
+            })
+        })
+}
