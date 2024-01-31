@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
-import Discipline_data from "./Discipline_data.json";
+import getAllDisciplines from "../../services/discipline.service";
+// import { getAllDisciplines } from "../../services/discipline.service";
+
 
 const LeftContent = () => {
   return (
@@ -32,9 +34,10 @@ const Discipline = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-       const titles = (Discipline_data);
-        setAllData(titles);
-        setSearchResults(titles);
+        const apiData = await getAllDisciplines();
+        console.log("api data",apiData)
+        setAllData(apiData);
+        setSearchResults(apiData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -48,8 +51,6 @@ const Discipline = () => {
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-    const inputWidth = Math.max(200, e.target.scrollWidth);
-    document.querySelector('.search-input').style.minWidth = inputWidth + 'px';
     const filteredResults = allData.filter(item =>
       item.toLowerCase().includes(term.toLowerCase())
     );
@@ -58,17 +59,11 @@ const Discipline = () => {
   };
 
   const handleSelectItem = (item) => {
-    setSelectedItems((prevSelectedItems) => {
+    setSelectedItems(prevSelectedItems => {
       if (prevSelectedItems.includes(item)) {
-        const newSelectedItems = prevSelectedItems.filter((selectedItem) => selectedItem !== item);
-        console.log("Deselected:", item);
-        console.log("Selected items:", newSelectedItems);
-        return newSelectedItems;
+        return prevSelectedItems.filter(selectedItem => selectedItem !== item);
       } else {
-        const newSelectedItems = [...prevSelectedItems, item];
-        console.log("Selected:", item);
-        console.log("Selected items:", newSelectedItems);
-        return newSelectedItems;
+        return [...prevSelectedItems, item];
       }
     });
   };
@@ -76,7 +71,7 @@ const Discipline = () => {
   return (
     <div className="discipline-container">
       {loading ? (
-        <Loader  show="true"/>
+        <Loader show="true"/>
       ) : (
         <>
           <div className="top-container">
@@ -122,4 +117,4 @@ const Discipline = () => {
   );
 };
 
-export default Discipline;
+export default Discipline
