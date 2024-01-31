@@ -1,4 +1,4 @@
-import { config } from "../../config/Constants";
+import  config  from "../../config/Config";
 import messagesKa from "./languages/ka.json";
 import messagesAr from "./languages/ar.json";
 import messagesEn from "./languages/en.json";
