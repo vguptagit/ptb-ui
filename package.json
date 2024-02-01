@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:production": "env-cmd -f .env.production react-scripts start"
+    "start:development": "env-cmd -f .env.development react-scripts start"
   },
   "eslintConfig": {
     "extends": [
