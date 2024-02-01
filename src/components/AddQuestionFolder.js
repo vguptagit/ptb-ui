@@ -34,7 +34,7 @@ const QuestionFolder = ({ userId }) => {
         console.log('Saved Folder:', savedFolder);
       } catch (error) {
         console.error('Error saving folder:', error);
-        if (error.message.response.request.status === 409) {
+        if (error?.message?.response?.request?.status === 409) {
           Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
           Toastify({ message: 'Failed to save folder', type: 'error' });

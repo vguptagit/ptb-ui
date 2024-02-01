@@ -4,6 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { saveTestFolder } from '../services/testfolder.service';
+import Toastify from './common/Toastify';
 
 const TestFolder = () => {
     const [showTextBox, setShowTextBox] = useState(false);
@@ -19,10 +21,29 @@ const TestFolder = () => {
     setShowTextBox(false);
   };
 
-  const handleSaveFolder = () => {
+  const handleSaveFolder = async () => {
     if (folderName.trim() !== '') {
-      setSavedFolders([...savedFolders, folderName]);
-      setFolderName('');
+      const newFolderData = {
+        parentId: "",
+        sequence: 1,
+        title: folderName
+      };
+  
+      try {
+        const savedFolder = await saveTestFolder(newFolderData);
+        setSavedFolders([...savedFolders, savedFolder.title]);
+        setFolderName('');
+        setShowTextBox(false);
+        Toastify({ message: 'Folder saved successfully', type: 'success' });
+        console.log('Saved Folder:', savedFolder);
+      } catch (error) {
+        console.error('Error saving folder:', error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save folder', type: 'error' });
+        }
+      }
     }
   };
 
