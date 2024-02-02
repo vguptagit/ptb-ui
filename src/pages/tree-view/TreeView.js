@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { Tree } from "@minoru/react-dnd-treeview";
-import SampleData from "./sample_data.json";
 import "./TreeView.css";
+import { getAllBooks } from "../../services/book.service";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   const [, drag] = useDrag({
@@ -26,8 +26,9 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode }) {
-  const [treeData, setTreeData] = useState(SampleData);
+function TreeView({ onDataUpdate, droppedNode, disciplines}) {
+  const [treeData, setTreeData] = useState([]);
+
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
@@ -35,10 +36,53 @@ function TreeView({ onDataUpdate, droppedNode }) {
   };
 
   useEffect(() => {
+  
+    let convertedList = [];
+    for (let i = 0; i < disciplines.length; i++) {
+      const newItem = {
+        id: i + 1,
+        parent: 0,
+        droppable: true,
+        text: disciplines[i],
+      };
+      convertedList.push(newItem);
+    }
+    for (let i = 0; i < convertedList.length; i++)
+     {
+    getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
+    }
+    console.log("convertedList ", convertedList)
+    setTreeData(convertedList); 
+  }, []); 
+
+
+  const getBooksList =  (discipline, disciplineId , booksList) => {
+    
+    getAllBooks(discipline).then(
+      (books) => { 
+        for (let i = 0; i < books.length; i++) {
+        const newItem = {
+          id: booksList.length + 1,
+          parent: disciplineId,
+          droppable: true,
+          text: `${books[i].title}_${discipline}`,
+        };
+        booksList.push(newItem);
+      }
+    },
+    (error) => { 
+        console.log(error); 
+    
+    }  );
+    
+  }
+
+  useEffect(() => {
     console.log("Dropped Node in TreeView:", droppedNode);
   }, [droppedNode]);
 
   return (
+    <>
     <div className="treeview">
       <Tree
         tree={treeData}
@@ -48,6 +92,7 @@ function TreeView({ onDataUpdate, droppedNode }) {
         onDrop={handleDrop}
       />
     </div>
+    </>
   );
 }
 

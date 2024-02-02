@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
-import getAllDisciplines from "../../services/discipline.service";
-// import { getAllDisciplines } from "../../services/discipline.service";
+import { getAllDisciplines } from "../../services/discipline.service";
 
 
 const LeftContent = () => {

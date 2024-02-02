@@ -2,7 +2,7 @@ import httpInterceptor from "../httpHelper/httpHelper";
 
 const url = process.env.REACT_APP_API_URL
 
-const getAllDisciplines = async () => {
+export const getAllDisciplines = async () => {
     try {
         const response = await httpInterceptor.get(`https://testbuilder.dev.pearsoncmg.com/ptb/disciplines`);
         console.log("API Response:", response.data);
@@ -16,4 +16,17 @@ const getAllDisciplines = async () => {
     }
 };
 
-export default getAllDisciplines;
+export const getUserDisciplines = () => {
+   
+    return httpInterceptor
+        .get(`${url}/settings/disciplines`)
+        .then((response) => {
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
+};
