@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Booktab.css';
@@ -21,30 +21,30 @@ const LeftContent = () => {
 };
 
 const TreeView = ({ searchTerm, selectedItems, onSelectItem }) => {
-    const [treeData, setTreeData] = useState(BooktabData);
-  
-    
-    const filteredTreeData = useMemo(() => {
-      if (!searchTerm) {
-        return treeData;
-      }
-  
-      const filterNodes = (nodes) => {
-        return nodes.filter((node) => {
-          const isMatch = node.text.toLowerCase().includes(searchTerm.toLowerCase());
-          const hasChildMatches = node.children && filterNodes(node.children).length > 0;
-  
-          return isMatch || hasChildMatches;
-        });
-      };
-  
-      return filterNodes(treeData);
-    }, [searchTerm, treeData]);
-  
-    const renderNode = (node, { isOpen, onToggle }) => (
+  const [treeData, setTreeData] = useState(BooktabData);
+
+
+  const filteredTreeData = useMemo(() => {
+    if (!searchTerm) {
+      return treeData;
+    }
+
+    const filterNodes = (nodes) => {
+      return nodes.filter((node) => {
+        const isMatch = node.text.toLowerCase().includes(searchTerm.toLowerCase());
+        const hasChildMatches = node.children && filterNodes(node.children).length > 0;
+
+        return isMatch || hasChildMatches;
+      });
+    };
+
+    return filterNodes(treeData);
+  }, [searchTerm, treeData]);
+
+  const renderNode = (node, { isOpen, onToggle }) => (
     <div
-      className={`tree-node ${selectedItems.includes(node.id) ? 'selected' : ''}`}
-      onClick={() => onSelectItem(node.id)}
+      className={`tree-node ${!node.children ? 'innermost' : ''} ${selectedItems.includes(node.id) ? 'selected' : ''}`}
+      onClick={() => onSelectItem(node)}
     >
       {node.droppable && (
         <span onClick={onToggle}>
@@ -53,6 +53,7 @@ const TreeView = ({ searchTerm, selectedItems, onSelectItem }) => {
       )}
       {node.text}
     </div>
+
   );
 
   return (
@@ -63,15 +64,13 @@ const TreeView = ({ searchTerm, selectedItems, onSelectItem }) => {
           rootId={0}
           render={renderNode}
           dragPreviewRender={() => null}
-          onDrop={() => {}}
+          onDrop={() => { }}
         />
       </DndProvider>
     </div>
   );
 };
-  
-  
-  
+
 
 
 const Booktab = () => {
@@ -97,66 +96,66 @@ const Booktab = () => {
     const inputWidth = Math.max(200, e.target.scrollWidth);
     document.querySelector('.search-input').style.minWidth = inputWidth + 'px';
   };
-
-  const handleSelectItem = (item) => {
-    setSelectedItems((prevSelectedItems) => {
-      if (prevSelectedItems.includes(item)) {
-        const newSelectedItems = prevSelectedItems.filter((selectedItem) => selectedItem !== item);
-        console.log("Deselected:", item);
-        console.log("Selected items:", newSelectedItems);
-        return newSelectedItems;
-      } else {
-        const newSelectedItems = [...prevSelectedItems, item];
-        console.log("Selected:", item);
-        console.log("Selected items:", newSelectedItems);
-        return newSelectedItems;
-      }
-    });
+  const handleSelectItem = (node) => {
+    if (!node.droppable || node.droppable.length === 0) {
+      setSelectedItems((prevSelectedItems) => {
+        if (prevSelectedItems.includes(node.id)) {
+          const newSelectedItems = prevSelectedItems.filter((selectedItem) => selectedItem !== node.id);
+          console.log("Deselected:", node.id);
+          console.log("Selected items:", newSelectedItems);
+          return newSelectedItems;
+        } else {
+          const newSelectedItems = [...prevSelectedItems, node.id];
+          console.log("Selected:", node.id);
+          console.log("Selected items:", newSelectedItems);
+          return newSelectedItems;
+        }
+      });
+    }
   };
+
 
   return (
     <div className="booktab-container">
-         {loading ? (
-        <Loader  show="true"/>
+      {loading ? (
+        <Loader show="true" />
       ) : (
-      <>
-        <div className="top-container">
-          <h4><FormattedMessage id="booktab.steps.1" /></h4>
-          <button className="booktab  btn btn-secondary " onClick={handleBack}>Back</button>
-          <button className="booktab  btn btn-primary" onClick={handleNext}>Next</button>
-        </div>
-        <div className="booktab d-flex justify-content-between">
-          <LeftContent />
-          <div className="booktab search-container">
-            <div className="booktab input-group rounded">
-              <input
-                type="search"
-                width="100%"
-                className="booktab form-control rounded search-input"
-                placeholder="Search Books"
-                aria-label="Search"
-                aria-describedby="search-addon"
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-              <div className="booktab input-group-append">
-                <span className="booktab input-group-text border-0" id="search-addon">
-                  <i className="fas fa-search"></i>
-                </span>
+        <>
+          <div className="top-container">
+            <h4><FormattedMessage id="booktab.steps.1" /></h4>
+            <button className="booktab btn btn-secondary " onClick={handleBack}>Back</button>
+            <button className="booktab btn btn-primary" onClick={handleNext}>Next</button>
+          </div>
+          <div className="booktab d-flex justify-content-between">
+            <LeftContent />
+            <div className="booktab search-container">
+              <div className="booktab input-group rounded">
+                <input
+                  type="search"
+                  width="100%"
+                  className="booktab form-control rounded search-input"
+                  placeholder="Search Books"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+                <div className="booktab input-group-append">
+                  <span className="booktab input-group-text border-0" id="search-addon">
+                    <i className="fas fa-search"></i>
+                  </span>
+                </div>
+              </div>
+              <div className="booktab result-list mt-3">
+                <TreeView
+                  selectedItems={selectedItems}
+                  onSelectItem={handleSelectItem}
+                  searchTerm={searchTerm}
+                />
               </div>
             </div>
-            <div className="booktab result-list mt-3">
-              
-              <TreeView 
-            
-                selectedItems={selectedItems}
-                onSelectItem={handleSelectItem}
-                searchTerm={searchTerm}
-              />
-            </div>
           </div>
-        </div>
-      </>
+        </>
       )}
     </div>
   );

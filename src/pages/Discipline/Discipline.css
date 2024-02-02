@@ -52,14 +52,14 @@
 
   list-style: none;
   padding: 0;
-  /* margin: 10px; */
+  
   position: relative;
   height: calc(77vh - 85px);
   overflow: auto;
 }
 
 .discipline.result-list li {
-  padding: 5px;
+  padding-block-start: inherit;
   cursor: pointer;
   border-bottom: 1px solid #D0D0D0;
 }
