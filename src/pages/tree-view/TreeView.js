@@ -51,6 +51,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
      {
     getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
     }
+    console.log("convertedList ", convertedList)
     setTreeData(convertedList); 
   }, []); 
 
@@ -61,7 +62,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
       (books) => { 
         for (let i = 0; i < books.length; i++) {
         const newItem = {
-          id: booksList.length + i,
+          id: booksList.length + 1,
           parent: disciplineId,
           droppable: true,
           text: `${books[i].title}_${discipline}`,
