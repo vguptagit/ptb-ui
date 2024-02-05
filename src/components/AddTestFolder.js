@@ -7,8 +7,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { saveTestFolder } from '../services/testfolder.service';
 import Toastify from './common/Toastify';
 
-const TestFolder = () => {
-    const [showTextBox, setShowTextBox] = useState(false);
+const TestFolder = ({rootFoldersLength, setDoReload}) => {
+  const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [savedFolders, setSavedFolders] = useState([]);
 
@@ -25,10 +25,10 @@ const TestFolder = () => {
     if (folderName.trim() !== '') {
       const newFolderData = {
         parentId: "",
-        sequence: 1,
+        sequence: rootFoldersLength + 1,
         title: folderName
       };
-  
+
       try {
         const savedFolder = await saveTestFolder(newFolderData);
         setSavedFolders([...savedFolders, savedFolder.title]);
@@ -36,6 +36,7 @@ const TestFolder = () => {
         setShowTextBox(false);
         Toastify({ message: 'Folder saved successfully', type: 'success' });
         console.log('Saved Folder:', savedFolder);
+        setDoReload();
       } catch (error) {
         console.error('Error saving folder:', error);
         if (error?.message?.response?.request?.status === 409) {
@@ -56,10 +57,10 @@ const TestFolder = () => {
             <FormattedMessage id="yourtests.addfolder" />
           </Button>
         </OverlayTrigger>
-          <Button className="color-black" variant="outline-light">
-            <i className="fa-solid fa-download"></i>&ensp;
-            <FormattedMessage id="yourtests.import" />
-          </Button>
+        <Button className="color-black" variant="outline-light">
+          <i className="fa-solid fa-download"></i>&ensp;
+          <FormattedMessage id="yourtests.import" />
+        </Button>
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">
@@ -82,7 +83,7 @@ const TestFolder = () => {
           </div>
         </div>
       )}
-<div>
+      <div>
         {/* <h2 className='saved-folders p-1'>Saved Folders:</h2>
         <ul>
           {savedFolders.map((folder, index) => (
