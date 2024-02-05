@@ -15,3 +15,17 @@ export const saveTestFolder = (folder) => {
       });
     });
 };
+
+export const getRootTestFolders = () => {
+  return httpInterceptor
+    .get(`${url}/my/testfolders`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
