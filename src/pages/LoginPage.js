@@ -1,22 +1,31 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import User from '../entities/User.Entity';
 
 // Login and session logic goes here.
 const LoginPage = () => {
     const { isAuthenticated, user, login, logout } = useAuth();
-
     const navigate = useNavigate();
+    const [storedFamilyName, setStoredFamilyName] = useState('');
+    const [storedEmailAddress, setStoredEmailAddress] = useState('');
+
+    useEffect(() => {
+        const familyName = sessionStorage.getItem('familyName');
+        const emailAddress = sessionStorage.getItem('emailAddress');
+
+        setStoredFamilyName(familyName || '');
+        setStoredEmailAddress(emailAddress || '');
+    }, []);
+
     const handleLogin = () => {
-        const user = new User(); 
-        user.name ='Pearson user'; 
-        user.email ='Pearson_User@pearson.com'; 
-        login(user);
+        const newUser = new User(); 
+        newUser.name = storedFamilyName; 
+        newUser.email = storedEmailAddress; 
+        login(newUser);
         navigate('/welcomescreen');
     }
-    useEffect(() => {
-    }, [])
+
     return (
         <>
             {isAuthenticated ? (
@@ -31,4 +40,5 @@ const LoginPage = () => {
         </>
     );
 }
+
 export default LoginPage;
