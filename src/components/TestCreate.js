@@ -16,9 +16,10 @@ const TestCreate = () => {
   const [questionListSize, setQuestionListSize] = useState(0);
 
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: "TREE_NODE",
+    accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
     drop: (item) => {
       console.log("Dropped node:", item.node);
+      console.log("Dropped node:", item.questionTemplate);
       let questions = selectedTest.questions;
       // TODO : Update the logic to handle different types of Question
       if(questions) {
@@ -28,7 +29,11 @@ const TestCreate = () => {
           questions.push(getQuestion('Essay'));
           selectedTest.questions = questions;
       }
-      setDroppedNode(item.node);
+      if (item.type === "QUESTION_TEMPLATE") {
+        setDroppedNode(item.questionTemplate);
+      } else if (item.type === "TREE_NODE") {
+        setDroppedNode(item.node);
+      }
       setChildEditMode(true); // Always set mode edit for the node dropped
     },
     collect: (monitor) => ({
