@@ -1,3 +1,4 @@
+// context/AppContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import Test from "../entities/Test.Entity";
 
@@ -52,6 +53,10 @@ const AppProvider = ({ children }) => {
                 console.log('REMOVE_TEST', payload.test);
 
                 setTests(tests.filter((test) => test.id !== payload.test.id));
+                return;
+            case "UPDATE_TEST_TITLE":
+                // Assuming payload has 'id' and 'title' properties
+                setTests(tests.map(test => (test.id === payload.id ? { ...test, title: payload.title } : test)));
                 return;
             default:
                 return;
