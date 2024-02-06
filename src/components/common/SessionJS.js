@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 
+
 function SessionJS() {
+  const url = process.env.REACT_APP_AUTH_Success_URL
+  const apiurl = process.env.REACT_APP_API_URL
+  
   useEffect(() => {
     console.log("sessionjs onmount");
     createScriptElement();
@@ -34,7 +38,7 @@ function SessionJS() {
       window.piSession.initialize("37r9t4VtxolfmvZhi9g25tQ6PxxwNPLT", {
         "sessionIdleTimeoutSeconds": 3600,
         "requireLogin": true,
-        "loginSuccessUrl": "http://testbuilder.dev.pearsoncmg.com:3000/login"
+        "loginSuccessUrl": url
       });
       window.piSession.monitorUserActivity(true);
       // Call getToken once after initialization
@@ -48,7 +52,7 @@ function SessionJS() {
   const iesMxSessionGetToken = () => {
     if (window.piSession) {
       window.piSession.getToken((status, token) => {
-        console.log('alll' , window.piSession);
+       
         console.log('getToken:', status, token);
         if (status === 'success' && token) {
           callLoginEndpoint(token);
@@ -60,7 +64,7 @@ function SessionJS() {
   };
 
   const callLoginEndpoint = (token) => {
-    const apiUrl = 'http://localhost:8080/auth';
+    const apiUrl = `${apiurl}/auth`;
     const config = {
       headers: {
         'AccessToken': token,
