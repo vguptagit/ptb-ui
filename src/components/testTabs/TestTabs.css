@@ -1,4 +1,3 @@
-/* styles.css */
 
 .test-container {
     padding: 1rem;
@@ -37,8 +36,4 @@ button.close-tab.btn.btn-link {
 
 #dropdown-ellipsis.dropdown-toggle::after{
 display: none;
-}
-
-#btn-test-wizard{
-    visibility: hidden;
 }
