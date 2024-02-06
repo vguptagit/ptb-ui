@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 
 function SessionJS() {
-  const url = process.env.AUTH_Success_URL
+  const url = process.env.REACT_APP_AUTH_Success_URL
   const apiurl = process.env.REACT_APP_API_URL
   
   useEffect(() => {
@@ -52,7 +52,7 @@ function SessionJS() {
   const iesMxSessionGetToken = () => {
     if (window.piSession) {
       window.piSession.getToken((status, token) => {
-        console.log('alll' , window.piSession);
+       
         console.log('getToken:', status, token);
         if (status === 'success' && token) {
           callLoginEndpoint(token);
