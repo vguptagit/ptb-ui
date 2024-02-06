@@ -1,4 +1,4 @@
-/* styles.css */
+/* TestTbas.css  */
 
 .test-container {
     padding: 1rem;
@@ -20,6 +20,10 @@
     margin-top: 8px;
 }
 
+.ml-2 {
+    margin-top: 2px;
+}
+
 input.rounded.form-control {
     margin-left: -14px;
     margin-top: -5px;
@@ -33,13 +37,4 @@ button.close-tab.btn.btn-link {
 
 #dropdown-ellipsis.dropdown-toggle::after{
 display: none;
-}
-
-#btn-test-wizard{
-    visibility: hidden;
-}
-
-.ml-2 {
-    margin-left: -0.5rem!important;
-    white-space: nowrap;
 }

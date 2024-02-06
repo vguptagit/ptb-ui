@@ -1,24 +1,23 @@
-// components/TestCreate.js
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { useDrop } from "react-dnd";
 import { FormattedMessage } from "react-intl";
 import { Form } from "react-bootstrap";
-import "./TestCreate.css";
-import QuestionBanksTips from "./testTabs/QuestionsBanksTips/QuestionsBanksTips";
+import { useDrop } from "react-dnd";
+import QuestionsBanksTips from "./testTabs/QuestionsBanksTips/QuestionsBanksTips";
 import Essay from "./questions/Essay";
 import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
-import QtiService from '../utils/qtiService';
+import QtiService from "../utils/qtiService";
+import "./TestCreate.css";
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent } = useAppContext();
-  const [newTabName, setNewTabName] = useState(selectedTest?.title || '');
+  const {selectedTest, dispatchEvent } = useAppContext();
+  const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
   const [droppedNode, setDroppedNode] = useState(null);
   const [childEditMode, setChildEditMode] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
 
   useEffect(() => {
-    setNewTabName(selectedTest?.title || '');
+    setNewTabName(selectedTest?.title || "");
   }, [selectedTest]);
 
   const handleTitleChange = (event) => {
@@ -26,7 +25,7 @@ const TestCreate = () => {
 
     if (selectedTest && selectedTest.id) {
       setNewTabName(newTitle);
-      dispatchEvent('UPDATE_TEST_TITLE', { id: selectedTest.id, title: newTitle });
+      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
     }
   };
 
@@ -35,21 +34,15 @@ const TestCreate = () => {
     drop: (item) => {
       console.log("Dropped node:", item.node);
       console.log("Dropped node:", item.questionTemplate);
-      let questions = selectedTest.questions;
-
-      if (questions) {
-        questions.push(getQuestion('Essay'));
-      } else {
-        questions = [];
-        questions.push(getQuestion('Essay'));
-        selectedTest.questions = questions;
-      }
+      let questions = selectedTest.questions || [];
 
       if (item.type === "QUESTION_TEMPLATE") {
-        setDroppedNode(item.questionTemplate);
+        questions.push(getQuestion("Essay"));
       } else if (item.type === "TREE_NODE") {
-        setDroppedNode(item.node);
+        questions.push(getQuestion("Essay"));
       }
+
+      dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id, questions });
       setChildEditMode(true);
     },
     collect: (monitor) => ({
@@ -59,26 +52,26 @@ const TestCreate = () => {
   });
 
   const getQuestion = (questionType) => {
-    let question = {}
-    if (questionType === 'Essay') {
+    let question = {};
+    if (questionType === "Essay") {
       const essayTemplate = CustomQuestionBanksService.Essay_Template;
-      var qtiModel = QtiService.getQtiModel(essayTemplate, 'Essay');
+      var qtiModel = QtiService.getQtiModel(essayTemplate, "Essay");
       qtiModel.EditOption = true;
       question.qtiModel = qtiModel;
     }
     return question;
-  }
+  };
 
   const handleQuestionState = (edit) => {
     setChildEditMode(edit);
-  }
+  };
 
   const handleQuestionDelete = (deleteIndex) => {
     if (deleteIndex > -1) {
       selectedTest.questions.splice(deleteIndex, 1);
       setQuestionListSize(selectedTest.questions.length + 1);
     }
-  }
+  };
 
   return (
     <div>
@@ -100,15 +93,32 @@ const TestCreate = () => {
         </div>
       </div>
       <div className="test-container">
-        {selectedTest.questions ?
-          (selectedTest.questions.map((questionNode, index) => {
-            return <Essay questionNode={questionNode} key={Date.now() + '_' + selectedTest.id + questionListSize + '_' + index} questionNodeIndex={index} questionNodeIsEdit={questionNode.qtiModel.EditOption} onQuestionStateChange={handleQuestionState} onQuestionDelete={handleQuestionDelete} />
-          })) : ''}
+        {selectedTest.questions &&
+          selectedTest.questions.map((questionNode, index) => (
+            <Essay
+              questionNode={questionNode}
+              key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          ))}
       </div>
-      <div ref={drop} className={`test-container ${canDrop && isOver && !childEditMode ? "drop-active" : ""}`}>
+      <div
+        ref={drop}
+        className={`test-container ${
+          canDrop && isOver && !childEditMode ? "drop-active" : ""
+        }`}
+      >
         <div>
-          {selectedTest.questions && selectedTest.questions.length !== 0 ? <div className="drag-container align-items-center d-flex justify-content-center">Drag Questions Here </div> : <QuestionBanksTips />}
-
+          {selectedTest.questions && selectedTest.questions.length !== 0 ? (
+            <div className="drag-container align-items-center d-flex justify-content-center">
+              Drag Questions Here{" "}
+            </div>
+          ) : (
+            <QuestionsBanksTips />
+          )}
         </div>
       </div>
     </div>
