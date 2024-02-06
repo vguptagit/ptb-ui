@@ -8,10 +8,14 @@ import { AppProvider } from './context/AppContext';
 import { ToastContainer } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { MultiBackend, getBackendOptions } from '@minoru/react-dnd-treeview';
+import SessionJS from './components/common/SessionJS'
+
 
 function App() {
+
   return (
     <>
+    <SessionJS/>  
       <AuthProvider>
         <AppProvider>
           <IntlProvider locale={initLocale} messages={localeMessages}>

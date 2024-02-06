@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     }
     const logout = () => {
         setIsAuthenticated(false);
+        window.piSession.logout();
         console.log("setIsAuthenticated", isAuthenticated);
         navigate('/login');
     }

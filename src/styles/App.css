@@ -212,6 +212,11 @@ html, body, #root {
   --bs-btn-disabled-color: #eef8fc !important;
   --bs-btn-disabled-bg: #a0d1e1 !important;
   --bs-btn-disabled-border-color: #a0d1e1 !important;
+  --bs-btn-focus-shadow-rgb: #000 !important;
+}
+
+.btn-primary:focus{
+  outline: 2px solid #000 !important;
 }
 
 .btn-secondary{
@@ -227,8 +232,21 @@ html, body, #root {
   --bs-btn-disabled-color: #cacaca !important;
   --bs-btn-disabled-bg: #f8f8f8 !important;
   --bs-btn-disabled-border-color: #e8e8e8 !important;
+  --bs-btn-focus-shadow-rgb: #000 !important;
+}
+
+.btn-secondary:focus{
+  outline: 2px solid #000 !important;
 }
 
 .text-box{
   background-color: #007fa9;
+}
+
+input[type=text]:focus{
+  outline: 2px solid #000 !important;
+}
+
+input[type=search]:focus{
+  outline: 2px solid #000 !important;
 }

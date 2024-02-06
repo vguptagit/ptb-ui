@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Button, Form } from 'react-bootstrap';
-import { saveUserQuestionFolder } from '../services/userfolder.service';
-import Toastify from './common/Toastify';
+import React, { useState } from "react";
+import { FormattedMessage } from "react-intl";
+import { Button, Form } from "react-bootstrap";
+import { saveUserQuestionFolder } from "../services/userfolder.service";
+import Toastify from "./common/Toastify";
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
-  const [folderName, setFolderName] = useState('');
+  const [folderName, setFolderName] = useState("");
   const [savedFolders, setSavedFolders] = useState([]);
 
   const handleAddQuestionFolderClick = () => {
@@ -18,36 +18,50 @@ const QuestionFolder = ({ userId }) => {
   };
 
   const handleSaveFolder = async () => {
-    if (folderName.trim() !== '') {
-      const newFolderData = {
-        parentId: "",
-        sequence: 1,
-        title: folderName
-      };
-  
+    if (folderName.trim() !== "") {
       try {
+        // Calculate the new sequence
+        const maxSequence = savedFolders.reduce((max, folder) => {
+          return folder.sequence > max ? folder.sequence : max;
+        }, 1);
+        const newSequence = maxSequence + 1;
+
+        const newFolderData = {
+          parentId: " ",
+          sequence: newSequence,
+          title: folderName,
+        };
+
         const savedFolder = await saveUserQuestionFolder(newFolderData, userId);
-        setSavedFolders([...savedFolders, savedFolder.title]);
-        setFolderName('');
+
+        setSavedFolders([...savedFolders, savedFolder]);
+        setFolderName("");
         setShowTextBox(false);
-        Toastify({ message: 'Folder saved successfully', type: 'success' });
-        console.log('Saved Folder:', savedFolder);
+        Toastify({ message: "Folder saved successfully", type: "success" });
+        console.log("Saved Folder:", savedFolder);
       } catch (error) {
-        console.error('Error saving folder:', error);
+        console.error("Error saving folder:", error);
+
         if (error?.message?.response?.request?.status === 409) {
-          Toastify({ message: error.message.response.data.message, type: 'error' });
+          Toastify({
+            message: error.message.response.data.message,
+            type: "error",
+          });
         } else {
-          Toastify({ message: 'Failed to save folder', type: 'error' });
+          Toastify({ message: "Failed to save folder", type: "error" });
         }
       }
     }
   };
-  
 
   return (
     <div className="p-2">
       <div className="button-container">
-        <Button className="color-black" variant="outline-light" onClick={handleAddQuestionFolderClick}>
+        <Button
+          className="color-black"
+          variant="outline-light"
+          onClick={handleAddQuestionFolderClick}
+        >
           <i className="fa-solid fa-plus"></i>&nbsp;
           <FormattedMessage id="yourquestions.addquestionfolder" />
         </Button>
@@ -68,13 +82,17 @@ const QuestionFolder = ({ userId }) => {
               onClick={handleSaveFolder}
               className="btn"
               style={{
-                color: 'black',
-                backgroundColor: 'white',
+                color: "black",
+                backgroundColor: "white",
               }}
             >
               <i className="fa-solid fa-check"></i>
             </Button>
-            <Button onClick={handleTextBoxClose} className="btn ml-2" style={{ color: 'black', backgroundColor: 'white' }}>
+            <Button
+              onClick={handleTextBoxClose}
+              className="btn ml-2"
+              style={{ color: "black", backgroundColor: "white" }}
+            >
               <i className="fa-solid fa-xmark"></i>
             </Button>
           </div>
