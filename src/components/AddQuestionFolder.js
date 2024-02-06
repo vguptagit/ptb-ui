@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { Button, Form } from "react-bootstrap";
-import {
-  getUserQuestionFolders,
-  saveUserQuestionFolder,
-} from "../services/userfolder.service";
+import { saveUserQuestionFolder } from "../services/userfolder.service";
 import Toastify from "./common/Toastify";
 
 const QuestionFolder = ({ userId }) => {
@@ -23,28 +20,23 @@ const QuestionFolder = ({ userId }) => {
   const handleSaveFolder = async () => {
     if (folderName.trim() !== "") {
       try {
-        // Fetch existing folders to determine the maximum sequence
-        const existingFolders = await getUserQuestionFolders();
+        // Calculate the new sequence
+        const maxSequence = savedFolders.reduce((max, folder) => {
+          return folder.sequence > max ? folder.sequence : max;
+        }, 1);
+        const newSequence = maxSequence + 1;
 
-        // Calculate the maximum sequence value among existing folders
-        const maxSequence = Math.max(
-          ...existingFolders.map((folder) => folder.sequence),
-          0
-        );
-
-        // Create new folder data with dynamically calculated sequence
         const newFolderData = {
           parentId: " ",
-          sequence: maxSequence + 1,
+          sequence: newSequence,
           title: folderName,
         };
 
         const savedFolder = await saveUserQuestionFolder(newFolderData, userId);
 
-        setSavedFolders([...savedFolders, savedFolder.title]);
+        setSavedFolders([...savedFolders, savedFolder]);
         setFolderName("");
         setShowTextBox(false);
-
         Toastify({ message: "Folder saved successfully", type: "success" });
         console.log("Saved Folder:", savedFolder);
       } catch (error) {
