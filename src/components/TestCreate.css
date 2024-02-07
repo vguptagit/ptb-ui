@@ -20,11 +20,6 @@
     margin-top: 8px;
 }
 
-.ml-21 {
-    margin-top: -5px;
-    white-space: nowrap;
-    margin-left: -8px
-}
 
 input.rounded.form-control {
     margin-left: 3px;
@@ -78,4 +73,9 @@ a#dropdown-ellipsis {
     margin: 5px;
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: var(--bs-border-radius)!important
+}
+
+.ml-2 {
+    margin-left: -0.5rem!important;
+    white-space: nowrap;
 }
