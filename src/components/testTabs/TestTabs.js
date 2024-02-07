@@ -59,7 +59,7 @@ const TestTabs = () => {
       addTest(untitled2Test);
     }
 
-   // Add the new test
+    // Add the new test
     addTest(newTest);
 
     // Select the new test
@@ -86,13 +86,13 @@ const TestTabs = () => {
 
   return (
     <div className="tab-container">
-    <div className="d-flex flex-column flex-sm-row justify-content-between">
+      <div className="d-flex flex-column flex-sm-row justify-content-between">
         <h4 className="p-1">
           <FormattedMessage id="testtabs.title" />
         </h4>
         <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-wizard">Test Creation Wizard</Tooltip>}>
-            <Button className="btn-test mr-1"  id="btn-test-wizard">
+            <Button className="btn-test mr-1" id="btn-test-wizard">
               <i className="fa-solid fa-wand-magic-sparkles"></i>
               <FormattedMessage id="testtabs.testwizard" />
             </Button>
@@ -115,7 +115,7 @@ const TestTabs = () => {
                 </Dropdown.Item>
               </DropdownButton>
             </ButtonGroup>
-            
+
             {/* Adjusted margin classes for the "Export" button */}
             <Button className="btn-test mt-1 mt-sm-0" disabled>
               <FormattedMessage id="testtabs.export" />
@@ -143,8 +143,8 @@ const TestTabs = () => {
                 >
                   <div className='tab-label'>
                     <span>{test.title}</span>
-                    {/* Conditionally render the close button */}
-                    {test.title.startsWith('Untitled') && tests.length > 1 && (
+                    {/* Always render the close button */}
+                    {tests.length > 1 && (
                       <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
                         <i className="fas fa-times"></i>
                       </Button>
@@ -168,8 +168,8 @@ const TestTabs = () => {
                     >
                       <div className='tab-label'>
                         <span>{test.title}</span>
-                        {/* Conditionally render the close button */}
-                        {test.title.startsWith('Untitled') && tests.length > 1 && (
+                        {/* Always render the close button */}
+                        {tests.length > 1 && (
                           <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
                             <i className="fas fa-times"></i>
                           </Button>

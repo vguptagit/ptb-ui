@@ -1,3 +1,4 @@
+/* TestTbas.css  */
 
 .test-container {
     padding: 1rem;
@@ -37,3 +38,22 @@ button.close-tab.btn.btn-link {
 #dropdown-ellipsis.dropdown-toggle::after{
 display: none;
 }
+
+#btn-test-wizard{
+    visibility: hidden;
+}
+
+.custom-tabs {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+  }
+/*   
+  .custom-tab-item {
+    flex: 0 0;
+
+  } */
+
+  /* .custom-tab-item {
+    flex: 1 1 auto; /* Allow tabs to grow and shrink equally */
+    /* min-width: 5%; /* Set a minimum width for the tabs */
+  
