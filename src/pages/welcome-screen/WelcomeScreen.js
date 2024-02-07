@@ -39,7 +39,13 @@ const WelcomeScreen = () => {
           </div>
         </div>
 
-          <Button variant="primary" className="custom-button" onClick={handleStart}>Start</Button>
+          <Button 
+            variant="primary" 
+            className="custom-button"
+            aria-label='start button to activate press enter'
+            onClick={handleStart}>
+              Start
+          </Button>
         </Card.Body>
       </Card>
     </div>

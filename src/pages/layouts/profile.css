@@ -58,3 +58,17 @@
     .profile-dropdown .dropdown-menu.show.show::after {
         transform: rotate(0deg) translateY(-131px);
     }
+
+    #nav-dropdown:focus{
+        outline: 1px solid white !important;
+        border-radius: 2px;
+    }
+
+    #help-icon:focus{
+        outline: 1px solid white !important;
+        border-radius: 2px;
+    }
+
+    .brand{
+        cursor: default;
+    }
