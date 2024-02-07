@@ -25,7 +25,6 @@ const Profile = () => {
         <div className="d-flex justify-content-center align-items-center">
           <Button
             variant="primary"
-            href="#setting"
             className="button-setting"
           >
             <FormattedMessage id="profile.setting" />

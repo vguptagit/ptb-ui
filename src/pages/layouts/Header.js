@@ -8,7 +8,7 @@ const Header = () => {
     return (
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container fluid>
-          <Navbar.Brand>
+          <Navbar.Brand className='brand' href="#home">
             {/* <img src='PSO_BIG.D.png' height='30' alt='' loading='lazy' /> */}
             <h1 className='pearson-heading'>
               <FormattedMessage id="pearsonheader.title" />
@@ -22,7 +22,7 @@ const Header = () => {
             </Nav>
             <Nav>
               <Profile />
-              <Nav.Link>
+              <Nav.Link id="help-icon">
                 Help <i className="bi bi-question-circle"></i>
               </Nav.Link>
             </Nav>
