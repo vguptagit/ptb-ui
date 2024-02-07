@@ -47,13 +47,31 @@ display: none;
     display: flex;
     overflow-x: auto; /* Enable horizontal scrolling if needed */
   }
-/*   
-  .custom-tab-item {
-    flex: 0 0;
 
-  } */
+button.close-tab.btn.btn-link {
+    margin-top: -15px;
+    color: black;
+    margin-right: -12px;
+        }
 
-  /* .custom-tab-item {
-    flex: 1 1 auto; /* Allow tabs to grow and shrink equally */
-    /* min-width: 5%; /* Set a minimum width for the tabs */
-  
+
+i.fas.fa-times {
+    margin-right: -12px;
+    }
+
+ a.nav-link {
+    margin-right: 5px;
+    }
+
+  .d-flex.justify-content-between {
+     padding: 3px;
+    }
+    
+  a#dropdown-ellipsis {
+    margin-left: 7px;
+    }
+    
+ .tabs-and-buttons-container {
+    margin-left: -1px;
+    }
+    
