@@ -250,3 +250,11 @@ input[type=text]:focus{
 input[type=search]:focus{
   outline: 2px solid #000 !important;
 }
+
+.nav-item a:focus{
+  outline: 2px solid #000 !important;
+}
+
+.color-black:focus{
+  outline: 2px solid #000 !important;
+}

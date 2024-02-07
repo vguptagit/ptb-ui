@@ -1,4 +1,4 @@
-// AppContext.js
+// context/AppContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import Test from "../entities/Test.Entity";
 
@@ -40,19 +40,8 @@ const AppProvider = ({ children }) => {
                 setTests(tests.filter((test) => test.id !== payload.test.id));
                 return;
             case "UPDATE_TEST_TITLE":
-                const updatedTests = tests.map(test => {
-                    if (test.id === payload.id) {
-                        return { ...test, title: payload.title };
-                    }
-                    return test;
-                });
-                setTests(updatedTests);
-                setSelectedTest(test => {
-                    if (test.id === payload.id) {
-                        return { ...test, title: payload.title };
-                    }
-                    return test;
-                });
+                // Assuming payload has 'id' and 'title' properties
+                setTests(tests.map(test => (test.id === payload.id ? { ...test, title: payload.title } : test)));
                 return;
             default:
                 return;
@@ -74,4 +63,4 @@ const AppProvider = ({ children }) => {
 
 const useAppContext = () => useContext(AppContext);
 
-export { AppProvider, useAppContext };
+export { AppProvider, useAppContext }
