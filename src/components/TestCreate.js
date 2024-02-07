@@ -10,7 +10,7 @@ import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent } = useAppContext();
+  const {selectedTest, dispatchEvent } = useAppContext();
   const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
   const [droppedNode, setDroppedNode] = useState(null);
   const [childEditMode, setChildEditMode] = useState(false);
@@ -26,9 +26,6 @@ const TestCreate = () => {
     if (selectedTest && selectedTest.id) {
       setNewTabName(newTitle);
       dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
-      
-      // Update selectedTest.title directly
-      selectedTest.title = newTitle;
     }
   };
 
