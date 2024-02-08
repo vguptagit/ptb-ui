@@ -275,3 +275,7 @@ input[type=search]:focus{
 .close-tab:focus{
   outline: 2px solid #000 !important;
 }
+
+.resource-tab-links{
+  padding-top: 7px;
+}
