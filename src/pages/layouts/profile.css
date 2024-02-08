@@ -72,3 +72,11 @@
     .brand{
         cursor: default;
     }
+
+    #profile-tooltip{
+        margin-top: 7px;
+    }
+
+    #help-tooltip{
+        margin-top: 7px;
+    }

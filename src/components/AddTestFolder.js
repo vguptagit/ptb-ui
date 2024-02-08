@@ -57,10 +57,12 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
             <FormattedMessage id="yourtests.addfolder" />
           </Button>
         </OverlayTrigger>
-        <Button className="color-black" variant="outline-light">
-          <i className="fa-solid fa-download"></i>&ensp;
-          <FormattedMessage id="yourtests.import" />
-        </Button>
+        <OverlayTrigger placement="bottom" overlay={<Tooltip id="import">Import</Tooltip>}>
+          <Button className="color-black" variant="outline-light">
+            <i className="fa-solid fa-download"></i>&ensp;
+            <FormattedMessage id="yourtests.import" />
+          </Button>
+        </OverlayTrigger>
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">

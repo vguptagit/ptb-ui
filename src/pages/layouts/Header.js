@@ -3,6 +3,8 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Profile from './Profile';
 import { FormattedMessage } from "react-intl";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const Header = () => {
     return (
@@ -22,9 +24,11 @@ const Header = () => {
             </Nav>
             <Nav>
               <Profile />
+            <OverlayTrigger placement="bottom" overlay={<Tooltip id="help-tooltip">Help</Tooltip>}>
               <Nav.Link id="help-icon">
                 Help <i className="bi bi-question-circle"></i>
               </Nav.Link>
+            </OverlayTrigger>
             </Nav>
           </Navbar.Collapse>
         </Container>

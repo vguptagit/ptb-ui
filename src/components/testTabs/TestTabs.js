@@ -100,26 +100,32 @@ const TestTabs = () => {
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
             <ButtonGroup className="mt-2 mt-sm-0 flex-sm-row">
-              <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                <Dropdown.Item href="#">
-                  <FormattedMessage id="testtabs.save" />
-                </Dropdown.Item>
-                <Dropdown.Item href="#">
-                  <FormattedMessage id="testtabs.saveas" />
-                </Dropdown.Item>
-              </DropdownButton>
+              <OverlayTrigger placement="bottom" overlay={<Tooltip id="save">Save</Tooltip>}>
+                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                  <Dropdown.Item href="#">
+                    <FormattedMessage id="testtabs.save" />
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#">
+                    <FormattedMessage id="testtabs.saveas" />
+                  </Dropdown.Item>
+                </DropdownButton>
+              </OverlayTrigger>
 
-              <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                <Dropdown.Item href="#" disabled>
-                  <FormattedMessage id="testtabs.print" />
-                </Dropdown.Item>
-              </DropdownButton>
+              <OverlayTrigger placement="bottom" overlay={<Tooltip id="print">Print</Tooltip>}>
+                <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                  <Dropdown.Item href="#" disabled>
+                    <FormattedMessage id="testtabs.print" />
+                  </Dropdown.Item>
+                </DropdownButton>
+              </OverlayTrigger>
             </ButtonGroup>
 
             {/* Adjusted margin classes for the "Export" button */}
-            <Button className="btn-test mt-1 mt-sm-0" disabled>
-              <FormattedMessage id="testtabs.export" />
-            </Button>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip id="export">Export</Tooltip>}>
+              <Button className="btn-test mt-1 mt-sm-0" disabled>
+                <FormattedMessage id="testtabs.export" />
+              </Button>
+            </OverlayTrigger>
           </div>
         </div>
       </div>
@@ -136,7 +142,7 @@ const TestTabs = () => {
           </OverlayTrigger>
           {tests.map((test, index) => (
             index < 4 ? (
-              <OverlayTrigger placement="bottom" overlay={<Tooltip id="new-tab">{test.title}</Tooltip>}>
+              <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-title">{test.title}</Tooltip>}>
                 <Nav.Item key={test.id}>
                   <Nav.Link
                     onClick={() => { handleNodeSelect(test) }}
