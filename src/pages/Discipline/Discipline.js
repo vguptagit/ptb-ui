@@ -27,7 +27,9 @@ const Discipline = () => {
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
-    navigate("/booktab");
+    if (selectedItems.length > 0) {
+      navigate("/booktab");
+    }
   };
 
   useEffect(() => {
@@ -75,7 +77,7 @@ const Discipline = () => {
         <>
           <div className="top-container">
             <h4><FormattedMessage id="discipline.steps.2" /></h4>
-            <button className="discipline btn btn-primary" onClick={handleNext}>Next</button>
+            <button className="discipline btn btn-primary" onClick={handleNext}   disabled={selectedItems.length === 0}>Next</button>
           </div>
           <div className="discipline d-flex justify-content-between">
             <LeftContent />
