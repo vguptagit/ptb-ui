@@ -61,8 +61,13 @@ display: none;
   
     #tab-label-dropdown #close-tab-dropdown{
         margin-top: 0px;
+        margin-left: 5px;
     }
 
     #test-tabs-navlink{
         padding-right: 17px;
+    }
+
+    .tab-label{
+        margin-left: 16px;
     }
