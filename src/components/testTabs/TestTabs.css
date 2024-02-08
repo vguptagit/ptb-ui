@@ -33,6 +33,7 @@ button.close-tab.btn.btn-link {
     margin-top: -13px;
     color: black;
     padding: 0px 9px 0px 9px;
+    margin-right: -14px;
 }
  
 
@@ -63,5 +64,5 @@ display: none;
     }
 
     #test-tabs-navlink{
-        padding-right: 0px;
+        padding-right: 17px;
     }

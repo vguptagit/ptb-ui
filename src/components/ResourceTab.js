@@ -10,7 +10,7 @@ const ResourceTab = () => {
                     <FormattedMessage id="home.title" />
                 </h2>
             </div>
-            <div>
+            <div className="resource-tab-links">
                 <Nav variant="tabs" defaultActiveKey="#/home/tests">
                     <Nav.Item>
                         <Nav.Link href="#/home/tests">Your Tests</Nav.Link>
