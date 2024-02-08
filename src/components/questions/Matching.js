@@ -1,4 +1,4 @@
-const Matching = () => {
+const Matching = (props) => {
     return (
         <>
             Matching Question

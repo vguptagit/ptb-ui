@@ -1,4 +1,4 @@
-const MultipleResponse = () => {
+const MultipleResponse = (props) => {
     return (
         <>
             MultipleResponse Question
