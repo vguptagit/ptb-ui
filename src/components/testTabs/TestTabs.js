@@ -140,6 +140,7 @@ const TestTabs = () => {
                 <Nav.Link
                   onClick={() => { handleNodeSelect(test) }}
                   className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
+                  id='test-tabs-navlink'
                 >
                   <div className='tab-label'>
                     <span>{test.title}</span>
@@ -166,11 +167,11 @@ const TestTabs = () => {
                       key={test.id}
                       onClick={() => handleNodeSelect(test)}
                     >
-                      <div className='tab-label'>
+                      <div className='tab-label' id='tab-label-dropdown'>                        
                         <span>{test.title}</span>
                         {/* Always render the close button */}
                         {tests.length > 1 && (
-                          <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                          <Button className="close-tab" id='close-tab-dropdown' variant="link" onClick={(e) => removeTab(e, test)}>
                             <i className="fas fa-times"></i>
                           </Button>
                         )}

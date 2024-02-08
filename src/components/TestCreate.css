@@ -46,6 +46,23 @@ input.rounded.form-control {
     font-weight: bold;
 }
 
+button.close-tab.btn.btn-link {
+    margin-top: -13px;
+    color: black;
+}
+
+.d-flex.justify-content-between {
+    padding: 3px;
+}
+
+a#dropdown-ellipsis {
+    margin-left: 12px;
+}
+
+.tabs-and-buttons-container {
+    margin-left: -1px;
+}
+
 .drag-container {
     min-height: 100px;
     margin: 5px;
