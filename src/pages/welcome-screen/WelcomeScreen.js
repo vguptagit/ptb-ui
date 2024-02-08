@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -10,6 +10,10 @@ const WelcomeScreen = () => {
   const handleStart = () => {
     navigate("/discipline");
   };
+
+  useEffect(() => {
+    document.title = "Welcome Screen";
+  }, []);
 
   return (
     <div className="center-container">

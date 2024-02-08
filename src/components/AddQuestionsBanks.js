@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 const QuestBanks = () => {
 
-       
-      
-
+  useEffect(() => {
+    document.title = "Question Banks";
+  }, []);
+    
   return (
     <div className="p-2">
       <div className="button-container">

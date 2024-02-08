@@ -136,23 +136,25 @@ const TestTabs = () => {
           </OverlayTrigger>
           {tests.map((test, index) => (
             index < 4 ? (
-              <Nav.Item key={test.id}>
-                <Nav.Link
-                  onClick={() => { handleNodeSelect(test) }}
-                  className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
-                  id='test-tabs-navlink'
-                >
-                  <div className='tab-label'>
-                    <span>{test.title}</span>
-                    {/* Always render the close button */}
-                    {tests.length > 1 && (
-                      <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
-                        <i className="fas fa-times"></i>
-                      </Button>
-                    )}
-                  </div>
-                </Nav.Link>
-              </Nav.Item>
+              <OverlayTrigger placement="bottom" overlay={<Tooltip id="new-tab">{test.title}</Tooltip>}>
+                <Nav.Item key={test.id}>
+                  <Nav.Link
+                    onClick={() => { handleNodeSelect(test) }}
+                    className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
+                    id='test-tabs-navlink'
+                  >
+                    <div className='tab-label'>
+                      <span>{test.title}</span>
+                      {/* Always render the close button */}
+                      {tests.length > 1 && (
+                        <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                          <i className="fas fa-times"></i>
+                        </Button>
+                      )}
+                    </div>
+                  </Nav.Link>
+                </Nav.Item>
+              </OverlayTrigger>
             ) : null
           ))}
           {tests.length > 4 && (

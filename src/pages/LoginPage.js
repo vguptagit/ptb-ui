@@ -18,6 +18,10 @@ const LoginPage = () => {
         setStoredEmailAddress(emailAddress || '');
     }, []);
 
+    useEffect(() => {
+        document.title = "Pearson Sign In";
+      }, []);
+
     const handleLogin = () => {
         const newUser = new User(); 
         newUser.name = storedFamilyName; 
