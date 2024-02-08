@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './WelcomeScreen.css';
+import Header from '../layouts/Header';
+
 
 const WelcomeScreen = () => {
   const navigate = useNavigate();
@@ -16,6 +18,11 @@ const WelcomeScreen = () => {
   }, []);
 
   return (
+    <>
+    <header className="App-header">
+                <Header />
+            </header>
+            
     <div className="center-container">
       <Card className="card-container">
         <Card.Body>
@@ -53,6 +60,7 @@ const WelcomeScreen = () => {
         </Card.Body>
       </Card>
     </div>
+    </>
   );
 }
 
