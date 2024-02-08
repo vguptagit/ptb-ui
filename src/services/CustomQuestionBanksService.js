@@ -18,6 +18,12 @@ CustomQuestionBanksService.TrueFalse_Template=TrueFalse_Template;
 CustomQuestionBanksService.MatchFollowing_Template=MatchFollowing_Template;
 CustomQuestionBanksService.Essay_Template=Essay_Template;
 CustomQuestionBanksService.FillInTheBlanks_Template=FillInTheBlanks_Template;
+CustomQuestionBanksService.Essay = "Essay";
+CustomQuestionBanksService.MultipleChoice = "MultipleChoice";
+CustomQuestionBanksService.FillInBlanks = "FillInBlanks";
+CustomQuestionBanksService.Matching = "Matching";
+CustomQuestionBanksService.MultipleResponse = "MultipleResponse";
+CustomQuestionBanksService.TrueFalse = "TrueFalse";
 
 CustomQuestionBanksService.questionTemplates = function (qtiFormat) {
 

@@ -1,4 +1,4 @@
-const TrueFalse = () => {
+const TrueFalse = (props) => {
     return (
         <>
             TrueFalse Question

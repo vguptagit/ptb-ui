@@ -1,4 +1,4 @@
-const MultipleChoice = () => {
+const MultipleChoice = (props) => {
     return (
         <>
             MultipleChoice Question

@@ -1,4 +1,4 @@
-const FillInBlanks = () => {
+const FillInBlanks = (props) => {
     return (
         <>
             FillInBlanks Question
