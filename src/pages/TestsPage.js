@@ -9,6 +9,10 @@ const Tests = () => {
   const [rootFolders, setRootFolders] = useState([]);
   const { tests, dispatchEvent } = useAppContext();
   const [doReload, setDoReload] = useState(false);
+
+  useEffect(() => {
+    document.title = "Your Tests";
+  }, []);
   
   const handleNodeSelect = (item) => {
     dispatchEvent("SELECT_TEST", item);
