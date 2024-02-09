@@ -58,10 +58,10 @@ function SessionJS() {
           // Call the login endpoint function from authService.js
           callLoginEndpoint(token)
             .then(response => {
-              console.log('Login successful:', response.data);
+              console.log('Login successful:', response);
           
-              sessionStorage.setItem('familyName', response.data.familyName);
-              sessionStorage.setItem('emailAddress', response.data.emailAddress);
+              sessionStorage.setItem('familyName', response.familyName);
+              sessionStorage.setItem('emailAddress', response.emailAddress);
           
               if (response.data && response.data.success) {
                 window.location.href = 'http://testbuilder.dev.pearsoncmg.com:3000/login';
