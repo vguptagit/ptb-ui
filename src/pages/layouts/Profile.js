@@ -3,15 +3,12 @@ import { Button } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import "./profile.css";
 import { useAuth } from "../../context/AuthContext";
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
 const Profile = () => {
   const { user, logout } = useAuth();
 
   return (
   
-    <OverlayTrigger placement="bottom" overlay={<Tooltip id="profile-tooltip">Profile</Tooltip>}>
       <NavDropdown
         title={
           <span>
@@ -45,7 +42,6 @@ const Profile = () => {
           </div>
         </div>
       </NavDropdown>
-    </OverlayTrigger>
   );
 };
 

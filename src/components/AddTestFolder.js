@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 import { saveTestFolder } from '../services/testfolder.service';
 import Toastify from './common/Toastify';
 
@@ -51,18 +49,14 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
   return (
     <div className="p-2">
       <div className="button-container">
-        <OverlayTrigger placement="bottom" overlay={<Tooltip id="add-folder">Add new folder</Tooltip>}>
           <Button className="color-black" variant="outline-light" onClick={handleAddFolderClick}>
             <i className="fa-solid fa-plus"></i>&ensp;
             <FormattedMessage id="yourtests.addfolder" />
           </Button>
-        </OverlayTrigger>
-        <OverlayTrigger placement="bottom" overlay={<Tooltip id="import">Import</Tooltip>}>
           <Button className="color-black" variant="outline-light">
             <i className="fa-solid fa-download"></i>&ensp;
             <FormattedMessage id="yourtests.import" />
           </Button>
-        </OverlayTrigger>
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">
