@@ -16,6 +16,20 @@ export const getUserQuestionFolders = () => {
     });
 };
 
+export const getUserQuestionFoldersRoot = () => {
+  return httpInterceptor
+    .get(`${url}/my/questionfoldersroot`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
 export const saveUserQuestionFolder = (folder) => {
   return httpInterceptor
     .post(`${url}/my/questionfolders`, folder)

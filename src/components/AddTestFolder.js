@@ -72,14 +72,14 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
               placeholder="Enter folder name"
               value={folderName}
               onChange={(e) => setFolderName(e.target.value)}
-              className="rounded"
+              className="rounded ml-1"
             />
           </div>
           <div className="d-flex">
             <Button onClick={handleSaveFolder} className="btn" style={{ color: 'black', backgroundColor: 'white' }}>
               <i className="fa-solid fa-check"></i>
             </Button>
-            <Button onClick={handleTextBoxClose} className="btn ml-2" style={{ color: 'black', backgroundColor: 'white' }}>
+            <Button onClick={handleTextBoxClose} className="closebtn m1-2" style={{ color: 'black', backgroundColor: 'white' }}>
               <i className="fa-solid fa-xmark"></i>
             </Button>
           </div>

@@ -3,6 +3,7 @@ import { useDrag } from "react-dnd";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
 import { getAllBooks } from "../../services/book.service";
+import { getUserQuestionFolders } from "../../services/userfolder.service";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   const [, drag] = useDrag({
@@ -11,7 +12,14 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   });
 
   return (
-    <div ref={drag} className="tree-node" onClick={() => { onToggle(); onDataUpdate && onDataUpdate(node); }}>
+    <div
+      ref={drag}
+      className="tree-node"
+      onClick={() => {
+        onToggle();
+        onDataUpdate && onDataUpdate(node);
+      }}
+    >
       {node.droppable && (
         <span>
           {node.isOpen ? (
@@ -26,9 +34,8 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines}) {
+function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
   const [treeData, setTreeData] = useState([]);
-
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
@@ -36,46 +43,57 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
   };
 
   useEffect(() => {
-  
-    let convertedList = [];
-    for (let i = 0; i < disciplines.length; i++) {
-      const newItem = {
-        id: i + 1,
-        parent: 0,
-        droppable: true,
-        text: disciplines[i],
-      };
-      convertedList.push(newItem);
-    }
-    for (let i = 0; i < convertedList.length; i++)
-     {
-    getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
-    }
-    console.log("convertedList ", convertedList)
-    setTreeData(convertedList); 
-  }, []); 
-
-
-  const getBooksList =  (discipline, disciplineId , booksList) => {
-    
-    getAllBooks(discipline).then(
-      (books) => { 
-        for (let i = 0; i < books.length; i++) {
+    if (disciplines && disciplines.length > 0) {
+      let convertedList = [];
+      for (let i = 0; i < disciplines.length; i++) {
         const newItem = {
-          id: booksList.length + 1,
-          parent: disciplineId,
+          id: i + 1,
+          parent: 0,
           droppable: true,
-          text: `${books[i].title}_${discipline}`,
+          text: disciplines[i],
         };
-        booksList.push(newItem);
+        convertedList.push(newItem);
       }
-    },
-    (error) => { 
-        console.log(error); 
-    
-    }  );
-    
-  }
+      for (let i = 0; i < convertedList.length; i++) {
+        getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
+      }
+      console.log("convertedList ", convertedList);
+      setTreeData(convertedList);
+    } else if (folders && folders.length > 0) {
+      getUserQuestionFolders()
+      .then((folders) => {
+        const folderNodes = folders.map((folder, index) => ({
+          id: index + 1,
+          parent: 0,
+          droppable: true,
+          text: folder.title,
+        }));
+        setTreeData(folderNodes);
+      })
+      .catch((error) => {
+        console.error("Error fetching question folders:", error);
+      });
+    }
+  }, []);
+
+  const getBooksList = (discipline, disciplineId, booksList) => {
+    getAllBooks(discipline).then(
+      (books) => {
+        for (let i = 0; i < books.length; i++) {
+          const newItem = {
+            id: booksList.length + 1,
+            parent: disciplineId,
+            droppable: true,
+            text: `${books[i].title}_${discipline}`,
+          };
+          booksList.push(newItem);
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
   useEffect(() => {
     console.log("Dropped Node in TreeView:", droppedNode);
@@ -83,15 +101,19 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
 
   return (
     <>
-    <div className="treeview">
-      <Tree
-        tree={treeData}
-        rootId={0}
-        render={(node, { onToggle }) => <DraggableNode node={node} onToggle={onToggle} />}
-        dragPreviewRender={(monitorProps) => <div>{monitorProps.item.node.text}</div>}
-        onDrop={handleDrop}
-      />
-    </div>
+      <div className="treeview">
+        <Tree
+          tree={treeData}
+          rootId={0}
+          render={(node, { onToggle }) => (
+            <DraggableNode node={node} onToggle={onToggle} />
+          )}
+          dragPreviewRender={(monitorProps) => (
+            <div>{monitorProps.item.node.text}</div>
+          )}
+          onDrop={handleDrop}
+        />
+      </div>
     </>
   );
 }

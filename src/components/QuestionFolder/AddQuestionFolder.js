@@ -1,13 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { Button, Form } from "react-bootstrap";
-import { saveUserQuestionFolder } from "../services/userfolder.service";
-import Toastify from "./common/Toastify";
+import { getUserQuestionFoldersRoot, saveUserQuestionFolder, getUserQuestionFolders } from "../../services/userfolder.service";
+import Toastify from "../common/Toastify";
+import TreeView from "../../pages/tree-view/TreeView";
+import "./AddQuestionFolder.css"
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [savedFolders, setSavedFolders] = useState([]);
+  const [rootFolderGuid, setRootFolderGuid] = useState("");
+  const [initialFetchDone, setInitialFetchDone] = useState(false);
+  const [updateKey, setUpdateKey] = useState(0);
+
+  useEffect(() => {
+    async function fetchRootFolderGuid() {
+      try {
+        const rootFolder = await getUserQuestionFoldersRoot();
+        setRootFolderGuid(rootFolder.guid);
+      } catch (error) {
+        console.error("Error fetching root folder:", error);
+      }
+    }
+    fetchRootFolderGuid();
+
+    const savedFoldersFromStorage = JSON.parse(localStorage.getItem("savedFolders"));
+    if (savedFoldersFromStorage) {
+      setSavedFolders(savedFoldersFromStorage);
+    }
+
+    setInitialFetchDone(true);
+  }, []);
+
+  useEffect(() => {
+    if (initialFetchDone) {
+      fetchUserFolders();
+    }
+  }, [initialFetchDone]);
+
+  useEffect(() => {
+    fetchUserFolders();
+  }, []);
+  const fetchUserFolders = async () => {
+    try {
+      const folders = await getUserQuestionFolders();
+      setSavedFolders(folders);
+      localStorage.setItem("savedFolders", JSON.stringify(folders));
+    } catch (error) {
+      console.error("Error fetching user folders:", error);
+    }
+  };
 
   const handleAddQuestionFolderClick = () => {
     setShowTextBox(true);
@@ -20,25 +63,32 @@ const QuestionFolder = ({ userId }) => {
   const handleSaveFolder = async () => {
     if (folderName.trim() !== "") {
       try {
-        // Calculate the new sequence
         const maxSequence = savedFolders.reduce((max, folder) => {
           return folder.sequence > max ? folder.sequence : max;
         }, 1);
         const newSequence = maxSequence + 1;
 
         const newFolderData = {
-          parentId: " ",
+          parentId: rootFolderGuid,
           sequence: newSequence,
           title: folderName,
         };
 
         const savedFolder = await saveUserQuestionFolder(newFolderData, userId);
 
-        setSavedFolders([...savedFolders, savedFolder]);
+        const updatedFolders = [...savedFolders, savedFolder];
+        setSavedFolders(updatedFolders);
+
+        try {
+          localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
+        } catch (localStorageError) {
+          console.error("Error setting data in local storage:", localStorageError);
+        }
+
+        setUpdateKey(updateKey + 1);
         setFolderName("");
         setShowTextBox(false);
         Toastify({ message: "Folder saved successfully", type: "success" });
-        console.log("Saved Folder:", savedFolder);
       } catch (error) {
         console.error("Error saving folder:", error);
 
@@ -68,7 +118,7 @@ const QuestionFolder = ({ userId }) => {
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">
-          <div className="flex-grow-1 mr-2">
+          <div className="flex-grow-1 mr-4">
             <Form.Control
               type="text"
               placeholder="Enter folder name"
@@ -90,7 +140,7 @@ const QuestionFolder = ({ userId }) => {
             </Button>
             <Button
               onClick={handleTextBoxClose}
-              className="btn ml-2"
+              className="closebtn"
               style={{ color: "black", backgroundColor: "white" }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -98,6 +148,10 @@ const QuestionFolder = ({ userId }) => {
           </div>
         </div>
       )}
+      {/* Render saved folders */}
+      <div className="saved-folders">
+        {savedFolders && savedFolders.length > 0 && <TreeView key={updateKey} folders={savedFolders}/> }
+      </div>
     </div>
   );
 };
