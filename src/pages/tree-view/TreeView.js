@@ -71,7 +71,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders, testFolders
       });
     } else if (testFolders && testFolders.length > 0) {
       const folderNodes = testFolders.map((folder, index) => ({
-        id: folder?.id !== 0 ? folder?.id : index + 1,
+        id: folder?.id !== 0 ? folder?.id : testFolders.length + index + 1,
         parent: folder?.parentId !== null ? parseInt(folder.parentId) : 0,
         droppable: true,
         text: folder.title,
@@ -121,6 +121,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders, testFolders
             <div>{monitorProps.item.node?.text}</div>
           )}
           onDrop={handleDrop}
+          sort={false}
         />
       </div>
     </>
