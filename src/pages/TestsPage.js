@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from "react-intl";
 import { getRootTestFolders } from '../services/testfolder.service';
 import Toastify from '../components/common/Toastify';
+import TreeView from "../pages/tree-view/TreeView";
 
 const Tests = () => {
   const [rootFolders, setRootFolders] = useState([]);
@@ -37,7 +38,9 @@ const Tests = () => {
   return (
     <>
       <TestFolder rootFoldersLength={rootFolders.length} setDoReload={setDoReload}/>
-      
+      <div className="root-folders-tests">
+        {rootFolders && rootFolders.length > 0 && <TreeView testFolders={rootFolders}/> }
+      </div>
       {/* <h2 className="test-list p-1">
         <FormattedMessage id="testlist.title" />
       </h2>

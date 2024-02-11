@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useDrag } from "react-dnd";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
 import { getAllBooks } from "../../services/book.service";
 import { getUserQuestionFolders } from "../../services/userfolder.service";
 
-const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
-  const [, drag] = useDrag({
-    type: "TREE_NODE",
-    item: { node },
-  });
+const DraggableNode = ({ node, onToggle, onDataUpdate, isOpen, depth }) => {
 
   return (
     <div
-      ref={drag}
       className="tree-node"
       onClick={() => {
         onToggle();
         onDataUpdate && onDataUpdate(node);
       }}
+      style={{ marginInlineStart: depth * 10 }}
     >
       {node.droppable && (
         <span>
-          {node.isOpen ? (
+          {isOpen ? (
             <i className="bi bi-caret-down-fill"></i>
           ) : (
             <i className="bi bi-caret-right-fill"></i>
@@ -34,12 +29,13 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
+function TreeView({ onDataUpdate, droppedNode, disciplines, folders, testFolders }) {
   const [treeData, setTreeData] = useState([]);
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
-    onDataUpdate(newTree);
+    //onDataUpdate(newTree);
+    console.log(newTree);
   };
 
   useEffect(() => {
@@ -73,8 +69,21 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
       .catch((error) => {
         console.error("Error fetching question folders:", error);
       });
+    } else if (testFolders && testFolders.length > 0) {
+      const folderNodes = testFolders.map((folder, index) => ({
+        id: folder?.id !== 0 ? folder?.id : index + 1,
+        parent: folder?.parentId !== null ? parseInt(folder.parentId) : 0,
+        droppable: true,
+        text: folder.title,
+      }));
+      setTreeData(folderNodes);
+      console.log(folderNodes);
     }
   }, []);
+
+  useEffect(()=>{
+    
+  })
 
   const getBooksList = (discipline, disciplineId, booksList) => {
     getAllBooks(discipline).then(
@@ -105,11 +114,11 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
         <Tree
           tree={treeData}
           rootId={0}
-          render={(node, { onToggle }) => (
-            <DraggableNode node={node} onToggle={onToggle} />
+          render={(node, { depth, isOpen, onToggle }) => (
+            <DraggableNode node={node} depth={depth} isOpen={isOpen} onToggle={onToggle}/>
           )}
           dragPreviewRender={(monitorProps) => (
-            <div>{monitorProps.item.node.text}</div>
+            <div>{monitorProps.item.node?.text}</div>
           )}
           onDrop={handleDrop}
         />

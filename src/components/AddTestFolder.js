@@ -24,7 +24,7 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
   const handleSaveFolder = async () => {
     if (folderName.trim() !== '') {
       const newFolderData = {
-        parentId: "",
+        parentId: 0,
         sequence: rootFoldersLength + 1,
         title: folderName
       };
