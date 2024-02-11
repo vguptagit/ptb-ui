@@ -79,7 +79,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders, testFolders
       setTreeData(folderNodes);
       console.log(folderNodes);
     }
-  }, []);
+  }, [disciplines, folders, testFolders]);
 
   useEffect(()=>{
     
