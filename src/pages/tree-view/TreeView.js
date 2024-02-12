@@ -11,14 +11,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   });
 
   return (
-    <div
-      ref={drag}
-      className="tree-node"
-      onClick={() => {
-        onToggle();
-        onDataUpdate && onDataUpdate(node);
-      }}
-    >
+    <div ref={drag} className="tree-node" onClick={() => { onToggle(); onDataUpdate && onDataUpdate(node); }}>
       {node.droppable && (
         <span>
           {node.isOpen ? (
@@ -33,8 +26,9 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
+function TreeView({ onDataUpdate, droppedNode, disciplines}) {
   const [treeData, setTreeData] = useState([]);
+
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
@@ -59,6 +53,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
   
 
   const handleNodeClick = (node) => {
+    console.log("treeData ==>",treeData);
     if (node.droppable) {
       if (node.type === 'book') getBookNodes(node);
       else if (node.type === 'node') getBookNodeQuestions(node);
@@ -72,55 +67,22 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, folders }) {
       (books) => { 
         for (let i = 0; i < books.length; i++) {
         const newItem = {
-          id: i + 1,
-          parent: 0,
+          id: booksList.length + 1,
+          parent: disciplineId,
           droppable: true,
           bookGuid : books[i].guid,
           text: `${books[i].title}_${discipline}`,
           type: "book"
         };
-        convertedList.push(newItem);
+        booksList.push(newItem);
       }
-      for (let i = 0; i < convertedList.length; i++) {
-        getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
-      }
-      console.log("convertedList ", convertedList);
-      setTreeData(convertedList);
-    } else if (folders && folders.length > 0) {
-      getUserQuestionFolders()
-      .then((folders) => {
-        const folderNodes = folders.map((folder, index) => ({
-          id: index + 1,
-          parent: 0,
-          droppable: true,
-          text: folder.title,
-        }));
-        setTreeData(folderNodes);
-      })
-      .catch((error) => {
-        console.error("Error fetching question folders:", error);
-      });
-    }
-  }, []);
-
-  const getBooksList = (discipline, disciplineId, booksList) => {
-    getAllBooks(discipline).then(
-      (books) => {
-        for (let i = 0; i < books.length; i++) {
-          const newItem = {
-            id: booksList.length + 1,
-            parent: disciplineId,
-            droppable: true,
-            text: `${books[i].title}_${discipline}`,
-          };
-          booksList.push(newItem);
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  };
+    },
+    (error) => { 
+        console.log(error); 
+    
+    }  );
+    
+  }
 
   const getBookNodes =  (node) => {
      

@@ -18,7 +18,7 @@ export const getAllBookNodes = async (bookId) => {
 
 export const getAllBookNodeQuestions = async (bookId, nodeId) => {
     return httpInterceptor
-        .get(`${url}/books/${bookId}/nodes/${nodeId}`)
+        .get(`${url}/books/${bookId}/nodes/${nodeId}/questions`)
         .then((response) => {
             return response?.data;
         })
