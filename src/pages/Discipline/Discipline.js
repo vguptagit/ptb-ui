@@ -33,6 +33,10 @@ const Discipline = () => {
   };
 
   useEffect(() => {
+    document.title = "Choose Your Discipline";
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const apiData = await getAllDisciplines();

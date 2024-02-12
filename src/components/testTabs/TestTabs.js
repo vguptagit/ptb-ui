@@ -8,8 +8,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
@@ -91,35 +89,33 @@ const TestTabs = () => {
           <FormattedMessage id="testtabs.title" />
         </h4>
         <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-wizard">Test Creation Wizard</Tooltip>}>
             <Button className="btn-test mr-1" id="btn-test-wizard">
               <i className="fa-solid fa-wand-magic-sparkles"></i>
               <FormattedMessage id="testtabs.testwizard" />
             </Button>
-          </OverlayTrigger>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
             <ButtonGroup className="mt-2 mt-sm-0 flex-sm-row">
-              <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                <Dropdown.Item href="#">
-                  <FormattedMessage id="testtabs.save" />
-                </Dropdown.Item>
-                <Dropdown.Item href="#">
-                  <FormattedMessage id="testtabs.saveas" />
-                </Dropdown.Item>
-              </DropdownButton>
+                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                  <Dropdown.Item href="#">
+                    <FormattedMessage id="testtabs.save" />
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#">
+                    <FormattedMessage id="testtabs.saveas" />
+                  </Dropdown.Item>
+                </DropdownButton>
 
-              <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                <Dropdown.Item href="#" disabled>
-                  <FormattedMessage id="testtabs.print" />
-                </Dropdown.Item>
-              </DropdownButton>
+                <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                  <Dropdown.Item href="#" disabled>
+                    <FormattedMessage id="testtabs.print" />
+                  </Dropdown.Item>
+                </DropdownButton>
             </ButtonGroup>
 
             {/* Adjusted margin classes for the "Export" button */}
-            <Button className="btn-test mt-1 mt-sm-0" disabled>
-              <FormattedMessage id="testtabs.export" />
-            </Button>
+              <Button className="btn-test mt-1 mt-sm-0" disabled>
+                <FormattedMessage id="testtabs.export" />
+              </Button>
           </div>
         </div>
       </div>
@@ -127,32 +123,30 @@ const TestTabs = () => {
 
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip id="new-tab">New Tab</Tooltip>}>
             <Nav.Item>
               <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
                 <i className="fa-solid fa-plus"></i>
               </Nav.Link>
             </Nav.Item>
-          </OverlayTrigger>
           {tests.map((test, index) => (
             index < 4 ? (
-              <Nav.Item key={test.id}>
-                <Nav.Link
-                  onClick={() => { handleNodeSelect(test) }}
-                  className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
-                  id='test-tabs-navlink'
-                >
-                  <div className='tab-label'>
-                    <span>{test.title}</span>
-                    {/* Always render the close button */}
-                    {tests.length > 1 && (
-                      <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
-                        <i className="fas fa-times"></i>
-                      </Button>
-                    )}
-                  </div>
-                </Nav.Link>
-              </Nav.Item>
+                <Nav.Item key={test.id}>
+                  <Nav.Link
+                    onClick={() => { handleNodeSelect(test) }}
+                    className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
+                    id='test-tabs-navlink'
+                  >
+                    <div className='tab-label'>
+                      <span>{test.title}</span>
+                      {/* Always render the close button */}
+                      {tests.length > 1 && (
+                        <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                          <i className="fas fa-times"></i>
+                        </Button>
+                      )}
+                    </div>
+                  </Nav.Link>
+                </Nav.Item>
             ) : null
           ))}
           {tests.length > 4 && (

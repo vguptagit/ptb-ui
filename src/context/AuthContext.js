@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import User from "../entities/User.Entity";
 
@@ -24,8 +24,23 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         window.piSession.logout();
         console.log("setIsAuthenticated", isAuthenticated);
-        navigate('/login');
+
+      //  navigate('/logout');
     }
+    useEffect(() => {
+        debugger;
+        const familyName = sessionStorage.getItem('familyName') ;
+        const emailAddress = sessionStorage.getItem('emailAddress') ;
+
+        // If user details are available, log in the user directly and navigate to the welcome page
+        if (familyName && emailAddress) {
+            const newUser = new User(); 
+            newUser.name = familyName; 
+            newUser.email = emailAddress; 
+            login(newUser);
+        }
+    }, []);
+
     return (
         <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
             {children}

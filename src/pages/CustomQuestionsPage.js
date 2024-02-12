@@ -6,7 +6,7 @@ import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemp
 const CustomQuestionsPage = () => {
     
     useEffect(() => {
-       
+        document.title = "Custom Questions";
     }, [])
 
     return (

@@ -18,7 +18,6 @@ const TestCreate = () => {
   const {selectedTest, dispatchEvent } = useAppContext();
   selectedTest.questions = selectedTest.questions || [];
   const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
-  const [droppedNode, setDroppedNode] = useState(null);
   const [childEditMode, setChildEditMode] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
 
@@ -27,7 +26,12 @@ const TestCreate = () => {
   }, [selectedTest]);
 
   const handleTitleChange = (event) => {
-    const newTitle = event.target.value;
+    let newTitle = event.target.value;
+
+    // Truncate the title if it exceeds 12 characters including white space
+    if (newTitle.length > 12) {
+      newTitle = newTitle.substring(0, 12);
+    }
 
     if (selectedTest && selectedTest.id) {
       setNewTabName(newTitle);

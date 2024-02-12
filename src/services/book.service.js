@@ -2,19 +2,33 @@ import httpInterceptor from "../httpHelper/httpHelper";
 
 const url = process.env.REACT_APP_API_URL
 
-// export const getAllBooks = () => {
-//     return httpInterceptor
-//         .get(`${url}/books`)
-//         .then((response) =>{
-//             return response?.data;
-//         })
-//         .catch((error)=>{
-//             Promise.reject({
-//                 type: "error",
-//                 message : error
-//             })
-//         })
-// }
+export const getAllBookNodes = async (bookId) => {
+    return httpInterceptor
+        .get(`${url}/books/${bookId}/nodes`)
+        .then((response) => {
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
+};
+
+export const getAllBookNodeQuestions = async (bookId, nodeId) => {
+    return httpInterceptor
+        .get(`${url}/books/${bookId}/nodes/${nodeId}`)
+        .then((response) => {
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
+};
 
 export const getAllBooks = async (discipline, userBooks) => {
     const queryParams = new URLSearchParams({

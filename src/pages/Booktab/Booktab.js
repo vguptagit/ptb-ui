@@ -80,6 +80,10 @@ const Booktab = () => {
   
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    document.title = "Choose Your Books or Topics";
+  }, []);
+
   const handleNext = () => {
     if (selectedItems.length > 0) {
       navigate("/home");

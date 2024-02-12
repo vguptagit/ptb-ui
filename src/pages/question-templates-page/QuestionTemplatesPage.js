@@ -18,12 +18,12 @@ const DraggableQuestionTemplate = ({ questionTemplate }) => {
   return (
     <li
       className="row qstn-header myLI12"
-      ref={drag}
       qstntemplate={questionTemplate.qstnTemplate.toString()}
     >
       <button className="plusIconQT newTest-close glyphicon glyphicon-plus"></button>
       <div
         className="printViewContainer"
+        ref={drag}
         dangerouslySetInnerHTML={getQuestionHtmlTemplate(questionTemplate)}
       ></div>
     </li>
@@ -38,7 +38,7 @@ const QuestionTemplatesPage = () => {
   }, []);
 
   return (
-    <div className="p-2">
+    <div className="custom-questions-tab p-2">
       <ul>
         {questionTemplates.map((questionTemplate, index) => (
           <DraggableQuestionTemplate
