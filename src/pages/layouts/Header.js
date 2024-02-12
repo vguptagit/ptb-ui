@@ -10,7 +10,7 @@ const Header = () => {
     return (
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container fluid>
-          <Navbar.Brand className='brand' href="#home">
+          <Navbar.Brand className='brand'>
             {/* <img src='PSO_BIG.D.png' height='30' alt='' loading='lazy' /> */}
             <h1 className='pearson-heading'>
               <FormattedMessage id="pearsonheader.title" />

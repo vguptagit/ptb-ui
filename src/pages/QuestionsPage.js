@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Testing from '../components/common/Testing'
-import QuestionFolder from "../components/AddQuestionFolder";
+import QuestionFolder from '../components/QuestionFolder/AddQuestionFolder';
+
 
 const Questions = () => {
     useEffect(() => {
