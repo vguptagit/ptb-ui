@@ -16,18 +16,22 @@ const TestTabs = () => {
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
 
   useEffect(() => {
-    const ellipsisItems = tests.slice(4);
+    const ellipsisItems = tests?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
-
-    // Select the "Untitled 1" tab by default if no test is already selected
-    if (!selectedTest) {
-      const untitled1Test = tests.find((test) => test.title === 'Untitled 1');
-      dispatchEvent('SELECT_TEST', untitled1Test);
+  
+    // Select the first "Untitled" tab by default if no test is already selected
+    if (!selectedTest || !selectedTest.title || !selectedTest.title.startsWith('Untitled')) {
+      const untitledTest = tests?.find((test) => test.title && test.title.startsWith('Untitled'));
+      if (untitledTest) {
+        dispatchEvent('SELECT_TEST', untitledTest);
+      } else if (tests && tests.length > 0) {
+        dispatchEvent('SELECT_TEST', tests[0]);
+      }
     }
-
   }, [tests, selectedTest, dispatchEvent]);
-
+  
+  
   useEffect(() => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : '');
