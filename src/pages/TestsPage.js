@@ -35,18 +35,15 @@ const Tests = () => {
   }, [doReload]);
 
   const onNodeUpdate = (changedNode) => {
-    // console.log(changedNode);
-    // updateTestFolder(
-    //   {guid : changedNode.guid,
-    //   parentId : changedNode.parentId})
-    // .then(()=> {
-    //   Toastify({ message: 'Folder rearranged successfully', type: 'success' });
-    //   setDoReload();
-    // })
-    // .catch((error)=>{
-    //   console.error('Error getting root folders:', error);
-    //   Toastify({ message: 'Failed to rearrange Folder', type: 'error' });
-    // })
+    updateTestFolder(changedNode)
+    .then(()=> {
+      Toastify({ message: 'Folder rearranged successfully', type: 'success' });
+      setDoReload();
+    })
+    .catch((error)=>{
+      console.error('Error getting root folders:', error);
+      Toastify({ message: 'Failed to rearrange Folder', type: 'error' });
+    })
   }
 
  
