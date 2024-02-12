@@ -2,9 +2,9 @@ import { useAppContext } from "../context/AppContext";
 import TestFolder from "../components/AddTestFolder";
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from "react-intl";
-import { getRootTestFolders } from '../services/testfolder.service';
+import { getRootTestFolders, updateTestFolder } from '../services/testfolder.service';
 import Toastify from '../components/common/Toastify';
-import TreeView from "../pages/tree-view/TreeView";
+import TreeView from "../pages/tree-view-test-folders/TreeView";
 
 const Tests = () => {
   const [rootFolders, setRootFolders] = useState([]);
@@ -34,12 +34,27 @@ const Tests = () => {
     })
   }, [doReload]);
 
+  const onNodeUpdate = (changedNode) => {
+    // console.log(changedNode);
+    // updateTestFolder(
+    //   {guid : changedNode.guid,
+    //   parentId : changedNode.parentId})
+    // .then(()=> {
+    //   Toastify({ message: 'Folder rearranged successfully', type: 'success' });
+    //   setDoReload();
+    // })
+    // .catch((error)=>{
+    //   console.error('Error getting root folders:', error);
+    //   Toastify({ message: 'Failed to rearrange Folder', type: 'error' });
+    // })
+  }
+
  
   return (
     <>
       <TestFolder rootFoldersLength={rootFolders.length} setDoReload={setDoReload}/>
       <div className="root-folders-tests">
-        {rootFolders && rootFolders.length > 0 && <TreeView testFolders={rootFolders}/> }
+        {rootFolders && rootFolders.length > 0 && <TreeView testFolders={rootFolders} onNodeUpdate={onNodeUpdate}/> }
       </div>
       {/* <h2 className="test-list p-1">
         <FormattedMessage id="testlist.title" />
