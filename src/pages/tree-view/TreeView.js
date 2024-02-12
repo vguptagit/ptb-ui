@@ -28,7 +28,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
 
 function TreeView({ onDataUpdate, droppedNode, disciplines}) {
   const [treeData, setTreeData] = useState([]);
-
+  const [addedNodes, setAddedNodes] = useState(new Set());
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
@@ -47,16 +47,15 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
      {
     getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
     }
-    console.log("convertedList ", convertedList)
     setTreeData(convertedList); 
   }, []); 
   
 
   const handleNodeClick = (node) => {
-    console.log("treeData ==>",treeData);
+
     if (node.droppable) {
-      if (node.type === 'book') getBookNodes(node);
-      else if (node.type === 'node') getBookNodeQuestions(node);
+      if (node.type === 'book' && !addedNodes.has(node.bookGuid)) getBookNodes(node);
+      else if (node.type === 'node' && !addedNodes.has(node.bookGuid, node.nodeGuid)) getBookNodeQuestions(node);
     }
   };
 
@@ -99,6 +98,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
           type: "node"
         };
         setTreeData([...treeData, newItemNode]);
+        setAddedNodes(new Set(addedNodes).add(node.bookGuid));
       }
     },
     (error) => { 
@@ -122,6 +122,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
           type: "question"
         };
         setTreeData([...treeData, newItemQuestion]);
+        setAddedNodes(new Set(addedNodes).add(node.bookGuid+node.nodeGuid));
       }
     },
     (error) => { 
