@@ -77,11 +77,15 @@ const Booktab = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
+  
   const [loading, setLoading] = useState(false);
 
   const handleNext = () => {
-    navigate("/home");
+    if (selectedItems.length > 0) {
+      navigate("/home");
+    }
   };
+
   const handleBack = () => {
     navigate("/discipline");
   };
@@ -124,7 +128,7 @@ const Booktab = () => {
           <div className="top-container">
             <h4><FormattedMessage id="booktab.steps.1" /></h4>
             <button className="booktab btn btn-secondary " onClick={handleBack}>Back</button>
-            <button className="booktab btn btn-primary" onClick={handleNext}>Next</button>
+            <button className="booktab btn btn-primary" onClick={handleNext} disabled={selectedItems.length === 0}>Next</button>
           </div>
           <div className="booktab d-flex justify-content-between">
             <LeftContent />
