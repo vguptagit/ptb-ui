@@ -21,10 +21,10 @@ const QuestionBanks = () => {
           });
       }, []); 
     return (
-        <>
+        <div className="p-2">
            <QuestBanks/>
            {disciplineData.length > 0 && <div><TreeView disciplines = {disciplineData}/>  </div> }
-        </>
+        </div>
     );
 }
 export default QuestionBanks;
