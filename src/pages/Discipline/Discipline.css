@@ -51,7 +51,7 @@
 }
 
 .discipline.result-list {
-  width: 64cap;
+  width: 99%;
   list-style: none;
   padding: 0;
   position: relative;
@@ -63,6 +63,7 @@
   padding-block-start: inherit;
   cursor: pointer;
   border-top: 1px solid #D0D0D0;
+  font-size: 14px;
 }
 
 .discipline.result-list li:last-child {
