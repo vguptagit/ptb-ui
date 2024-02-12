@@ -95,7 +95,6 @@ const TestTabs = () => {
             </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-            <ButtonGroup className="mt-2 mt-sm-0 flex-sm-row">
                 <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
                   <Dropdown.Item href="#">
                     <FormattedMessage id="testtabs.save" />
@@ -105,12 +104,9 @@ const TestTabs = () => {
                   </Dropdown.Item>
                 </DropdownButton>
 
-                <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                  <Dropdown.Item href="#" disabled>
+                <Button id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
                     <FormattedMessage id="testtabs.print" />
-                  </Dropdown.Item>
-                </DropdownButton>
-            </ButtonGroup>
+                </Button>
 
             {/* Adjusted margin classes for the "Export" button */}
               <Button className="btn-test mt-1 mt-sm-0" disabled>
