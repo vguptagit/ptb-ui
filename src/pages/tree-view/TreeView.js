@@ -55,7 +55,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
 
     if (node.droppable) {
       if (node.type === 'book' && !addedNodes.has(node.bookGuid)) getBookNodes(node);
-      else if (node.type === 'node' && !addedNodes.has(node.bookGuid, node.nodeGuid)) getBookNodeQuestions(node);
+      else if (node.type === 'node' && !addedNodes.has(node.bookGuid + node.nodeGuid)) getBookNodeQuestions(node);
     }
   };
 
@@ -98,8 +98,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
           type: "node"
         };
         setTreeData([...treeData, newItemNode]);
-        setAddedNodes(new Set(addedNodes).add(node.bookGuid));
+        
       }
+      setAddedNodes(new Set(addedNodes).add(node.bookGuid));
     },
     (error) => { 
         console.log(error); 
@@ -122,8 +123,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
           type: "question"
         };
         setTreeData([...treeData, newItemQuestion]);
-        setAddedNodes(new Set(addedNodes).add(node.bookGuid+node.nodeGuid));
+        
       }
+      setAddedNodes(new Set(addedNodes).add(node.bookGuid+node.nodeGuid));
     },
     (error) => { 
         console.log(error); 
