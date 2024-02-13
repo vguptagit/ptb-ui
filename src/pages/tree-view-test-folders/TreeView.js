@@ -43,6 +43,7 @@ function TreeView({ onDataUpdate, droppedNode, testFolders, onNodeUpdate}) {
     onNodeUpdate(nodeToBeUpdated);
   };
 
+  // one based index
   function getIndexByParentGuid(parentGuid){
     return testFolders.findIndex(ele => ele.guid === parentGuid);
   }
@@ -50,8 +51,8 @@ function TreeView({ onDataUpdate, droppedNode, testFolders, onNodeUpdate}) {
   useEffect(() => {
     if (testFolders && testFolders.length > 0) {
       const folderNodes = testFolders.map((folder, index) => ({
-        id: index,
-        parent: getIndexByParentGuid(folder.parentId) !== -1 ? getIndexByParentGuid(folder.parentId) : 0,
+        id: index + 1, // one based index
+        parent: getIndexByParentGuid(folder.parentId) !== 0 ? getIndexByParentGuid(folder.parentId) + 1 : 0,
         droppable: true,
         text: folder.title,
         data: {
