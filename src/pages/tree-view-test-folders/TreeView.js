@@ -13,7 +13,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, isOpen, depth }) => {
       }}
       style={{ marginInlineStart: depth * 10 }}
     >
-      {node.droppable && node.parentId !== 0 && (
+      {node.droppable && (
         <span>
           {isOpen ? (
             <i className="bi bi-caret-down-fill"></i>
