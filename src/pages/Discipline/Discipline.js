@@ -105,7 +105,7 @@ const Discipline = () => {
               </div>
               <ul className="discipline result-list mt-3">
                 {searchResults.map((item, index) => (
-                  <li
+                  <li tabindex="0"
                     key={index}
                     className={`result-item ${selectedItems.includes(item) ? "selected" : ""}`}
                     onClick={() => handleSelectItem(item)}

@@ -38,8 +38,8 @@ const QuestionTemplatesPage = () => {
   }, []);
 
   return (
-    <div className="p-2">
-      <ul>
+    <div className="custom-questions-tab p-2">
+      <ul className="TemplateLayout">
         {questionTemplates.map((questionTemplate, index) => (
           <DraggableQuestionTemplate
             key={index}

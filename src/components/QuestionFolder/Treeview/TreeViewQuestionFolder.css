@@ -1,0 +1,27 @@
+.treeview {
+  height: 100%;
+}
+
+.treeview > ul {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 5px 0px;
+  list-style: none;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  color: #4d4d4d;
+  line-height: 1em;
+}
+
+.tree-node span {
+  cursor: pointer;
+  margin-right: 10px;
+}
+

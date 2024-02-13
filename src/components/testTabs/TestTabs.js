@@ -8,8 +8,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
@@ -18,18 +16,22 @@ const TestTabs = () => {
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
 
   useEffect(() => {
-    const ellipsisItems = tests.slice(4);
+    const ellipsisItems = tests?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
-
-    // Select the "Untitled 1" tab by default if no test is already selected
-    if (!selectedTest) {
-      const untitled1Test = tests.find((test) => test.title === 'Untitled 1');
-      dispatchEvent('SELECT_TEST', untitled1Test);
+  
+    // Select the first "Untitled" tab by default if no test is already selected
+    if (!selectedTest || !selectedTest.title || !selectedTest.title.startsWith('Untitled')) {
+      const untitledTest = tests?.find((test) => test.title && test.title.startsWith('Untitled'));
+      if (untitledTest) {
+        dispatchEvent('SELECT_TEST', untitledTest);
+      } else if (tests && tests.length > 0) {
+        dispatchEvent('SELECT_TEST', tests[0]);
+      }
     }
-
   }, [tests, selectedTest, dispatchEvent]);
-
+  
+  
   useEffect(() => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : '');
@@ -91,16 +93,12 @@ const TestTabs = () => {
           <FormattedMessage id="testtabs.title" />
         </h4>
         <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-wizard">Test Creation Wizard</Tooltip>}>
             <Button className="btn-test mr-1" id="btn-test-wizard">
               <i className="fa-solid fa-wand-magic-sparkles"></i>
               <FormattedMessage id="testtabs.testwizard" />
             </Button>
-          </OverlayTrigger>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-            <ButtonGroup className="mt-2 mt-sm-0 flex-sm-row">
-              <OverlayTrigger placement="bottom" overlay={<Tooltip id="save">Save</Tooltip>}>
                 <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
                   <Dropdown.Item href="#">
                     <FormattedMessage id="testtabs.save" />
@@ -109,23 +107,15 @@ const TestTabs = () => {
                     <FormattedMessage id="testtabs.saveas" />
                   </Dropdown.Item>
                 </DropdownButton>
-              </OverlayTrigger>
 
-              <OverlayTrigger placement="bottom" overlay={<Tooltip id="print">Print</Tooltip>}>
-                <DropdownButton id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                  <Dropdown.Item href="#" disabled>
+                <Button id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
                     <FormattedMessage id="testtabs.print" />
-                  </Dropdown.Item>
-                </DropdownButton>
-              </OverlayTrigger>
-            </ButtonGroup>
+                </Button>
 
             {/* Adjusted margin classes for the "Export" button */}
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="export">Export</Tooltip>}>
               <Button className="btn-test mt-1 mt-sm-0" disabled>
                 <FormattedMessage id="testtabs.export" />
               </Button>
-            </OverlayTrigger>
           </div>
         </div>
       </div>
@@ -133,16 +123,13 @@ const TestTabs = () => {
 
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip id="new-tab">New Tab</Tooltip>}>
             <Nav.Item>
               <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
                 <i className="fa-solid fa-plus"></i>
               </Nav.Link>
             </Nav.Item>
-          </OverlayTrigger>
           {tests.map((test, index) => (
             index < 4 ? (
-              <OverlayTrigger placement="bottom" overlay={<Tooltip id="test-title">{test.title}</Tooltip>}>
                 <Nav.Item key={test.id}>
                   <Nav.Link
                     onClick={() => { handleNodeSelect(test) }}
@@ -160,7 +147,6 @@ const TestTabs = () => {
                     </div>
                   </Nav.Link>
                 </Nav.Item>
-              </OverlayTrigger>
             ) : null
           ))}
           {tests.length > 4 && (

@@ -3,8 +3,8 @@ import { FormattedMessage } from "react-intl";
 import { Button, Form } from "react-bootstrap";
 import { getUserQuestionFoldersRoot, saveUserQuestionFolder, getUserQuestionFolders } from "../../services/userfolder.service";
 import Toastify from "../common/Toastify";
-import TreeView from "../../pages/tree-view/TreeView";
 import "./AddQuestionFolder.css"
+import TreeViewQuestionFolder from "./Treeview/TreeViewQuestionFolder";
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
@@ -150,7 +150,7 @@ const QuestionFolder = ({ userId }) => {
       )}
       {/* Render saved folders */}
       <div className="saved-folders">
-        {savedFolders && savedFolders.length > 0 && <TreeView key={updateKey} folders={savedFolders}/> }
+        {savedFolders && savedFolders.length > 0 && <TreeViewQuestionFolder key={updateKey} folders={savedFolders}/> }
       </div>
     </div>
   );
