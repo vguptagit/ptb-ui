@@ -47,7 +47,7 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
   };
 
   return (
-    <div className="p-2">
+    <>
       <div className="button-container">
           <Button className="color-black" variant="outline-light" onClick={handleAddFolderClick}>
             <i className="fa-solid fa-plus"></i>&ensp;
@@ -87,7 +87,7 @@ const TestFolder = ({rootFoldersLength, setDoReload}) => {
           ))}
         </ul> */}
       </div>
-    </div>
+    </>
   );
 };
 

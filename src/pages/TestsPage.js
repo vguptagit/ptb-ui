@@ -48,7 +48,7 @@ const Tests = () => {
 
  
   return (
-    <>
+    <div className="p-2">
       <TestFolder rootFoldersLength={rootFolders.length} setDoReload={setDoReload}/>
       <div className="root-folders-tests">
         {rootFolders && rootFolders.length > 0 && <TreeView testFolders={rootFolders} onNodeUpdate={onNodeUpdate}/> }
@@ -65,7 +65,7 @@ const Tests = () => {
           ))}
         </ul>
       </div> */}
-      </>
+      </div>
   );  
 };
 
