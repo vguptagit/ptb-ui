@@ -172,6 +172,7 @@ const QuestionFolder = ({ userId }) => {
             <Button
               onClick={handleSaveFolder}
               className="btn"
+              aria-label='tick mark'
               style={{
                 color: "black",
                 backgroundColor: "white",
@@ -182,6 +183,7 @@ const QuestionFolder = ({ userId }) => {
             <Button
               onClick={handleTextBoxClose}
               className="closebtn"
+              aria-label='close mark'
               style={{ color: "black", backgroundColor: "white" }}
             >
               <i className="fa-solid fa-xmark"></i>

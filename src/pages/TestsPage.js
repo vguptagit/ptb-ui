@@ -8,6 +8,10 @@ const Tests = () => {
   const [doReload, setDoReload] = useState(false);
 
   useEffect(() => {
+    document.title = "Your Tests";
+  }, []);
+
+  useEffect(() => {
     getRootTestFolders()
       .then((rootFolders) => {
         setRootFolders(rootFolders);
