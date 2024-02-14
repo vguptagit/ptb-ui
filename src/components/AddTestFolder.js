@@ -119,10 +119,18 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
             />
           </div>
           <div className="d-flex">
-            <Button onClick={handleSaveFolder} className="btn" style={{ color: 'black', backgroundColor: 'white' }}>
+            <Button 
+              onClick={handleSaveFolder}
+              className="btn"
+              aria-label='tick mark'
+              style={{ color: 'black', backgroundColor: 'white' }}>
               <i className="fa-solid fa-check"></i>
             </Button>
-            <Button onClick={handleTextBoxClose} className="closebtn m1-2" style={{ color: 'black', backgroundColor: 'white' }}>
+            <Button 
+              onClick={handleTextBoxClose}
+              className="closebtn m1-2"
+              aria-label='close mark'
+              style={{ color: 'black', backgroundColor: 'white' }}>
               <i className="fa-solid fa-xmark"></i>
             </Button>
           </div>

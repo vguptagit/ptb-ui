@@ -20,7 +20,7 @@ const DraggableQuestionTemplate = ({ questionTemplate }) => {
       className="row qstn-header myLI12"
       qstntemplate={questionTemplate.qstnTemplate.toString()}
     >
-      <button className="plusIconQT newTest-close glyphicon glyphicon-plus"></button>
+      {/* <button className="plusIconQT newTest-close glyphicon glyphicon-plus"></button> */}
       <div
         className="printViewContainer"
         ref={drag}
