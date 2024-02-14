@@ -2,14 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
 
-const DraggableNode = ({ node, onToggle, onDataUpdate, isOpen, depth }) => {
+const DraggableNode = ({ node, onToggle, depth, isOpen, handleFolderSelect }) => {
+
+  const [selectedFolder, setSelectedFolder] = useState(null);
+
+  const handleEditFolder = (folderTitle) => {
+    console.log("Edit folder:", folderTitle);
+    if (handleFolderSelect) {
+      handleFolderSelect(folderTitle);
+      setSelectedFolder(folderTitle);
+    }
+  };
 
   return (
     <div
       className="tree-node"
       onClick={() => {
         onToggle();
-        onDataUpdate && onDataUpdate(node);
       }}
       style={{ marginInlineStart: depth * 10 }}
     >
@@ -23,28 +32,45 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, isOpen, depth }) => {
         </span>
       )}
       {node.text}
+      {selectedFolder === node.text && (
+        <button
+          className="edit-button selected"
+          onClick={() => handleEditFolder(node.text)}
+        >
+          <i className="bi bi-pencil-fill"></i>
+        </button>
+      )}
+      {selectedFolder !== node.text && (
+        <button
+          className="edit-button"
+          onClick={() => handleEditFolder(node.text)}
+        >
+          <i className="bi bi-pencil-fill"></i>
+        </button>
+      )}
+
     </div>
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, testFolders, onNodeUpdate}) {
+function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
   const [treeData, setTreeData] = useState([]);
 
-  const handleDrop = (newTree, {dragSource, dropTarget}) => {
+  const handleDrop = (newTree, { dragSource, dropTarget }) => {
     setTreeData(newTree);
     console.log(dragSource);
     console.log(dropTarget);
     const nodeToBeUpdated = {
-      guid : dragSource.data.guid,
-      parentId : dropTarget.data.guid,
-      sequence : dragSource.data.sequence,
+      guid: dragSource.data.guid,
+      parentId: dropTarget.data.guid,
+      sequence: dragSource.data.sequence,
     }
     console.log(nodeToBeUpdated);
     onNodeUpdate(nodeToBeUpdated);
   };
 
   // one based index
-  function getIndexByParentGuid(parentGuid){
+  function getIndexByParentGuid(parentGuid) {
     return testFolders.findIndex(ele => ele.guid === parentGuid);
   }
 
@@ -56,7 +82,7 @@ function TreeView({ onDataUpdate, droppedNode, testFolders, onNodeUpdate}) {
         droppable: true,
         text: folder.title,
         data: {
-          guid : folder.guid,
+          guid: folder.guid,
           sequence: folder.sequence,
         }
       }));
@@ -72,7 +98,7 @@ function TreeView({ onDataUpdate, droppedNode, testFolders, onNodeUpdate}) {
           tree={treeData}
           rootId={0}
           render={(node, { depth, isOpen, onToggle }) => (
-            <DraggableNode node={node} depth={depth} isOpen={isOpen} onToggle={onToggle}/>
+            <DraggableNode node={node} isOpen={isOpen} depth={depth} onToggle={onToggle} handleFolderSelect={handleFolderSelect} />
           )}
           dragPreviewRender={(monitorProps) => (
             <div>{monitorProps.item.node?.text}</div>
