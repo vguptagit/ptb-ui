@@ -1,6 +1,5 @@
 
 .qstn-header{
-    font-family: Helvetica Neue Light;
 	font-weight: normal !important;
     font-size: 12px;
     margin: 0 0px 5px 0px;
@@ -9,7 +8,6 @@
 
 .printViewContainer {
 	font-size: 14px;
-	font-family: Helvetica Neue Light;
 	padding-left: 4px;
 }
 
@@ -141,4 +139,13 @@ li[qstntemplate='true'] .qti-itemBody>blockquote:first-child>div.optionLabelView
 
 .custom-questions-tab{
 	overflow-x: hidden;
+}
+
+.TemplateLayout{
+	margin-left: -20px;
+	margin-right: 10px;
+}
+.qti-assessmentItem{
+	margin-left: -11px;
+    margin-right: -11px;
 }

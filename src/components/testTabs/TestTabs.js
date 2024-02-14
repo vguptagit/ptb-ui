@@ -140,7 +140,7 @@ const TestTabs = () => {
                       <span>{test.title}</span>
                       {/* Always render the close button */}
                       {tests.length > 1 && (
-                        <Button className="close-tab" variant="link" onClick={(e) => removeTab(e, test)}>
+                        <Button className="close-tab" aria-label='close' variant="link" onClick={(e) => removeTab(e, test)}>
                           <i className="fas fa-times"></i>
                         </Button>
                       )}
@@ -162,10 +162,10 @@ const TestTabs = () => {
                       onClick={() => handleNodeSelect(test)}
                     >
                       <div className='tab-label' id='tab-label-dropdown'>                        
-                        <span>{test.title}</span>
+                        <span className='test-title'>{test.title}</span>
                         {/* Always render the close button */}
                         {tests.length > 1 && (
-                          <Button className="close-tab" id='close-tab-dropdown' variant="link" onClick={(e) => removeTab(e, test)}>
+                          <Button className="close-tab" aria-label='close' id='close-tab-dropdown' variant="link" onClick={(e) => removeTab(e, test)}>
                             <i className="fas fa-times"></i>
                           </Button>
                         )}

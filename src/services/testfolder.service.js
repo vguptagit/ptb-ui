@@ -16,6 +16,20 @@ export const saveTestFolder = (folder) => {
     });
 };
 
+export const updateTestFolder = (folder) => {
+  return httpInterceptor
+    .put(`${url}/my/testfolders`, folder)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
 export const getRootTestFolders = () => {
   return httpInterceptor
     .get(`${url}/my/testfolders`)

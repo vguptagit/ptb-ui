@@ -100,9 +100,9 @@ const Booktab = () => {
   }, [selectedItems]);
 
   const handleNext = () => {
-    if (selectedItems.length > 0) {
-      navigate("/home");
-    }
+
+    navigate("/home");
+
   };
 
   const handleBack = () => {
@@ -143,7 +143,7 @@ const Booktab = () => {
           <div className="top-container">
             <h4><FormattedMessage id="booktab.steps.1" /></h4>
             <button className="booktab btn btn-secondary " onClick={handleBack}>Back</button>
-            <button className="booktab btn btn-primary" onClick={handleNext} disabled={selectedItems.length === 0}>Next</button>
+            <button className="booktab btn btn-primary" onClick={handleNext} >Next</button>
           </div>
           <div className="booktab d-flex justify-content-between">
             <LeftContent />

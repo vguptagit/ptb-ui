@@ -43,3 +43,17 @@ export const saveUserQuestionFolder = (folder) => {
       });
     });
 };
+
+export const updateUserQuestionFolders = (folders) => {
+  return httpInterceptor
+    .put(`${url}/my/questionfolders`, folders)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};

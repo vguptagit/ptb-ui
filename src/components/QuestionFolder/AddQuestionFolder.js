@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { Button, Form } from "react-bootstrap";
-import { getUserQuestionFoldersRoot, saveUserQuestionFolder, getUserQuestionFolders } from "../../services/userfolder.service";
+import {
+  getUserQuestionFoldersRoot,
+  saveUserQuestionFolder,
+  getUserQuestionFolders,
+  updateUserQuestionFolders,
+} from "../../services/userfolder.service";
 import Toastify from "../common/Toastify";
-import "./AddQuestionFolder.css"
+import "./AddQuestionFolder.css";
 import TreeViewQuestionFolder from "./Treeview/TreeViewQuestionFolder";
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState("");
+  const [editFolderName, setEditFolderName] = useState("");
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     async function fetchRootFolderGuid() {
@@ -25,7 +32,9 @@ const QuestionFolder = ({ userId }) => {
     }
     fetchRootFolderGuid();
 
-    const savedFoldersFromStorage = JSON.parse(localStorage.getItem("savedFolders"));
+    const savedFoldersFromStorage = JSON.parse(
+      localStorage.getItem("savedFolders")
+    );
     if (savedFoldersFromStorage) {
       setSavedFolders(savedFoldersFromStorage);
     }
@@ -54,6 +63,10 @@ const QuestionFolder = ({ userId }) => {
 
   const handleAddQuestionFolderClick = () => {
     setShowTextBox(true);
+    setIsEditing(false);
+    if (!isEditing) {
+      setFolderName("");
+    }
   };
 
   const handleTextBoxClose = () => {
@@ -68,30 +81,51 @@ const QuestionFolder = ({ userId }) => {
         }, 1);
         const newSequence = maxSequence + 1;
 
-        const newFolderData = {
-          parentId: rootFolderGuid,
-          sequence: newSequence,
-          title: folderName,
-        };
-
-        const savedFolder = await saveUserQuestionFolder(newFolderData, userId);
-
-        const updatedFolders = [...savedFolders, savedFolder];
-        setSavedFolders(updatedFolders);
-
-        try {
+        if (isEditing) {
+          // If editing, update the folder
+          const editedFolderIndex = savedFolders.findIndex(
+            (folder) => folder.title === editFolderName
+          );
+          const editedFolder = savedFolders[editedFolderIndex];
+          const updatedFolderData = {
+            guid: editedFolder.guid,
+            parentId: rootFolderGuid,
+            sequence: editedFolder.sequence,
+            title: folderName,
+          };
+          const updateFolder = await updateUserQuestionFolders(
+            updatedFolderData
+          );
+          const updatedFolders = [...savedFolders, updateFolder];
+          setSavedFolders(updatedFolders);
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
-        } catch (localStorageError) {
-          console.error("Error setting data in local storage:", localStorageError);
+          setUpdateKey(updateKey + 1);
+          Toastify({ message: "Folder updated successfully", type: "success" });
+        } else {
+          // If not editing, save the new folder
+          const newFolderData = {
+            parentId: rootFolderGuid,
+            sequence: newSequence,
+            title: folderName,
+          };
+          const savedFolder = await saveUserQuestionFolder(
+            newFolderData,
+            userId
+          );
+          const updatedFolders = [...savedFolders, savedFolder];
+          setSavedFolders(updatedFolders);
+          localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
+          setUpdateKey(updateKey + 1);
+          Toastify({ message: "Folder saved successfully", type: "success" });
         }
 
-        setUpdateKey(updateKey + 1);
         setFolderName("");
         setShowTextBox(false);
-        Toastify({ message: "Folder saved successfully", type: "success" });
+
+        // Fetch the updated folders immediately after saving or updating
+        fetchUserFolders();
       } catch (error) {
         console.error("Error saving folder:", error);
-
         if (error?.message?.response?.request?.status === 409) {
           Toastify({
             message: error.message.response.data.message,
@@ -102,6 +136,13 @@ const QuestionFolder = ({ userId }) => {
         }
       }
     }
+  };
+
+  const handleFolderSelect = (folderTitle) => {
+    setFolderName(folderTitle);
+    setEditFolderName(folderTitle);
+    setShowTextBox(true);
+    setIsEditing(true);
   };
 
   return (
@@ -150,7 +191,13 @@ const QuestionFolder = ({ userId }) => {
       )}
       {/* Render saved folders */}
       <div className="saved-folders">
-        {savedFolders && savedFolders.length > 0 && <TreeViewQuestionFolder key={updateKey} folders={savedFolders}/> }
+        {savedFolders && savedFolders.length > 0 && (
+          <TreeViewQuestionFolder
+            key={updateKey}
+            folders={savedFolders}
+            onFolderSelect={handleFolderSelect}
+          />
+        )}
       </div>
     </div>
   );

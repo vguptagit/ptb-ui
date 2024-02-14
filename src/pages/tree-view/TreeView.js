@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
-import { getAllBooks, getAllBookNodes, getAllBookNodeQuestions } from "../../services/book.service";
+import {
+  getAllBooks,
+  getAllBookNodes,
+  getAllBookNodeQuestions,
+} from "../../services/book.service";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   const [, drag] = useDrag({
@@ -11,7 +15,14 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   });
 
   return (
-    <div ref={drag} className="tree-node" onClick={() => { onToggle(); onDataUpdate && onDataUpdate(node); }}>
+    <div
+      ref={drag}
+      className="tree-node"
+      onClick={() => {
+        onToggle();
+        onDataUpdate && onDataUpdate(node);
+      }}
+    >
       {node.droppable && (
         <span>
           {node.isOpen ? (
@@ -26,7 +37,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines}) {
+function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   const [treeData, setTreeData] = useState([]);
   const [addedNodes, setAddedNodes] = useState(new Set());
 
@@ -41,95 +52,101 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
       parent: 0,
       droppable: true,
       text: discipline,
-      type: "discipline"
+      type: "discipline",
     }));
-    for (let i = 0; i < convertedList.length; i++)
-     {
-    getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
+    for (let i = 0; i < convertedList.length; i++) {
+      getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
     }
-    setTreeData(convertedList); 
-  }, []); 
-  
+    setTreeData(convertedList);
+  }, []);
 
-  const handleNodeClick = (node) => {
+  const handleNodeClick = (clickedNode) => {
+    const updatedTreeData = treeData.map((node) => {
+      if (node.id === clickedNode.id && node.droppable) {
+        return { ...node, isOpen: !node.isOpen };
+      }
+      return node;
+    });
 
-    if (node.droppable) {
-      if (node.type === 'book' && !addedNodes.has(node.bookGuid)) getBookNodes(node);
-      else if (node.type === 'node' && !addedNodes.has(node.bookGuid, node.nodeGuid)) getBookNodeQuestions(node);
+    setTreeData(updatedTreeData);
+
+    if (clickedNode.droppable) {
+      if (clickedNode.type === "book" && !addedNodes.has(clickedNode.bookGuid))
+        getBookNodes(clickedNode);
+      else if (
+        clickedNode.type === "node" &&
+        !addedNodes.has(clickedNode.bookGuid + clickedNode.nodeGuid)
+      )
+        getBookNodeQuestions(clickedNode);
     }
   };
 
-
-  const getBooksList =  (discipline, disciplineId , booksList) => {
-     
+  const getBooksList = (discipline, disciplineId, booksList) => {
     getAllBooks(discipline).then(
-      (books) => { 
+      (books) => {
         for (let i = 0; i < books.length; i++) {
-        const newItem = {
-          id: booksList.length + 1,
-          parent: disciplineId,
-          droppable: true,
-          bookGuid : books[i].guid,
-          text: `${books[i].title}_${discipline}`,
-          type: "book"
-        };
-        booksList.push(newItem);
+          const newItem = {
+            id: booksList.length + 1,
+            parent: disciplineId,
+            droppable: true,
+            bookGuid: books[i].guid,
+            text: `${books[i].title}_${discipline}`,
+            type: "book",
+          };
+          booksList.push(newItem);
+        }
+      },
+      (error) => {
+        console.log(error);
       }
-    },
-    (error) => { 
-        console.log(error); 
-    
-    }  );
-    
-  }
+    );
+  };
 
-  const getBookNodes =  (node) => {
-     
+  const getBookNodes = (node) => {
     getAllBookNodes(node.bookGuid).then(
-      (nodes) => { 
+      (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
-        const newItemNode = {
-          id: treeData.length + 1,
-          parent: node.id,
-          droppable: true,
-          bookGuid: node.bookGuid,
-          nodeGuid : nodes[i].guid,
-          text: `${nodes[i].title}_${node.text}`,
-          type: "node"
-        };
-        setTreeData([...treeData, newItemNode]);
+          const newItemNode = {
+            id: treeData.length + 1,
+            parent: node.id,
+            droppable: true,
+            bookGuid: node.bookGuid,
+            nodeGuid: nodes[i].guid,
+            text: `${nodes[i].title}_${node.text}`,
+            type: "node",
+          };
+          setTreeData([...treeData, newItemNode]);
+        }
         setAddedNodes(new Set(addedNodes).add(node.bookGuid));
+      },
+      (error) => {
+        console.log(error);
       }
-    },
-    (error) => { 
-        console.log(error); 
-    }  );
-    
-  }
+    );
+  };
 
-  const getBookNodeQuestions =  (node) => {
-     
+  const getBookNodeQuestions = (node) => {
     getAllBookNodeQuestions(node.bookGuid, node.nodeGuid).then(
-      (nodes) => { 
+      (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
-        const newItemQuestion = {
-          id: treeData.length + 1,
-          parent: node.id,
-          droppable: false,
-          bookGuid: node.bookGuid,
-          nodeGuid : node.nodeGuid,
-          text: `${nodes[i].title}_${node.text}`,
-          type: "question"
-        };
-        setTreeData([...treeData, newItemQuestion]);
-        setAddedNodes(new Set(addedNodes).add(node.bookGuid+node.nodeGuid));
+          const newItemQuestion = {
+            id: treeData.length + 1,
+            parent: node.id,
+            droppable: false,
+            bookGuid: node.bookGuid,
+            nodeGuid: node.nodeGuid,
+            text: `${nodes[i].title}_${node.text}`,
+            type: "question",
+          };
+          setTreeData([...treeData, newItemQuestion]);
+        }
+        setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
+      },
+      (error) => {
+        console.log(error);
       }
-    },
-    (error) => { 
-        console.log(error); 
-    }  );
-    
-  }
+    );
+  };
 
   useEffect(() => {
     console.log("Dropped Node in TreeView:-->", droppedNode);
@@ -137,15 +154,23 @@ function TreeView({ onDataUpdate, droppedNode, disciplines}) {
 
   return (
     <>
-    <div className="treeview">
-      <Tree
-        tree={treeData}
-        rootId={0}
-        render={(node, { onToggle }) => <DraggableNode node={node} onToggle={onToggle} onDataUpdate={handleNodeClick}/>}
-        dragPreviewRender={(monitorProps) => <div>{monitorProps.item.node.text}</div>}
-        onDrop={handleDrop}
-      />
-    </div>
+      <div className="treeview">
+        <Tree
+          tree={treeData}
+          rootId={0}
+          render={(node, { onToggle }) => (
+            <DraggableNode
+              node={node}
+              onToggle={onToggle}
+              onDataUpdate={handleNodeClick}
+            />
+          )}
+          dragPreviewRender={(monitorProps) => (
+            <div>{monitorProps.item.node.text}</div>
+          )}
+          onDrop={handleDrop}
+        />
+      </div>
     </>
   );
 }
