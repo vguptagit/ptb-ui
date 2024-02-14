@@ -4,8 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import './Booktab.css';
 import Loader from "../../components/common/loader/Loader";
 import { getDisciplineBooks } from "../../services/book.service";
-import { DndProvider } from "react-dnd";
+// import { DndProvider } from "react-dnd";
 import { Tree, MultiBackend, getBackendOptions } from "@minoru/react-dnd-treeview";
+import {  DndProvider, useDrag, useDrop } from 'react-dnd';
 
 const LeftContent = () => {
   return (
@@ -19,54 +20,28 @@ const LeftContent = () => {
   );
 };
 
-const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
-  const filteredTreeData = useMemo(() => {
-    if (!searchTerm) {
-      return treeData;
-    }
+const TreeNode = ({ node, onDrop }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'NODE', 
+    item: { id: node.guid },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
 
-    const filterNodes = (nodes) => {
-      return nodes.filter((node) => {
-        const isMatch = node.text.toLowerCase().includes(searchTerm.toLowerCase());
-        const hasChildMatches = node.children && filterNodes(node.children).length > 0;
-
-        return isMatch || hasChildMatches;
-      });
-    };
-
-    return filterNodes(treeData);
-  }, [searchTerm, treeData]);
-
-  const renderNode = (node, { isOpen, onToggle }) => (
-    <div
-      className={`tree-node ${!node.children ? 'innermost' : ''} ${selectedItems.includes(node.id) ? 'selected' : ''}`}
-      onClick={() => onSelectItem(node)}
-    >
-      {node.droppable && (
-        <span onClick={onToggle}>
-          {isOpen ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-right-fill"></i>}
-        </span>
-      )}
-      {node.text}
-    </div>
-  );
+  const [, drop] = useDrop({
+    accept: 'NODE', 
+    drop: () => onDrop(node),
+  });
 
   return (
-    <div className="treeview">
-      <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-        <Tree
-          tree={filteredTreeData}
-          rootId={0}
-          render={renderNode}
-          dragPreviewRender={() => null}
-          onDrop={() => { }}
-        />
-      </DndProvider>
+    <div ref={drop} className={`tree-node ${isDragging ? 'dragging' : ''}`}>
+      <div ref={drag}>{node.text}</div>
     </div>
   );
 };
 
-const Booktab = () => {
+const Booktab = ({ onDropNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,21 +63,39 @@ const Booktab = () => {
 
   useEffect(() => {
     setLoading(true);
-    getDisciplineBooks(selectedItems.join(","))
-      .then(data => {
-        setTreeData(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching discipline books:', error);
-        setLoading(false);
-      });
-  }, [selectedItems]);
+    const fetchData = async () => {
+        for (const setofItem of selectedItems) {
+            try {
+                const data = await getDisciplineBooks(setofItem);
+                const formattedData = data.map(item => ({
+                    id: item.guid,
+                    text: `${item.discipline} - ${item.title}`,
+                    droppable: true,
+                    nodes: item.nodes && item.nodes.map(node => ({
+                        id: node.guid,
+                        text: node.title,
+                        droppable: true,
+                        nodes: node.nodes && node.nodes.map(innerNode => ({
+                            id: innerNode.guid,
+                            text: innerNode.title,
+                            droppable: false,
+                        })),
+                    })),
+                }));
+                setTreeData(prevTreeData => [...prevTreeData, ...formattedData]);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching discipline books:', error);
+                setLoading(false);
+            }
+        }
+    };
+    fetchData();
+}, [selectedItems]);
 
+  
   const handleNext = () => {
-
     navigate("/home");
-
   };
 
   const handleBack = () => {
@@ -133,51 +126,47 @@ const Booktab = () => {
       });
     }
   };
+  const handleNodeClick = (node) => {
+    if (!node.nodes || node.nodes.length === 0) {
+      alert(node.title);
+    }
+  };
 
+  const renderNode = (node) => (
+    <div key={node.id}>
+      <div 
+        className={node.droppable ? 'droppable-node' : 'regular-node'}
+        onClick={() => handleNodeClick(node)}
+      >
+        {node.text}
+      </div>
+      {node.nodes && node.nodes.map((childNode) => renderNode(childNode))}
+    </div>
+  );
   return (
     <div className="booktab-container">
-      {loading ? (
-        <Loader show="true" />
-      ) : (
-        <>
-          <div className="top-container">
-            <h4><FormattedMessage id="booktab.steps.1" /></h4>
-            <button className="booktab btn btn-secondary " onClick={handleBack}>Back</button>
-            <button className="booktab btn btn-primary" onClick={handleNext} >Next</button>
-          </div>
-          <div className="booktab d-flex justify-content-between">
-            <LeftContent />
-            <div className="booktab search-container">
-              <div className="booktab input-group rounded">
-                <input
-                  type="search"
-                  width="100%"
-                  className="booktab form-control rounded search-input"
-                  placeholder="Search Books"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
-                <div className="booktab input-group-append">
-                  <span className="booktab input-group-text border-0" id="search-addon">
-                    <i className="fas fa-search"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="booktab result-list mt-3">
-                <TreeView
-                  selectedItems={selectedItems}
-                  onSelectItem={handleSelectItem}
-                  searchTerm={searchTerm}
-                  treeData={treeData}
-                />
-              </div>
+    {loading ? (
+      <Loader show="true" />
+    ) : (
+      <>
+        <div className="top-container">
+          <h4><FormattedMessage id="booktab.steps.1" /></h4>
+          <button className="booktab btn btn-secondary " onClick={handleBack}>Back</button>
+          <button className="booktab btn btn-primary" onClick={handleNext} >Next</button>
+        </div>
+        <div className="booktab d-flex justify-content-between">
+          <LeftContent />
+          <div className="booktab search-container">
+            <div className="booktab result-list mt-3">
+              <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+                <Tree tree={treeData} render={renderNode} />
+              </DndProvider>
             </div>
           </div>
-        </>
-      )}
-    </div>
+        </div>
+      </>
+    )}
+  </div>
   );
 };
 
