@@ -64,10 +64,11 @@
   cursor: pointer;
   border-top: 1px solid #D0D0D0;
   font-size: 14px;
+  padding: 5px;
 }
 
 .discipline.result-list li:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid #D0D0D0;;
 }
 
 .discipline.result-list li.selected {
