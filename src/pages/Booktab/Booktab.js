@@ -45,9 +45,9 @@ const Booktab = () => {
   }, []);
 
   const handleNext = () => {
-    
-      navigate("/home");
-    
+
+    navigate("/home");
+
   };
 
   const handleBack = () => {
@@ -110,14 +110,18 @@ const Booktab = () => {
                   </span>
                 </div>
               </div>
-              <div className="booktab result-list mt-3">
+              <ul className="discipline result-list mt-3">
                 {treeData.map((item, index) => (
-                  <div key={index}>
-
-                    <p>{item.discipline}book: {item.referenceBookid}</p>
-                  </div>
+                  <li
+                    key={index}
+                    className={`result-item ${selectedItems.includes(item) ? "selected" : ""}`}
+                    onClick={() => handleSelectItem(item)}
+                  >
+                    {item.discipline} book: {item.referenceBookid}
+                  </li>
                 ))}
-              </div>
+              </ul>
+
             </div>
           </div>
         </>
