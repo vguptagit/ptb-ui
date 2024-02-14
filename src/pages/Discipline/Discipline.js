@@ -109,6 +109,10 @@ const Discipline = () => {
                     key={index}
                     className={`result-item ${selectedItems.includes(item) ? "selected" : ""}`}
                     onClick={() => handleSelectItem(item)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter")
+                        handleSelectItem(item);
+                      }}
                   >
                     {item}
                   </li>
