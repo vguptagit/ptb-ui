@@ -16,9 +16,9 @@ export const getAllBookNodes = async (bookId) => {
         });
 };
 
-export const getAllBookNodeQuestions = async (bookId, nodeId) => {
+export const getAllBookNodeSubNodes = async (bookId, nodeId) => {
     return httpInterceptor
-        .get(`${url}/books/${bookId}/nodes/${nodeId}/questions`)
+        .get(`${url}/books/${bookId}/nodes/${nodeId}/nodes`)
         .then((response) => {
             return response?.data;
         })
