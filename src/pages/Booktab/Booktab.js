@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Booktab.css';
+import Loader from "../../components/common/loader/Loader";
+import { getDisciplineBooks } from "../../services/book.service";
 import { DndProvider } from "react-dnd";
 import { Tree, MultiBackend, getBackendOptions } from "@minoru/react-dnd-treeview";
-import { getDisciplineBooks } from "../../services/book.service";
-import Loader from "../../components/common/loader/Loader";
-
 
 const LeftContent = () => {
   return (
@@ -20,9 +19,56 @@ const LeftContent = () => {
   );
 };
 
+const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
+  const filteredTreeData = useMemo(() => {
+    if (!searchTerm) {
+      return treeData;
+    }
+
+    const filterNodes = (nodes) => {
+      return nodes.filter((node) => {
+        const isMatch = node.text.toLowerCase().includes(searchTerm.toLowerCase());
+        const hasChildMatches = node.children && filterNodes(node.children).length > 0;
+
+        return isMatch || hasChildMatches;
+      });
+    };
+
+    return filterNodes(treeData);
+  }, [searchTerm, treeData]);
+
+  const renderNode = (node, { isOpen, onToggle }) => (
+    <div
+      className={`tree-node ${!node.children ? 'innermost' : ''} ${selectedItems.includes(node.id) ? 'selected' : ''}`}
+      onClick={() => onSelectItem(node)}
+    >
+      {node.droppable && (
+        <span onClick={onToggle}>
+          {isOpen ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-right-fill"></i>}
+        </span>
+      )}
+      {node.text}
+    </div>
+  );
+
+  return (
+    <div className="treeview">
+      <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+        <Tree
+          tree={filteredTreeData}
+          rootId={0}
+          render={renderNode}
+          dragPreviewRender={() => null}
+          onDrop={() => { }}
+        />
+      </DndProvider>
+    </div>
+  );
+};
 
 const Booktab = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [treeData, setTreeData] = useState([]);
@@ -31,9 +77,18 @@ const Booktab = () => {
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
+
+  useEffect(() => {
+    const disciplines = new URLSearchParams(location.search).get("disciplines");
+    if (disciplines) {
+      const selectedDisciplines = disciplines.split(",");
+      setSelectedItems(selectedDisciplines);
+    }
+  }, [location.search]);
+
   useEffect(() => {
     setLoading(true);
-    getDisciplineBooks()
+    getDisciplineBooks(selectedItems.join(","))
       .then(data => {
         setTreeData(data);
         setLoading(false);
@@ -42,7 +97,7 @@ const Booktab = () => {
         console.error('Error fetching discipline books:', error);
         setLoading(false);
       });
-  }, []);
+  }, [selectedItems]);
 
   const handleNext = () => {
     if (selectedItems.length > 0) {
@@ -111,12 +166,12 @@ const Booktab = () => {
                 </div>
               </div>
               <div className="booktab result-list mt-3">
-                {treeData.map((item, index) => (
-                  <div key={index}>
-
-                    <p>{item.discipline}book: {item.referenceBookid}</p>
-                  </div>
-                ))}
+                <TreeView
+                  selectedItems={selectedItems}
+                  onSelectItem={handleSelectItem}
+                  searchTerm={searchTerm}
+                  treeData={treeData}
+                />
               </div>
             </div>
           </div>
