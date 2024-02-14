@@ -93,7 +93,7 @@ const Booktab = ({ onDropNode }) => {
         let newData = [];
         for (const setofItem of selectedItems) {
           const data = await getDisciplineBooks(setofItem);
-          console.log("Fetched data:", data); // Log the fetched data
+          console.log("Fetched data:", data); 
           const formattedData = data.map(item => ({
             id: item.guid,
             text: `${item.discipline} - ${item.title}`,
@@ -111,7 +111,7 @@ const Booktab = ({ onDropNode }) => {
           }));
           newData = [...newData, ...formattedData];
         }
-        console.log("New data:", newData); // Log the newData before setting state
+        console.log("New data:", newData); 
         setTreeData(newData);
         console.log("treeview", treeData)
         setLoading(false);
