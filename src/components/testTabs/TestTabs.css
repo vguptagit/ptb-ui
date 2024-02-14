@@ -70,4 +70,14 @@ display: none;
 
     .tab-label{
         margin-left: 16px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #close-tab-dropdown{
+        padding-right: 18px;
+    }
+
+    .test-title{
+        text-align: center;
     }
