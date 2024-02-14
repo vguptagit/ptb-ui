@@ -19,9 +19,7 @@
   align-items: center;
   margin-bottom: 5px;
   padding: 10px;
-  background-color: #F8F8F8;
   font-size: 14px;
-  color: #4D4D4D;
   line-height: 1em;
 }
 
@@ -76,10 +74,14 @@
 .booktab.btn.btn-secondary {
   margin-inline-start: auto;
   margin-right: 10px;
+  font-size: 14px;
+  
 
 }
 
-
+.booktab.btn.btn-primary{
+  font-size: 14px;
+}
 
 
 .booktab.search-container {
@@ -115,9 +117,11 @@
   width: 99%;
   list-style: none;
   padding: 0;
-  position: relative;
+  /* position: relative; */
   height: calc(77vh - 85px);
   overflow: auto;
+ 
+  border-top: 1px solid #D0D0D0;
 }
 
 .booktab.result-list li {
@@ -125,6 +129,7 @@
 
   cursor: pointer;
   border-top: 1px solid #D0D0D0;
+  
 }
 
 .booktab.result-list li:last-child {
