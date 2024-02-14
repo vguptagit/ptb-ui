@@ -5,7 +5,7 @@ import "./TreeView.css";
 import {
   getAllBooks,
   getAllBookNodes,
-  getAllBookNodeQuestions,
+  getAllBookNodeSubNodes,
 } from "../../services/book.service";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
@@ -77,7 +77,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
         clickedNode.type === "node" &&
         !addedNodes.has(clickedNode.bookGuid + clickedNode.nodeGuid)
       )
-        getBookNodeQuestions(clickedNode);
+      getBookNodeSubNodes(clickedNode);
     }
   };
 
@@ -103,11 +103,12 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   };
 
   const getBookNodes = (node) => {
+    let nodeList = [];
     getAllBookNodes(node.bookGuid).then(
       (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
           const newItemNode = {
-            id: treeData.length + 1,
+            id: treeData.length + nodeList.length + 1,
             parent: node.id,
             droppable: true,
             bookGuid: node.bookGuid,
@@ -115,8 +116,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
             text: `${nodes[i].title}_${node.text}`,
             type: "node",
           };
-          setTreeData([...treeData, newItemNode]);
+          nodeList.push(newItemNode);
         }
+        setTreeData([...treeData, ...nodeList]);
         setAddedNodes(new Set(addedNodes).add(node.bookGuid));
       },
       (error) => {
@@ -125,21 +127,23 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
     );
   };
 
-  const getBookNodeQuestions = (node) => {
-    getAllBookNodeQuestions(node.bookGuid, node.nodeGuid).then(
+  const getBookNodeSubNodes = (node) => {
+    let nodeList = [];
+    getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
       (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
-          const newItemQuestion = {
-            id: treeData.length + 1,
+          const newItemNode = {
+            id: treeData.length + nodeList.length + 1,
             parent: node.id,
-            droppable: false,
+            droppable: true,
             bookGuid: node.bookGuid,
-            nodeGuid: node.nodeGuid,
+            nodeGuid: nodes[i].guid,
             text: `${nodes[i].title}_${node.text}`,
-            type: "question",
+            type: "node",
           };
-          setTreeData([...treeData, newItemQuestion]);
+          nodeList.push(newItemNode);
         }
+        setTreeData([...treeData, ...nodeList]);
         setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
       },
       (error) => {
