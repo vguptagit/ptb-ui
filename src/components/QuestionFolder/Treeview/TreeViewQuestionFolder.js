@@ -3,9 +3,9 @@ import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeViewQuestionFolder.css";
 import { getUserQuestionFolders } from "../../../services/userfolder.service";
 
-function TreeViewQuestionFolder() {
+function TreeViewQuestionFolder({ onFolderSelect }) {
   const [treeData, setTreeData] = useState([]);
-  const handleDrop = (newTree) => setTreeData(newTree);
+  const [selectedFolder, setSelectedFolder] = useState(null);
 
   useEffect(() => {
     getUserQuestionFolders()
@@ -23,6 +23,14 @@ function TreeViewQuestionFolder() {
       });
   }, []);
 
+  const handleEditFolder = (folderTitle) => {
+    console.log("Edit folder:", folderTitle);
+    if (onFolderSelect) {
+      onFolderSelect(folderTitle);
+      setSelectedFolder(folderTitle);
+    }
+  };
+
   return (
     <div className="treeview">
       <Tree
@@ -31,21 +39,38 @@ function TreeViewQuestionFolder() {
         render={(node, { isOpen, onToggle }) => (
           <div className="tree-node">
             {node.droppable && (
-              <span onClick={onToggle}>
+              <span onClick={onToggle} className="custom-caret">
                 {isOpen ? (
-                  <i className="bi bi-caret-down-fill"></i>
+                  <i className="fa fa-caret-down"></i>
                 ) : (
-                  <i className="bi bi-caret-right-fill"></i>
+                  <i className="fa fa-caret-right"></i>
                 )}
               </span>
             )}
             {node.text}
+            {selectedFolder === node.text && (
+              <button
+                className="edit-button selected"
+                onClick={() => handleEditFolder(node.text)}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            {selectedFolder !== node.text && (
+              <button
+                className="edit-button"
+                onClick={() => handleEditFolder(node.text)}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
           </div>
         )}
         dragPreviewRender={(monitorProps) => (
-          <div style={{ fontSize: "inherit" }}>{monitorProps.item.text}</div>
+          <div className="custom-drag-preview">{monitorProps.item.text}</div>
         )}
-        onDrop={handleDrop}
+        onDrop={(newTree) => setTreeData(newTree)}
+        dragPreviewClassName="custom-drag-preview"
       />
     </div>
   );
