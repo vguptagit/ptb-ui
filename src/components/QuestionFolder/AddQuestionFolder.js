@@ -145,6 +145,16 @@ const QuestionFolder = ({ userId }) => {
     setIsEditing(true);
   };
 
+  const onNodeUpdate = async (changedNode) => {
+    try {
+      await updateUserQuestionFolders(changedNode);
+      Toastify({ message: "Folder rearranged successfully", type: "success" });
+    } catch (error) {
+      console.error("Error rearranging folder:", error);
+      Toastify({ message: "Failed to rearrange Folder", type: "error" });
+    }
+  };
+  
   return (
     <div className="p-2">
       <div className="button-container">
@@ -172,7 +182,7 @@ const QuestionFolder = ({ userId }) => {
             <Button
               onClick={handleSaveFolder}
               className="btn"
-              aria-label='tick mark'
+              aria-label="tick mark"
               style={{
                 color: "black",
                 backgroundColor: "white",
@@ -183,7 +193,7 @@ const QuestionFolder = ({ userId }) => {
             <Button
               onClick={handleTextBoxClose}
               className="closebtn"
-              aria-label='close mark'
+              aria-label="close mark"
               style={{ color: "black", backgroundColor: "white" }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -198,6 +208,7 @@ const QuestionFolder = ({ userId }) => {
             key={updateKey}
             folders={savedFolders}
             onFolderSelect={handleFolderSelect}
+            onNodeUpdate={onNodeUpdate}
           />
         )}
       </div>

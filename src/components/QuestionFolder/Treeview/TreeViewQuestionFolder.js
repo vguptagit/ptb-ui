@@ -1,27 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeViewQuestionFolder.css";
-import { getUserQuestionFolders } from "../../../services/userfolder.service";
 
-function TreeViewQuestionFolder({ onFolderSelect }) {
+function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
 
   useEffect(() => {
-    getUserQuestionFolders()
-      .then((folders) => {
-        const folderNodes = folders.map((folder, index) => ({
-          id: index + 1,
-          parent: 0,
-          droppable: true,
-          text: folder.title,
-        }));
-        setTreeData(folderNodes);
-      })
-      .catch((error) => {
-        console.error("Error fetching question folders:", error);
-      });
-  }, []);
+    if (folders && folders.length > 0) {
+      const folderNodes = folders.map((folder, index) => ({
+        id: index + 1, // one based index
+        parent: getIndexByParentGuid(folder.parentId) !== 0 ? getIndexByParentGuid(folder.parentId) + 1 : 0,
+        droppable: true,
+        text: folder.title,
+        data: {
+          guid: folder.guid,
+          sequence: folder.sequence,
+        }
+      }));
+      setTreeData(folderNodes);
+    }
+  }, [folders]);
+
+  function getIndexByParentGuid(parentGuid) {
+    return folders.findIndex(ele => ele.guid === parentGuid);
+  }
+
+  const handleDrop = (newTree, { dragSource, dropTarget }) => {
+    setTreeData(newTree);
+    const nodeToBeUpdated = {
+      guid: dragSource.data.guid,
+      parentId: dropTarget.data.guid,
+      sequence: dropTarget.data.sequence,
+      title: dragSource.text,
+    }
+    onNodeUpdate(nodeToBeUpdated);
+  };
 
   const handleEditFolder = (folderTitle) => {
     console.log("Edit folder:", folderTitle);
@@ -69,7 +83,7 @@ function TreeViewQuestionFolder({ onFolderSelect }) {
         dragPreviewRender={(monitorProps) => (
           <div className="custom-drag-preview">{monitorProps.item.text}</div>
         )}
-        onDrop={(newTree) => setTreeData(newTree)}
+        onDrop={handleDrop}
         dragPreviewClassName="custom-drag-preview"
       />
     </div>
