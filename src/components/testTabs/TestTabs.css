@@ -69,9 +69,8 @@ display: none;
     }
 
     .tab-label{
-        margin-left: 16px;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
     }
 
     #close-tab-dropdown{
