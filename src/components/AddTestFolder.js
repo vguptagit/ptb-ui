@@ -39,6 +39,7 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
           guid: editedFolder.guid,
           sequence: editedFolder.sequence,
           title: folderName,
+          extUserId: window.piSession.userId(),
         };
         try {
           await updateTestFolder(
@@ -54,7 +55,8 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
         const newFolderData = {
           parentId: 0,
           sequence: rootFolders.length + 1,
-          title: folderName
+          title: folderName,
+          extUserId: window.piSession.userId(),
         };
 
         try {
