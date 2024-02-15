@@ -28,45 +28,47 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const isSelected = selectedItems.includes(node.id);
 
   const handleNodeClick = () => {
-    setIsOpen(!isOpen);
-    if (!node.droppable || node.droppable.length === 0) {
-      onSelectItem(node);
-    }
+      setIsOpen(!isOpen);
+  };
+
+  const handleSelectChild = (childNode) => {
+      onSelectItem(childNode);
   };
 
   return (
-    <div>
-      <div
-        className={`tree-node ${isSelected ? "selected" : ""}`}
-        style={{ display: "flex", alignItems: "center" }}
-      >
-        {/* Check if the node has child nodes before rendering the arrow */}
-        {node.nodes && node.nodes.length > 0 && (
-          <div className="tree-node-header" onClick={handleNodeClick}>
-            {isOpen ? (
-              <i className="fa fa-caret-down"></i>
-            ) : (
-              <i className="fa fa-caret-right"></i>
-            )}
-          </div>
-        )}
-        <span style={{ marginLeft: "5px" }}>{node.text}</span>
-      </div>
       <div>
-        {isOpen && node.nodes && node.nodes.length > 0 && (
-          <div className="nested-nodes">
-            {node.nodes.map((childNode) => (
-              <TreeNode
-                key={childNode.id}
-                node={childNode}
-                onSelectItem={onSelectItem}
-                selectedItems={selectedItems}
-              />
-            ))}
+          <div
+              className={`tree-node ${isSelected ? "selected" : ""}`}
+              style={{ display: "flex", alignItems: "center" }}
+              onClick={() => handleNodeClick()}
+          >
+              {node.nodes && node.nodes.length > 0 && (
+                  <div className="tree-node-header">
+                      {isOpen ? (
+                          <i className="fa fa-caret-down"></i>
+                      ) : (
+                          <i className="fa fa-caret-right"></i>
+                      )}
+                  </div>
+              )}
+              <span style={{ marginLeft: "5px" }}>{node.text}</span>
           </div>
-        )}
+          <div>
+              {isOpen && node.nodes && node.nodes.length > 0 && (
+                  <div className="nested-nodes">
+                      {node.nodes.map((childNode) => (
+                          <div key={childNode.id} onClick={() => handleSelectChild(childNode)}>
+                              <TreeNode
+                                  node={childNode}
+                                  onSelectItem={onSelectItem}
+                                  selectedItems={selectedItems}
+                              />
+                          </div>
+                      ))}
+                  </div>
+              )}
+          </div>
       </div>
-    </div>
   );
 };
 
@@ -125,6 +127,7 @@ const Booktab = ({ onDropNode }) => {
       setSelectedItems(selectedDisciplines);
     }
   }, [location.search]);
+  
 
   useEffect(() => {
     setLoading(true);
@@ -142,14 +145,7 @@ const Booktab = ({ onDropNode }) => {
               item.nodes.map((node) => ({
                 id: node.guid,
                 text: node.title,
-                droppable: true,
-                nodes:
-                  node.nodes &&
-                  node.nodes.map((innerNode) => ({
-                    id: innerNode.guid,
-                    text: innerNode.title,
-                    droppable: false,
-                  })),
+                droppable: false,
               })),
           }));
           newData = [...newData, ...formattedData];
@@ -163,6 +159,9 @@ const Booktab = ({ onDropNode }) => {
     };
     fetchData();
   }, [selectedItems]);
+
+  console.log("Tree Data:", treeData);
+  console.log("Selected Items:", selectedItems);
 
   const handleNext = () => {
     navigate("/home");
@@ -179,20 +178,21 @@ const Booktab = ({ onDropNode }) => {
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
 
-  const handleSelectItem = (node) => {
-    if (!node.droppable || node.droppable.length === 0) {
-      setSelectedItems((prevSelectedItems) => {
-        if (prevSelectedItems.includes(node.id)) {
-          return prevSelectedItems.filter(
-            (selectedItem) => selectedItem !== node.id
-          );
-        } else {
-          return [...prevSelectedItems, node.id];
-        }
-      });
+ const handleSelectItem = (node) => {
+    if (!node.droppable) { 
+        setSelectedItems((prevSelectedItems) => {
+            if (prevSelectedItems.includes(node.id)) {
+                
+                return prevSelectedItems.filter(item => item !== node.id);
+            } else {
+              
+                return [...prevSelectedItems, node.id];
+            }
+        });
     }
-  };
+};
 
+  
   return (
     <div className="booktab-container">
       {loading ? (
@@ -200,10 +200,8 @@ const Booktab = ({ onDropNode }) => {
       ) : (
         <>
           <div className="top-container">
-            <h4>
-              <FormattedMessage id="booktab.steps.1" />
-            </h4>
-            <button className="booktab btn btn-secondary " onClick={handleBack}>
+            <h4>Choose Your Books or Topics</h4>
+            <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
             <button className="booktab btn btn-primary" onClick={handleNext}>
