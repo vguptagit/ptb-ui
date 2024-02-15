@@ -35,22 +35,37 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   };
 
   return (
-    <div className={`tree-node ${isSelected ? "selected" : ""}`}>
-      <div className="tree-node-header" onClick={handleNodeClick}>
-        {node.text}
+    <div>
+      <div
+        className={`tree-node ${isSelected ? "selected" : ""}`}
+        style={{ display: "flex", alignItems: "center" }}
+      >
+        {/* Check if the node has child nodes before rendering the arrow */}
+        {node.nodes && node.nodes.length > 0 && (
+          <div className="tree-node-header" onClick={handleNodeClick}>
+            {isOpen ? (
+              <i className="fa fa-caret-down"></i>
+            ) : (
+              <i className="fa fa-caret-right"></i>
+            )}
+          </div>
+        )}
+        <span style={{ marginLeft: "5px" }}>{node.text}</span>
       </div>
-      {isOpen && node.nodes && node.nodes.length > 0 && (
-        <div className="nested-nodes">
-          {node.nodes.map((childNode) => (
-            <TreeNode
-              key={childNode.id}
-              node={childNode}
-              onSelectItem={onSelectItem}
-              selectedItems={selectedItems}
-            />
-          ))}
-        </div>
-      )}
+      <div>
+        {isOpen && node.nodes && node.nodes.length > 0 && (
+          <div className="nested-nodes">
+            {node.nodes.map((childNode) => (
+              <TreeNode
+                key={childNode.id}
+                node={childNode}
+                onSelectItem={onSelectItem}
+                selectedItems={selectedItems}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
