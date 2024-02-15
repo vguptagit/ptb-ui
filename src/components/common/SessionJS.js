@@ -52,14 +52,15 @@ function SessionJS() {
   const iesMxSessionGetToken = () => {
     if (window.piSession) {
       window.piSession.getToken((status, token) => {
-       
+        sessionStorage.setItem('token',token);
+        sessionStorage.setItem('userId', window.piSession.userId())
         console.log('getToken:', status, token);
         if (status === 'success' && token) {
           // Call the login endpoint function from authService.js
           callLoginEndpoint(token)
             .then(response => {
               console.log('Login successful:', response);
-          
+              // sessionStorage.setItem('userId', wi)
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
           
