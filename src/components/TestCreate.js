@@ -27,11 +27,6 @@ const TestCreate = () => {
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
 
-    // Truncate the title if it exceeds 12 characters including white space
-    if (newTitle.length > 12) {
-      newTitle = newTitle.substring(0, 12);
-    }
-
     if (selectedTest && selectedTest.id) {
       setNewTabName(newTitle);
       dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
