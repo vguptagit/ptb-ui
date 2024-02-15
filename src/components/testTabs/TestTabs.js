@@ -8,6 +8,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import QtiService from "../../utils/qtiService";
+import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
+import Toastify from '../common/Toastify'; 
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
@@ -85,6 +90,152 @@ const TestTabs = () => {
     alert("Button Clicked");
   };
 
+  const handleSave = async (e, activeTest) => {
+    let testItems = tests.filter((item) => item.id === activeTest.id);
+    const test = testItems[0]; // This always exists
+    console.log("Saving Test : ", test);
+    // 1. Check for duplicate test
+    // 2. Save questions
+    // 3. Save tests
+    
+    let isDuplicate = await isDuplicateTest(test);
+    if(isDuplicate) {
+      // Show Modal popup to change test title.
+    } else {
+      // Proceed to save
+      let questionBindings = await saveQuestions(test);
+      saveTest(test,questionBindings);
+    }
+    
+  }
+
+  const saveTest  = async (test,questionBindings) => {
+    // Building the json to create the test.
+    var testcreationdata = {
+      "metadata" : {
+        "crawlable" : "true"
+      },
+      "body" : {
+        "@context" : "http://purl.org/pearson/paf/v1/ctx/core/StructuredAssignment",
+        "@type" : "StructuredAssignment",
+        "assignmentContents" : {
+          "@contentType" : "application/vnd.pearson.paf.v1.assignment+json",
+          "binding" : []
+        }
+      }
+    };
+
+    testcreationdata.body.title = test.title;
+    testcreationdata.body.guid = null; // TODO : Set this value
+    
+
+    // TODO: Update this logic based on understanding of what testID represents
+    if (test.testId != null) {
+      testcreationdata.metadata = test.metadata;
+      testcreationdata.metadata.guid = test.testId;
+    }
+
+    testcreationdata.metadata.title = test.title;
+    testcreationdata.body.assignmentContents.binding = questionBindings;
+    try {
+      let testResult = await saveMyTest(testcreationdata,test.folderGuid);
+      if(testResult) {
+        Toastify({ message: "Test Saved !", type: 'success' });
+      }
+    } catch(error) {
+        console.error('Error saving Test:', error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save Test', type: 'error' });
+        }
+    }
+    
+   
+  }
+
+  const saveQuestions = async (test) => {
+    // Save the Question Envelops & return the question bindings to attach to test
+    // TODO - Add additional logic from legacy app as needed 
+    let questionEnvelops = [];
+    let questionBindings = [];
+    let userSettings = {};
+      
+    if(test.questions && test.questions.length > 0) {
+      test.questions.forEach((qstn,index) => {
+        questionEnvelops.push(buildQuestionEnvelop(qstn,userSettings));
+      });
+    }
+    try {
+      const questionResults = await saveMyQuestions(questionEnvelops);
+      questionResults.forEach((qstnResult, index) => {
+        questionBindings.push(
+            {
+              guid : qstnResult.guid,
+              activityFormat : "application/vnd.pearson.qti.v2p1.asi+xml",
+              bindingIndex : index
+            }
+          )
+        });
+    } catch (error) {
+        console.error('Error saving Questions:', error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save Questions', type: 'error' });
+        }
+    }
+    return questionBindings;
+  }
+
+  const buildQuestionEnvelop = (qstn,userSettings) => {
+    qstn.data = QtiService.getQtiXML(qstn);
+    qstn.IsEdited = true; // TODO: Update this based on required functionality
+    var qstnExtMetadata = buildQuestionMetadata(qstn,userSettings);
+    var QuestionEnvelop = {
+      metadata : {
+        guid : qstn.IsEdited ? null : qstn.guid,
+        title : qstn.title,
+        description : qstn.description,
+        quizType : qstn.quizType,
+        subject : qstn.subject,
+        timeRequired : qstn.timeRequired,
+        crawlable : qstn.crawlable,
+        keywords : qstn.keywords,
+        versionOf : qstn.versionOf,
+        version : qstn.version,
+        extendedMetadata : qstnExtMetadata
+      },
+      body : qstn.IsEdited ? qstn.data : null
+    };
+    
+    return QuestionEnvelop;
+  }
+
+  const buildQuestionMetadata = (qstn, userSettings) => {
+    // TODO: Add logic to populate Question Extended Metadata
+    var qstnExtMetadata = []
+    return qstnExtMetadata;
+  }
+
+
+  const isDuplicateTest = (test) => {
+    // Check if test with same title exists under the folder. 
+    // If yes, then show modal popup & block operation until user changes title
+    // If no, proceed
+    // Assuming No Duplicates for now. To be updated later
+    return false;
+  }
+
+  
+  const handleSaveAs = () => {
+    console.log("Save was clicked by you");
+    // 1. Show modal pop up for new test
+    // 2. Check for duplicate test
+    // 3. Save questions
+    // 4. Save tests
+  }
+
 
   return (
     <div className="tab-container">
@@ -100,10 +251,10 @@ const TestTabs = () => {
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
                 <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                  <Dropdown.Item href="#">
+                  <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
                     <FormattedMessage id="testtabs.save" />
                   </Dropdown.Item>
-                  <Dropdown.Item href="#">
+                  <Dropdown.Item href="#" onClick={handleSaveAs}>
                     <FormattedMessage id="testtabs.saveas" />
                   </Dropdown.Item>
                 </DropdownButton>
