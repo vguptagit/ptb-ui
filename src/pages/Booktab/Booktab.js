@@ -28,47 +28,48 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const isSelected = selectedItems.includes(node.id);
 
   const handleNodeClick = () => {
-      setIsOpen(!isOpen);
+    setIsOpen(!isOpen);
   };
 
   const handleSelectChild = (childNode) => {
-      onSelectItem(childNode);
+    onSelectItem(childNode);
   };
 
   return (
-      <div>
-          <div
-              className={`tree-node ${isSelected ? "selected" : ""}`}
-              style={{ display: "flex", alignItems: "center" }}
-              onClick={() => handleNodeClick()}
-          >
-              {node.nodes && node.nodes.length > 0 && (
-                  <div className="tree-node-header">
-                      {isOpen ? (
-                          <i className="fa fa-caret-down"></i>
-                      ) : (
-                          <i className="fa fa-caret-right"></i>
-                      )}
-                  </div>
-              )}
-              <span style={{ marginLeft: "5px" }}>{node.text}</span>
+    <div>
+      <div
+        className={`tree-node ${isSelected ? "selected" : ""}`}
+        onClick={() => handleNodeClick()}
+      >
+        {node.nodes && node.nodes.length > 0 && (
+          <div className="tree-node-header">
+            {isOpen ? (
+              <i className="fa fa-caret-down"></i>
+            ) : (
+              <i className="fa fa-caret-right"></i>
+            )}
           </div>
-          <div>
-              {isOpen && node.nodes && node.nodes.length > 0 && (
-                  <div className="nested-nodes">
-                      {node.nodes.map((childNode) => (
-                          <div key={childNode.id} onClick={() => handleSelectChild(childNode)}>
-                              <TreeNode
-                                  node={childNode}
-                                  onSelectItem={onSelectItem}
-                                  selectedItems={selectedItems}
-                              />
-                          </div>
-                      ))}
-                  </div>
-              )}
-          </div>
+        )}
+        <span>{node.text}</span>
       </div>
+      <div>
+        {isOpen &&
+          node.nodes &&
+          node.nodes.length > 0 && (
+            <div className="nested-nodes">
+              {node.nodes.map((childNode) => (
+                <div key={childNode.id} onClick={() => handleSelectChild(childNode)}>
+                  <TreeNode
+                    node={childNode}
+                    onSelectItem={onSelectItem}
+                    selectedItems={selectedItems}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+      </div>
+    </div>
   );
 };
 
@@ -112,7 +113,8 @@ const Booktab = ({ onDropNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedDisciplines, setSelectedDisciplines] = useState([]);
+  const [selectedBooks, setSelectedBooks] = useState([]); 
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -124,17 +126,16 @@ const Booktab = ({ onDropNode }) => {
     const disciplines = new URLSearchParams(location.search).get("disciplines");
     if (disciplines) {
       const selectedDisciplines = disciplines.split(",");
-      setSelectedItems(selectedDisciplines);
+      setSelectedDisciplines(selectedDisciplines);
     }
   }, [location.search]);
-  
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       try {
         let newData = [];
-        for (const setofItem of selectedItems) {
+        for (const setofItem of selectedDisciplines) {
           const data = await getDisciplineBooks(setofItem);
           const formattedData = data.map((item) => ({
             id: item.guid,
@@ -158,10 +159,7 @@ const Booktab = ({ onDropNode }) => {
       }
     };
     fetchData();
-  }, [selectedItems]);
-
-  console.log("Tree Data:", treeData);
-  console.log("Selected Items:", selectedItems);
+  }, [selectedDisciplines]);
 
   const handleNext = () => {
     navigate("/home");
@@ -178,21 +176,18 @@ const Booktab = ({ onDropNode }) => {
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
 
- const handleSelectItem = (node) => {
-    if (!node.droppable) { 
-        setSelectedItems((prevSelectedItems) => {
-            if (prevSelectedItems.includes(node.id)) {
-                
-                return prevSelectedItems.filter(item => item !== node.id);
-            } else {
-              
-                return [...prevSelectedItems, node.id];
-            }
-        });
+  const handleSelectItem = (node) => {
+    if (!node.droppable) {
+      setSelectedBooks((prevSelectedBooks) => {
+        if (prevSelectedBooks.includes(node.id)) {
+          return prevSelectedBooks.filter((item) => item !== node.id);
+        } else {
+          return [...prevSelectedBooks, node.id];
+        }
+      });
     }
-};
+  };
 
-  
   return (
     <div className="booktab-container">
       {loading ? (
@@ -233,7 +228,7 @@ const Booktab = ({ onDropNode }) => {
               </div>
               <ul className="discipline result-list mt-3">
                 <TreeView
-                  selectedItems={selectedItems}
+                  selectedItems={selectedBooks}
                   onSelectItem={handleSelectItem}
                   searchTerm={searchTerm}
                   treeData={treeData}
