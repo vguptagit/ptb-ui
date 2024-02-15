@@ -16,7 +16,6 @@ import "./TestCreate.css";
 
 const TestCreate = () => {
   const {selectedTest, dispatchEvent } = useAppContext();
-  selectedTest.questions = selectedTest.questions || [];
   const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
   const [childEditMode, setChildEditMode] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
@@ -43,13 +42,12 @@ const TestCreate = () => {
     accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
     drop: (item) => {
       console.log("Dropped node:", item);
-      console.log("Dropped node:", item.questionTemplate);
       if (item.type === "QUESTION_TEMPLATE") {
-        selectedTest.questions.push(getQuestion(item.questionTemplate.quizType));
+        selectedTest.questions.push(getQuestion(item.questionTemplate));
       } else if (item.type === "TREE_NODE") {
-        selectedTest.questions.push(getQuestion(item.questionTemplate.quizType));
+        selectedTest.questions.push(getQuestion(item.questionTemplate));
       } else {
-        selectedTest.questions.push(getQuestion(item.questionTemplate.data,item.questionTemplate.quizType));
+        selectedTest.questions.push(getQuestion(item.questionTemplate));
       }
       
       dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
@@ -61,10 +59,10 @@ const TestCreate = () => {
     }),
   });
 
-  const getQuestion = (qtiXml,questionType) => {
-    let question = {};
-    question.quizType=questionType;
-    var qtiModel = QtiService.getQtiModel(qtiXml, questionType);
+  //Generate qtimoddel based on question template
+  const getQuestion = (questionNode) => {
+    let question = questionNode;
+    var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
     qtiModel.EditOption = true;
     question.qtiModel = qtiModel;
     console.log(question);
@@ -168,7 +166,7 @@ const TestCreate = () => {
         </div>
       </div>
       <div className="test-container">
-        {selectedTest.questions && selectedTest.questions.map((questionNode, index) => (
+        {selectedTest && selectedTest.questions && selectedTest.questions.map((questionNode, index) => (
             renderQuestions(questionNode,index)
            
           ))}
@@ -180,7 +178,7 @@ const TestCreate = () => {
         }`}
       >
         <div>
-          {selectedTest.questions && selectedTest.questions.length !== 0 ? (
+          {selectedTest && selectedTest.questions && selectedTest.questions.length !== 0 ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
               Drag Questions Here{" "}
             </div>
