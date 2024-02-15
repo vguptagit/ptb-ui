@@ -19,52 +19,72 @@ const LeftContent = () => {
     </div>
   );
 };
-const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
-  const filteredTreeData = useMemo(() => {
-    if (!searchTerm) {
-      return treeData;
+
+const TreeNode = ({ node, onSelectItem }) => {
+  const handleNodeClick = () => {
+    if (!node.nodes || node.nodes.length === 0) {
+      onSelectItem(node);
     }
-
-    const filterNodes = (nodes) => {
-      return nodes.filter((node) => {
-        const isMatch = node.text.toLowerCase().includes(searchTerm.toLowerCase());
-        const hasChildMatches = node.nodes && filterNodes(node.nodes).length > 0;
-
-        return isMatch || hasChildMatches;
-      });
-    };
-
-    return filterNodes(treeData);
-  }, [searchTerm, treeData]);
-
-  const renderNode = (node, { isOpen, onToggle }) => (
-    <div
-      className={`tree-node ${!node.nodes ? 'innermost' : ''} ${selectedItems.includes(node.id) ? 'selected' : ''}`}
-      onClick={() => onSelectItem(node)}
-    >
-      {node.droppable && (
-        <span onClick={onToggle}>
-          {isOpen ? <i className="bi bi-caret-down-fill"></i> : <i className="bi bi-caret-right-fill"></i>}
-        </span>
-      )}
-      {node.text}
-    </div>
-  );
-
+  };
   return (
-    <div className="treeview">
-      <Tree
-        tree={filteredTreeData}
-        rootId={0}
-        render={renderNode}
-        dragPreviewRender={() => null}
-        onDrop={() => { }}
-      />
+    <div className={`tree-node ${!node.nodes ? 'innermost' : ''}`} onClick={handleNodeClick}>
+      {node.text}
+      {node.nodes && node.nodes.length > 0 && (
+        <div className="nested-nodes">
+          {node.nodes.map((childNode) => (
+            <TreeNode key={childNode.id} node={childNode} onSelectItem={onSelectItem} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
+const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
+  const filterNodes = (nodes, term) => {
+    const filteredNodes = nodes.filter((node) => {
+      const isMatch = node.text.toLowerCase().includes(term.toLowerCase());
+  
+   
+      if (node.nodes && node.nodes.length > 0) {
+     
+        node.nodes = filterNodes(node.nodes, term);
+  
+    
+        if (node.nodes && node.nodes.length > 0) {
+          return true;
+        }
+      }
+  
+      return isMatch;
+    });
+  
+    return filteredNodes;
+  };
+  
 
+  const filteredTreeData = useMemo(() => {
+    if (!searchTerm) {
+      return treeData;
+    }
+    
+    return filterNodes(treeData, searchTerm);
+  }, [searchTerm, treeData]);
+
+  const handleNodeClick = (node) => {
+    if (!node.droppable || node.droppable.length === 0) {
+      onSelectItem(node);
+    }
+  };
+
+  return (
+    <div className="treeview">
+      {filteredTreeData.map((node) => (
+        <TreeNode key={node.id} node={node} onSelectItem={handleNodeClick} />
+      ))}
+    </div>
+  );
+};
 
 const Booktab = ({ onDropNode }) => {
   const navigate = useNavigate();
@@ -113,7 +133,7 @@ const Booktab = ({ onDropNode }) => {
         }
         console.log("New data:", newData); 
         setTreeData(newData);
-        console.log("treeview", treeData)
+        console.log("treedata", treeData)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching discipline books:', error);
