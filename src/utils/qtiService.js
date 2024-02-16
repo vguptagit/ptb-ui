@@ -421,7 +421,7 @@ QTI.initialized = false;
                 "printCaption" : "Essay Question",
                 "editCaption" : "Enter Essay Question",
                 "printRecommendedAnswer" : "Recommended Answer",
-                "editRecommendedAnswer" : "Enter Essay Recommended Answer",							
+                "editRecommendedAnswer" : "Recommended Answer",							
                 "DISPLAY" : true
             },
 

@@ -10,9 +10,9 @@ export default httpInterceptor;
 
 httpInterceptor.interceptors.request.use(
     config =>{
-        const token = localStorage.getItem("authToken");
+        const token = sessionStorage.getItem("token");
         if(token){
-            httpInterceptor.headers['Authorization'] = 'Bearer ' + token; 
+            config.headers['x-authorization'] =  token; 
         } 
         return config;
     }, 

@@ -13,14 +13,21 @@ const AppContext = createContext({
 
 const AppProvider = ({ children }) => {
     const [tests, setTests] = useState([]);
-    const [selectedTest, setSelectedTest] = useState(new Test());
+    const [selectedTest, setSelectedTest] = useState();
 
     const selectTest = (item) => {
-        setSelectedTest(item);
+        const selectedItem = tests.filter(test => test.id === item.id);
+        if(selectedItem && selectedItem.length > 0) {
+            setSelectedTest(selectedItem[0]);
+        }
     };
 
     const addTest = (newTest) => {
         setTests([...tests, newTest]);
+        // Pre Select if test legth is 1
+        if(tests.length === 1) {
+            setSelectedTest(newTest);
+        }
     };
 
     const deleteTest = (testSelected) => {
@@ -31,17 +38,18 @@ const AppProvider = ({ children }) => {
     const dispatchEvent = (actionType, payload) => {
         switch (actionType) {
             case "SELECT_TEST":
-                setSelectedTest(payload);
+                selectTest(payload);
                 return;
             case "ADD_TEST":
-                setTests([...tests, payload.test]);
+                addTest(payload.test);
                 return;
             case "REMOVE_TEST":
                 setTests(tests.filter((test) => test.id !== payload.test.id));
                 return;
             case "UPDATE_TEST_TITLE":
-                // Assuming payload has 'id' and 'title' properties
-                setTests(tests.map(test => (test.id === payload.id ? { ...test, title: payload.title } : test)));
+                  const tabTitle= payload.title.length > 10? payload.title.substring(0, 6)+ "..." : payload.title;
+                  // Assuming payload has 'id' and 'title' properties
+                  setTests(tests.map(test => (test.id === payload.id ? { ...test, title: tabTitle } : test)));
                 return;
             default:
                 return;
@@ -49,9 +57,16 @@ const AppProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const defaultTestTab = new Test();
-        defaultTestTab.title = 'Untitled 1';
-        setTests([defaultTestTab]);
+        if (!tests || (tests && tests.length === 0)) {
+            let untitled1Test = tests.find((test) => test.title === 'Untitled 1');
+            if(!untitled1Test) {
+              const defaultTestTab = new Test();
+              defaultTestTab.title = 'Untitled 1';
+              untitled1Test = defaultTestTab;
+              setTests([...tests,untitled1Test]);
+            }
+          setSelectedTest(untitled1Test);
+          }
     }, []);
 
     return (

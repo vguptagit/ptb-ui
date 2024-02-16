@@ -28,7 +28,7 @@ const Discipline = () => {
 
   const handleNext = () => {
     if (selectedItems.length > 0) {
-      navigate("/booktab");
+      navigate(`/booktab?disciplines=${selectedItems.join(',')}`);
     }
   };
 
@@ -40,7 +40,6 @@ const Discipline = () => {
     const fetchData = async () => {
       try {
         const apiData = await getAllDisciplines();
-        console.log("api data",apiData)
         setAllData(apiData);
         setSearchResults(apiData);
         setLoading(false);
@@ -126,4 +125,4 @@ const Discipline = () => {
   );
 };
 
-export default Discipline
+export default Discipline;
