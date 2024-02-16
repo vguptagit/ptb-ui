@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Collapse, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-const Essay = (props) => {debugger;
+const Essay = (props) => {
     const [open, setOpen] = useState(false);
     const questionNode = props.questionNode;
     const questionNodeIndex = props.questionNodeIndex;

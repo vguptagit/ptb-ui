@@ -7,7 +7,7 @@ import Toastify from './common/Toastify';
 import TreeView from "../pages/tree-view-test-folders/TreeView";
 import { updateTestFolder } from '../services/testfolder.service';
 
-const TestFolder = ({ rootFolders, setDoReload }) => {
+const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
   const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [editFolderName, setEditFolderName] = useState("");
@@ -47,7 +47,7 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
           );
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder updated successfully", type: "success" });
-          setDoReload();
+          setDoReload(!doReload);
         } catch (error) {
           Toastify({ message: 'Failed to update folder', type: 'error' });
         }
@@ -64,7 +64,7 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
           setFolderName('');
           setShowTextBox(false);
           Toastify({ message: 'Folder saved successfully', type: 'success' });
-          setDoReload();
+          setDoReload(!doReload);
         } catch (error) {
           if (error?.message?.response?.request?.status === 409) {
             Toastify({ message: error.message.response.data.message, type: 'error' });
@@ -89,7 +89,7 @@ const TestFolder = ({ rootFolders, setDoReload }) => {
     updateTestFolder(changedNode)
       .then(() => {
         Toastify({ message: 'Folder rearranged successfully', type: 'success' });
-        setDoReload();
+        setDoReload(!doReload);
       })
       .catch((error) => {
         console.error('Error getting root folders:', error);

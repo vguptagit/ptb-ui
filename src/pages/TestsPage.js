@@ -28,7 +28,7 @@ const Tests = () => {
 
   return (
     <div className="p-2">
-      <TestFolder rootFolders={rootFolders} setDoReload={setDoReload} />
+      <TestFolder rootFolders={rootFolders} doReload={doReload} setDoReload={setDoReload} />
     </div>
   );
 };
