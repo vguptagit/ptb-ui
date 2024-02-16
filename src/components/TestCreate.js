@@ -15,27 +15,33 @@ import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
 
 const TestCreate = () => {
-  const {selectedTest, dispatchEvent } = useAppContext();
-  const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
-  const [childEditMode, setChildEditMode] = useState(false);
+  const { selectedTest, dispatchEvent } = useAppContext();
+  const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
+  const [initialTabTitle, setInitialTabTitle] = useState(""); 
+  const [isEditing, setIsEditing] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
 
   useEffect(() => {
-    setNewTabName(selectedTest?.title || "");
+    setTabTitle(selectedTest?.title || "");
+    setInitialTabTitle(selectedTest?.title || ""); 
   }, [selectedTest]);
 
   const handleTitleChange = (event) => {
-    let newTitle = event.target.value;
+    const newTitle = event.target.value;
+    setTabTitle(newTitle);
+    setIsEditing(true); 
+  };
 
-    // Truncate the title if it exceeds 12 characters including white space
-    if (newTitle.length > 12) {
-      newTitle = newTitle.substring(0, 12);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (tabTitle.trim().length === 0) {
+      
+      return;
+    } else {
+      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
+      setInitialTabTitle(tabTitle); 
     }
-
-    if (selectedTest && selectedTest.id) {
-      setNewTabName(newTitle);
-      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
-    }
+    setIsEditing(false); 
   };
 
   const [{ canDrop, isOver }, drop] = useDrop({
@@ -49,9 +55,9 @@ const TestCreate = () => {
       } else {
         selectedTest.questions.push(getQuestion(item.questionTemplate));
       }
-      
+
       dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
-      setChildEditMode(true);
+      setIsEditing(true);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -59,7 +65,7 @@ const TestCreate = () => {
     }),
   });
 
-  //Generate qtimoddel based on question template
+  
   const getQuestion = (questionNode) => {
     let question = questionNode;
     var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
@@ -70,7 +76,7 @@ const TestCreate = () => {
   };
 
   const handleQuestionState = (edit) => {
-    setChildEditMode(edit);
+    setIsEditing(edit);
   };
 
   const handleQuestionDelete = (deleteIndex) => {
@@ -80,71 +86,66 @@ const TestCreate = () => {
     }
   };
 
-  const renderQuestions = (questionNode,index) => {
+  const renderQuestions = (questionNode, index) => {
     switch (questionNode.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
         return <MultipleChoice
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
       case CustomQuestionBanksService.MultipleResponse:
         return <MultipleResponse
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
       case CustomQuestionBanksService.TrueFalse:
         return <TrueFalse
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
       case CustomQuestionBanksService.Matching:
         return <Matching
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
       case CustomQuestionBanksService.FillInBlanks:
         return <FillInBlanks
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
       case CustomQuestionBanksService.Essay:
         return <Essay
-        questionNode={questionNode}
-        key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
-        questionNodeIndex={index}
-        questionNodeIsEdit={questionNode.qtiModel.EditOption}
-        onQuestionStateChange={handleQuestionState}
-        onQuestionDelete={handleQuestionDelete}
+          questionNode={questionNode}
+          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          questionNodeIndex={index}
+          questionNodeIsEdit={questionNode.qtiModel.EditOption}
+          onQuestionStateChange={handleQuestionState}
+          onQuestionDelete={handleQuestionDelete}
         />;
-        break;
-      default: return <div></div>;
-      }
-  }
+      default:
+        return <div></div>;
+    }
+  };
 
   return (
     <div>
@@ -154,27 +155,29 @@ const TestCreate = () => {
             <div className="ml-2">
               <FormattedMessage id="testName" />
             </div>
-            <Form.Control
-              type="text"
-              name="title"
-              placeholder="Enter Test title "
-              value={newTabName}
-              onChange={handleTitleChange}
-              className="rounded"
-            />
+            <Form onSubmit={handleSubmit}>
+              <Form.Control
+                type="text"
+                name="title"
+                placeholder="Enter Test title "
+                value={isEditing ? tabTitle : initialTabTitle} 
+                onChange={handleTitleChange}
+                className="rounded"
+                required={true}
+              />
+            </Form>
           </div>
         </div>
       </div>
       <div className="test-container">
         {selectedTest && selectedTest.questions && selectedTest.questions.map((questionNode, index) => (
-            renderQuestions(questionNode,index)
-           
-          ))}
+          renderQuestions(questionNode, index)
+        ))}
       </div>
       <div
         ref={drop}
         className={`test-container ${
-          canDrop && isOver && !childEditMode ? "drop-active" : ""
+          canDrop && isOver && !isEditing ? "drop-active" : ""
         }`}
       >
         <div>
