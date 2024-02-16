@@ -47,8 +47,9 @@ const AppProvider = ({ children }) => {
                 setTests(tests.filter((test) => test.id !== payload.test.id));
                 return;
             case "UPDATE_TEST_TITLE":
-                // Assuming payload has 'id' and 'title' properties
-                setTests(tests.map(test => (test.id === payload.id ? { ...test, title: payload.title } : test)));
+                  const tabTitle= payload.title.length > 10? payload.title.substring(0, 6)+ "..." : payload.title;
+                  // Assuming payload has 'id' and 'title' properties
+                  setTests(tests.map(test => (test.id === payload.id ? { ...test, title: tabTitle } : test)));
                 return;
             default:
                 return;
