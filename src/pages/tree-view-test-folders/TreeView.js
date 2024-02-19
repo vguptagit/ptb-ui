@@ -58,14 +58,15 @@ function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
 
   const handleDrop = (newTree, { dragSource, dropTarget }) => {
     setTreeData(newTree);
-    console.log(dragSource);
-    console.log(dropTarget);
+    console.log("dragSource", dragSource);
+    console.log("dropTarget", dropTarget);
     const nodeToBeUpdated = {
       guid: dragSource.data.guid,
       parentId: dropTarget.data.guid,
-      sequence: dragSource.data.sequence,
+      sequence: getNextSequenceForParentFolderId(dropTarget.data.guid),
+      extUserId: window.piSession.userId(),
     }
-    console.log(nodeToBeUpdated);
+    console.log("nodeToBeUpdated", nodeToBeUpdated);
     onNodeUpdate(nodeToBeUpdated);
   };
 
@@ -74,7 +75,19 @@ function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
     return testFolders.findIndex(ele => ele.guid === parentGuid);
   }
 
+  function getNextSequenceForParentFolderId(parentFolderId){
+    // find next sequence by parent folder id 
+    let maxSequence = 0;
+    for(const folder of testFolders){
+      if(folder.parentId === parentFolderId && folder.sequence > maxSequence){
+        maxSequence = folder.sequence;
+      }
+    }
+    return maxSequence + 1;
+  }
+
   useEffect(() => {
+    console.log("testfolders", testFolders);
     if (testFolders && testFolders.length > 0) {
       const folderNodes = testFolders.map((folder, index) => ({
         id: index + 1, // one based index
@@ -87,7 +100,6 @@ function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
         }
       }));
       setTreeData(folderNodes);
-      console.log(folderNodes);
     }
   }, [testFolders]);
 
