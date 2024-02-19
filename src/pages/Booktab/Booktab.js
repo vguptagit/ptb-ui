@@ -24,7 +24,7 @@ const LeftContent = () => {
 };
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); 
   const isSelected = selectedItems.includes(node.id);
 
   const handleNodeClick = () => {
@@ -73,23 +73,15 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   );
 };
 
-const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
+const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
-    const filteredNodes = nodes.map((node) => {
-      const filteredChildNodes = node.nodes ? filterNodes(node.nodes, term) : [];
-      return {
-        ...node,
-        nodes: filteredChildNodes,
-      };
-    }).filter((node) => {
-      const isMatch = node.text.toLowerCase().includes(term.toLowerCase());
-      return isMatch || node.nodes.length > 0;
+    return nodes.flatMap(node => {
+      const filteredChildNodes = filterNodes(node.nodes || [], term);
+      return node.text.toLowerCase().includes(term.toLowerCase()) || filteredChildNodes.length > 0
+        ? [{ ...node, nodes: filteredChildNodes }]
+        : [];
     });
-    return filteredNodes;
   };
-  
-  
-  
 
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
@@ -112,12 +104,12 @@ const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
   );
 };
 
-const Booktab = ({ onDropNode }) => {
+
+const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDisciplines, setSelectedDisciplines] = useState([]);
-  const [selectedBooks, setSelectedBooks] = useState([]); 
+  const [selectedBooks, setSelectedBooks] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -126,43 +118,40 @@ const Booktab = ({ onDropNode }) => {
   }, []);
 
   useEffect(() => {
-    const disciplines = new URLSearchParams(location.search).get("disciplines");
-    if (disciplines) {
-      const selectedDisciplines = disciplines.split(",");
-      setSelectedDisciplines(selectedDisciplines);
-    }
-  }, [location.search]);
-
-  useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
+      setLoading(true);
       try {
-        let newData = [];
-        for (const setofItem of selectedDisciplines) {
-          const data = await getDisciplineBooks(setofItem);
-          const formattedData = data.map((item) => ({
-            id: item.guid,
-            text: `${item.discipline}`,
-            droppable: true,
-            nodes:
-              item.nodes &&
-              item.nodes.map((node) => ({
-                id: node.guid,
-                text: node.title,
-                droppable: false,
-              })),
-          }));
-          newData = [...newData, ...formattedData];
+        const disciplines = new URLSearchParams(location.search).get("disciplines");
+        if (disciplines) {
+          const selectedDisciplines = disciplines.split(",");
+          let newData = [];
+          for (const setofItem of selectedDisciplines) {
+            const data = await getDisciplineBooks(setofItem);
+            const formattedData = data.map((item) => ({
+              id: item.guid,
+              text: `${item.discipline}`,
+              droppable: true,
+              nodes:
+                item.nodes &&
+                item.nodes.map((node, index) => ({
+                  id: node.guid || `${item.guid}_${index}`,
+                  text: `${node.title}`,
+                  droppable: false,
+                  parentId: item.guid,
+                })),
+            }));
+            newData = [...newData, ...formattedData];
+          }
+          setTreeData(newData);
+          setLoading(false);
         }
-        setTreeData(newData);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching discipline books:", error);
         setLoading(false);
       }
     };
     fetchData();
-  }, [selectedDisciplines]);
+  }, [location.search]);
 
   const handleNext = () => {
     navigate("/home");
@@ -178,14 +167,14 @@ const Booktab = ({ onDropNode }) => {
     const inputWidth = Math.max(200, e.target.scrollWidth);
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
-
   const handleSelectItem = (node) => {
     if (!node.droppable) {
       setSelectedBooks((prevSelectedBooks) => {
-        if (prevSelectedBooks.includes(node.id)) {
-          return prevSelectedBooks.filter((item) => item !== node.id);
+        const key = node.id;
+        if (prevSelectedBooks.includes(key)) {
+          return prevSelectedBooks.filter((item) => item !== key);
         } else {
-          return [...prevSelectedBooks, node.id];
+          return [...prevSelectedBooks, key];
         }
       });
     }
@@ -214,7 +203,7 @@ const Booktab = ({ onDropNode }) => {
                   type="search"
                   width="100%"
                   className="discipline form-control rounded search-input"
-                  placeholder="Search Discipline"
+                  placeholder="Search Books"
                   aria-label="Search"
                   aria-describedby="search-addon"
                   value={searchTerm}
