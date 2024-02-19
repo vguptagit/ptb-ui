@@ -75,18 +75,21 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
 
 const TreeView = ({ searchTerm, selectedItems, onSelectItem, treeData }) => {
   const filterNodes = (nodes, term) => {
-    const filteredNodes = nodes.filter((node) => {
+    const filteredNodes = nodes.map((node) => {
+      const filteredChildNodes = node.nodes ? filterNodes(node.nodes, term) : [];
+      return {
+        ...node,
+        nodes: filteredChildNodes,
+      };
+    }).filter((node) => {
       const isMatch = node.text.toLowerCase().includes(term.toLowerCase());
-      if (node.nodes && node.nodes.length > 0) {
-        node.nodes = filterNodes(node.nodes, term);
-        if (node.nodes && node.nodes.length > 0) {
-          return true;
-        }
-      }
-      return isMatch;
+      return isMatch || node.nodes.length > 0;
     });
     return filteredNodes;
   };
+  
+  
+  
 
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
@@ -139,7 +142,7 @@ const Booktab = ({ onDropNode }) => {
           const data = await getDisciplineBooks(setofItem);
           const formattedData = data.map((item) => ({
             id: item.guid,
-            text: `${item.discipline} - ${item.title}`,
+            text: `${item.discipline}`,
             droppable: true,
             nodes:
               item.nodes &&
