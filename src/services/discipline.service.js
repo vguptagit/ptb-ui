@@ -30,3 +30,18 @@ export const getUserDisciplines = () => {
             });
         });
 };
+
+export const saveUserDiscipline = (disciplines) => {
+   
+    return httpInterceptor
+        .post(`${url}/settings/disciplines`, disciplines)
+        .then((response) => {
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
+};
