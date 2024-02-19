@@ -23,14 +23,14 @@ function SearchBox() {
           className=" form-control rounded search-input"
           placeholder="Search selected banks"
           aria-label="Search"
-          aria-describedby="#search-addon-noborder"
+          aria-describedby="search-addon-noborder"
           value={searchTerm}
           onChange={handleSearch}
         />
         <div className="discipline input-group-append">
         <span
             className="input-group-text bg-transparent border-0"
-            id="#search-addon-noborder"
+            id="search-addon-noborder"
           >
             <i className="fas fa-search"></i>
           </span>
