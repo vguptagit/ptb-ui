@@ -27,8 +27,7 @@ export const AuthProvider = ({ children }) => {
 
       //  navigate('/logout');
     }
-    useEffect(() => {
-        debugger;
+    useEffect(() => {        
         const familyName = sessionStorage.getItem('familyName') ;
         const emailAddress = sessionStorage.getItem('emailAddress') ;
 

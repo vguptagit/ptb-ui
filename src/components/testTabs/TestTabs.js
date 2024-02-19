@@ -143,7 +143,7 @@ const TestTabs = () => {
     try {
       let testResult = await saveMyTest(testcreationdata,test.folderGuid);
       if(testResult) {
-        Toastify({ message: "Test Saved !", type: 'success' });
+        Toastify({ message: "Test has been saved successfully!", type: 'success' });
       }
     } catch(error) {
         console.error('Error saving Test:', error);
