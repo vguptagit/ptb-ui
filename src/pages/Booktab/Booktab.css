@@ -131,3 +131,7 @@
   border: 1px solid #212529 !important;
   margin-top: 4px;
 }
+
+#search-addon-noborder {
+  margin-top: 4px;
+}
