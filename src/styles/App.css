@@ -49,6 +49,7 @@ html, body, #root {
   --toastify-color-success: #198754;
   --toastify-color-warning: #ffc107;
   --toastify-color-error: #dc3545;
+  --bs-link-color: #006a8d;
 }
 
 .container-xxl {
