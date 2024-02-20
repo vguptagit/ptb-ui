@@ -54,6 +54,7 @@ html, body, #root {
 .container-xxl {
   margin: 0 auto;
   background-color: #f8f9fa;
+  content:"width=device-width, initial-scale=1";
 }
 .container-xxl .panel {
   padding: 0;
