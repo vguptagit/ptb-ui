@@ -16,33 +16,46 @@ import "./TestCreate.css";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
+  const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
-  const [initialTabTitle, setInitialTabTitle] = useState(""); 
+  const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || "");
   const [isEditing, setIsEditing] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
+  const [formSubmittedOnce, setFormSubmittedOnce] = useState(false);
 
+  
   useEffect(() => {
     setTabTitle(selectedTest?.title || "");
-    setInitialTabTitle(selectedTest?.title || ""); 
+    setInitialTabTitle(selectedTest?.title || "");
+    setNewTabName(selectedTest?.title || "");
   }, [selectedTest]);
 
   const handleTitleChange = (event) => {
-    const newTitle = event.target.value;
+    let newTitle = event.target.value;
+    // Capitalize the first letter of the new title
+    newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
+
+    // if (selectedTest && selectedTest.id) {
+    //   setNewTabName(newTitle);
+    //   dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
+    // }
+
     setTabTitle(newTitle);
-    setIsEditing(true); 
+    setIsEditing(true);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (tabTitle.trim().length === 0) {
-      
-      return;
+        return;
     } else {
-      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
-      setInitialTabTitle(tabTitle); 
+        dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
+        setInitialTabTitle(tabTitle);
     }
-    setIsEditing(false); 
-  };
+    setIsEditing(false);
+    setFormSubmittedOnce(true); // Add this line
+};
+
 
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
@@ -160,7 +173,7 @@ const TestCreate = () => {
                 type="text"
                 name="title"
                 placeholder="Enter Test title "
-                value={isEditing ? tabTitle : initialTabTitle} 
+                value={isEditing ? tabTitle : (formSubmittedOnce ? initialTabTitle : newTabName)}
                 onChange={handleTitleChange}
                 className="rounded"
                 required={true}
