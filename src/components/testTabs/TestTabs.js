@@ -14,6 +14,10 @@ import QtiService from "../../utils/qtiService";
 import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 
+const CustomTooltip = ({ title }) => (
+  <Tooltip id="tooltip">{title}</Tooltip>
+);
+
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -239,8 +243,6 @@ const TestTabs = () => {
     // 4. Save tests
   }
   
-
-
   return (
     <div className="tab-container">
       <div className="d-flex flex-column flex-sm-row justify-content-between">
@@ -275,19 +277,28 @@ const TestTabs = () => {
         </div>
       </div>
 
-
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
-            <Nav.Item>
-              <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
-                <i className="fa-solid fa-plus"></i>
-              </Nav.Link>
-            </Nav.Item>
-          {tests.map((test, index) => (
-            index < 4 ? (
-                <Nav.Item key={test.id}>
-                  <Nav.Link
-                    onClick={() => { handleNodeSelect(test) }}
+        <Nav.Item>
+         <OverlayTrigger
+          placement="top"
+            overlay={<Tooltip id="tooltip-add-new">Add New Test</Tooltip>}
+              >
+               <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
+                  <i className="fa-solid fa-plus"></i>
+                </Nav.Link>
+           </OverlayTrigger>
+         </Nav.Item>
+
+         {tests.map((test, index) => (
+           index < 4 ? (
+             <Nav.Item key={test.id}>
+              <OverlayTrigger
+                placement="top"
+                 overlay={<Tooltip id={`tooltip-${test.id}`}>{test.title}</Tooltip>}
+                >
+                 <Nav.Link
+                   onClick={() => { handleNodeSelect(test) }}
                     className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
                     id='test-tabs-navlink'
                   >
@@ -301,23 +312,26 @@ const TestTabs = () => {
                       )}
                     </div>
                   </Nav.Link>
-                </Nav.Item>
+                </OverlayTrigger>
+              </Nav.Item>
             ) : null
           ))}
           {tests.length > 4 && (
             <Nav.Item className='three-dots-link'>
-              <Dropdown alignRight>
-                <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
-                  <i className="fa-solid fa-ellipsis"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {ellipsisDropdownItems.map((test, index) => (
-                    <Dropdown.Item
-                      key={test.id}
-                      onClick={() => handleNodeSelect(test)}
-                    >
+            <Dropdown alignRight>
+              <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
+                <i className="fa-solid fa-ellipsis"></i>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {ellipsisDropdownItems.map((test, index) => (
+                  <OverlayTrigger
+                    key={test.id}
+                    placement="top"
+                    overlay={<Tooltip id={`tooltip-${test.id}`}>{test.title}</Tooltip>}
+                  >
+                    <Dropdown.Item onClick={() => handleNodeSelect(test)}>
                       <div className='tab-label' id='tab-label-dropdown'>                        
-                        <span className='test-title'>{test.title}</span>
+                        <span className='test-title' data-tip>{test.title}</span>
                         {/* Always render the close button */}
                         {tests.length > 1 && (
                           <Button className="close-tab" aria-label='close' id='close-tab-dropdown' variant="link" onClick={(e) => removeTab(e, test)}>
@@ -326,10 +340,12 @@ const TestTabs = () => {
                         )}
                       </div>
                     </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Nav.Item>
+                  </OverlayTrigger>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Nav.Item>
+          
           )}
         </Nav>
       </div>
