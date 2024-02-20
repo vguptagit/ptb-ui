@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
-import { getAllDisciplines } from "../../services/discipline.service";
+import { getAllDisciplines, saveUserDiscipline } from "../../services/discipline.service";
 
 
 const LeftContent = () => {
@@ -27,6 +27,7 @@ const Discipline = () => {
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
+    saveUserDiscipline(selectedItems);
     if (selectedItems.length > 0) {
       navigate(`/booktab?disciplines=${selectedItems.join(',')}`);
     }

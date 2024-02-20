@@ -99,16 +99,19 @@ const TestTabs = () => {
     // 3. Save tests
     
     let isDuplicate = await isDuplicateTest(test);
-    if(isDuplicate) {
+    if (isDuplicate) {
       // Show Modal popup to change test title.
     } else {
       // Proceed to save
+      if (!test.title.trim()) {
+        // If the test title is empty or only contains whitespace, set it to a default value
+        test.title = `Untitled ${tests.length}`;
+      }
       let questionBindings = await saveQuestions(test);
-      saveTest(test,questionBindings);
+      saveTest(test, questionBindings);
     }
-    
   }
-
+  
   const saveTest  = async (test,questionBindings) => {
     // Building the json to create the test.
     var testcreationdata = {
@@ -140,7 +143,7 @@ const TestTabs = () => {
     try {
       let testResult = await saveMyTest(testcreationdata,test.folderGuid);
       if(testResult) {
-        Toastify({ message: "Test Saved !", type: 'success' });
+        Toastify({ message: "Test has been saved successfully!", type: 'success' });
       }
     } catch(error) {
         console.error('Error saving Test:', error);
@@ -235,6 +238,7 @@ const TestTabs = () => {
     // 3. Save questions
     // 4. Save tests
   }
+  
 
 
   return (

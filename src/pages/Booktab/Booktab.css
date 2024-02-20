@@ -1,16 +1,14 @@
 .treeview {
   height: 100%;
-
-
-  ul {
-    list-style: none;
-  }
 }
 
-.treeview>ul {
+.treeview ul {
+  list-style: none;
+}
+
+.treeview > ul {
   box-sizing: border-box;
   height: 100%;
-
   padding: 5px 0px;
 }
 
@@ -23,43 +21,39 @@
   line-height: 1em;
 }
 
-.tree-node span {
-  cursor: pointer;
-  margin-right: 10px;
+.tree-node-header {
+  margin-right: 5px;
 }
 
+.nested-nodes {
+  margin-left: 15px;
+}
 
 .tree-node.custom-style {
-  background: #E0E0E0;
+  background: #e0e0e0;
   height: 40px;
-  border-bottom: 1px solid #D0D0D0;
+  border-bottom: 1px solid #d0d0d0;
   font-family: Helvetica, sans-serif;
   font-size: 14px;
-  color: #4D4D4D;
+  color: #4d4d4d;
   line-height: 1em;
-
 }
-
-
-
 
 .booktab-container {
-  background-color: #FFFF;
-  color: #4D4D4D;
+  background-color: #ffff;
+  color: #4d4d4d;
   justify-content: space-around;
-
 }
-
 
 .top-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #F8F8F8;
-  color: #4D4D4D;
+  background-color: #f8f8f8;
+  color: #4d4d4d;
   line-height: 1em;
   padding: 10px;
-  border-bottom: 1px solid #D0D0D0;
+  border-bottom: 1px solid #d0d0d0;
   margin-bottom: 20px;
 }
 
@@ -69,20 +63,15 @@
   line-height: 1.5;
 }
 
-
-
 .booktab.btn.btn-secondary {
   margin-inline-start: auto;
   margin-right: 10px;
   font-size: 14px;
-  
-
 }
 
-.booktab.btn.btn-primary{
+.booktab.btn.btn-primary {
   font-size: 14px;
 }
-
 
 .booktab.search-container {
   width: 55%;
@@ -117,19 +106,15 @@
   width: 99%;
   list-style: none;
   padding: 0;
-  /* position: relative; */
   height: calc(77vh - 85px);
   overflow: auto;
- 
-  border-top: 1px solid #D0D0D0;
+  border-top: 1px solid #d0d0d0;
 }
 
 .booktab.result-list li {
   padding-block-start: inherit;
-
   cursor: pointer;
-  border-top: 1px solid #D0D0D0;
-  
+  border-top: 1px solid #d0d0d0;
 }
 
 .booktab.result-list li:last-child {
@@ -137,12 +122,16 @@
 }
 
 .tree-node.selected {
-  background-color: #007FA9;
-  box-shadow: 3px 3px 5px inset #006A8D;
-  color: #FFFFFF;
+  background-color: #007fa9;
+  box-shadow: 3px 3px 5px inset #006a8d;
+  color: #ffffff;
 }
 
-#search-addon{
+#search-addon {
   border: 1px solid #212529 !important;
   margin-top: 4px;
+}
+
+#search-addon-noborder {
+  margin-top: 10px;
 }
