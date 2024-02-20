@@ -139,7 +139,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
         </div>
       )}
       <div className="root-folders-tests">
-        {rootFolders && rootFolders.length > 0 && <TreeView testFolders={rootFolders} onNodeUpdate={onNodeUpdate} handleFolderSelect={handleFolderSelect} />}
+        {rootFolders && rootFolders.length > 0 && <TreeView folderName={editFolderName} testFolders={rootFolders} onNodeUpdate={onNodeUpdate} handleFolderSelect={handleFolderSelect} />}
       </div>
     </>
   );
