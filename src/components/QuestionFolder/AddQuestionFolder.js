@@ -20,18 +20,17 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  async function fetchRootFolderGuid() {
+    try {
+      const rootFolder = await getUserQuestionFoldersRoot();
+      setRootFolderGuid(rootFolder.guid);
+    } catch (error) {
+      console.error("Error fetching root folder:", error);
+    }
+  }
 
   useEffect(() => {
-    async function fetchRootFolderGuid() {
-      try {
-        const rootFolder = await getUserQuestionFoldersRoot();
-        setRootFolderGuid(rootFolder.guid);
-      } catch (error) {
-        console.error("Error fetching root folder:", error);
-      }
-    }
     fetchRootFolderGuid();
-
     const savedFoldersFromStorage = JSON.parse(
       localStorage.getItem("savedFolders")
     );

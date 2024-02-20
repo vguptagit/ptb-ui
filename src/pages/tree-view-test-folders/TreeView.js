@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
 
-const DraggableNode = ({ node, onToggle, depth, isOpen, handleFolderSelect }) => {
-
-  const [selectedFolder, setSelectedFolder] = useState(null);
+const DraggableNode = ({ node, onToggle, folderName, depth, isOpen, handleFolderSelect }) => {
 
   const handleEditFolder = (folderTitle) => {
     console.log("Edit folder:", folderTitle);
     if (handleFolderSelect) {
       handleFolderSelect(folderTitle);
-      setSelectedFolder(folderTitle);
     }
   };
 
@@ -32,7 +29,7 @@ const DraggableNode = ({ node, onToggle, depth, isOpen, handleFolderSelect }) =>
         </span>
       )}
       {node.text}
-      {selectedFolder === node.text && (
+      {folderName === node.text && (
         <button
           className="edit-button selected"
           onClick={() => handleEditFolder(node.text)}
@@ -40,7 +37,7 @@ const DraggableNode = ({ node, onToggle, depth, isOpen, handleFolderSelect }) =>
           <i className="bi bi-pencil-fill"></i>
         </button>
       )}
-      {selectedFolder !== node.text && (
+      {folderName !== node.text && (
         <button
           className="edit-button"
           onClick={() => handleEditFolder(node.text)}
@@ -53,7 +50,7 @@ const DraggableNode = ({ node, onToggle, depth, isOpen, handleFolderSelect }) =>
   );
 };
 
-function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
+function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect }) {
   const [treeData, setTreeData] = useState([]);
 
   const handleDrop = (newTree, { dragSource, dropTarget }) => {
@@ -75,11 +72,11 @@ function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
     return testFolders.findIndex(ele => ele.guid === parentGuid);
   }
 
-  function getNextSequenceForParentFolderId(parentFolderId){
+  function getNextSequenceForParentFolderId(parentFolderId) {
     // find next sequence by parent folder id 
     let maxSequence = 0;
-    for(const folder of testFolders){
-      if(folder.parentId === parentFolderId && folder.sequence > maxSequence){
+    for (const folder of testFolders) {
+      if (folder.parentId === parentFolderId && folder.sequence > maxSequence) {
         maxSequence = folder.sequence;
       }
     }
@@ -110,7 +107,7 @@ function TreeView({ testFolders, onNodeUpdate, handleFolderSelect }) {
           tree={treeData}
           rootId={0}
           render={(node, { depth, isOpen, onToggle }) => (
-            <DraggableNode node={node} isOpen={isOpen} depth={depth} onToggle={onToggle} handleFolderSelect={handleFolderSelect} />
+            <DraggableNode node={node} isOpen={isOpen} folderName={folderName} depth={depth} onToggle={onToggle} handleFolderSelect={handleFolderSelect} />
           )}
           dragPreviewRender={(monitorProps) => (
             <div>{monitorProps.item.node?.text}</div>
