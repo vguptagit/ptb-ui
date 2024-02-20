@@ -24,24 +24,28 @@ const LeftContent = () => {
 };
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
-  const [isOpen, setIsOpen] = useState(true); 
+  const [isOpen, setIsOpen] = useState(true);
   const isSelected = selectedItems.includes(node.id);
+  const hasChildNodes = node.nodes && node.nodes.length > 0;
 
   const handleNodeClick = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSelectChild = (childNode) => {
-    onSelectItem(childNode);
+  const handleSelectNode = () => {
+    // Check if the node is a leaf node (has no child nodes)
+    if (!hasChildNodes) {
+      onSelectItem(node);
+    }
   };
 
   return (
     <div>
       <div
         className={`tree-node ${isSelected ? "selected" : ""}`}
-        onClick={() => handleNodeClick()}
+        onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
       >
-        {node.nodes && node.nodes.length > 0 && (
+        {hasChildNodes && (
           <div className="tree-node-header">
             {isOpen ? (
               <i className="fa fa-caret-down"></i>
@@ -54,11 +58,10 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
       </div>
       <div>
         {isOpen &&
-          node.nodes &&
-          node.nodes.length > 0 && (
+          hasChildNodes && (
             <div className="nested-nodes">
               {node.nodes.map((childNode) => (
-                <div key={childNode.id} onClick={() => handleSelectChild(childNode)}>
+                <div key={childNode.id}>
                   <TreeNode
                     node={childNode}
                     onSelectItem={onSelectItem}
@@ -72,6 +75,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
     </div>
   );
 };
+
 
 const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
@@ -104,7 +108,6 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   );
 };
 
-
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -132,10 +135,9 @@ const Booktab = () => {
               text: `${item.discipline}`,
               droppable: true,
               nodes:
-                item.nodes &&
-                item.nodes.map((node, index) => ({
-                  id: node.guid || `${item.guid}_${index}`,
-                  text: `${node.title}`,
+                data.map((title, index) => ({
+                  id:` ${title.guid}`+ index,
+                  text: `${title.title}`,
                   droppable: false,
                   parentId: item.guid,
                 })),
@@ -167,6 +169,7 @@ const Booktab = () => {
     const inputWidth = Math.max(200, e.target.scrollWidth);
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
+
   const handleSelectItem = (node) => {
     if (!node.droppable) {
       setSelectedBooks((prevSelectedBooks) => {
@@ -179,6 +182,9 @@ const Booktab = () => {
       });
     }
   };
+
+  
+  
 
   return (
     <div className="booktab-container">
