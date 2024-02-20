@@ -33,7 +33,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   };
 
   const handleSelectNode = () => {
-    // Check if the node is a leaf node (has no child nodes)
+    
     if (!hasChildNodes) {
       onSelectItem(node);
     }
