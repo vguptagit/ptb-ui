@@ -66,39 +66,6 @@ export const importAllBooks = (books) => {
 
 
 
-// export const getDisciplineBooks = async (discipline) => {
-//     const queryParams = new URLSearchParams({
-//         discipline: discipline,
-//     });
-
-//     return httpInterceptor
-//         .get(`${url}/books?${queryParams}`)
-//         .then((response) => {
-//             console.log("discipline books",response)
-//             return response?.data;
-//         })
-//         .catch((error) => {
-//             console.log("went wrong", error);
-        
-//             return Promise.reject({
-//                 type: "error",
-//                 message: error
-//             });
-//         });
-// };
-// export const getDisciplineBooks = async () => {
-//     try {
-//         const response = await httpInterceptor.get(`${url}/books`);
-//         console.log("API Response:", response.data);
-//         return response.data;
-//     } catch (error) {
-//         console.error("API Error:", error);
-//         throw {
-//             type: "error",
-//             message: error
-//         };
-//     }
-// };
 
 export const getDisciplineBooks = async (discipline) => {
     const queryParams = new URLSearchParams({
@@ -116,4 +83,21 @@ export const getDisciplineBooks = async (discipline) => {
             message: error
         });
     }
+};
+
+
+export const saveUserBooks = (books, userid) => {
+   
+    return httpInterceptor
+        .post(`${url}/settings/books?extUserId=`+ userid, books)
+        .then((response) => {
+            console.log("selected books", response);
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
 };

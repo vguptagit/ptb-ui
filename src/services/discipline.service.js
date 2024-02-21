@@ -31,10 +31,10 @@ export const getUserDisciplines = () => {
         });
 };
 
-export const saveUserDiscipline = (disciplines) => {
+export const saveUserDiscipline = (disciplines,userid) => {
    
     return httpInterceptor
-        .post(`${url}/settings/disciplines`, disciplines)
+        .post(`${url}/settings/disciplines?extUserId=`+ userid, disciplines)
         .then((response) => {
             return response?.data;
         })

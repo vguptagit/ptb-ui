@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './Discipline.css';
 import Loader from "../../components/common/loader/Loader";
-import { getAllDisciplines, saveUserDiscipline } from "../../services/discipline.service";
+import { getAllDisciplines } from "../../services/discipline.service";
 
 
 const LeftContent = () => {
@@ -27,10 +27,11 @@ const Discipline = () => {
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
-    saveUserDiscipline(selectedItems);
+
     if (selectedItems.length > 0) {
       navigate(`/booktab?disciplines=${selectedItems.join(',')}`);
     }
+    console.log("selected items disicpline ", selectedItems)
   };
 
   useEffect(() => {
@@ -76,12 +77,12 @@ const Discipline = () => {
   return (
     <div className="discipline-container">
       {loading ? (
-        <Loader show="true"/>
+        <Loader show="true" />
       ) : (
         <>
           <div className="top-container">
             <h4><FormattedMessage id="discipline.steps.2" /></h4>
-            <button className="discipline btn btn-primary" onClick={handleNext}   disabled={selectedItems.length === 0}>Next</button>
+            <button className="discipline btn btn-primary" onClick={handleNext} disabled={selectedItems.length === 0}>Next</button>
           </div>
           <div className="discipline d-flex justify-content-between">
             <LeftContent />
@@ -112,7 +113,7 @@ const Discipline = () => {
                     onKeyDown={(e) => {
                       if (e.key === "Enter")
                         handleSelectItem(item);
-                      }}
+                    }}
                   >
                     {item}
                   </li>
