@@ -21,7 +21,7 @@ function Testing() {
     //End Confirmation popup
 
     //this if for toast
-    const notify = (type, message) => () => Toastify({ 'message': message, 'type': type, 'tabindex': 0 });
+    const notify = (type, message) => () => Toastify({ 'message': message, 'type': type });
 
     return (
         <>
