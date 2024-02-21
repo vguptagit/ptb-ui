@@ -6,14 +6,12 @@ const Essay = (props) => {
   const [open, setOpen] = useState(false);
   const questionNode = props.questionNode;
   const questionNodeIndex = props.questionNodeIndex;
-  const questionNodeIsEdit = props.questionNodeIsEdit;
   const initFormData = {
     question: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
     answer: questionNode.qtiModel ? questionNode.qtiModel.RecommendedAnswer : "",
     essayQuestionSize: questionNode.qtiModel ? questionNode.qtiModel.EssayPageSize : "",
   };
   const [formData, setFormData] = useState(initFormData);
-  const [editMode, setEditMode] = useState(questionNodeIsEdit);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,25 +20,26 @@ const Essay = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submit -- Form Data:", formData);
-    questionNode.qtiModel.Caption = formData.question;
-    questionNode.qtiModel.RecommendedAnswer = formData.answer;
-    questionNode.qtiModel.EssayPageSize = formData.essayQuestionSize;
-    questionNode.qtiModel.EditOption = false;
-    setEditMode(false);
+    if(questionNode) {
+      questionNode.qtiModel.Caption = formData.question;
+      questionNode.qtiModel.RecommendedAnswer = formData.answer;
+      questionNode.qtiModel.EssayPageSize = formData.essayQuestionSize;
+      questionNode.qtiModel.EditOption = false;
+    }
     props.onQuestionStateChange(false);
   };
 
   const handleEdit = (e) => {
     e.preventDefault();
-    setEditMode(true);
+    questionNode.qtiModel.EditOption = true;
     props.onQuestionStateChange(true);
   };
 
   const handleDelete = (e) => {
     e.preventDefault();
-    if (editMode) {
-      setEditMode(false);
+    if (questionNode.qtiModel.EditOption) {
+      questionNode.qtiModel.EditOption = false;
+      props.onQuestionDelete(questionNodeIndex);
       props.onQuestionStateChange(false);
     } else {
       props.onQuestionDelete(questionNodeIndex);
@@ -54,8 +53,8 @@ const Essay = (props) => {
   };
 
   return (
-    <div>
-      {!editMode ? (
+    <div id={questionNode.itemId}>
+      {!questionNode.qtiModel.EditOption ? (
         <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
           <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center">
             <div className="mr-2">{questionNodeIndex + 1})</div>

@@ -20,6 +20,7 @@ const TestCreate = () => {
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || "");
   const [isEditing, setIsEditing] = useState(false);
+  const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
   const [formSubmittedOnce, setFormSubmittedOnce] = useState(false);
 
@@ -61,16 +62,17 @@ const TestCreate = () => {
     accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
     drop: (item) => {
       console.log("Dropped node:", item);
+      let copyItem = JSON.parse(JSON.stringify(item));
       if (item.type === "QUESTION_TEMPLATE") {
-        selectedTest.questions.push(getQuestion(item.questionTemplate));
+        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.type === "TREE_NODE") {
-        selectedTest.questions.push(getQuestion(item.questionTemplate));
+        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else {
-        selectedTest.questions.push(getQuestion(item.questionTemplate));
+        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
 
-      dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
-      setIsEditing(true);
+     dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
+     setIsEditing(true);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -84,12 +86,13 @@ const TestCreate = () => {
     var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
     qtiModel.EditOption = true;
     question.qtiModel = qtiModel;
+    questionNode.itemId = Math.random().toString(36).slice(2);
     console.log(question);
     return question;
   };
 
   const handleQuestionState = (edit) => {
-    setIsEditing(edit);
+    setRefreshChildren(!refreshChildren);
   };
 
   const handleQuestionDelete = (deleteIndex) => {
@@ -104,7 +107,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.MultipleChoice:
         return <MultipleChoice
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}
@@ -113,7 +116,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.MultipleResponse:
         return <MultipleResponse
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}
@@ -122,7 +125,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.TrueFalse:
         return <TrueFalse
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}
@@ -131,7 +134,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.Matching:
         return <Matching
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}
@@ -140,7 +143,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.FillInBlanks:
         return <FillInBlanks
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}
@@ -149,7 +152,7 @@ const TestCreate = () => {
       case CustomQuestionBanksService.Essay:
         return <Essay
           questionNode={questionNode}
-          key={Date.now() + "_" + selectedTest.id + questionListSize + "_" + index}
+          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
           questionNodeIndex={index}
           questionNodeIsEdit={questionNode.qtiModel.EditOption}
           onQuestionStateChange={handleQuestionState}

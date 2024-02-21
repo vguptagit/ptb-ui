@@ -101,7 +101,11 @@ const TestTabs = () => {
     // 1. Check for duplicate test
     // 2. Save questions
     // 3. Save tests
-    
+    if(!areQuestionsAvailable(test)) {
+      Toastify({ message: "No unchanged questions to Save!", type: 'warn' });
+      return;
+    }
+
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
       // Show Modal popup to change test title.
@@ -242,6 +246,11 @@ const TestTabs = () => {
     // 3. Save questions
     // 4. Save tests
   }
+
+  const areQuestionsAvailable = (test) => {
+    console.log("enable dropdown");
+   return (test && test.questions.length > 0 && !test.questions.find(item => item.qtiModel.EditOption === true));
+  }
   
   return (
     <div className="tab-container">
@@ -257,12 +266,12 @@ const TestTabs = () => {
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
                 <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                  <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
-                    <FormattedMessage id="testtabs.save" />
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#" onClick={handleSaveAs}>
-                    <FormattedMessage id="testtabs.saveas" />
-                  </Dropdown.Item>
+                        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
+                          <FormattedMessage id="testtabs.save" />
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#" onClick={handleSaveAs}>
+                          <FormattedMessage id="testtabs.saveas" />
+                        </Dropdown.Item>  
                 </DropdownButton>
 
                 <Button id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
