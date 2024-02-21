@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 
 const Header = () => {
     return (
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar bg="light" data-bs-theme="light" expand="lg" className="bg-body-tertiary">
         <Container fluid>
           <Navbar.Brand className='brand'>
             {/* <img src='PSO_BIG.D.png' height='30' alt='' loading='lazy' /> */}

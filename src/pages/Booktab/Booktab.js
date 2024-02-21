@@ -220,7 +220,7 @@ const Booktab = () => {
       ) : (
         <>
           <div className="top-container">
-            <h4>Choose Your Books or Topics</h4>
+            <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
             <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
