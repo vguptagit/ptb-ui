@@ -110,6 +110,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
+ 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [bookDetails, setBookDetails] = useState([]);
@@ -125,7 +126,7 @@ const Booktab = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const disciplines = new URLSearchParams(location.search).get("disciplines");
+        const disciplines =  new URLSearchParams(location.search).get("disciplines");
         if (disciplines) {
           const selectedDisciplines = disciplines.split(",");
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
@@ -173,9 +174,8 @@ const Booktab = () => {
 
   const handleNext = () => {
     const parentIds = bookDetails.map(book => book.id);
-    const disciplinesofbooks = bookDetails.map(discipline => discipline.discipline);
-    saveUserDiscipline(disciplinesofbooks, sessionStorage.getItem("userId"));
-
+    const disciplines = bookDetails.map(discipline => discipline.discipline)
+    saveUserDiscipline(disciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
@@ -224,7 +224,7 @@ const Booktab = () => {
             <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
-            <button className="booktab btn btn-primary" onClick={handleNext}>
+            <button className="booktab btn btn-primary"  disabled={selectedBooks.length === 0}onClick={handleNext}>
               Next
             </button>
           </div>
