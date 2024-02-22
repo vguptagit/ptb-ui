@@ -41,3 +41,19 @@ width: auto;
 max-width: 100%; 
 }
 
+
+.clicked {
+  background-color: #007BFF; 
+  color: white; 
+}
+
+.clicked .tree-node,
+.clicked .lens-icon {
+  color: white;
+}
+
+.lens-icon {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
