@@ -57,3 +57,17 @@ export const updateUserQuestionFolders = (folders) => {
       });
     });
 };
+
+export const getChildQuestionFolders = (folderId) => {
+  return httpInterceptor
+    .get(`${url}/my/questionfolders/${folderId}/folders`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
