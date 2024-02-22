@@ -80,11 +80,13 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
     setTreeData(updatedTreeData);
 
     if (clickedNode.droppable) {
-      if (clickedNode.type === "book") {
+      if (clickedNode.type === "book" && !addedNodes.has(clickedNode.bookGuid))
         getBookNodes(clickedNode);
-      } else if (clickedNode.type === "node") {
-        getBookNodeSubNodes(clickedNode);
-      }
+      else if (
+        clickedNode.type === "node" &&
+        !addedNodes.has(clickedNode.bookGuid + clickedNode.nodeGuid)
+      )
+      getBookNodeSubNodes(clickedNode);
     }
   };
 
@@ -157,72 +159,53 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   };
 
   const getBookNodes = (node) => {
-    if (!addedNodes.has(node.bookGuid)) {
-      getAllBookNodes(node.bookGuid).then(
-        (nodes) => {
-          const filteredNodes = nodes.filter((item) => {
-            const key = `${node.bookGuid}_${item.guid}`;
-            return !addedNodes.has(key);
-          });
-          const newNodeList = filteredNodes.map((item) => ({
-            id: `${node.bookGuid}_${item.guid}`,
+    let nodeList = [];
+    getAllBookNodes(node.bookGuid).then(
+      (nodes) => {
+        for (let i = 0; i < nodes.length; i++) {
+          const newItemNode = {
+            id: treeData.length + nodeList.length + 1,
             parent: node.id,
             droppable: true,
             bookGuid: node.bookGuid,
-            nodeGuid: item.guid,
-            text: `${item.title}_${node.text}`,
+            nodeGuid: nodes[i].guid,
+            text: `${nodes[i].title}_${node.text}`,
             type: "node",
-          }));
-          setTreeData((prevTreeData) => [...prevTreeData, ...newNodeList]);
-          setAddedNodes((prevAddedNodes) => {
-            const newSet = new Set(prevAddedNodes);
-            filteredNodes.forEach((item) => {
-              const key = `${node.bookGuid}_${item.guid}`;
-              newSet.add(key);
-            });
-            return newSet;
-          });
-        },
-        (error) => {
-          console.log(error);
+          };
+          nodeList.push(newItemNode);
         }
-      );
-    }
+        setTreeData([...treeData, ...nodeList]);
+        setAddedNodes(new Set(addedNodes).add(node.bookGuid));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   const getBookNodeSubNodes = (node) => {
-    const key = `${node.bookGuid}_${node.nodeGuid}`;
-    if (!addedNodes.has(key)) {
-      getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
-        (nodes) => {
-          const filteredNodes = nodes.filter((item) => {
-            const subKey = `${node.bookGuid}_${item.guid}`;
-            return !addedNodes.has(subKey);
-          });
-          const newNodeList = filteredNodes.map((item) => ({
-            id: `${node.bookGuid}_${item.guid}`,
+    let nodeList = [];
+    getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
+      (nodes) => {
+        for (let i = 0; i < nodes.length; i++) {
+          const newItemNode = {
+            id: treeData.length + nodeList.length + 1,
             parent: node.id,
             droppable: true,
             bookGuid: node.bookGuid,
-            nodeGuid: item.guid,
-            text: `${item.title}_${node.text}`,
+            nodeGuid: nodes[i].guid,
+            text: `${nodes[i].title}_${node.text}`,
             type: "node",
-          }));
-          setTreeData((prevTreeData) => [...prevTreeData, ...newNodeList]);
-          setAddedNodes((prevAddedNodes) => {
-            const newSet = new Set(prevAddedNodes);
-            filteredNodes.forEach((item) => {
-              const subKey = `${node.bookGuid}_${item.guid}`;
-              newSet.add(subKey);
-            });
-            return newSet;
-          });
-        },
-        (error) => {
-          console.log(error);
+          };
+          nodeList.push(newItemNode);
         }
-      );
-    }
+        setTreeData([...treeData, ...nodeList]);
+        setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   useEffect(() => {
