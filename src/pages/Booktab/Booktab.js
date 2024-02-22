@@ -80,11 +80,16 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
     return nodes.flatMap((node) => {
       const filteredChildNodes = filterNodes(node.nodes || [], term);
-      return node.text.toLowerCase().includes(term.toLowerCase()) || filteredChildNodes.length > 0
-        ? [{ ...node, nodes: filteredChildNodes }]
-        : [];
+      if (filteredChildNodes.length > 0) {
+        return [{ ...node, nodes: filteredChildNodes }];
+      }
+      if (node.text.toLowerCase().includes(term.toLowerCase())) {
+        return [{ ...node, nodes: [] }];
+      }
+      return [];
     });
   };
+  
 
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
