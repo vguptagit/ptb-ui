@@ -2,9 +2,13 @@ import httpInterceptor from "../httpHelper/httpHelper";
 
 const url = process.env.REACT_APP_API_URL
 
-export const getAllBookNodes = async (bookId) => {
+export const getAllBookNodes = async (bookId, queryParams = {}) => {
+
+    const queryString = new URLSearchParams(queryParams).toString();
+    const requestUrl = `${url}/books/${bookId}/nodes${queryString ? `?${queryString}` : ''}`;
+
     return httpInterceptor
-        .get(`${url}/books/${bookId}/nodes`)
+        .get(requestUrl)
         .then((response) => {
             return response?.data;
         })

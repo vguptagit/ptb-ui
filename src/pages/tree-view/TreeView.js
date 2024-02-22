@@ -8,16 +8,21 @@ import {
   getAllBookNodeSubNodes,
 } from "../../services/book.service";
 
-const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
+const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds  }) => {
   const [, drag] = useDrag({
     type: "TREE_NODE",
     item: { node },
   });
+  const isClicked = clickedNodeIds.includes(node.id);
+  const handleLensClick = (e) => {
+    e.stopPropagation(); 
+    onLensClick(node);
+  };
 
   return (
     <div
       ref={drag}
-      className="tree-node"
+      className={`tree-node ${isClicked ? 'clicked' : ''}`}
       onClick={() => {
         onToggle();
         onDataUpdate && onDataUpdate(node);
@@ -33,6 +38,9 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
         </span>
       )}
       {node.text}
+      {node.type === "book" && (
+        <i className="fas fa-search lens-icon" onClick={handleLensClick}></i>
+      )}
     </div>
   );
 };
@@ -40,6 +48,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate }) => {
 function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   const [treeData, setTreeData] = useState([]);
   const [addedNodes, setAddedNodes] = useState(new Set());
+  const [clickedNodeIds, setClickedNodeIds] = useState([]);
 
   const handleDrop = (newTree) => {
     setTreeData(newTree);
@@ -95,6 +104,53 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
           };
           booksList.push(newItem);
         }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  
+
+  const handleLensClick = (node) => {
+    setClickedNodeIds(prevClickedNodeIds => {
+      const isAlreadyClicked = prevClickedNodeIds.includes(node.id);
+      if (isAlreadyClicked) {
+        return prevClickedNodeIds.filter(id => id !== node.id); 
+      } else {
+        return [...prevClickedNodeIds, node.id]; 
+      }
+    });
+    getBookNodesFlat(node, { flat: 1 });
+    // ... additional logic for handleLensClick
+    console.log("Lens clicked for node:", node.text);
+    // if (node.type === "book") {
+    //   getBookNodesFlat(node, { flat: 1 });
+    // }
+    
+  };
+
+
+  const getBookNodesFlat = (node, queryParams = {}) => {
+    let nodeList = [];
+    getAllBookNodes(node.bookGuid, queryParams).then(
+      (nodes) => {
+        for (let i = 0; i < nodes.length; i++) {
+          const newItemNode = {
+            id: treeData.length + nodeList.length + 1,
+            parent: node.id,
+            droppable: true,
+            bookGuid: node.bookGuid,
+            nodeGuid: nodes[i].guid,
+            text: `${nodes[i].title}_${node.text}`,
+            type: "node",
+          };
+          nodeList.push(newItemNode);
+        }
+        console.log("nodeListFlat is as follows",nodeList);
+        //setTreeData([...treeData, ...nodeList]);
+        //setAddedNodes(new Set(addedNodes).add(node.bookGuid));
       },
       (error) => {
         console.log(error);
@@ -167,6 +223,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
               node={node}
               onToggle={onToggle}
               onDataUpdate={handleNodeClick}
+              onLensClick={handleLensClick}
+              clickedNodeIds={clickedNodeIds}
+              isClicked={clickedNodeIds.includes(node.id)}
             />
           )}
           dragPreviewRender={(monitorProps) => (
