@@ -122,7 +122,8 @@ const Booktab = () => {
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-
+  const disciplines =  new URLSearchParams(location.search).get("disciplines");
+  const selectedDisciplines = disciplines.split(",");
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -131,9 +132,9 @@ const Booktab = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const disciplines =  new URLSearchParams(location.search).get("disciplines");
+        
         if (disciplines) {
-          const selectedDisciplines = disciplines.split(",");
+        
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
             let newData = [];
@@ -179,8 +180,8 @@ const Booktab = () => {
 
   const handleNext = () => {
     const parentIds = bookDetails.map(book => book.id);
-    const disciplines = bookDetails.map(discipline => discipline.discipline)
-    saveUserDiscipline(disciplines, sessionStorage.getItem("userId"));
+    // const disciplines = bookDetails.map(discipline => discipline.discipline)
+    saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
