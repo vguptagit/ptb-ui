@@ -80,11 +80,16 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
     return nodes.flatMap((node) => {
       const filteredChildNodes = filterNodes(node.nodes || [], term);
-      return node.text.toLowerCase().includes(term.toLowerCase()) || filteredChildNodes.length > 0
-        ? [{ ...node, nodes: filteredChildNodes }]
-        : [];
+      if (filteredChildNodes.length > 0) {
+        return [{ ...node, nodes: filteredChildNodes }];
+      }
+      if (node.text.toLowerCase().includes(term.toLowerCase())) {
+        return [{ ...node, nodes: [] }];
+      }
+      return [];
     });
   };
+  
 
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
@@ -110,13 +115,15 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
+ 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [bookDetails, setBookDetails] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-
+  const disciplines =  new URLSearchParams(location.search).get("disciplines");
+  const selectedDisciplines = disciplines.split(",");
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -125,9 +132,9 @@ const Booktab = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const disciplines = new URLSearchParams(location.search).get("disciplines");
+        
         if (disciplines) {
-          const selectedDisciplines = disciplines.split(",");
+        
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
             let newData = [];
@@ -173,9 +180,8 @@ const Booktab = () => {
 
   const handleNext = () => {
     const parentIds = bookDetails.map(book => book.id);
-    const disciplinesofbooks = bookDetails.map(discipline => discipline.discipline);
-    saveUserDiscipline(disciplinesofbooks, sessionStorage.getItem("userId"));
-
+    // const disciplines = bookDetails.map(discipline => discipline.discipline)
+    saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
@@ -224,7 +230,7 @@ const Booktab = () => {
             <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
-            <button className="booktab btn btn-primary" onClick={handleNext}>
+            <button className="booktab btn btn-primary"  disabled={selectedBooks.length === 0}onClick={handleNext}>
               Next
             </button>
           </div>

@@ -27,7 +27,6 @@ const Discipline = () => {
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
-
     if (selectedItems.length > 0) {
       navigate(`/booktab?disciplines=${selectedItems.join(',')}`);
     }
