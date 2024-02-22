@@ -42,3 +42,25 @@ width: auto;
 max-width: 100%; 
 }
 
+.edit-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.edit-button:hover {
+  border-color: #007FA9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.edit-button.selected {
+  border-color: #007FA9;
+  background-color: #007FA9;
+}
+
