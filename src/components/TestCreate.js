@@ -33,17 +33,21 @@ const TestCreate = () => {
 
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
+    
+    // Check if the input exceeds 255 characters
+    if (newTitle.length > 255) {
+      // Truncate the input to 255 characters
+      newTitle = newTitle.slice(0, 255);
+    }
+  
     // Capitalize the first letter of the new title
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-
-    // if (selectedTest && selectedTest.id) {
-    //   setNewTabName(newTitle);
-    //   dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
-    // }
-
+  
+    // Update the state with the new title
     setTabTitle(newTitle);
     setIsEditing(true);
   };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();

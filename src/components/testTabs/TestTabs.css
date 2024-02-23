@@ -4,80 +4,75 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-}
-
-.test-container h3 {
+  }
+  
+  .test-container h3 {
     margin-top: -11px;
-}
-
-.test-container label {
+  }
+  
+  .test-container label {
     display: block;
     margin-bottom: -20px;
-}
-
-.test-container input .test-container .addfolder-container {
-    width: 85%; /* Make the input fields take up the full width */
+  }
+  
+  .test-container input .test-container .addfolder-container {
+    width: 85%; 
     margin-top: 8px;
-}
-
-.ml-2 {
+  }
+  
+  .ml-2 {
     margin-top: 2px;
-}
-
-input.rounded.form-control {
+  }
+  
+  input.rounded.form-control {
     margin-left: -14px;
     margin-top: -5px;
-}
-
-button.close-tab.btn.btn-link {
+  }
+  
+  button.close-tab.btn.btn-link {
     margin-top: -13px;
     color: black;
     padding: 0px 9px 0px 9px;
     margin-right: -14px;
-}
- 
-
-#dropdown-ellipsis.dropdown-toggle::after{
-display: none;
-}
-
-#btn-test-wizard{
-    visibility: hidden;
-}
-
-.custom-tabs {
-    display: flex;
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
   }
-/*   
-  .custom-tab-item {
-    flex: 0 0;
-
-  } */
-
-  /* .custom-tab-item {
-    flex: 1 1 auto; /* Allow tabs to grow and shrink equally */
-    /* min-width: 5%; /* Set a minimum width for the tabs */
   
-    #tab-label-dropdown #close-tab-dropdown{
-        margin-top: 0px;
-        margin-left: 5px;
-    }
-
-    #test-tabs-navlink{
-        padding-right: 17px;
-    }
-
-    .tab-label{
-        /* margin-left: 16px; */
-        display: block;
-        width: 87px;
-    }
-
-    #close-tab-dropdown{
-        padding-right: 18px;
-    }
-
-    .test-title{
-        text-align: center;
-    }
+  #dropdown-ellipsis.dropdown-toggle::after {
+    display: none;
+  }
+  
+  #btn-test-wizard {
+    visibility: hidden;
+  }
+  
+  .custom-tabs {
+    display: flex;
+    overflow-x: auto; 
+  }
+  
+  #tab-label-dropdown #close-tab-dropdown {
+    margin-top: -10px;
+    margin-left: 42px;
+    margin-right: -5px;
+  }
+  
+  #test-tabs-navlink {
+    padding-right: 17px;
+  }
+  
+  .tab-label {
+    position: relative;
+  }
+  
+  #close-tab-dropdown {
+    padding-right: px;
+  }
+  
+  .test-title {
+    text-align: center;
+  }
+  
+  .close-tab-wrapper {
+    position: absolute; /* Position the close button absolutely */
+    top: 0; /* Adjust as needed to position vertically */
+    right: 0; /* Adjust as needed to position horizontally */
+  }
