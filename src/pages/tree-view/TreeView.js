@@ -91,7 +91,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   };
 
   const getBooksList = (discipline, disciplineId, booksList) => {
-    getAllBooks(discipline).then(
+    getAllBooks(discipline, true).then(
       (books) => {
         for (let i = 0; i < books.length; i++) {
           const newItem = {
