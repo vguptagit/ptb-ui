@@ -202,7 +202,7 @@ const Booktab = () => {
   const handleSelectItem = (node) => {
     if (!node.droppable) {
       const bookDetail = {
-        id: node.parentId,
+        id: `${node.id}`,
         title: node.text,
         discipline: treeData.find(item => item.id === node.parentId)?.text
       };
