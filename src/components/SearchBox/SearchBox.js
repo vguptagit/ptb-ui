@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-function SearchBox() {
+function SearchBox({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   // logic to fetch search results here
-
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    // logic to filter search results here
+   
+    const value = event.target.value;
+    setSearchTerm(value)
+    onSearch(value); // Call the onSearch prop function
   };
-
   const handleSelectItem = (item) => {
     // logic to handle item selection here
   };

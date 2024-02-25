@@ -6,6 +6,7 @@ import SearchBox from "../components/SearchBox/SearchBox";
 const QuestionBanks = () => {
   const [disciplineData, setDisciplineData] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   
   const handleSelectItem = (item) => {
     setSelectedItems([...selectedItems, item]); 
@@ -14,9 +15,9 @@ const QuestionBanks = () => {
     // Fetch data from the API using getAllBooks
     getUserDisciplines()
       .then((data) => {
-        // Set the fetched data to the state
+       
         if (data) {
-          //console.log("data is as follows ->>>", data);
+       
           const objCopy = [...data]
           setDisciplineData(objCopy);
         }
@@ -25,14 +26,19 @@ const QuestionBanks = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+  const handleSearch = (term) => {
+    console.log("term in questions bank is as follows",term);
+    setSearchTerm(term); 
+  };
   return (
     <div className="p-2">  
      <SearchBox
+        onSearch={handleSearch}
         selectedItems={selectedItems}
         handleSelectItem={handleSelectItem}
       />  
       <QuestBanks />
-      {disciplineData.length > 0 && <div><TreeView disciplines={disciplineData} />  </div>}
+      {disciplineData.length > 0 && <div><TreeView disciplines={disciplineData} searchTerm={searchTerm} />  </div>}
     </div>
   );
 }

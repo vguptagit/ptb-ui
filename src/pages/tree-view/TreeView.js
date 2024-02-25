@@ -45,11 +45,30 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines }) {
+const SimpleNode = ({ node, onToggle, onCombinedToggle  }) => {
+  return (
+    <div className="tree-node">
+      {node.droppable && (
+        <span onClick={() => onCombinedToggle(node)}>
+          {node.isOpen ? (
+            <i className="bi bi-caret-down-fill"></i>
+          ) : (
+            <i className="bi bi-caret-right-fill"></i>
+          )}
+        </span>
+      )}
+      {node.text}
+    </div>
+  );
+};
+
+function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   const [treeData, setTreeData] = useState([]);
+  const [searchableTreeData, setSearchableTreeData] = useState([]);
+  const [searchableTreeDataFilter, setSearchableTreeDataFilter] = useState([]);
   const [addedNodes, setAddedNodes] = useState(new Set());
   const [clickedNodeIds, setClickedNodeIds] = useState([]);
-
+  const [isSearchTermPresent, setIsSearchTermPresent] = useState(false);
   const handleDrop = (newTree) => {
     setTreeData(newTree);
     onDataUpdate(newTree);
@@ -66,8 +85,41 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
     for (let i = 0; i < convertedList.length; i++) {
       getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
     }
+    console.log("use effect called main")
+    setSearchableTreeData(convertedList);
     setTreeData(convertedList);
+    
   }, []);
+  useEffect(() => {
+    if(searchTerm != '')
+   { 
+    setIsSearchTermPresent(true);
+    const filteredData = searchableTreeData.filter(node => 
+      node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchableTreeDataFilter(filteredData);
+  }
+  else{
+    setIsSearchTermPresent(false);
+  }
+    console.log("new searchable tree data is as  follows",searchableTreeData);
+  }, [searchTerm]);
+
+
+  const handleSimpleToggle = (node) => {
+    const updatedSearchableTreeData = searchableTreeData.map((item) => {
+      if (item.id === node.id && item.droppable) {
+        return { ...item, isOpen: !item.isOpen };
+      }
+      return item;
+    });
+
+    setSearchableTreeData(updatedSearchableTreeData);
+  };
+  const handleCombinedToggle = (node, onToggle) => {
+    onToggle(); 
+    handleSimpleToggle(node);
+  };
 
   const handleNodeClick = (clickedNode) => {
     const updatedTreeData = treeData.map((node) => {
@@ -91,7 +143,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
   };
 
   const getBooksList = (discipline, disciplineId, booksList) => {
-    getAllBooks(discipline, true).then(
+    getAllBooks(discipline).then(
       (books) => {
         for (let i = 0; i < books.length; i++) {
           const newItem = {
@@ -117,17 +169,17 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
     setClickedNodeIds(prevClickedNodeIds => {
       const isAlreadyClicked = prevClickedNodeIds.includes(node.id);
       if (isAlreadyClicked) {
+        setSearchableTreeData((prevData) => {
+          return prevData.filter((item) => {
+            return !(item.type === "node" && item.bookGuid === node.bookGuid);
+          });
+        });
         return prevClickedNodeIds.filter(id => id !== node.id); 
       } else {
+        getBookNodesFlat(node, { flat: 1 });
         return [...prevClickedNodeIds, node.id]; 
       }
-    });
-    getBookNodesFlat(node, { flat: 1 });
-    // ... additional logic for handleLensClick
-    console.log("Lens clicked for node:", node.text);
-    // if (node.type === "book") {
-    //   getBookNodesFlat(node, { flat: 1 });
-    // }
+    });    
     
   };
 
@@ -138,9 +190,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
       (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
           const newItemNode = {
-            id: treeData.length + nodeList.length + 1,
+            id: `${node.bookGuid}-${i}`,
             parent: node.id,
-            droppable: true,
+            droppable: false,
             bookGuid: node.bookGuid,
             nodeGuid: nodes[i].guid,
             text: `${nodes[i].title}_${node.text}`,
@@ -148,9 +200,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
           };
           nodeList.push(newItemNode);
         }
-        console.log("nodeListFlat is as follows",nodeList);
-        //setTreeData([...treeData, ...nodeList]);
-        //setAddedNodes(new Set(addedNodes).add(node.bookGuid));
+        setSearchableTreeData([...searchableTreeData, ...nodeList]);
       },
       (error) => {
         console.log(error);
@@ -214,6 +264,8 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
 
   return (
     <>
+    {
+      !isSearchTermPresent &&(
       <div className="treeview">
         <Tree
           tree={treeData}
@@ -234,6 +286,26 @@ function TreeView({ onDataUpdate, droppedNode, disciplines }) {
           onDrop={handleDrop}
         />
       </div>
+      )}
+     
+     {
+      isSearchTermPresent &&(
+        <>
+        <h5>Search Results</h5>
+      <div className="treeview">
+        <Tree
+          tree={searchableTreeDataFilter}
+          rootId={0}
+          render={(node, { onToggle }) => (
+            <SimpleNode
+              node={node}
+              onCombinedToggle={() => handleCombinedToggle(node, onToggle)}
+            />
+          )}
+        />
+      </div>
+      </>
+      )}
     </>
   );
 }
