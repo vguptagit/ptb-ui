@@ -151,7 +151,7 @@ const Booktab = () => {
                     nodes: data
                       .filter(title => title.discipline === item.discipline)
                       .map((title, index) => ({
-                        id: `${title.guid}` + index,
+                        id: `${title.guid }`,
                         text: `${title.title}`,
                         droppable: false,
                         parentId: item.guid,
