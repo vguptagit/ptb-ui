@@ -151,7 +151,7 @@ const Booktab = () => {
                     nodes: data
                       .filter(title => title.discipline === item.discipline)
                       .map((title, index) => ({
-                        id: `${title.guid}` + index,
+                        id: `${title.guid }`,
                         text: `${title.title}`,
                         droppable: false,
                         parentId: item.guid,
@@ -202,7 +202,7 @@ const Booktab = () => {
   const handleSelectItem = (node) => {
     if (!node.droppable) {
       const bookDetail = {
-        id: node.parentId,
+        id: `${node.id}`,
         title: node.text,
         discipline: treeData.find(item => item.id === node.parentId)?.text
       };
