@@ -187,9 +187,15 @@ const TestCreate = () => {
         </div>
       </div>
       <div className="test-container">
-        {selectedTest && selectedTest.questions && selectedTest.questions.map((questionNode, index) => (
-          renderQuestions(questionNode, index)
-        ))}
+        {selectedTest &&
+          selectedTest.questions &&
+          selectedTest.questions.map((questionNode, index) => (
+            <div key={questionNode.itemId}>
+              <div>
+                {renderQuestions(questionNode, index)}
+              </div>
+            </div>
+          ))}
       </div>
       <div
         ref={drop}

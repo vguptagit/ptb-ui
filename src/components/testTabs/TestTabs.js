@@ -11,9 +11,9 @@ import "./TestTabs.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import QtiService from "../../utils/qtiService";
-import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
-import Toastify from '../common/Toastify'; 
-import Modalpopup from './Modalpopup';
+import { getFolderTests, saveMyQuestions, saveMyTest } from "../../services/testcreate.service";
+import Toastify from "../common/Toastify";
+import Modalpopup from "./Modalpopup";
 
 const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
 
@@ -22,7 +22,7 @@ const TestTabs = () => {
     useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
-  const [selectedTestTitle, setSelectedTestTitle] = useState('');
+  const [selectedTestTitle, setSelectedTestTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const TestTabs = () => {
 
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
-      // Show Modal popup to change test title.
+      Toastify({ message: "A test already exists with this name. Please save with another name.", type: "warn" });
     } else {
       // Proceed to save
       if (!test.title.trim()) {
@@ -242,15 +242,19 @@ const TestTabs = () => {
     return qstnExtMetadata;
   };
 
-  const isDuplicateTest = (test) => {
-    // Check if test with same title exists under the folder.
-    // If yes, then show modal popup & block operation until user changes title
-    // If no, proceed
-    // Assuming No Duplicates for now. To be updated later
-    return false;
-  }
+  const isDuplicateTest = async (test) => {
+    try {
+      const folderTests = await getFolderTests(test.id);
+      return folderTests.some(
+        (folderTest) =>
+          folderTest.title === test.title && folderTest.id !== test.id
+      );
+    } catch (error) {
+      console.error("Error fetching folder tests:", error);
+      throw error;
+    }
+  };
 
-  
   const handleShowModal = () => {
     setShowModal(true);
   };
@@ -285,15 +289,25 @@ const TestTabs = () => {
           </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
-                          <FormattedMessage id="testtabs.save" />
-                        </Dropdown.Item>
-                        <Dropdown.Item href="#" onClick={handleSaveAs}>
-                        <Modalpopup show={showModal} handleCloseModal={handleCloseModal} />
-                          <FormattedMessage id="testtabs.saveas" />
-                        </Dropdown.Item>  
-                </DropdownButton>
+            <DropdownButton
+              id="dropdown-item-button"
+              title="Save"
+              className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
+            >
+              <Dropdown.Item
+                href="#"
+                onClick={(e) => handleSave(e, selectedTest)}
+              >
+                <FormattedMessage id="testtabs.save" />
+              </Dropdown.Item>
+              <Dropdown.Item href="#" onClick={handleSaveAs}>
+                <Modalpopup
+                  show={showModal}
+                  handleCloseModal={handleCloseModal}
+                />
+                <FormattedMessage id="testtabs.saveas" />
+              </Dropdown.Item>
+            </DropdownButton>
 
             <Button
               id="dropdown-item-button"
