@@ -66,9 +66,9 @@ function SessionJS() {
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
           
-              if (response.data && response.data.success) {
-                window.location.href = 'http://testbuilder.dev.pearsoncmg.com:3000/welcomescreen';
-              }
+              // if (response.data && response.data.success) {
+              //   window.location.href = 'http://testbuilder.dev.pearsoncmg.com:3000/welcomescreen';
+              // }
             })
             .catch(error => {
               console.error('Error logging in:', error);
