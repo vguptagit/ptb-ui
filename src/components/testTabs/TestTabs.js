@@ -13,6 +13,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import QtiService from "../../utils/qtiService";
 import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
+import Modalpopup from './Modalpopup';
 
 const CustomTooltip = ({ title }) => (
   <Tooltip id="tooltip">{title}</Tooltip>
@@ -23,6 +24,7 @@ const TestTabs = () => {
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -239,13 +241,17 @@ const TestTabs = () => {
   }
 
   
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleSaveAs = () => {
-    console.log("Save was clicked by you");
-    // 1. Show modal pop up for new test
-    // 2. Check for duplicate test
-    // 3. Save questions
-    // 4. Save tests
-  }
+    handleShowModal();
+  };
 
   const areQuestionsAvailable = (test) => {
     console.log("enable dropdown");
@@ -270,6 +276,7 @@ const TestTabs = () => {
                           <FormattedMessage id="testtabs.save" />
                         </Dropdown.Item>
                         <Dropdown.Item href="#" onClick={handleSaveAs}>
+                        <Modalpopup show={showModal} handleCloseModal={handleCloseModal} />
                           <FormattedMessage id="testtabs.saveas" />
                         </Dropdown.Item>  
                 </DropdownButton>
