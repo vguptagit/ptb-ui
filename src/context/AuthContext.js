@@ -22,7 +22,9 @@ export const AuthProvider = ({ children }) => {
     }
     const logout = () => {
         setIsAuthenticated(false);
+         sessionStorage.removeItem("toeknExpry")
         window.piSession.logout();
+       
         console.log("setIsAuthenticated", isAuthenticated);
 
       //  navigate('/logout');
