@@ -11,8 +11,9 @@ import "./TestTabs.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import QtiService from "../../utils/qtiService";
-import { saveMyQuestions, saveMyTest } from "../../services/testcreate.service";
-import Toastify from "../common/Toastify";
+import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
+import Toastify from '../common/Toastify'; 
+import Modalpopup from './Modalpopup';
 
 const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
 
@@ -21,7 +22,8 @@ const TestTabs = () => {
     useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
-  const [selectedTestTitle, setSelectedTestTitle] = useState("");
+  const [selectedTestTitle, setSelectedTestTitle] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -246,14 +248,19 @@ const TestTabs = () => {
     // If no, proceed
     // Assuming No Duplicates for now. To be updated later
     return false;
+  }
+
+  
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   const handleSaveAs = () => {
-    console.log("Save was clicked by you");
-    // 1. Show modal pop up for new test
-    // 2. Check for duplicate test
-    // 3. Save questions
-    // 4. Save tests
+    handleShowModal();
   };
 
   const areQuestionsAvailable = (test) => {
@@ -278,21 +285,15 @@ const TestTabs = () => {
           </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-            <DropdownButton
-              id="dropdown-item-button"
-              title="Save"
-              className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
-            >
-              <Dropdown.Item
-                href="#"
-                onClick={(e) => handleSave(e, selectedTest)}
-              >
-                <FormattedMessage id="testtabs.save" />
-              </Dropdown.Item>
-              <Dropdown.Item href="#" onClick={handleSaveAs}>
-                <FormattedMessage id="testtabs.saveas" />
-              </Dropdown.Item>
-            </DropdownButton>
+                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
+                          <FormattedMessage id="testtabs.save" />
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#" onClick={handleSaveAs}>
+                        <Modalpopup show={showModal} handleCloseModal={handleCloseModal} />
+                          <FormattedMessage id="testtabs.saveas" />
+                        </Dropdown.Item>  
+                </DropdownButton>
 
             <Button
               id="dropdown-item-button"
