@@ -10,6 +10,16 @@ export default httpInterceptor;
 
 httpInterceptor.interceptors.request.use(
     config =>{
+        const tokenExpiry = sessionStorage.getItem("toeknExpry");
+        if (tokenExpiry) {
+            const expiryDate = new Date(tokenExpiry);
+          
+                const now = new Date();
+                if (now >= expiryDate) {
+                    window.piSession.logout();
+                }
+            }
+
         const token = sessionStorage.getItem("token");
         if(token){
             config.headers['x-authorization'] =  token; 

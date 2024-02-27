@@ -59,8 +59,9 @@
 .card-text {
     font-family: 'Helvetica Neue Light', sans-serif;
     font-size: 18px;
-    line-height: 1em;
+    line-height: 1e;
     text-align: center;
+    height: 33px;
 }
 
 .card-title {
@@ -68,6 +69,7 @@
     font-size: 34px !important;
     line-height: 1em !important;
     text-align: center;
+    height: 55px;
 }
 
 .card-container {

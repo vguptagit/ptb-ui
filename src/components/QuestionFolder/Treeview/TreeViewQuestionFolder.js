@@ -146,7 +146,7 @@ function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
             {node.text}
             {selectedFolder === node.text && (
               <button
-                className="edit-button selected"
+                className="editbutton selected"
                 onClick={() => handleEditFolder(node.text)}
               >
                 <i className="bi bi-pencil-fill"></i>
