@@ -37,10 +37,10 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
           )}
         </span>
       )}
-      {node.text}
-      {node.type === "book" && (
-        <i className="fas fa-search lens-icon" onClick={handleLensClick}></i>
-      )}
+      {node.type !== "book" &&(node.text)}
+      {node.type === "book" && (<span onClick={handleLensClick}>
+        {node.text}
+      </span>)}
     </div>
   );
 };
