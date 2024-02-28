@@ -97,7 +97,15 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     const filteredData = searchableTreeData.filter(node => 
       node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setSearchableTreeDataFilter(filteredData);
+    const parentIDsOfMatchedNodes = new Set(filteredData.filter(node => node.type === "node").map(node => node.parent));
+    const finalFilteredData = filteredData.filter(node => 
+      node.type !== "book" || (node.type === "book" && parentIDsOfMatchedNodes.has(node.id))
+    );
+    const parentIDsOfMatchedBooks = new Set(finalFilteredData.filter(node => node.type === "book").map(node => node.parent));
+    const finalFinalFilteredData = finalFilteredData.filter(node => 
+      node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
+    );
+    setSearchableTreeDataFilter(finalFinalFilteredData);
   }
   else{
     setIsSearchTermPresent(false);
