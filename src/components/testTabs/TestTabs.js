@@ -244,14 +244,13 @@ const TestTabs = () => {
 
   const isDuplicateTest = async (test) => {
     try {
-      const folderTests = await getFolderTests(test.id);
+      const folderTests = await getFolderTests(test.folderGuid);
       return folderTests.some(
         (folderTest) =>
           folderTest.title === test.title && folderTest.id !== test.id
       );
     } catch (error) {
       console.error("Error fetching folder tests:", error);
-      throw error;
     }
   };
 
