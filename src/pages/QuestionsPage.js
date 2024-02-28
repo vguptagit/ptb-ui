@@ -10,7 +10,6 @@ const Questions = () => {
     return (
         <>
             <QuestionFolder/>
-            <Testing />
         </>
     );
 }
