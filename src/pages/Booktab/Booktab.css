@@ -1,3 +1,6 @@
+//BookTab.css
+
+
 .treeview {
   height: 100%;
 }
@@ -15,7 +18,7 @@
 .tree-node {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   padding: 10px;
   font-size: 14px;
   margin-left: -10px !important;
