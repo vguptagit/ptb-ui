@@ -28,7 +28,7 @@
 }
 .button-container {
     display: flex;
-    gap: 10px; /* Adjusted gap between buttons */
+    gap: 3px; /* Adjusted gap between buttons */
     align-items: center;
     justify-content: flex-start; /* Changed to align buttons closer */
     padding: 3px;
