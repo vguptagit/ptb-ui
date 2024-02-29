@@ -94,12 +94,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   useEffect(() => {
     if(searchTerm != '')
    { 
-    const hasNodeTypes = searchableTreeData.some(node => node.type === "node");
-
-     if (!hasNodeTypes) {
-      Toastify({ message: "No Selected Nodes to search", type: "warn" });
-     }
-
+    const hasNodeTypes = searchableTreeData.some(node => node.type === "node");     
     setIsSearchTermPresent(true);
     const filteredData = searchableTreeData.filter(node => 
       node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
@@ -112,8 +107,14 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     const finalFinalFilteredData = finalFilteredData.filter(node => 
       node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
     );
+    if (!hasNodeTypes) {
+      Toastify({ message: "No Selected Nodes to search", type: "warn" });
+     }
+    else if (finalFinalFilteredData.length === 0) {
+      Toastify({ message: "No results found for the search term.", type: "info" });
+    }
     setSearchableTreeDataFilter(finalFinalFilteredData);
-  }
+   }
   else{
     setIsSearchTermPresent(false);
   }
@@ -306,7 +307,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
      {
       isSearchTermPresent &&(
         <>
-        <h5>Search Results</h5>
       <div className="treeview">
         <Tree
           tree={searchableTreeDataFilter}

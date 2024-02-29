@@ -32,7 +32,6 @@ function SearchBox({ onSearch }) {
             className="input-group-text bg-transparent border-0"
             id="search-addon-noborder"
           >
-            <i className="fas fa-search"></i>
           </span>
         </div>
       </div>
