@@ -260,7 +260,7 @@ const TestTabs = () => {
   };
 
   const handleSaveAs = () => {
-    handleShowModal();
+    setShowModal(true); 
   };
 
   const areQuestionsAvailable = (test) => {
@@ -285,15 +285,15 @@ const TestTabs = () => {
           </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-                        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
-                          <FormattedMessage id="testtabs.save" />
-                        </Dropdown.Item>
-                        <Dropdown.Item href="#" onClick={handleSaveAs}>
-                        <Modalpopup show={showModal} handleCloseModal={handleCloseModal} />
-                          <FormattedMessage id="testtabs.saveas" />
-                        </Dropdown.Item>  
-                </DropdownButton>
+          <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
+          <FormattedMessage id="testtabs.save" />
+        </Dropdown.Item>
+        <Dropdown.Item href="#" onClick={handleSaveAs}>
+        {showModal && <Modalpopup show={showModal} handleCloseModal={showModal} />}
+          <FormattedMessage id="testtabs.saveas" />
+        </Dropdown.Item>  
+      </DropdownButton>
 
             <Button
               id="dropdown-item-button"
