@@ -8,14 +8,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Nav from "react-bootstrap/Nav";
 import "./TestTabs.css";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import QtiService from "../../utils/qtiService";
-import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
-import Toastify from '../common/Toastify'; 
-import Modalpopup from './Modalpopup';
-
-const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
+import { saveMyQuestions, saveMyTest } from "../../services/testcreate.service";
+import Toastify from "../common/Toastify";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
@@ -23,8 +18,7 @@ const TestTabs = () => {
     console.log("selectedtest",selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
-  const [selectedTestTitle, setSelectedTestTitle] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [selectedTestTitle, setSelectedTestTitle] = useState("");
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -249,15 +243,6 @@ const TestTabs = () => {
     // If no, proceed
     // Assuming No Duplicates for now. To be updated later
     return false;
-  }
-
-  
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
   };
 
   const handleSaveAs = () => {
@@ -314,57 +299,47 @@ const TestTabs = () => {
 
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
-          <Nav.Item>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip id="tooltip-add-new">Add New Test</Tooltip>}
+        <Nav.Item>
+            <Nav.Link
+              href="#"
+              onClick={handleAddNewTestTab}
+              className="active"
+              aria-label="Add New Test"
             >
-              <Nav.Link
-                href="#"
-                onClick={handleAddNewTestTab}
-                className="active"
-              >
-                <i className="fa-solid fa-plus"></i>
-              </Nav.Link>
-            </OverlayTrigger>
+              <i className="fa-solid fa-plus"></i>
+            </Nav.Link>
           </Nav.Item>
 
           {tests.map((test, index) =>
             index < 4 ? (
               <Nav.Item key={test.id}>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id={`tooltip-${test.id}`}>{test.title}</Tooltip>
+                <Nav.Link
+                  onClick={() => {
+                    handleNodeSelect(test);
+                  }}
+                  className={
+                    selectedTest && selectedTest.id === test.id
+                      ? "active"
+                      : ""
                   }
+                  id="test-tabs-navlink"
                 >
-                  <Nav.Link
-                    onClick={() => {
-                      handleNodeSelect(test);
-                    }}
-                    className={
-                      selectedTest && selectedTest.id === test.id
-                        ? "active"
-                        : ""
-                    }
-                    id="test-tabs-navlink"
-                  >
-                    <div className="tab-label">
-                      <span>{test.title}</span>
-                      {/* Always render the close button */}
-                      {tests.length > 1 && (
-                        <Button
-                          className="close-tab"
-                          aria-label="close"
-                          variant="link"
-                          onClick={(e) => removeTab(e, test)}
-                        >
-                          <i className="fas fa-times"></i>
-                        </Button>
-                      )}
-                    </div>
-                  </Nav.Link>
-                </OverlayTrigger>
+                  <div className="tab-label">
+                    <span>{test.title}</span>
+                    {/* Always render the close button */}
+                    {tests.length > 1 && (
+                      <Button
+                        className="close-tab"
+                        aria-label="close"
+                        aria-roledescription=" "
+                        variant="link"
+                        onClick={(e) => removeTab(e, test)}
+                      >
+                        <i className="fas fa-times"></i>
+                      </Button>
+                    )}
+                  </div>
+                </Nav.Link>
               </Nav.Item>
             ) : null
           )}
@@ -376,37 +351,25 @@ const TestTabs = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {ellipsisDropdownItems.map((test, index) => (
-                    <OverlayTrigger
-                      key={test.id}
-                      placement="top"
-                      overlay={
-                        <Tooltip id={`tooltip-${test.id}`}>
-                          {test.title}
-                        </Tooltip>
-                      }
-                    >
-                      <Dropdown.Item onClick={() => handleNodeSelect(test)}>
-                        <div className="tab-label" id="tab-label-dropdown">
-                          <span className="test-title" data-tip>
-                            {test.title}
-                          </span>
-                          {/* Always render the close button */}
-                          {tests.length > 1 && (
-                            <div className="close-tab-wrapper">
-                              <Button
-                                className="close-tab"
-                                aria-label="close"
-                                id="close-tab-dropdown"
-                                variant="link"
-                                onClick={(e) => removeTab(e, test)}
-                              >
-                                <i className="fas fa-times"></i>
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      </Dropdown.Item>
-                    </OverlayTrigger>
+                    <Dropdown.Item onClick={() => handleNodeSelect(test)}>
+                      <div className="tab-label" id="tab-label-dropdown">
+                        <span className="test-title">{test.title}</span>
+                        {/* Always render the close button */}
+                        {tests.length > 1 && (
+                          <div className="close-tab-wrapper">
+                            <Button
+                              className="close-tab"
+                              aria-label="close"
+                              id="close-tab-dropdown"
+                              variant="link"
+                              onClick={(e) => removeTab(e, test)}
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
