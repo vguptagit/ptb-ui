@@ -366,13 +366,14 @@ const TestTabs = () => {
                       {/* Always render the close button */}
                       {tests.length > 1 && (
                         <Button
-                          className="close-tab"
-                          aria-label="close"
-                          variant="link"
-                          onClick={(e) => removeTab(e, test)}
-                        >
-                          <i className="fas fa-times"></i>
-                        </Button>
+                        className="close-tab"
+                        aria-label="close"
+                        aria-roledescription=" "
+                        variant="link"
+                        onClick={(e) => removeTab(e, test)}
+                      >
+                        <i className="fas fa-times"></i>
+                      </Button>
                       )}
                     </div>
                   </Nav.Link>
