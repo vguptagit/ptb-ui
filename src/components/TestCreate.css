@@ -94,3 +94,11 @@ a#dropdown-ellipsis {
   margin-left: -0.5rem !important;
   white-space: nowrap;
 }
+
+.metadata-container .mc--orientation label {
+  margin-top : 0px;
+}
+
+.icon-ml {
+  margin-left: 20px;
+}
