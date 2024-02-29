@@ -180,7 +180,6 @@ const TestCreate = () => {
                 onChange={handleTitleChange}
                 className="rounded"
                 required={true}
-                readOnly={!isEditing}
               />
             </Form>
           </div>
