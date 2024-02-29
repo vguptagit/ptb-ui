@@ -1,0 +1,36 @@
+/* Modalpopuplist.css */
+
+.button-container {
+    margin-bottom: 10px;
+  }
+  
+  .color-black {
+    color: black;
+  }
+  
+  .button-container button {
+    margin-right: 10px;
+  }
+  
+  .root-folders-tests {
+    margin-top: 20px;
+  }
+  
+  .root-folders-tests .tree-node {
+    margin-bottom: 5px;
+  }
+  
+  
+  .show-text-box {
+    display: flex;
+  }
+  
+  .show-text-box .form-control {
+    margin-bottom: 10px;
+    width: 360px;
+  }
+  
+  .show-text-box  button {
+    margin-left: 5px;
+  }
+  

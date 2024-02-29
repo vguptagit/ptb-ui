@@ -36,6 +36,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const handleSelectNode = () => {
     if (!hasChildNodes) {
       onSelectItem(node);
+      console.log("onSelectItem",onSelectItem)
     }
   };
 
@@ -151,7 +152,7 @@ const Booktab = () => {
                     nodes: data
                       .filter(title => title.discipline === item.discipline)
                       .map((title, index) => ({
-                        id: `${title.guid }`,
+                        id: `${title?.guid}`,
                         text: `${title.title}`,
                         droppable: false,
                         parentId: item.guid,
@@ -199,8 +200,27 @@ const Booktab = () => {
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
 
+  // const handleSelectItem = (node) => {
+  //   if (!node.droppable) {
+  //     const bookDetail = {
+  //       id: `${node.id}`,
+  //       title: node.text,
+  //       discipline: treeData.find(item => item.id === node.parentId)?.text
+  //     };
+  //     setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
+  //     setSelectedBooks((prevSelectedBooks) => {
+  //       const key = `${node.id}`;
+  //       if (prevSelectedBooks.includes(key)) {
+  //         return prevSelectedBooks.filter((item) => item !== key);
+  //       } else {
+  //         return [...prevSelectedBooks, key];
+  //       }
+  //     });
+  //   }
+  // };
   const handleSelectItem = (node) => {
     if (!node.droppable) {
+      // Only select if the node is a book
       const bookDetail = {
         id: `${node.id}`,
         title: node.text,
@@ -217,6 +237,7 @@ const Booktab = () => {
       });
     }
   };
+  
   console.log("books", bookDetails)
 
   return (

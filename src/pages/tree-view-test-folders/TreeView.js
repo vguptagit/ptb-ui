@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
 
-const DraggableNode = ({ node, onToggle, folderName, depth, isOpen, handleFolderSelect }) => {
+const DraggableNode = ({
+  node,
+  onToggle,
+  folderName,
+  depth,
+  isOpen,
+  handleFolderSelect
+}) => {
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
 
   const handleEditFolder = (folderTitle) => {
     if (handleFolderSelect) {
@@ -10,12 +18,22 @@ const DraggableNode = ({ node, onToggle, folderName, depth, isOpen, handleFolder
     }
   };
 
+  const handleNodeClick = () => {
+    // If the clicked node is different from the currently selected node
+    if (selectedNodeId !== node.data.guid) {
+      setSelectedNodeId(node.data.guid); // Select the clicked node
+      console.log("Selected Node ID:", node.data.guid);
+    } else {
+      // If the clicked node is the same as the currently selected node
+      setSelectedNodeId(null); // Deselect the clicked node
+    }
+    onToggle(); // Toggle node state
+  };
+
   return (
     <div
-      className="tree-node"
-      onClick={() => {
-        onToggle();
-      }}
+      className={`tree-node ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
+      onClick={handleNodeClick}
       style={{ marginInlineStart: depth * 10 }}
     >
       {node.droppable && (
@@ -30,7 +48,7 @@ const DraggableNode = ({ node, onToggle, folderName, depth, isOpen, handleFolder
       {node.text}
       {folderName === node.text && (
         <button
-          className="edit-button selected"
+          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
           onClick={() => handleEditFolder(node.text)}
         >
           <i className="bi bi-pencil-fill"></i>
@@ -38,17 +56,15 @@ const DraggableNode = ({ node, onToggle, folderName, depth, isOpen, handleFolder
       )}
       {folderName !== node.text && (
         <button
-          className="edit-button"
+          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
           onClick={() => handleEditFolder(node.text)}
         >
           <i className="bi bi-pencil-fill"></i>
         </button>
       )}
-
     </div>
   );
 };
-
 function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect }) {
   const [treeData, setTreeData] = useState([]);
 
