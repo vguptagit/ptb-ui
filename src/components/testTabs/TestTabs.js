@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useAppContext } from "../../context/AppContext";
@@ -16,44 +17,59 @@ import Toastify from "../common/Toastify";
 import Modalpopup from "./Modalpopup";
 
 const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
+=======
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useAppContext } from '../../context/AppContext';
+import Test from '../../entities/Test.Entity';
+import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Nav from 'react-bootstrap/Nav';
+import './TestTabs.css';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import QtiService from "../../utils/qtiService";
+import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
+import Toastify from '../common/Toastify'; 
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
-    useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent } = useAppContext();
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
+<<<<<<< HEAD
   const [selectedTestTitle, setSelectedTestTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
+=======
+  const [selectedTestTitle, setSelectedTestTitle] = useState('');
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
-
+  
     // Select the first "Untitled" tab by default if no test is already selected
-    if (
-      !selectedTest ||
-      !selectedTest.title ||
-      !selectedTest.title.startsWith("Untitled")
-    ) {
-      const untitledTest = tests?.find(
-        (test) => test.title && test.title.startsWith("Untitled")
-      );
+    if (!selectedTest || !selectedTest.title || !selectedTest.title.startsWith('Untitled')) {
+      const untitledTest = tests?.find((test) => test.title && test.title.startsWith('Untitled'));
       if (untitledTest) {
-        dispatchEvent("SELECT_TEST", untitledTest);
+        dispatchEvent('SELECT_TEST', untitledTest);
       } else if (tests && tests.length > 0) {
-        dispatchEvent("SELECT_TEST", tests[0]);
+        dispatchEvent('SELECT_TEST', tests[0]);
       }
     }
   }, [tests, selectedTest, dispatchEvent]);
-
+  
+  
   useEffect(() => {
     // Update the selectedTestTitle when the selectedTest changes
-    setSelectedTestTitle(selectedTest ? selectedTest.title : "");
+    setSelectedTestTitle(selectedTest ? selectedTest.title : '');
   }, [selectedTest]);
 
   const handleNodeSelect = (item) => {
-    dispatchEvent("SELECT_TEST", item);
+    dispatchEvent('SELECT_TEST', item);
   };
 
   const handleAddNewTestTab = () => {
@@ -61,18 +77,18 @@ const TestTabs = () => {
     newTest.title = `Untitled ${tests.length + 1}`;
 
     // Check if there is only one tab and it is "Untitled 1"
-    if (tests.length === 1 && tests[0].title === "Untitled 1") {
+    if (tests.length === 1 && tests[0].title === 'Untitled 1') {
       // If it's "Untitled 1", add a closing tab for "Untitled 1"
       const untitled1Test = new Test();
-      untitled1Test.title = "Untitled 1";
+      untitled1Test.title = 'Untitled 1';
       addTest(untitled1Test);
     }
 
     // Check if "Untitled 2" tab exists, if not, add it
-    const untitled2Exists = tests.some((test) => test.title === "Untitled 2");
+    const untitled2Exists = tests.some((test) => test.title === 'Untitled 2');
     if (!untitled2Exists) {
       const untitled2Test = new Test();
-      untitled2Test.title = "Untitled 2";
+      untitled2Test.title = 'Untitled 2';
       addTest(untitled2Test);
     }
 
@@ -80,7 +96,7 @@ const TestTabs = () => {
     addTest(newTest);
 
     // Select the new test
-    dispatchEvent("SELECT_TEST", newTest);
+    dispatchEvent('SELECT_TEST', newTest);
   };
 
   const removeTab = (e, testSelected) => {
@@ -89,10 +105,8 @@ const TestTabs = () => {
 
     if (selectedTest && selectedTest.id === testSelected.id) {
       const index = tests.findIndex((test) => test.id === testSelected.id);
-      const newSelectedTest =
-        tests[index - 1] ||
-        tests.find((test) => test.title.startsWith("Untitled"));
-      dispatchEvent("SELECT_TEST", newSelectedTest);
+      const newSelectedTest = tests[index - 1] || tests.find((test) => test.title.startsWith('Untitled'));
+      dispatchEvent('SELECT_TEST', newSelectedTest);
     }
 
     deleteTest(testSelected);
@@ -109,44 +123,42 @@ const TestTabs = () => {
     // 1. Check for duplicate test
     // 2. Save questions
     // 3. Save tests
-    if (!areQuestionsAvailable(test)) {
-      Toastify({ message: "No unchanged questions to Save!", type: "warn" });
-      return;
-    }
-
+    
     let isDuplicate = await isDuplicateTest(test);
+<<<<<<< HEAD
     if (isDuplicate) {
       Toastify({ message: "A test already exists with this name. Please save with another name.", type: "warn" });
+=======
+    if(isDuplicate) {
+      // Show Modal popup to change test title.
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
     } else {
       // Proceed to save
-      if (!test.title.trim()) {
-        // If the test title is empty or only contains whitespace, set it to a default value
-        test.title = `Untitled ${tests.length}`;
-      }
       let questionBindings = await saveQuestions(test);
-      saveTest(test, questionBindings);
+      saveTest(test,questionBindings);
     }
-  };
+    
+  }
 
-  const saveTest = async (test, questionBindings) => {
+  const saveTest  = async (test,questionBindings) => {
     // Building the json to create the test.
     var testcreationdata = {
-      metadata: {
-        crawlable: "true",
+      "metadata" : {
+        "crawlable" : "true"
       },
-      body: {
-        "@context":
-          "http://purl.org/pearson/paf/v1/ctx/core/StructuredAssignment",
-        "@type": "StructuredAssignment",
-        assignmentContents: {
-          "@contentType": "application/vnd.pearson.paf.v1.assignment+json",
-          binding: [],
-        },
-      },
+      "body" : {
+        "@context" : "http://purl.org/pearson/paf/v1/ctx/core/StructuredAssignment",
+        "@type" : "StructuredAssignment",
+        "assignmentContents" : {
+          "@contentType" : "application/vnd.pearson.paf.v1.assignment+json",
+          "binding" : []
+        }
+      }
     };
 
     testcreationdata.body.title = test.title;
     testcreationdata.body.guid = null; // TODO : Set this value
+    
 
     // TODO: Update this logic based on understanding of what testID represents
     if (test.testId != null) {
@@ -157,91 +169,88 @@ const TestTabs = () => {
     testcreationdata.metadata.title = test.title;
     testcreationdata.body.assignmentContents.binding = questionBindings;
     try {
-      let testResult = await saveMyTest(testcreationdata, test.folderGuid);
-      if (testResult) {
-        Toastify({
-          message: "Test has been saved successfully!",
-          type: "success",
-        });
+      let testResult = await saveMyTest(testcreationdata,test.folderGuid);
+      if(testResult) {
+        Toastify({ message: "Test Saved !", type: 'success' });
       }
-    } catch (error) {
-      console.error("Error saving Test:", error);
-      if (error?.message?.response?.request?.status === 409) {
-        Toastify({
-          message: error.message.response.data.message,
-          type: "error",
-        });
-      } else {
-        Toastify({ message: "Failed to save Test", type: "error" });
-      }
+    } catch(error) {
+        console.error('Error saving Test:', error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save Test', type: 'error' });
+        }
     }
-  };
+    
+   
+  }
 
   const saveQuestions = async (test) => {
     // Save the Question Envelops & return the question bindings to attach to test
-    // TODO - Add additional logic from legacy app as needed
+    // TODO - Add additional logic from legacy app as needed 
     let questionEnvelops = [];
     let questionBindings = [];
     let userSettings = {};
-
-    if (test.questions && test.questions.length > 0) {
-      test.questions.forEach((qstn, index) => {
-        questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
+      
+    if(test.questions && test.questions.length > 0) {
+      test.questions.forEach((qstn,index) => {
+        questionEnvelops.push(buildQuestionEnvelop(qstn,userSettings));
       });
     }
     try {
       const questionResults = await saveMyQuestions(questionEnvelops);
       questionResults.forEach((qstnResult, index) => {
-        questionBindings.push({
-          guid: qstnResult.guid,
-          activityFormat: "application/vnd.pearson.qti.v2p1.asi+xml",
-          bindingIndex: index,
+        questionBindings.push(
+            {
+              guid : qstnResult.guid,
+              activityFormat : "application/vnd.pearson.qti.v2p1.asi+xml",
+              bindingIndex : index
+            }
+          )
         });
-      });
     } catch (error) {
-      console.error("Error saving Questions:", error);
-      if (error?.message?.response?.request?.status === 409) {
-        Toastify({
-          message: error.message.response.data.message,
-          type: "error",
-        });
-      } else {
-        Toastify({ message: "Failed to save Questions", type: "error" });
-      }
+        console.error('Error saving Questions:', error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+          Toastify({ message: 'Failed to save Questions', type: 'error' });
+        }
     }
     return questionBindings;
-  };
+  }
 
-  const buildQuestionEnvelop = (qstn, userSettings) => {
+  const buildQuestionEnvelop = (qstn,userSettings) => {
     qstn.data = QtiService.getQtiXML(qstn);
     qstn.IsEdited = true; // TODO: Update this based on required functionality
-    var qstnExtMetadata = buildQuestionMetadata(qstn, userSettings);
+    var qstnExtMetadata = buildQuestionMetadata(qstn,userSettings);
     var QuestionEnvelop = {
-      metadata: {
-        guid: qstn.IsEdited ? null : qstn.guid,
-        title: qstn.title,
-        description: qstn.description,
-        quizType: qstn.quizType,
-        subject: qstn.subject,
-        timeRequired: qstn.timeRequired,
-        crawlable: qstn.crawlable,
-        keywords: qstn.keywords,
-        versionOf: qstn.versionOf,
-        version: qstn.version,
-        extendedMetadata: qstnExtMetadata,
+      metadata : {
+        guid : qstn.IsEdited ? null : qstn.guid,
+        title : qstn.title,
+        description : qstn.description,
+        quizType : qstn.quizType,
+        subject : qstn.subject,
+        timeRequired : qstn.timeRequired,
+        crawlable : qstn.crawlable,
+        keywords : qstn.keywords,
+        versionOf : qstn.versionOf,
+        version : qstn.version,
+        extendedMetadata : qstnExtMetadata
       },
-      body: qstn.IsEdited ? qstn.data : null,
+      body : qstn.IsEdited ? qstn.data : null
     };
-
+    
     return QuestionEnvelop;
-  };
+  }
 
   const buildQuestionMetadata = (qstn, userSettings) => {
     // TODO: Add logic to populate Question Extended Metadata
-    var qstnExtMetadata = [];
+    var qstnExtMetadata = []
     return qstnExtMetadata;
-  };
+  }
 
+
+<<<<<<< HEAD
   const isDuplicateTest = async (test) => {
     try {
       const folderTests = await getFolderTests(test.folderGuid);
@@ -261,19 +270,30 @@ const TestTabs = () => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+=======
+  const isDuplicateTest = (test) => {
+    // Check if test with same title exists under the folder. 
+    // If yes, then show modal popup & block operation until user changes title
+    // If no, proceed
+    // Assuming No Duplicates for now. To be updated later
+    return false;
+  }
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
 
+  
   const handleSaveAs = () => {
+<<<<<<< HEAD
     handleShowModal();
   };
+=======
+    console.log("Save was clicked by you");
+    // 1. Show modal pop up for new test
+    // 2. Check for duplicate test
+    // 3. Save questions
+    // 4. Save tests
+  }
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
 
-  const areQuestionsAvailable = (test) => {
-    console.log("enable dropdown");
-    return (
-      test &&
-      test.questions.length > 0 &&
-      !test.questions.find((item) => item.qtiModel.EditOption === true)
-    );
-  };
 
   return (
     <div className="tab-container">
@@ -282,12 +302,13 @@ const TestTabs = () => {
           <FormattedMessage id="testtabs.title" />
         </h4>
         <div className="p-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
-          <Button className="btn-test mr-1" id="btn-test-wizard">
-            <i className="fa-solid fa-wand-magic-sparkles"></i>
-            <FormattedMessage id="testtabs.testwizard" />
-          </Button>
+            <Button className="btn-test mr-1" id="btn-test-wizard">
+              <i className="fa-solid fa-wand-magic-sparkles"></i>
+              <FormattedMessage id="testtabs.testwizard" />
+            </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
+<<<<<<< HEAD
             <DropdownButton
               id="dropdown-item-button"
               title="Save"
@@ -315,17 +336,33 @@ const TestTabs = () => {
             >
               <FormattedMessage id="testtabs.print" />
             </Button>
+=======
+                <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                  <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
+                    <FormattedMessage id="testtabs.save" />
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#" onClick={handleSaveAs}>
+                    <FormattedMessage id="testtabs.saveas" />
+                  </Dropdown.Item>
+                </DropdownButton>
+
+                <Button id="dropdown-item-button" title="Print" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
+                    <FormattedMessage id="testtabs.print" />
+                </Button>
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
 
             {/* Adjusted margin classes for the "Export" button */}
-            <Button className="btn-test mt-1 mt-sm-0" disabled>
-              <FormattedMessage id="testtabs.export" />
-            </Button>
+              <Button className="btn-test mt-1 mt-sm-0" disabled>
+                <FormattedMessage id="testtabs.export" />
+              </Button>
           </div>
         </div>
       </div>
 
+
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
+<<<<<<< HEAD
           <Nav.Item>
             <OverlayTrigger
               placement="top"
@@ -379,16 +416,43 @@ const TestTabs = () => {
                   </Nav.Link>
                 </OverlayTrigger>
               </Nav.Item>
+=======
+            <Nav.Item>
+              <Nav.Link href="#" onClick={handleAddNewTestTab} className='active'>
+                <i className="fa-solid fa-plus"></i>
+              </Nav.Link>
+            </Nav.Item>
+          {tests.map((test, index) => (
+            index < 4 ? (
+                <Nav.Item key={test.id}>
+                  <Nav.Link
+                    onClick={() => { handleNodeSelect(test) }}
+                    className={selectedTest && selectedTest.id === test.id ? 'active' : ''}
+                    id='test-tabs-navlink'
+                  >
+                    <div className='tab-label'>
+                      <span>{test.title}</span>
+                      {/* Always render the close button */}
+                      {tests.length > 1 && (
+                        <Button className="close-tab" aria-label='close' variant="link" onClick={(e) => removeTab(e, test)}>
+                          <i className="fas fa-times"></i>
+                        </Button>
+                      )}
+                    </div>
+                  </Nav.Link>
+                </Nav.Item>
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
             ) : null
-          )}
+          ))}
           {tests.length > 4 && (
-            <Nav.Item className="three-dots-link">
+            <Nav.Item className='three-dots-link'>
               <Dropdown alignRight>
                 <Dropdown.Toggle id="dropdown-ellipsis" as={Nav.Link}>
                   <i className="fa-solid fa-ellipsis"></i>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {ellipsisDropdownItems.map((test, index) => (
+<<<<<<< HEAD
                     <OverlayTrigger
                       key={test.id}
                       placement="top"
@@ -420,6 +484,22 @@ const TestTabs = () => {
                         </div>
                       </Dropdown.Item>
                     </OverlayTrigger>
+=======
+                    <Dropdown.Item
+                      key={test.id}
+                      onClick={() => handleNodeSelect(test)}
+                    >
+                      <div className='tab-label' id='tab-label-dropdown'>                        
+                        <span className='test-title'>{test.title}</span>
+                        {/* Always render the close button */}
+                        {tests.length > 1 && (
+                          <Button className="close-tab" aria-label='close' id='close-tab-dropdown' variant="link" onClick={(e) => removeTab(e, test)}>
+                            <i className="fas fa-times"></i>
+                          </Button>
+                        )}
+                      </div>
+                    </Dropdown.Item>
+>>>>>>> parent of 15dea56... in this test tabs that overlay and tooltip has removed and that plus button is reading as add new test + button on screen reader
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
