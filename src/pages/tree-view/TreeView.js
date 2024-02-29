@@ -7,6 +7,7 @@ import {
   getAllBookNodes,
   getAllBookNodeSubNodes,
 } from "../../services/book.service";
+import Toastify from "../../components/common/Toastify";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds  }) => {
   const [, drag] = useDrag({
@@ -93,6 +94,12 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   useEffect(() => {
     if(searchTerm != '')
    { 
+    const hasNodeTypes = searchableTreeData.some(node => node.type === "node");
+
+     if (!hasNodeTypes) {
+      Toastify({ message: "No Selected Nodes to search", type: "warn" });
+     }
+
     setIsSearchTermPresent(true);
     const filteredData = searchableTreeData.filter(node => 
       node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
