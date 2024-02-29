@@ -11,7 +11,7 @@ import "./TestTabs.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import QtiService from "../../utils/qtiService";
-import { saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
+import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
 
@@ -117,7 +117,7 @@ const TestTabs = () => {
 
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
-      // Show Modal popup to change test title.
+      Toastify({ message: "A test already exists with this name. Please save with another name.", type: "warn" });
     } else {
       // Proceed to save
       if (!test.title.trim()) {
@@ -243,13 +243,18 @@ const TestTabs = () => {
     return qstnExtMetadata;
   };
 
-  const isDuplicateTest = (test) => {
-    // Check if test with same title exists under the folder.
-    // If yes, then show modal popup & block operation until user changes title
-    // If no, proceed
-    // Assuming No Duplicates for now. To be updated later
-    return false;
-  }
+  const isDuplicateTest = async (test) => {
+    try {
+      const folderTests = await getFolderTests(test.folderGuid);
+      return folderTests.some(
+        (folderTest) =>
+          folderTest.title === test.title && folderTest.id !== test.id
+      );
+    } catch (error) {
+      console.error("Error fetching folder tests:", error);
+    }
+  };
+
 
   
   const handleShowModal = () => {
