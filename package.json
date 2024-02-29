@@ -35,7 +35,9 @@
     "start:development": "env-cmd -f .env.development react-scripts start",
     "build:development": "env-cmd -f .env.development react-scripts build",
     "start:qa": "env-cmd -f .env.qa react-scripts start",
-    "build:qa": "env-cmd -f .env.qa react-scripts build"
+    "build:qa": "env-cmd -f .env.qa react-scripts build",
+    "start:stg":"env-cmd -f .env.stg react-scripts start",
+    "build:stg":"env-cmd -f .env.stg react-scripts build"
   },
   "eslintConfig": {
     "extends": [

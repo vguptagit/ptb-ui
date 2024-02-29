@@ -1,4 +1,3 @@
-
 .scree-height {
     min-height: calc(100vh - 60px);
 }
@@ -28,11 +27,12 @@
 }
 .button-container {
     display: flex;
-    gap: 10px; /* Adjusted gap between buttons */
+    gap: 3px; /* Adjusted gap between buttons */
     align-items: center;
     justify-content: flex-start; /* Changed to align buttons closer */
     padding: 3px;
     background-color: #ddd; /* Light grey background color */
+    margin-top: -12px;
 }
 
 .resource-tab, .create-or-edit-test, .saved-folders, .test-list{

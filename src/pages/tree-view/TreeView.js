@@ -7,6 +7,7 @@ import {
   getAllBookNodes,
   getAllBookNodeSubNodes,
 } from "../../services/book.service";
+import Toastify from "../../components/common/Toastify";
 
 const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds  }) => {
   const [, drag] = useDrag({
@@ -37,10 +38,10 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
           )}
         </span>
       )}
-      {node.text}
-      {node.type === "book" && (
-        <i className="fas fa-search lens-icon" onClick={handleLensClick}></i>
-      )}
+      {node.type !== "book" &&(node.text)}
+      {node.type === "book" && (<span onClick={handleLensClick}>
+        {node.text}
+      </span>)}
     </div>
   );
 };
@@ -93,11 +94,25 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   useEffect(() => {
     if(searchTerm != '')
    { 
+    const hasNodeTypes = searchableTreeData.some(node => node.type === "node");
+
+     if (!hasNodeTypes) {
+      Toastify({ message: "No Selected Nodes to search", type: "warn" });
+     }
+
     setIsSearchTermPresent(true);
     const filteredData = searchableTreeData.filter(node => 
       node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setSearchableTreeDataFilter(filteredData);
+    const parentIDsOfMatchedNodes = new Set(filteredData.filter(node => node.type === "node").map(node => node.parent));
+    const finalFilteredData = filteredData.filter(node => 
+      node.type !== "book" || (node.type === "book" && parentIDsOfMatchedNodes.has(node.id))
+    );
+    const parentIDsOfMatchedBooks = new Set(finalFilteredData.filter(node => node.type === "book").map(node => node.parent));
+    const finalFinalFilteredData = finalFilteredData.filter(node => 
+      node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
+    );
+    setSearchableTreeDataFilter(finalFinalFilteredData);
   }
   else{
     setIsSearchTermPresent(false);

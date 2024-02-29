@@ -16,51 +16,48 @@ import "./TestCreate.css";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
-  const [newTabName, setNewTabName] = useState(selectedTest?.title || "");
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || "");
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
   const [formSubmittedOnce, setFormSubmittedOnce] = useState(false);
 
-  
   useEffect(() => {
     setTabTitle(selectedTest?.title || "");
     setInitialTabTitle(selectedTest?.title || "");
-    setNewTabName(selectedTest?.title || "");
   }, [selectedTest]);
 
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
-    
-    // Check if the input exceeds 255 characters
+  
+    // Remove any characters that are not special characters, numbers, or alphabets
+    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/g, '');
+
     if (newTitle.length > 255) {
-      // Truncate the input to 255 characters
       newTitle = newTitle.slice(0, 255);
     }
-  
-    // Capitalize the first letter of the new title
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
   
-    // Update the state with the new title
     setTabTitle(newTitle);
-    setIsEditing(true);
+    setIsEditing(true); 
+  
+    if (selectedTest && selectedTest.id) {
+      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
+    }
   };
   
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (tabTitle.trim().length === 0) {
-        return;
+      return;
     } else {
-        dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
-        setInitialTabTitle(tabTitle);
+      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
+      setInitialTabTitle(tabTitle);
+      setIsEditing(false); 
+      setFormSubmittedOnce(true);
     }
-    setIsEditing(false);
-    setFormSubmittedOnce(true); // Add this line
-};
-
+  };
 
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
@@ -75,8 +72,8 @@ const TestCreate = () => {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
 
-     dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
-     setIsEditing(true);
+      dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
+      setIsEditing(true);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -84,7 +81,6 @@ const TestCreate = () => {
     }),
   });
 
-  
   const getQuestion = (questionNode) => {
     let question = questionNode;
     var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
@@ -180,7 +176,7 @@ const TestCreate = () => {
                 type="text"
                 name="title"
                 placeholder="Enter Test title "
-                value={isEditing ? tabTitle : (formSubmittedOnce ? initialTabTitle : newTabName)}
+                value={tabTitle}
                 onChange={handleTitleChange}
                 className="rounded"
                 required={true}
@@ -190,9 +186,15 @@ const TestCreate = () => {
         </div>
       </div>
       <div className="test-container">
-        {selectedTest && selectedTest.questions && selectedTest.questions.map((questionNode, index) => (
-          renderQuestions(questionNode, index)
-        ))}
+        {selectedTest &&
+          selectedTest.questions &&
+          selectedTest.questions.map((questionNode, index) => (
+            <div key={questionNode.itemId}>
+              <div>
+                {renderQuestions(questionNode, index)}
+              </div>
+            </div>
+          ))}
       </div>
       <div
         ref={drop}
