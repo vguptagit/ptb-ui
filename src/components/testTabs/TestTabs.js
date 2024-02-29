@@ -20,6 +20,7 @@ const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
     useAppContext();
+    console.log("selectedtest",selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
@@ -289,8 +290,8 @@ const TestTabs = () => {
         <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
           <FormattedMessage id="testtabs.save" />
         </Dropdown.Item>
-        <Dropdown.Item href="#" onClick={handleSaveAs}>
-        {showModal && <Modalpopup show={showModal} handleCloseModal={showModal} />}
+        <Dropdown.Item href="#" onClick={(e) => handleSaveAs(e,selectedTest)}>
+        {showModal && <Modalpopup  show={ handleShowModal} handleCloseModal={handleCloseModal}     selectedTitle={selectedTest.title} handleSave={handleSave} />}
           <FormattedMessage id="testtabs.saveas" />
         </Dropdown.Item>  
       </DropdownButton>
