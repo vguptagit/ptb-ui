@@ -70,14 +70,20 @@ return (
                 <div className="mr-2">{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
             </div>
             
-            <div className="w-100">
+            <div className="w-100 mt-3">
             {
                 formData.Options.map((value,index) => {
                     return (
-                    <div className="">
-                     {formData.CorrectAnswer == index ? <span><i className="bi bi-check"></i> </span>: <span className="icon-ml"></span>} 
-                     <span>{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
-                     <span className="ml-1">{value}</span>
+                    <div className="view-question">
+                        <div className="icon-section">
+                        {formData.CorrectAnswer == index ? 
+                                <i className="bi bi-check" style={{ color: "green"}}></i>
+                                        : <span className="icon-ml"></span>} 
+                        </div>
+                        <div className= {formData.CorrectAnswer == index ? "text-section checked" : "text-section"}>
+                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
+                            <span className="ml-1 answer">{value}</span>
+                        </div>
                     </div>);
                 })
             }
@@ -118,7 +124,14 @@ return (
                     name="CorrectAnswer"
                     onChange={handleChange}
                 />
-                
+                {/* <Form.Control
+                    onChange={handleOptionsChange}
+                    value={optItem}
+                    name={index}
+                    className="mb-2"
+                    type="text"
+                    placeholder="Enter Answer"
+                /> */}
                 <Form.Text style={{ fontSize: '1.1rem' }} className="mb-1 ">{optItem}</Form.Text>
                 {/* <Form.Label className="mb-1 mt-0">{optItem}</Form.Label> */}
                 
