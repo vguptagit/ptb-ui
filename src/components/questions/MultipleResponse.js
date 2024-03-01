@@ -79,22 +79,29 @@ const MultipleResponse = (props) => {
             {!questionNode.qtiModel.EditOption ? (
                 <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
                     <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
-                        <div className="w-100">
-                            <div className="mr-2">{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
+                        <div className="w-100" >
+                            <div className="mr-2" >{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
                         </div>
 
-                        <div className="w-100">
-                            {formData.Options.map((value, index) => (
-                                <div className="" key={index}>
-                                    {formData.CorrectAnswer.includes(index) ? <span><i className="bi bi-check"></i> </span> : <span className="icon-ml"></span>}
+                        <div className="w-100"  style={{paddingTop: "15px"}}>
+                            {formData.Options.map((value, index) =>{
+                                return (
+                                    <div className="view-question"  >
+                                    <div className="icon-section">
+                                    {formData.CorrectAnswer.includes(index) ? 
+                                            <i className="bi bi-check" style={{ color: "green" ,marginRight: "2px"}} ></i>
+                                                    : <span className="icon-ml"></span>} 
+                                    </div>
+                                <div className= {formData.CorrectAnswer.includes(index)  ?  "text-section checked" : "text-section"} >
                                     <span>{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
                                     <span className="ml-1">{value}</span>
                                 </div>
-                            ))}
+                           </div> )}
+                            )}
                         </div>
                     </div>
-                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end">
-                        <button className="editbtn" onClick={handleEdit}>
+                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end" style={{paddingTop :"120px"}}>
+                        <button className="editbtn"  onClick={handleEdit}>
                             <i className="bi bi-pencil-fill"></i>
                         </button>
                         <button className="deletebtn" onClick={handleDelete}>
@@ -110,7 +117,7 @@ const MultipleResponse = (props) => {
                             name="Caption"
                             onChange={handleChange}
                             value={formData.Caption}
-                            className="mb-2"
+                            className="mb-4"
                             type="text"
                             autoComplete="off"
                         />
@@ -150,33 +157,36 @@ const MultipleResponse = (props) => {
                         )}
                         <span className="ms-2">Format and add metadata</span>
                     </div>
-                    <Collapse key={open ? "open" : "closed"} in={open}>
-                        <div className="metadata-container">
-                            <div className="d-flex mc--orientation">
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleChange}
-                                    checked={formData.Orientation}
-                                    className="mr-5"
-                                    name="Orientation"
-                                    value={true}
-                                    label="Horizontal Question Display"
-                                />
-
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleChange}
-                                    checked={!formData.Orientation}
-                                    className=""
-                                    name="Orientation"
-                                    value={false}
-                                    label="Vertical Question Display"
-                                />
-                            </div>
-                        </div>
-                    </Collapse>
-                    <div className="mb-1 d-flex justify-content-end">
-                        <Link className="savelink" onClick={handleSubmit}>
+                    <Collapse key={open ? "open" : "closed"} in={open}>        
+      <div className="metadata-container">
+        <div className="mb-2">
+			<span className="caption-metadata">Format</span><span className="normal-text"> (visible in Print View) </span>
+		</div>  
+        <div className="d-flex mc--orientation">
+            <Form.Check
+                type="radio"
+                onChange={handleChange}
+                checked={"false" == formData.Orientation}
+                className="mr-5"
+                name="Orientation"
+                value="false"
+                label="Horizontal Question Display"
+            />
+            
+            <Form.Check
+                type="radio"
+                onChange={handleChange}
+                checked={"true" == formData.Orientation}
+                className=""
+                name="Orientation"
+                value="true"
+                label="Vertical Question Display"
+            />
+        </div>
+      </div>
+ </Collapse>
+                    <div className="mb-1 d-flex justify-content-end " >
+                        <Link className="savelink"  onClick={handleSubmit}>
                             Save
                         </Link>
                         <Link className="deletelink" onClick={handleDelete}>
