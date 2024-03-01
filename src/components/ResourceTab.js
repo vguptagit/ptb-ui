@@ -1,13 +1,15 @@
 import React from "react";
+import {useState, useEffect} from 'react';
 import { FormattedMessage } from "react-intl";
 import { Nav } from "react-bootstrap";
 import { useLocation } from 'react-router-dom';
 
 const ResourceTab = () => {
     const location = useLocation();
-    const getActiveTab = () => {
-        return "#"+location.pathname;
-    }
+    const [activePath, setActivePath] = useState();
+    useEffect(() => {
+        setActivePath(location.pathname);
+    }, [location]);
     return (
         <div className="tab-container">
             <div>
@@ -16,7 +18,7 @@ const ResourceTab = () => {
                 </h2>
             </div>
             <div className="resource-tab-links">
-            <Nav variant="tabs" defaultActiveKey={getActiveTab}>
+            <Nav variant="tabs" activeKey={"#"+activePath}>
                         <Nav.Item>
                             <Nav.Link href="#/home/tests">Your Tests</Nav.Link>
                         </Nav.Item>
