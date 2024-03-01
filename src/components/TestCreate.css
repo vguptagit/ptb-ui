@@ -99,6 +99,36 @@ a#dropdown-ellipsis {
   margin-top : 0px;
 }
 
-.icon-ml {
-  margin-left: 20px;
+
+.metadata-container {
+margin-left:20px;
+margin-bottom:5px;
+}
+
+.view-question {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+  width: inherit;
+  min-height: 28px;
+}
+
+.view-question .text-section {
+  display: inline-flex;
+}
+
+.view-question .text-section .answer{
+  line-height: inherit;
+}
+
+.view-question .icon-ml {
+  margin-left: 1rem;
+}
+
+.view-question .bi-check::before {
+  font-size: x-large;
+}
+
+.view-question .checked {
+  margin-left: -0.5rem;
 }
