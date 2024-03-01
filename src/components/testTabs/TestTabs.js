@@ -126,10 +126,10 @@ const TestTabs = () => {
         test.title = `Untitled ${tests.length}`;
       }
   
-      // Retrieve the folderGuid from sessionStorage
-      const folderGuid = sessionStorage.getItem('selectedFolderId');
+      
+      const folderGuid = JSON.parse(sessionStorage.getItem('selectedFolderId'));
   
-      // Update the test's folderGuid
+    
       test.folderGuid = folderGuid;
   
       let questionBindings = await saveQuestions(test);
