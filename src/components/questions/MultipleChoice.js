@@ -66,18 +66,24 @@ return (
 {!questionNode.qtiModel.EditOption ? (
     <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
       <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
-            <div className="w-100"> 
+            <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}> 
                 <div className="mr-2">{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
             </div>
             
-            <div className="w-100">
+            <div className="w-100 mt-3">
             {
                 formData.Options.map((value,index) => {
                     return (
-                    <div className="">
-                     {formData.CorrectAnswer == index ? <span><i className="bi bi-check"></i> </span>: <span className="icon-ml"></span>} 
-                     <span>{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
-                     <span className="ml-1">{value}</span>
+                    <div className="view-question">
+                        <div className="icon-section">
+                        {formData.CorrectAnswer == index ? 
+                                <i className="bi bi-check" style={{ color: "green"}}></i>
+                                        : <span className="icon-ml"></span>} 
+                        </div>
+                        <div className= {formData.CorrectAnswer == index ? "text-section checked" : "text-section"}>
+                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
+                            <span className="ml-1 answer">{value}</span>
+                        </div>
                     </div>);
                 })
             }
@@ -140,8 +146,11 @@ return (
               )}
               <span className="ms-2">Format and add metadata</span>
    </div>
-   <Collapse key={open ? "open" : "closed"} in={open}>
+   <Collapse key={open ? "open" : "closed"} in={open}>        
       <div className="metadata-container">
+        <div className="mb-2">
+			<span className="caption-metadata">Format</span><span className="normal-text"> (visible in Print View) </span>
+		</div>  
         <div className="d-flex mc--orientation">
             <Form.Check
                 type="radio"
