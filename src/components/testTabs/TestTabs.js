@@ -20,6 +20,7 @@ const CustomTooltip = ({ title }) => <Tooltip id="tooltip">{title}</Tooltip>;
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
     useAppContext();
+    
     console.log("selectedtest",selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
@@ -114,7 +115,7 @@ const TestTabs = () => {
       Toastify({ message: "No unchanged questions to Save!", type: "warn" });
       return;
     }
-
+  
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
       // Show Modal popup to change test title.
@@ -124,11 +125,17 @@ const TestTabs = () => {
         // If the test title is empty or only contains whitespace, set it to a default value
         test.title = `Untitled ${tests.length}`;
       }
+  
+      // Retrieve the folderGuid from sessionStorage
+      const folderGuid = sessionStorage.getItem('selectedFolderId');
+  
+      // Update the test's folderGuid
+      test.folderGuid = folderGuid;
+  
       let questionBindings = await saveQuestions(test);
       saveTest(test, questionBindings);
     }
   };
-
   const saveTest = async (test, questionBindings) => {
     // Building the json to create the test.
     var testcreationdata = {
@@ -256,12 +263,19 @@ const TestTabs = () => {
     setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleCloseModal = (e) => {
+    console.log("closew 1",showModal);
+    setShowModal(!showModal);
+    console.log("closew 2",showModal);
+    // e.preventDefault();
+    // e.stopPropagation();
   };
 
   const handleSaveAs = () => {
+    console.log("handleSaveAs 1",showModal);
+
     setShowModal(true); 
+    console.log("handleSaveAs 2",showModal);
   };
 
   const areQuestionsAvailable = (test) => {
@@ -291,7 +305,11 @@ const TestTabs = () => {
           <FormattedMessage id="testtabs.save" />
         </Dropdown.Item>
         <Dropdown.Item href="#" onClick={(e) => handleSaveAs(e,selectedTest)}>
-        {showModal && <Modalpopup  show={ handleShowModal} handleCloseModal={handleCloseModal}     selectedTitle={selectedTest.title} handleSave={handleSave} />}
+         <Modalpopup   show={showModal}
+        handleCloseModal={handleCloseModal} 
+        selectedTest={selectedTest}
+        handleSave={handleSave}
+         />
           <FormattedMessage id="testtabs.saveas" />
         </Dropdown.Item>  
       </DropdownButton>
@@ -304,7 +322,6 @@ const TestTabs = () => {
               <FormattedMessage id="testtabs.print" />
             </Button>
 
-            {/* Adjusted margin classes for the "Export" button */}
             <Button className="btn-test mt-1 mt-sm-0" disabled>
               <FormattedMessage id="testtabs.export" />
             </Button>
