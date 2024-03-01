@@ -55,8 +55,8 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
   const handleFolderSelect = (selectedItem) => {
     debugger;
     console.log("Selected folder title:", selectedItem);
-    setFolderName(folderTitle);
-    setEditFolderName(folderTitle);
+    setFolderName(selectedItem);
+    setEditFolderName(selectedItem);
     setShowTextBox(true);
     setIsEditing(true);
   };

@@ -269,11 +269,11 @@ const TestTabs = () => {
   };
 
   const handleCloseModal = (e) => {
-    console.log("closew 1",showModal);
+  
     setShowModal(!showModal);
-    console.log("closew 2",showModal);
-    // e.preventDefault();
-    // e.stopPropagation();
+
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleSaveAs = () => {
