@@ -64,3 +64,9 @@ max-width: 100%;
   background-color: #007FA9;
 }
 
+
+
+.tree-node.selected {
+  background-color: #eaf6ff; /* Update with your desired selected background color */
+  /* Additional styles for selected nodes */
+}
