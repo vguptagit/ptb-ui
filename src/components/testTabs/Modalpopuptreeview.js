@@ -1,73 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
-import "./TreeView.css";
+import "./Modalpopuptreeview.css";
 
-const DraggableNode = ({
-  node,
-  onToggle,
-  folderName,
-  depth,
-  isOpen,
-  handleFolderSelect
-}) => {
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
 
-  const handleEditFolder = (folderTitle) => {
-    if (handleFolderSelect) {
-      handleFolderSelect(folderTitle);
-    }
-  };
+    const DraggableNode = ({
+        node,
+        onToggle,
+        folderId,
+        depth,
+        isOpen,
+        selectedFolderId,
+        handleFolderSelect,
+      }) => {
+        const handleNodeClick = () => {
+          if (selectedFolderId !== node.data.guid) {
+            handleFolderSelect(node.data.guid);
+          } else {
+            handleFolderSelect(null);
+          }
+          onToggle(); // Toggle the node
+        };
+      
+        return (
+          <div
+            className={`tree-node ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
+            onClick={handleNodeClick}
+            style={{ marginInlineStart: depth * 10 }}
+          >
+            {node.droppable && (
+              <span>
+                {isOpen ? (
+                  <i className="bi bi-caret-down-fill"></i>
+                ) : (
+                  <i className="bi bi-caret-right-fill"></i>
+                )}
+              </span>
+            )}
+            {node.text}
+          </div>
+        );
+      };
 
-  const handleNodeClick = () => {
-    // If the clicked node is different from the currently selected node
-    if (selectedNodeId !== node.data.guid) {
-      setSelectedNodeId(node.data.guid); // Select the clicked node
-      console.log("Selected Node ID:", node.data.guid);
-    } else {
-      // If the clicked node is the same as the currently selected node
-      setSelectedNodeId(null); // Deselect the clicked node
-    }
-    onToggle(); // Toggle node state
-  };
-
-  return (
-    <div
-      className={`tree-node ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
-      onClick={handleNodeClick}
-      style={{ marginInlineStart: depth * 10 }}
-    >
-      {node.droppable && (
-        <span>
-          {isOpen ? (
-            <i className="bi bi-caret-down-fill"></i>
-          ) : (
-            <i className="bi bi-caret-right-fill"></i>
-          )}
-        </span>
-      )}
-      {node.text}
-      {folderName === node.text && (
-        <button
-          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
-          onClick={() => handleEditFolder(node.text)}
-        >
-          <i className="bi bi-pencil-fill"></i>
-        </button>
-      )}
-      {folderName !== node.text && (
-        <button
-          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
-          onClick={() => handleEditFolder(node.text)}
-        >
-          <i className="bi bi-pencil-fill"></i>
-        </button>
-      )}
-    </div>
-  );
-};
-function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect }) {
+function Modalpopuptreeview({ testFolders, folderId, onNodeUpdate, handleFolderSelectOnParent}) {
   const [treeData, setTreeData] = useState([]);
-
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  console.log("selectedfolderID",selectedFolderId);
+  useEffect(() => {
+    sessionStorage.setItem('selectedFolderId', JSON.stringify(selectedFolderId));
+  }, [selectedFolderId]);
   const handleDrop = (newTree, { dragSource, dropTarget, destinationIndex }) => {
     setTreeData(newTree);
     const nodeToBeUpdated = {
@@ -79,13 +59,12 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
     onNodeUpdate(nodeToBeUpdated);
   };
 
-  // one based index
+  
   function getIndexByParentGuid(parentGuid) {
     return testFolders.findIndex(ele => ele.guid === parentGuid);
   }
 
   function getNextSequenceForParentFolderId(parentFolderId) {
-    // find next sequence by parent folder id 
     let maxSequence = 0;
     for (const folder of testFolders) {
       if (folder.parentId === parentFolderId && folder.sequence > maxSequence) {
@@ -106,7 +85,7 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
     }, -Infinity);
       const specifiedSequence = biggestSequence;
       const folderNodes = testFolders.map((folder, index) => ({
-        id: index + 1, // one based index
+        id: index + 1, 
         parent: getIndexByParentGuid(folder.parentId) !== 0 ? getIndexByParentGuid(folder.parentId) + 1 : 0,
         droppable: true,
         text: folder.title,
@@ -116,10 +95,10 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
         }
     }));
       folderNodes.sort((a, b) => a.data.sequence - b.data.sequence);
-      // Find the index where the sequence value becomes greater than or equal to the specified sequence
+      
       const insertIndex = folderNodes.findIndex(node => node.data.sequence === specifiedSequence);
 
-      // If such an index is found, splice the array to move the folders with greater sequence values to the beginning
+
       if (insertIndex !== -1) {
         const movedFolders = folderNodes.splice(insertIndex);
         folderNodes.unshift(...movedFolders);
@@ -140,10 +119,12 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
                 <DraggableNode
                     node={node}
                     isOpen={isOpen}
-                    folderName={folderName}
+                    folderId={folderId}
                     depth={depth}
                     onToggle={onToggle}
-                    handleFolderSelect={handleFolderSelect}
+                    selectedFolderId={selectedFolderId}
+                    handleFolderSelect={setSelectedFolderId}
+                    handleFolderSelectOnParent={handleFolderSelectOnParent}
                 />
             );
         }}
@@ -158,4 +139,4 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
   );
 }
 
-export default TreeView;
+export default Modalpopuptreeview;
