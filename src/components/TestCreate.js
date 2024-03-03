@@ -13,11 +13,14 @@ import TrueFalse from "./questions/TrueFalse";
 import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
 import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
+import TreeView from "./TreeView";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
-  const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || "");
+  const [initialTabTitle, setInitialTabTitle] = useState(
+    selectedTest?.title || ""
+  );
   const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
@@ -30,31 +33,37 @@ const TestCreate = () => {
 
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
-  
+
     // Remove any characters that are not special characters, numbers, or alphabets
-    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/g, '');
+    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/g, "");
 
     if (newTitle.length > 255) {
       newTitle = newTitle.slice(0, 255);
     }
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-  
+
     setTabTitle(newTitle);
-    setIsEditing(true); 
-  
+    setIsEditing(true);
+
     if (selectedTest && selectedTest.id) {
-      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: newTitle });
+      dispatchEvent("UPDATE_TEST_TITLE", {
+        id: selectedTest.id,
+        title: newTitle,
+      });
     }
   };
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (tabTitle.trim().length === 0) {
       return;
     } else {
-      dispatchEvent("UPDATE_TEST_TITLE", { id: selectedTest.id, title: tabTitle });
+      dispatchEvent("UPDATE_TEST_TITLE", {
+        id: selectedTest.id,
+        title: tabTitle,
+      });
       setInitialTabTitle(tabTitle);
-      setIsEditing(false); 
+      setIsEditing(false);
       setFormSubmittedOnce(true);
     }
   };
@@ -83,7 +92,10 @@ const TestCreate = () => {
 
   const getQuestion = (questionNode) => {
     let question = questionNode;
-    var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
+    var qtiModel = QtiService.getQtiModel(
+      questionNode.data,
+      questionNode.quizType
+    );
     qtiModel.EditOption = true;
     question.qtiModel = qtiModel;
     questionNode.itemId = Math.random().toString(36).slice(2);
@@ -105,59 +117,113 @@ const TestCreate = () => {
   const renderQuestions = (questionNode, index) => {
     switch (questionNode.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
-        return <MultipleChoice
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <MultipleChoice
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       case CustomQuestionBanksService.MultipleResponse:
-        return <MultipleResponse
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <MultipleResponse
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       case CustomQuestionBanksService.TrueFalse:
-        return <TrueFalse
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <TrueFalse
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       case CustomQuestionBanksService.Matching:
-        return <Matching
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <Matching
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       case CustomQuestionBanksService.FillInBlanks:
-        return <FillInBlanks
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <FillInBlanks
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       case CustomQuestionBanksService.Essay:
-        return <Essay
-          questionNode={questionNode}
-          key={questionNode.itemId + "_" + selectedTest.id + questionListSize + "_" + index}
-          questionNodeIndex={index}
-          questionNodeIsEdit={questionNode.qtiModel.EditOption}
-          onQuestionStateChange={handleQuestionState}
-          onQuestionDelete={handleQuestionDelete}
-        />;
+        return (
+          <Essay
+            questionNode={questionNode}
+            key={
+              questionNode.itemId +
+              "_" +
+              selectedTest.id +
+              questionListSize +
+              "_" +
+              index
+            }
+            questionNodeIndex={index}
+            questionNodeIsEdit={questionNode.qtiModel.EditOption}
+            onQuestionStateChange={handleQuestionState}
+            onQuestionDelete={handleQuestionDelete}
+          />
+        );
       default:
         return <div></div>;
     }
@@ -185,16 +251,13 @@ const TestCreate = () => {
           </div>
         </div>
       </div>
-      <div className="test-container">
-        {selectedTest &&
-          selectedTest.questions &&
-          selectedTest.questions.map((questionNode, index) => (
-            <div key={questionNode.itemId}>
-              <div>
-                {renderQuestions(questionNode, index)}
-              </div>
-            </div>
-          ))}
+       <div className="test-container">
+        {selectedTest && selectedTest.questions && (
+          <TreeView
+            data={selectedTest.questions}
+            renderQuestions={renderQuestions}
+          />
+        )}
       </div>
       <div
         ref={drop}
@@ -203,7 +266,9 @@ const TestCreate = () => {
         }`}
       >
         <div>
-          {selectedTest && selectedTest.questions && selectedTest.questions.length !== 0 ? (
+          {selectedTest &&
+          selectedTest.questions &&
+          selectedTest.questions.length !== 0 ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
               Drag Questions Here{" "}
             </div>

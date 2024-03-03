@@ -20,6 +20,7 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState(null);
   async function fetchRootFolderGuid() {
     try {
       const rootFolder = await getUserQuestionFoldersRoot();
@@ -70,6 +71,7 @@ const QuestionFolder = ({ userId }) => {
 
   const handleTextBoxClose = () => {
     setShowTextBox(false);
+    setFolderName("");
   };
 
   const handleSaveFolder = async () => {
@@ -88,7 +90,7 @@ const QuestionFolder = ({ userId }) => {
           const editedFolder = savedFolders[editedFolderIndex];
           const updatedFolderData = {
             guid: editedFolder.guid,
-            parentId: rootFolderGuid,
+            parentId: editedFolder.parentId,
             sequence: editedFolder.sequence,
             title: folderName,
           };
@@ -153,7 +155,7 @@ const QuestionFolder = ({ userId }) => {
       Toastify({ message: "Failed to rearrange Folder", type: "error" });
     }
   };
-  
+
   return (
     <div className="p-2">
       <div className="button-container">
@@ -208,6 +210,7 @@ const QuestionFolder = ({ userId }) => {
             folders={savedFolders}
             onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
+            rootFolderGuid={rootFolderGuid}
           />
         )}
       </div>
