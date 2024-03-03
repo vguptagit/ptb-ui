@@ -3,7 +3,13 @@ import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeViewQuestionFolder.css";
 import { getChildQuestionFolders } from "../../../services/userfolder.service";
 
-function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
+function TreeViewQuestionFolder({
+  onFolderSelect,
+  onNodeUpdate,
+  folders,
+  rootFolderGuid,
+  handleTextBoxClose,
+}) {
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
 
@@ -68,21 +74,26 @@ function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
   }, [folders]);
 
   const handleDrop = async (newTree, { dragSource, dropTarget }) => {
+    let parentId;
+
+    if (dropTarget && dropTarget.data) {
+      parentId = dropTarget.data.guid;
+    } else {
+      parentId = rootFolderGuid;
+    }
+
     const nodeToBeUpdated = {
       guid: dragSource.data.guid,
-      parentId: dropTarget.data.guid,
-      sequence: dropTarget.data.sequence,
+      parentId: parentId,
+      sequence: dropTarget ? dropTarget.data.sequence : 0,
       title: dragSource.text,
     };
 
     try {
-      // Fetch child folders of the drop target
-      const childFolders = await getChildQuestionFolders(dropTarget.data.guid);
-
-      // Map fetched child folders to tree nodes
+      const childFolders = await getChildQuestionFolders(parentId);
       const childNodes = childFolders.map((childFolder, index) => ({
-        id: `${dropTarget.id}.${index + 1}`,
-        parent: dropTarget.id,
+        id: `${parentId}.${index + 1}`,
+        parent: parentId,
         droppable: true,
         text: childFolder.title,
         data: {
@@ -90,23 +101,11 @@ function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
           sequence: childFolder.sequence,
         },
       }));
-
-      // Find the parent node index in the treeData
-      const parentIndex = newTree.findIndex(
-        (node) => node.id === dropTarget.id
-      );
-
-      // Check if the drop target node is a child node
-      const isChildNode = dropTarget.id.toString().includes(".");
-
-      // If it's a child node, update the parentIndex
+      const parentIndex = newTree.findIndex((node) => node.id === parentId);
+      const isChildNode = parentId.toString().includes(".");
       const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
-
-      // Insert the new child nodes at the appropriate position
       const updatedTreeData = [...newTree];
       updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
-
-      // Update the state with the new tree data
       setTreeData(updatedTreeData);
     } catch (error) {
       console.error("Error fetching child question folders:", error);
@@ -116,15 +115,21 @@ function TreeViewQuestionFolder({ onFolderSelect, onNodeUpdate, folders }) {
 
   const handleEditFolder = (folderTitle) => {
     console.log("Edit folder:", folderTitle);
-    if (onFolderSelect) {
-      onFolderSelect(folderTitle);
+    if (selectedFolder === folderTitle) {
+      setSelectedFolder(null);
+      if (onFolderSelect) {
+        onFolderSelect("");
+      }
+    } else {
+      if (onFolderSelect) {
+        onFolderSelect(folderTitle);
+      }
       setSelectedFolder(folderTitle);
     }
   };
 
   const handleDeleteFolder = (folderTitle) => {
     console.log("Delete folder:", folderTitle);
-    // Implement deletion logic here
   };
 
   return (
