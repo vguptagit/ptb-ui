@@ -64,7 +64,7 @@ const MultipleChoice = (props) => {
 return (
 <div id={questionNode.itemId}>
 {!questionNode.qtiModel.EditOption ? (
-    <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+    <div className="mb-3 d-flex align-items-center m-2 addfolder-container">
       <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
             <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}> 
                 <div className="mr-2">{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
@@ -89,7 +89,7 @@ return (
             }
             </div>
       </div>
-      <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end">
+      <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
         <button className="editbtn" onClick={handleEdit}>
           <i className="bi bi-pencil-fill"></i>
         </button>
@@ -109,30 +109,33 @@ return (
       className="mb-2"
       type="text"
       autoComplete="off"
+      placeholder={props.questionNode.qtiModel.EditCaption}
     />
     <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
         {formData?.Options?.length > 0 &&
             formData?.Options.map((optItem, index) => {
             return (
-            <Form.Group key={index} className="mb-2 w-100 ">
-                <div className="d-flex align-items-center">
-                <Form.Check
-                    type="radio"
-                    checked={index == formData.CorrectAnswer}
-                    value={index}
-                    className="me-2"
-                    name="CorrectAnswer"
-                    onChange={handleChange}
-                />
-                <Form.Control
-                    onChange={handleOptionsChange}
-                    value={optItem}
-                    name={index}
-                    className="mb-2"
-                    type="text"
-                    placeholder="Enter Answer"
-                />
-                </div>
+            <Form.Group key={index} className="mc-flex-row mb-2">
+                    <div className="mc-col mc-col-1">
+                        <Form.Check
+                            type="radio"
+                            checked={index == formData.CorrectAnswer}
+                            value={index}
+                            name="CorrectAnswer"
+                            className="item-1"
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="mc-col mc-col-2">
+                        <Form.Control
+                            onChange={handleOptionsChange}
+                            value={optItem}
+                            name={index}
+                            className="item-2"
+                            type="text"
+                            placeholder="Enter Answer"
+                        />
+                    </div>
             </Form.Group>
             );
         })}
@@ -159,7 +162,7 @@ return (
                 className="mr-5"
                 name="Orientation"
                 value="false"
-                label="Horizontal Question Display"
+                label="Horizontal Display"
             />
             
             <Form.Check
@@ -169,7 +172,7 @@ return (
                 className=""
                 name="Orientation"
                 value="true"
-                label="Vertical Question Display"
+                label="Vertical Display"
             />
         </div>
       </div>
