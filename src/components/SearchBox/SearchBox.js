@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 function SearchBox({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const debounceTimeoutRef = useRef();
   // logic to fetch search results here
   const handleSearch = (event) => {
    
     const value = event.target.value;
     setSearchTerm(value)
-    onSearch(value); // Call the onSearch prop function
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    debounceTimeoutRef.current = setTimeout(() => {
+      onSearch(value); // Call the onSearch prop function after the delay
+    }, 1000);
+    // onSearch(value); // Call the onSearch prop function
   };
   const handleSelectItem = (item) => {
     // logic to handle item selection here
