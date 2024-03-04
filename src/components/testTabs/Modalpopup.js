@@ -55,7 +55,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
 
   return (
     <Modal show={show} onHide={handleCloseModal} centered>
-      <Modal.Header closeButton>
+      <Modal.Header >
         <Modal.Title>
           <div style={{ display: "flex" }}>
             <div style={{ marginBlockStart: "5px" }}> <h6>Save As:</h6></div>
