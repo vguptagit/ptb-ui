@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Collapse, Form } from "react-bootstrap";
 import { useState } from "react";
 import React from 'react';
+import DOMPurify from 'dompurify'
 const MultipleChoice = (props) => {
     const [open, setOpen] = useState(false);
     const questionNode = props.questionNode;
@@ -58,7 +59,9 @@ const MultipleChoice = (props) => {
         }
     };
 
-    
+    const sanitizedData = (data) => ({
+        __html: DOMPurify.sanitize(data)
+      })
 
 
 return (
@@ -67,8 +70,7 @@ return (
     <div className="mb-3 d-flex align-items-center m-2 addfolder-container">
       <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
             <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}> 
-                <div className="mr-2">{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
-            </div>
+            <div className="mr-2">{questionNodeIndex + 1}) <span dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>            </div>
             
             <div className="w-100 mt-3">
             {
@@ -82,8 +84,7 @@ return (
                         </div>
                         <div className= {formData.CorrectAnswer == index ? "text-section checked" : "text-section"}>
                             <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
-                            <span className="ml-1 answer">{value}</span>
-                        </div>
+                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>                        </div>
                     </div>);
                 })
             }
