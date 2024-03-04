@@ -35,27 +35,36 @@ const DraggableNode = ({
     e.preventDefault();
     e.stopPropagation();
   };
-  
+
+  const handleDeleteFolder = (folderTitle) => {
+    console.log("Delete folder:", folderTitle);
+  };
 
   return (
     <div
-      className={`tree-node ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
-      onClick={handleNodeClick}
+      className={`tree-nodes ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
       style={{ marginInlineStart: depth * 10 }}
     >
-      {node.droppable && (
-        <span>
-          {isOpen ? (
-            <i className="bi bi-caret-down-fill"></i>
-          ) : (
-            <i className="bi bi-caret-right-fill"></i>
-          )}
-        </span>
-      )}
-      {node.text}
+      <div>
+        {node.data.sequence !== undefined && (
+          <span>
+            {isOpen ? (
+              <i className="bi bi-caret-down-fill"
+                onClick={handleNodeClick}
+              ></i>
+            ) : (
+              <i className="bi bi-caret-right-fill"
+                onClick={handleNodeClick}
+              ></i>
+            )}
+          </span>
+        )}
+        {node.text}
+      </div>
+      <div>
       {folderName === node.text && (
         <button
-          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
+          className={`edit-btn ${selectedNodeId === node.data.guid ? '' : 'selected'}`}
           onClick={() => handleEditFolder(node.text)}
         >
           <i className="bi bi-pencil-fill"></i>
@@ -63,12 +72,28 @@ const DraggableNode = ({
       )}
       {folderName !== node.text && (
         <button
-          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
+          className={`edit-btn ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
           onClick={() => handleEditFolder(node.text)}
         >
           <i className="bi bi-pencil-fill"></i>
         </button>
+      )}{folderName === node.text && (
+        <button
+          className="delete-btn"
+          onClick={() => handleDeleteFolder(node.text)}
+        >
+          <i className="bi bi-trash"></i>
+        </button>
       )}
+      {folderName !== node.text && (
+        <button
+        className="delete-btn"
+        onClick={() => handleDeleteFolder(node.text)}
+      >
+        <i className="bi bi-trash"></i>
+      </button>
+      )}
+      </div>
     </div>
   );
 };
@@ -174,7 +199,8 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect ,h
                 console.error("Error fetching folder tests:", error);
             }
         }
-        setTreeData(folderNodes); // Update tree data with new nodes
+        const folderNodesFiltered = folderNodes.filter(node => node.text !== null);
+        setTreeData(folderNodesFiltered);
     };
     fetchTestDetails();
 
