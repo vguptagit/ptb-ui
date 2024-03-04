@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Collapse, Form } from "react-bootstrap";
 import { useState } from "react";
+import DOMPurify from 'dompurify'
 
 const Essay = (props) => {
   const [open, setOpen] = useState(false);
@@ -52,13 +53,17 @@ const Essay = (props) => {
     setFormData({ ...formData, [essayQuestionSize]: value });
   };
 
+  const sanitizedData = (data) => ({
+    __html: DOMPurify.sanitize(data)
+  })
+
   return (
     <div id={questionNode.itemId}>
       {!questionNode.qtiModel.EditOption ? (
         <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
           <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center">
             <div className="mr-2">{questionNodeIndex + 1})</div>
-            <div>{formData.question} </div>
+            <div dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
           </div>
           <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end">
             <button className="editbtn" onClick={handleEdit}>
