@@ -18,7 +18,7 @@ import "./Modalpopuptreeview.css";
           } else {
             handleFolderSelect(null);
           }
-          onToggle(); // Toggle the node
+          onToggle(); 
         };
       
         return (
