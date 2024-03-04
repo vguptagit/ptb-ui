@@ -1,3 +1,36 @@
 .tree-container ul {
   list-style: none;
 }
+
+.mc-flex-row {
+  display: flex;
+	justify-content: center;
+	width: 100%;
+  margin: auto;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.mc-flex-row  .mc-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mc-flex-row  .mc-col-1 {
+  flex: 0 0 30px;
+  appearance: none;
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.mc-flex-row  .mc-col-2 {
+	flex: 2 1 0;
+}
+
+.mc-flex-row  .mc-col .item-1{
+  margin: 5px 0px;
+}
