@@ -55,8 +55,20 @@ const TestTabs = () => {
   }, [selectedTest]);
 
   const handleNodeSelect = (item) => {
-    dispatchEvent("SELECT_TEST", item);
+    // Check if the selected tab is within the first four tabs
+    const isWithinFirstFour = tests.slice(0, 4).some((test) => test.id === item.id);
+  
+    if (isWithinFirstFour) {
+      dispatchEvent("SELECT_TEST", item);
+    } else {
+      // Find the selected tab in the ellipsis dropdown items
+      const ellipsisItem = ellipsisDropdownItems.find((test) => test.id === item.id);
+      if (ellipsisItem) {
+        dispatchEvent("SELECT_TEST", item);
+      }
+    }
   };
+  
 
   const handleAddNewTestTab = () => {
     const newTest = new Test();
