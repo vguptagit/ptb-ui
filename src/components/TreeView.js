@@ -21,7 +21,6 @@ const TreeView = ({ data, renderQuestions }) => {
   };
 
   const handleDrop = (draggedNode, dropTargetNode) => {
-    console.log(draggedNode);
     const updatedTreeData = [...treeData];
     const draggedNodeIndex = updatedTreeData.findIndex(
       (node) => node.id === draggedNode.id
@@ -30,7 +29,11 @@ const TreeView = ({ data, renderQuestions }) => {
     const dropTargetNodeIndex = updatedTreeData.findIndex(
       (node) => node.id === dropTargetNode.id
     );
-    updatedTreeData.splice(dropTargetNodeIndex, 0, draggedNodeItem);
+    const insertionIndex =
+      draggedNodeIndex > dropTargetNodeIndex
+        ? dropTargetNodeIndex
+        : dropTargetNodeIndex - 1;
+    updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
     setTreeData(updatedTreeData);
   };
 
