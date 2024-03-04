@@ -6,27 +6,31 @@ import { getFolderTests } from "../../services/testcreate.service";
 const DraggableNode = ({
   node,
   onToggle,
-  folderId,
+  folderName,
   depth,
   isOpen,
   selectedFolderId,
   handleFolderSelect,
   handleFolderSelectOnParent
 }) => {
-  const handleEditFolder = (folderId) => {
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
+
+  const handleEditFolder = (folderTitle) => {
     if (handleFolderSelect) {
-      handleFolderSelect(folderId);
+      handleFolderSelect(folderTitle);
     }
   };
 
-  const handleNodeClick = (e) => {
-    if (selectedFolderId !== node.data.guid) {
-      handleFolderSelect(node.data.guid); 
-      console.log("Selected Folder ID:", node.data.guid);
+   const handleNodeClick = (e) => {
+    // If the clicked node is different from the currently selected node
+    if (selectedNodeId !== node.data.guid) {
+      setSelectedNodeId(node.data.guid); // Select the clicked node
+      console.log("Selected Node ID:", node.data.guid);
     } else {
-      handleFolderSelect(null); 
+      // If the clicked node is the same as the currently selected node
+      setSelectedNodeId(null); // Deselect the clicked node
     }
-    onToggle(); // Toggle the node
+    onToggle(); // Toggle node state
     // handleFolderSelectOnParent(node);
     e.preventDefault();
     e.stopPropagation();
@@ -49,10 +53,18 @@ const DraggableNode = ({
         </span>
       )}
       {node.text}
-      {folderId !== node.data.guid && (
+      {folderName === node.text && (
         <button
-          className={`edit-button ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
-          onClick={() => handleEditFolder(node.data.guid)}
+          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
+          onClick={() => handleEditFolder(node.text)}
+        >
+          <i className="bi bi-pencil-fill"></i>
+        </button>
+      )}
+      {folderName !== node.text && (
+        <button
+          className={`edit-button ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
+          onClick={() => handleEditFolder(node.text)}
         >
           <i className="bi bi-pencil-fill"></i>
         </button>
@@ -61,7 +73,7 @@ const DraggableNode = ({
   );
 };
 
-function TreeView({ testFolders, folderId, onNodeUpdate, handleFolderSelectOnParent,}) {
+function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect ,handleFolderSelectOnParent,}) {
   const [treeData, setTreeData] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   console.log("selectedfolderID",selectedFolderId);
@@ -180,11 +192,11 @@ function TreeView({ testFolders, folderId, onNodeUpdate, handleFolderSelectOnPar
                 <DraggableNode
                     node={node}
                     isOpen={isOpen}
-                    folderId={folderId}
+                    folderName={folderName}
                     depth={depth}
                     onToggle={onToggle}
                     selectedFolderId={selectedFolderId}
-                    handleFolderSelect={setSelectedFolderId}
+                    handleFolderSelect={handleFolderSelect}
                     handleFolderSelectOnParent={handleFolderSelectOnParent}
                 />
             );

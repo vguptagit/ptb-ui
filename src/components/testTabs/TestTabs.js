@@ -130,7 +130,7 @@ const TestTabs = () => {
   
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
-      Toastify({ message: "A test already exists with this name. Please save with another name.", type: "warn" });
+      Toastify({ message: "Test already exists with this name. Please save with another", type: "warn" });
     } else {
       // Proceed to save
       if (!test.title.trim()) {

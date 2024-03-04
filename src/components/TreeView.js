@@ -20,12 +20,31 @@ const TreeView = ({ data, renderQuestions }) => {
     }));
   };
 
+  const handleDrop = (draggedNode, dropTargetNode) => {
+    const updatedTreeData = [...treeData];
+    const draggedNodeIndex = updatedTreeData.findIndex(
+      (node) => node.id === draggedNode.id
+    );
+    const draggedNodeItem = updatedTreeData.splice(draggedNodeIndex, 1)[0];
+    const dropTargetNodeIndex = updatedTreeData.findIndex(
+      (node) => node.id === dropTargetNode.id
+    );
+    const insertionIndex =
+      draggedNodeIndex > dropTargetNodeIndex
+        ? dropTargetNodeIndex
+        : dropTargetNodeIndex - 1;
+    updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
+    setTreeData(updatedTreeData);
+  };
+
   return (
     <div className="tree-container">
       {treeData && (
         <Tree
           tree={treeData}
           render={(node) => <div>{node.content}</div>}
+          onDrop={handleDrop}
+          canDrop={() => true}
         />
       )}
     </div>
