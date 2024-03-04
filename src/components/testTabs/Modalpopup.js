@@ -82,7 +82,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="p-2">
+        <div>
           <Modalpopuplist rootFolders={rootFolders}
            doReload={doReload} setDoReload={setDoReload}
             selectedFolderId={selectedFolderId}
