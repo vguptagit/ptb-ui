@@ -40,7 +40,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
             guid: editedFolder.guid,
             sequence: editedFolder.sequence,
             title: folderName,
-            extUserId: window.piSession.userId(),
+            extUserId: sessionStorage.getItem('userId'),
           };
           try {
             await updateTestFolder(
@@ -57,7 +57,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
             parentId: 0,
             sequence: rootFolders.length + 1,
             title: folderName,
-            extUserId: window.piSession.userId(),
+            extUserId: sessionStorage.getItem('userId'),
           };
   
           try {

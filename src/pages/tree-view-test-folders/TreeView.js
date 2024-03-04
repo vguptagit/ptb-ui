@@ -74,7 +74,7 @@ function TreeView({ testFolders, folderName, onNodeUpdate, handleFolderSelect })
       guid: dragSource.data.guid,
       parentId: dropTarget === undefined ? 0 : dropTarget.data.guid,
       sequence: dropTarget === undefined ? getNextSequenceWithoutParentId(dragSource) : getNextSequenceForParentFolderId(dropTarget.data.guid),
-      extUserId: window.piSession.userId(),
+      extUserId: sessionStorage.getItem('userId'),
     }
     onNodeUpdate(nodeToBeUpdated);
   };

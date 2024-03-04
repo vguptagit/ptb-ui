@@ -9,7 +9,7 @@ const callLoginEndpoint = async (token) => {
     const config = {
       headers: {
         'AccessToken': token,
-        'UserId': window.piSession.userId(),
+        'UserId': sessionStorage.getItem('userId'),
         'Accept': 'application/json'
       }
     };
