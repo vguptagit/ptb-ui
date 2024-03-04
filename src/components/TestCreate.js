@@ -43,6 +43,7 @@ const TestCreate = () => {
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
 
     setTabTitle(newTitle);
+    console.log("new title",newTitle)
     setIsEditing(true);
 
     if (selectedTest && selectedTest.id) {

@@ -7,12 +7,12 @@ import Modalpopuplist from './Modalpopuplist';
 
 function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   console.log("shiw",show);
-  
+  console.log("selcted title ",selectedTest?.title)
   const [editFolderName, setEditFolderName] = useState("");
   const [rootFolders, setRootFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [doReload, setDoReload] = useState(false);
-
+  console.log("ddddddddddddddddddddd",selectedFolderId)
   useEffect(() => {
     document.title = "Your Tests";
   }, []);
@@ -38,20 +38,29 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       setSelectedFolderId(JSON.parse(storedSelectedFolderId));
     }
   }, []);
-
+  console.log("selected fldrr id in modalpopup",selectedFolderId)
   useEffect(() => {
     if (selectedTest) {
       setEditFolderName(selectedTest.title || "");
     }
   }, [selectedTest]);
+  const handleEditFolderNameChange = (e) => {
+  
+    setEditFolderName(e.target.value);
+  };
 
+  console.log("edited ",editFolderName)
   const handleSaveClick = (e) => {
+    if (editFolderName.length > 0) {
+      // Update the title of selectedTest with the edited folder name
+      selectedTest.title = editFolderName;
+    }
+  
+    // Pass the updated selectedTest object to handleSave
     handleSave(e, selectedTest, selectedFolderId);
   };
 
-  const handleEditFolderNameChange = (e) => {
-    setEditFolderName(e.target.value);
-  };
+ 
 
   return (
     <Modal show={show} onHide={handleCloseModal} centered>
@@ -73,9 +82,13 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="p-2">
-          <Modalpopuplist rootFolders={rootFolders} doReload={doReload} setDoReload={setDoReload} selectedFolderId={selectedFolderId} setSelectedFolderId={setSelectedFolderId} />
+        <div>
+          <Modalpopuplist rootFolders={rootFolders}
+           doReload={doReload} setDoReload={setDoReload}
+            selectedFolderId={selectedFolderId}
+          />
         </div>
+      
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleCloseModal}>
