@@ -1,73 +1,36 @@
-/* css for modal  */
-.treeview {
-    height: 100%;
-    
-    ul {
-      list-style: none;
-      padding-left: 10px !important;
-    }
-    }
-    
-    .treeview > ul {
-    box-sizing: border-box;
-    height: 100%;
-    padding: 5px 0px;
-    }
-    
-    .tree-node {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    padding: 10px;
-    background-color: #F8F8F8;
-    font-size: 14px;
-    color: #4D4D4D;
-    line-height: 1em;
-    }
-    
-    .tree-node span {
-    cursor: pointer;
-    margin-right: 10px;
-    }
-    
-    
-    .tree-node.custom-style {
-    background: #E0E0E0;
-    height: 40px;
-    border-bottom: 1px solid #D0D0D0;
-    font-family: Helvetica, sans-serif; 
-    font-size: 14px;
-    color: #4D4D4D;
-    line-height: 1em;
-    width: auto;
-    max-width: 100%; 
-    }
-    
-    .edit-button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      cursor: pointer;
-      border-radius: 3px;
-      background-color: white;
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-    
-    .edit-button:hover {
-      border-color: #007FA9;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    
-    
-    .edit-button.selected {
-      border-color: #007FA9;
-      background-color: #007FA9;
-    }
-    
-    
-    
-    .tree-node.selected {
-      background-color: #eaf6ff; /* Update with your desired selected background color */
-      /* Additional styles for selected nodes */
-    }
+/* Modalpopuplist.css */
+
+.button-container {
+  margin-bottom: 10px;
+}
+
+.color-black {
+  color: black;
+}
+
+.button-container button {
+  margin-right: 10px;
+}
+
+.root-folders-tests {
+  margin-top: 20px;
+  max-height: 300px; /* Set a maximum height for the container */
+  overflow-y: auto; /* Enable vertical scrollbar if content exceeds container height */
+}
+
+.root-folders-tests .tree-node {
+  margin-bottom: 5px;
+}
+
+.show-text-box {
+  display: flex;
+}
+
+.show-text-box .form-control {
+  margin-bottom: 10px;
+  width: 360px;
+}
+
+.show-text-box button {
+  margin-left: 5px;
+}
