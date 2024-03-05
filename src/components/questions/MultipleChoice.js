@@ -179,11 +179,11 @@ return (
       </div>
  </Collapse>
   <div className="mb-1 d-flex justify-content-end">
-    <Link className="savelink" onClick={handleSubmit}>
+    <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
       Save
     </Link>
     <Link className="deletelink" onClick={handleDelete}>
-      Delete
+      Remove
     </Link>
   </div>
 </Form>
