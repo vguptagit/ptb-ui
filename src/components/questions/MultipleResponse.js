@@ -11,7 +11,7 @@ const MultipleResponse = (props) => {
         Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
         Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ["", "", "", ""],
         CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : [],
-        Orientation: questionNode.qtiModel ? questionNode.qtiModel.Orientation : true
+        Orientation: questionNode.qtiModel ? "true":"false"
     };
     const [formData, setFormData] = useState(initFormData);
     const [selectedIndexes, setSelectedIndexes] = useState([]);
@@ -106,14 +106,14 @@ const MultipleResponse = (props) => {
                             )}
                         </div>
                     </div>
-                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end" style={{paddingTop :"120px"}}>
-                        <button style={{ border: "none", background: "none" }}  className="editbtn"  onClick={handleEdit}>
-                            <i className="bi bi-pencil-fill"></i>
-                        </button>
-                        <button  style={{ border: "none", background: "none" }} className="deletebtn" onClick={handleDelete}>
-                            <i className="bi bi-archive-fill"></i>
-                        </button>
-                    </div>
+                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+        <button className="editbtn" onClick={handleEdit}>
+          <i className="bi bi-pencil-fill"></i>
+        </button>
+        <button className="deletebtn" onClick={handleDelete}>
+          <i className="bi bi-archive-fill"></i>
+        </button>
+      </div>
                 </div>
             ) : (
                 <Form className="editmode border rounded p-3 bg-light">
@@ -126,6 +126,7 @@ const MultipleResponse = (props) => {
                             className="mb-4"
                             type="text"
                             autoComplete="off"
+                            placeholder={props.questionNode.qtiModel.EditCaption}
                         />
                         <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
                             {formData?.Options?.length > 0 &&
@@ -192,7 +193,7 @@ const MultipleResponse = (props) => {
       </div>
  </Collapse>
                     <div className="mb-1 d-flex justify-content-end " >
-                        <Link className="savelink"  onClick={handleSubmit}>
+                    <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
                             Save
                         </Link>
                         <Link className="deletelink" onClick={handleDelete}>
