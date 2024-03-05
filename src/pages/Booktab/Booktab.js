@@ -91,7 +91,6 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     });
   };
   
-
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
       return treeData;
@@ -101,18 +100,21 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
 
   return (
     <div className="treeview">
-      {filteredTreeData.map((node) => (
-        <TreeNode
-          key={node.id}
-          node={node}
-          onSelectItem={onSelectItem}
-          selectedItems={selectedItems}
-        />
-      ))}
+      {searchTerm && filteredTreeData.length === 0 ? (
+        <div>No books found for "{searchTerm}"</div>
+      ) : (
+        filteredTreeData.map((node) => (
+          <TreeNode
+            key={node.id}
+            node={node}
+            onSelectItem={onSelectItem}
+            selectedItems={selectedItems}
+          />
+        ))
+      )}
     </div>
   );
 };
-
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
