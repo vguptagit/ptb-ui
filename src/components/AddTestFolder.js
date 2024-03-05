@@ -49,7 +49,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
           Toastify({ message: "Folder updated successfully", type: "success" });
           setDoReload(!doReload);
         } catch (error) {
-          Toastify({ message: 'Failed to update folder', type: 'error' });
+          Toastify({ message: `A folder with ${folderName} title already exists at this level`, type: 'error' });
         }
       } else {
         const newFolderData = {
@@ -73,8 +73,6 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
           }
         }
       }
-      setFolderName("");
-      setShowTextBox(false);
     }
   };
 
@@ -138,7 +136,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
           </div>
         </div>
       )}
-      <div className="root-folders-tests">
+      <div className="root-folders-tests pt-1" id="folders-tests">
         {rootFolders && rootFolders.length > 0 && <TreeView folderName={editFolderName} testFolders={rootFolders} onNodeUpdate={onNodeUpdate} handleFolderSelect={handleFolderSelect} />}
       </div>
     </>
