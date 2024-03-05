@@ -11,7 +11,7 @@ const MultipleChoice = (props) => {
         Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
         Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ["","","",""],
         CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : -1,
-        Orientation: questionNode.qtiModel ? questionNode.qtiModel.Orientation : false
+        Orientation: questionNode.qtiModel ? "true" : "false"
     };
     const [formData, setFormData] = useState(initFormData);
 
