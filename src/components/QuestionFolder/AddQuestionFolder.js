@@ -157,7 +157,7 @@ const QuestionFolder = ({ userId }) => {
   };
 
   return (
-    <div className="p-2">
+    <div className="">
       <div className="button-container">
         <Button
           className="color-black"
