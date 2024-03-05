@@ -32,8 +32,6 @@
     justify-content: flex-start; /* Changed to align buttons closer */
     padding: 3px;
     background-color: #ddd; /* Light grey background color */
-    margin-left: -5px;
-    margin-right: -5px;
 }
 
 .resource-tab, .create-or-edit-test, .saved-folders, .test-list{
