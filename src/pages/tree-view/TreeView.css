@@ -1,50 +1,50 @@
-.treeview {
-height: 100%;
+.treeviewqb {
+  height: 100%;
+  margin-left: 15px;
+  margin-right: 5px;
 
-ul {
-  list-style: none;
-}
+  ul {
+    list-style: none;
+  }
 }
 
-.treeview > ul {
-box-sizing: border-box;
-height: 100%;
-padding: 5px 0px;
+.treeviewqb > ul {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 5px 0px;
 }
 
 .tree-node {
-display: flex;
-align-items: center;
-margin-bottom: 5px;
-padding: 10px;
-background-color: #F8F8F8;
-font-size: 14px;
-color: #4D4D4D;
-line-height: 1em;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  color: #4d4d4d;
+  line-height: 1em;
 }
 
 .tree-node span {
-cursor: pointer;
-margin-right: 10px;
+  cursor: pointer;
+  margin-right: 10px;
 }
-
 
 .tree-node.custom-style {
-background: #E0E0E0;
-height: 40px;
-border-bottom: 1px solid #D0D0D0;
-font-family: Helvetica, sans-serif; 
-font-size: 14px;
-color: #4D4D4D;
-line-height: 1em;
-width: auto;
-max-width: 100%; 
+  background: #e0e0e0;
+  height: 40px;
+  border-bottom: 1px solid #d0d0d0;
+  font-family: Helvetica, sans-serif;
+  font-size: 14px;
+  color: #4d4d4d;
+  line-height: 1em;
+  width: auto;
+  max-width: 100%;
 }
 
-
 .clicked {
-  background-color: #007BFF; 
-  color: white; 
+  background-color: #007bff;
+  color: white;
 }
 
 .clicked .tree-node,
@@ -56,4 +56,3 @@ max-width: 100%;
   margin-left: 5px;
   cursor: pointer;
 }
-
