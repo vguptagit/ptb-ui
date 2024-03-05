@@ -108,16 +108,17 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
         <Button className="color-black" variant="outline-light"></Button>
       </div>
       {showTextBox && (
-        <div className="show-text-box">
-          <div>
+        <div className="search-box">
+          
             <Form.Control
+            width="30px"    
               type="text"
               placeholder="Enter folder name"
               value={folderName}
               onChange={(e) => setFolderName(e.target.value)}
             />
-          </div>
-          <div>
+          
+          <div className='button-box'>
             <Button onClick={handleSaveFolder} aria-label='tick mark'>
               <i className="fa-solid fa-check"></i>
             </Button>

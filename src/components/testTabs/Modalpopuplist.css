@@ -1,9 +1,5 @@
 /* Modalpopuplist.css */
 
-.button-container {
-    margin-bottom: 10px;
-}
-
 .color-black {
     color: black;
 }
@@ -13,24 +9,27 @@
 }
 
 .root-folders-tests {
-    margin-top: 20px;
+   
     max-height: 300px; /* Set a maximum height for the container */
     overflow-y: auto; /* Enable vertical scrollbar if content exceeds container height */
 }
 
-.root-folders-tests .tree-node {
-    margin-bottom: 5px;
-}
 
-.show-text-box {
+.search-box {
     display: flex;
+    align-items: center;
 }
 
-.show-text-box .form-control {
-    margin-bottom: 10px;
-    width: 360px;
+.search-box .form-control {
+ 
+    width: 390px;
+    margin-right: 5px;
 }
-
-.show-text-box button {
-    margin-left: 5px;
+.button-box {
+    display: flex;
+    align-items: center;
+    
+}
+.button-box button{
+    margin-left: 1px;
 }
