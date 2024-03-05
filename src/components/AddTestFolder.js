@@ -1,15 +1,14 @@
-
-import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Button, Form } from 'react-bootstrap';
-import { saveTestFolder } from '../services/testfolder.service';
-import Toastify from './common/Toastify';
+import React, { useState } from "react";
+import { FormattedMessage } from "react-intl";
+import { Button, Form } from "react-bootstrap";
+import { saveTestFolder } from "../services/testfolder.service";
+import Toastify from "./common/Toastify";
 import TreeView from "../pages/tree-view-test-folders/TreeView";
-import { updateTestFolder } from '../services/testfolder.service';
+import { updateTestFolder } from "../services/testfolder.service";
 
 const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
   const [showTextBox, setShowTextBox] = useState(false);
-  const [folderName, setFolderName] = useState('');
+  const [folderName, setFolderName] = useState("");
   const [editFolderName, setEditFolderName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
@@ -28,7 +27,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
 
   // need to update this
   const handleSaveFolder = async () => {
-    if (folderName.trim() !== '') {
+    if (folderName.trim() !== "") {
       if (isEditing) {
         // If editing, update the folder
         const editedFolderIndex = rootFolders.findIndex(
@@ -37,39 +36,46 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
         const editedFolder = rootFolders[editedFolderIndex];
         const updatedFolderData = {
           guid: editedFolder.guid,
+          parentId: editedFolder.parentId,
           sequence: editedFolder.sequence,
           title: folderName,
-          extUserId: sessionStorage.getItem('userId'),
+          extUserId: sessionStorage.getItem("userId"),
         };
         try {
-          await updateTestFolder(
-            updatedFolderData
-          );
+          await updateTestFolder(updatedFolderData);
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder updated successfully", type: "success" });
           setDoReload(!doReload);
+          setFolderName("");
+          setShowTextBox(false);
         } catch (error) {
-          Toastify({ message: `A folder with ${folderName} title already exists at this level`, type: 'error' });
+          Toastify({
+            message: `A folder with ${folderName} title already exists at this level`,
+            type: "error",
+          });
         }
       } else {
         const newFolderData = {
           parentId: 0,
           sequence: rootFolders.length + 1,
           title: folderName,
-          extUserId: sessionStorage.getItem('userId'),
+          extUserId: sessionStorage.getItem("userId"),
         };
 
         try {
           await saveTestFolder(newFolderData);
-          setFolderName('');
+          setFolderName("");
           setShowTextBox(false);
-          Toastify({ message: 'Folder saved successfully', type: 'success' });
+          Toastify({ message: "Folder saved successfully", type: "success" });
           setDoReload(!doReload);
         } catch (error) {
           if (error?.message?.response?.request?.status === 409) {
-            Toastify({ message: error.message.response.data.message, type: 'error' });
+            Toastify({
+              message: error.message.response.data.message,
+              type: "error",
+            });
           } else {
-            Toastify({ message: 'Failed to save folder', type: 'error' });
+            Toastify({ message: "Failed to save folder", type: "error" });
           }
         }
       }
@@ -86,19 +92,26 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
   const onNodeUpdate = (changedNode) => {
     updateTestFolder(changedNode)
       .then(() => {
-        Toastify({ message: 'Folder rearranged successfully', type: 'success' });
+        Toastify({
+          message: "Folder rearranged successfully",
+          type: "success",
+        });
         setDoReload(!doReload);
       })
       .catch((error) => {
-        console.error('Error getting root folders:', error);
-        Toastify({ message: 'Failed to rearrange Folder', type: 'error' });
-      })
-  }
+        console.error("Error getting root folders:", error);
+        Toastify({ message: "Failed to rearrange Folder", type: "error" });
+      });
+  };
 
   return (
     <>
       <div className="button-container">
-        <Button className="color-black" variant="outline-light" onClick={handleAddFolderClick}>
+        <Button
+          className="color-black"
+          variant="outline-light"
+          onClick={handleAddFolderClick}
+        >
           <i className="fa-solid fa-plus"></i>&ensp;
           <FormattedMessage id="yourtests.addfolder" />
         </Button>
@@ -119,29 +132,37 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
             />
           </div>
           <div className="d-flex">
-            <Button 
+            <Button
               onClick={handleSaveFolder}
               className="btn"
-              aria-label='tick mark'
-              style={{ color: 'black', backgroundColor: 'white' }}>
+              aria-label="tick mark"
+              style={{ color: "black", backgroundColor: "white" }}
+            >
               <i className="fa-solid fa-check"></i>
             </Button>
-            <Button 
+            <Button
               onClick={handleTextBoxClose}
               className="closebtn m1-2"
-              aria-label='close mark'
-              style={{ color: 'black', backgroundColor: 'white' }}>
+              aria-label="close mark"
+              style={{ color: "black", backgroundColor: "white" }}
+            >
               <i className="fa-solid fa-xmark"></i>
             </Button>
           </div>
         </div>
       )}
       <div className="root-folders-tests" id="folders-tests">
-        {rootFolders && rootFolders.length > 0 && <TreeView folderName={editFolderName} testFolders={rootFolders} onNodeUpdate={onNodeUpdate} handleFolderSelect={handleFolderSelect} />}
+        {rootFolders && rootFolders.length > 0 && (
+          <TreeView
+            folderName={editFolderName}
+            testFolders={rootFolders}
+            onNodeUpdate={onNodeUpdate}
+            handleFolderSelect={handleFolderSelect}
+          />
+        )}
       </div>
     </>
   );
 };
 
 export default TestFolder;
-
