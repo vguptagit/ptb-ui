@@ -105,7 +105,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
           <i className="fa-solid fa-plus"></i>&ensp;
           <FormattedMessage id="yourtests.addfolder" />
         </Button>
-        <Button className="color-black" variant="outline-light"></Button>
+        {/* <Button className="color-black" variant="outline-light"></Button> */}
       </div>
       {showTextBox && (
         <div className="search-box">
