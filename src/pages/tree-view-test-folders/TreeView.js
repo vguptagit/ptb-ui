@@ -45,7 +45,7 @@ const DraggableNode = ({
       className={`tree-nodes ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
       style={{ marginInlineStart: depth * 10 }}
     >
-      <div>
+      <div className="node-name">
         {node.data.sequence !== undefined && (
           <span>
             {isOpen ? (
