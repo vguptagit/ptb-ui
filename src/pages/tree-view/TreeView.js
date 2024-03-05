@@ -282,7 +282,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     <>
     {
       !isSearchTermPresent &&(
-      <div className="treeview">
+      <div className="treeviewqb">
         <Tree
           tree={treeData}
           rootId={0}
