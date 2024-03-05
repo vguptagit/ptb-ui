@@ -13,7 +13,6 @@
 }
 
 .root-folders-tests {
-  margin-top: 20px;
   max-height: 300px; /* Set a maximum height for the container */
   overflow-y: auto; /* Enable vertical scrollbar if content exceeds container height */
 }

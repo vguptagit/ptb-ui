@@ -31,7 +31,7 @@ const QuestionBanks = () => {
     setSearchTerm(term); 
   };
   return (
-    <div className="">  
+    <div className="p-2">  
      <SearchBox
         onSearch={handleSearch}
         selectedItems={selectedItems}

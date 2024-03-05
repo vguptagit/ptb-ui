@@ -136,7 +136,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
           </div>
         </div>
       )}
-      <div className="root-folders-tests pt-1" id="folders-tests">
+      <div className="root-folders-tests" id="folders-tests">
         {rootFolders && rootFolders.length > 0 && <TreeView folderName={editFolderName} testFolders={rootFolders} onNodeUpdate={onNodeUpdate} handleFolderSelect={handleFolderSelect} />}
       </div>
     </>
