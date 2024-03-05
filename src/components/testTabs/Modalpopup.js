@@ -52,13 +52,9 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   console.log("edited ",editFolderName)
   const handleSaveClick = (e) => {
     if (editFolderName.length > 0) {
-      // Update the title of selectedTest with the edited folder name
-      selectedTest.title = editFolderName;
+       selectedTest.title = editFolderName;
     }
-  
-    // Pass the updated selectedTest object to handleSave
     handleSave(e, selectedTest, selectedFolderId);
-    handleCloseModal();
   };
 
  
