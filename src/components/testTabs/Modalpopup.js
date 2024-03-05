@@ -58,6 +58,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   
     // Pass the updated selectedTest object to handleSave
     handleSave(e, selectedTest, selectedFolderId);
+    handleCloseModal();
   };
 
  
