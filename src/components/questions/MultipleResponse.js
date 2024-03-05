@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Collapse, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import DOMPurify from "dompurify";
 
 const MultipleResponse = (props) => {
     const [open, setOpen] = useState(false);
@@ -10,7 +11,7 @@ const MultipleResponse = (props) => {
         Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
         Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ["", "", "", ""],
         CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : [],
-        Orientation: questionNode.qtiModel ? questionNode.qtiModel.Orientation : false
+        Orientation: questionNode.qtiModel ? questionNode.qtiModel.Orientation : true
     };
     const [formData, setFormData] = useState(initFormData);
     const [selectedIndexes, setSelectedIndexes] = useState([]);
@@ -74,13 +75,18 @@ const MultipleResponse = (props) => {
         }
     };
 
+    
+    const sanitizedData = (data) => ({
+        __html: DOMPurify.sanitize(data)
+      })
+
     return (
         <div id={questionNode.itemId}>
             {!questionNode.qtiModel.EditOption ? (
                 <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
                     <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
-                        <div className="w-100" >
-                            <div className="mr-2" >{questionNodeIndex + 1}) <span>{formData.Caption}</span></div>
+                    <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}> 
+                            <div className="mr-2" >{questionNodeIndex + 1}) <span dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>
                         </div>
 
                         <div className="w-100"  style={{paddingTop: "15px"}}>
@@ -93,18 +99,18 @@ const MultipleResponse = (props) => {
                                                     : <span className="icon-ml"></span>} 
                                     </div>
                                 <div className= {formData.CorrectAnswer.includes(index)  ?  "text-section checked" : "text-section"} >
-                                    <span>{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
-                                    <span className="ml-1">{value}</span>
+                                <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
+                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span> 
                                 </div>
                            </div> )}
                             )}
                         </div>
                     </div>
                     <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end" style={{paddingTop :"120px"}}>
-                        <button className="editbtn"  onClick={handleEdit}>
+                        <button style={{ border: "none", background: "none" }}  className="editbtn"  onClick={handleEdit}>
                             <i className="bi bi-pencil-fill"></i>
                         </button>
-                        <button className="deletebtn" onClick={handleDelete}>
+                        <button  style={{ border: "none", background: "none" }} className="deletebtn" onClick={handleDelete}>
                             <i className="bi bi-archive-fill"></i>
                         </button>
                     </div>
@@ -166,7 +172,7 @@ const MultipleResponse = (props) => {
             <Form.Check
                 type="radio"
                 onChange={handleChange}
-                checked={"false" == formData.Orientation}
+                checked={"false" === formData.Orientation}
                 className="mr-5"
                 name="Orientation"
                 value="false"
@@ -176,7 +182,7 @@ const MultipleResponse = (props) => {
             <Form.Check
                 type="radio"
                 onChange={handleChange}
-                checked={"true" == formData.Orientation}
+                checked={"true" === formData.Orientation}
                 className=""
                 name="Orientation"
                 value="true"
