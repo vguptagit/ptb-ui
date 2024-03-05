@@ -183,6 +183,7 @@ const TestTabs = () => {
           message: "Test has been saved successfully!",
           type: "success",
         });
+        setShowModal(false);
       }
     } catch (error) {
       console.error("Error saving Test:", error);
