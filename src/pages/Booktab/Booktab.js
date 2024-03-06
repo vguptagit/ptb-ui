@@ -26,7 +26,7 @@ const LeftContent = () => {
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const isSelected = selectedItems.includes(node.id);
+  const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
   const hasChildNodes = node.nodes && node.nodes.length > 0;
 
   const handleNodeClick = () => {
@@ -36,14 +36,15 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const handleSelectNode = () => {
     if (!hasChildNodes) {
       onSelectItem(node);
-      console.log("onSelectItem",onSelectItem)
+      setIsSelected(!isSelected);
     }
   };
 
   return (
     <div>
       <div
-        className={`tree-node ${isSelected ? "selected" : ""}`}
+        className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""
+          }`}
         onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
       >
         {hasChildNodes && (
@@ -58,20 +59,19 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
         <span>{node.text}</span>
       </div>
       <div>
-        {isOpen &&
-          hasChildNodes && (
-            <div className="nested-nodes">
-              {node.nodes.map((childNode) => (
-                <div key={childNode.id}>
-                  <TreeNode
-                    node={childNode}
-                    onSelectItem={onSelectItem}
-                    selectedItems={selectedItems}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+        {isOpen && hasChildNodes && (
+          <div className="nested-nodes">
+            {node.nodes.map((childNode) => (
+              <div key={childNode.id}>
+                <TreeNode
+                  node={childNode}
+                  onSelectItem={onSelectItem}
+                  selectedItems={selectedItems}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -90,7 +90,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
       return [];
     });
   };
-  
+
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
       return treeData;
@@ -118,14 +118,14 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
- 
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [bookDetails, setBookDetails] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-  const disciplines =  new URLSearchParams(location.search).get("disciplines");
+  const disciplines = new URLSearchParams(location.search).get("disciplines");
   const selectedDisciplines = disciplines.split(",");
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
@@ -135,9 +135,9 @@ const Booktab = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        
+
         if (disciplines) {
-        
+
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
             let newData = [];
@@ -239,7 +239,7 @@ const Booktab = () => {
       });
     }
   };
-  
+
   console.log("books", bookDetails)
 
   return (
@@ -253,7 +253,7 @@ const Booktab = () => {
             <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
-            <button className="booktab btn btn-primary"  disabled={selectedBooks.length === 0}onClick={handleNext}>
+            <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
               Next
             </button>
           </div>
