@@ -36,8 +36,8 @@
   top: 1px;
   cursor: pointer;
   border-radius: 3px;
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border: none;
   padding: 8px;
 }
 
@@ -51,11 +51,11 @@
 
 .editbutton:hover,
 .deletebutton:hover {
-  border-color: #007FA9;
+  border-color: #007fa9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .editbutton.selected {
-  border-color: #007FA9;
-  background-color: #007FA9;
+  border-color: #007fa9;
+  background-color: #007fa9;
 }

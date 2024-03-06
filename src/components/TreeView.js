@@ -29,10 +29,12 @@ const TreeView = ({ data, renderQuestions }) => {
     const dropTargetNodeIndex = updatedTreeData.findIndex(
       (node) => node.id === dropTargetNode.id
     );
-    const insertionIndex =
-      draggedNodeIndex > dropTargetNodeIndex
-        ? dropTargetNodeIndex
-        : dropTargetNodeIndex - 1;
+    let insertionIndex;
+    if (draggedNodeIndex > dropTargetNodeIndex) {
+      insertionIndex = dropTargetNodeIndex;
+    } else {
+      insertionIndex = dropTargetNodeIndex + 1;
+    }
     updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
     setTreeData(updatedTreeData);
   };
