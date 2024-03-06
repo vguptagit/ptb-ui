@@ -1,5 +1,7 @@
 .treeview {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .treeview ul {
@@ -141,4 +143,9 @@
 .choose-your-books-or-topics{
   font-size: 24px;
   margin-bottom: 0px;
+}
+.no-matching-books-message{
+  align-self: center;
+  padding-inline-start: 10px;
+  padding-top:20px;
 }
