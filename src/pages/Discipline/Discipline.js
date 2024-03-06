@@ -105,7 +105,7 @@ const Discipline = () => {
                 </div>
               </div>
               {searchResults.length === 0 && (
-                <div className="no-matching-discipline-message">No matching disciplines found for "{searchTerm}"</div>
+                <div className="no-matching-discipline-message">"No matching disciplines found"</div>
               )}
               <ul className="discipline result-list mt-3">
                 {searchResults.map((item, index) => (

@@ -101,7 +101,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   return (
     <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-        <div>No books found for "{searchTerm}"</div>
+        <div className="no-matching-books-message">"No matching books found "</div>
       ) : (
         filteredTreeData.map((node) => (
           <TreeNode
