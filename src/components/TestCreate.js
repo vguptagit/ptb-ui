@@ -43,7 +43,6 @@ const TestCreate = () => {
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
 
     setTabTitle(newTitle);
-    console.log("new title",newTitle)
     setIsEditing(true);
 
     if (selectedTest && selectedTest.id) {
@@ -116,19 +115,13 @@ const TestCreate = () => {
   };
 
   const renderQuestions = (questionNode, index) => {
+    const key = questionNode.itemId;
     switch (questionNode.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
         return (
           <MultipleChoice
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -139,14 +132,7 @@ const TestCreate = () => {
         return (
           <MultipleResponse
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -157,14 +143,7 @@ const TestCreate = () => {
         return (
           <TrueFalse
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -175,14 +154,7 @@ const TestCreate = () => {
         return (
           <Matching
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -193,14 +165,7 @@ const TestCreate = () => {
         return (
           <FillInBlanks
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -211,14 +176,7 @@ const TestCreate = () => {
         return (
           <Essay
             questionNode={questionNode}
-            key={
-              questionNode.itemId +
-              "_" +
-              selectedTest.id +
-              questionListSize +
-              "_" +
-              index
-            }
+            key={key}
             questionNodeIndex={index}
             questionNodeIsEdit={questionNode.qtiModel.EditOption}
             onQuestionStateChange={handleQuestionState}
@@ -226,7 +184,7 @@ const TestCreate = () => {
           />
         );
       default:
-        return <div></div>;
+        return null;
     }
   };
 
