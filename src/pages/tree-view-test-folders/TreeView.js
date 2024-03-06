@@ -64,20 +64,23 @@ const DraggableNode = ({
       <div>
       {folderName === node.text && (
         <button
-          className={`edit-btn ${selectedNodeId === node.data.guid ? '' : 'selected'}`}
-          onClick={() => handleEditFolder(node.text)}
+          className={`edit-btn ${node.data.sequence === undefined ? 'disabled' : ''} ${selectedNodeId === node.data.guid ? '' : 'selected'}`}
+          onClick={node.data.sequence === undefined ? undefined : () => handleEditFolder(node.text)}
+          disabled={node.data.sequence === undefined}
+        >
+          <i className="bi bi-pencil-fill"></i>
+      </button>
+      )}
+      {folderName !== node.text && (
+        <button
+          className={`edit-btn ${node.data.sequence === undefined ? 'disabled' : ''} ${selectedNodeId === node.data.guid ? '' : 'selected'}`}
+          onClick={node.data.sequence === undefined ? undefined : () => handleEditFolder(node.text)}
+          disabled={node.data.sequence === undefined}
         >
           <i className="bi bi-pencil-fill"></i>
         </button>
       )}
-      {folderName !== node.text && (
-        <button
-          className={`edit-btn ${selectedNodeId === node.data.guid ? 'selected' : ''}`}
-          onClick={() => handleEditFolder(node.text)}
-        >
-          <i className="bi bi-pencil-fill"></i>
-        </button>
-      )}{folderName === node.text && (
+      {folderName === node.text && (
         <button
           className="delete-btn"
           onClick={() => handleDeleteFolder(node.text)}
