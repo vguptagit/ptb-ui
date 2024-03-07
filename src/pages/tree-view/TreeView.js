@@ -23,7 +23,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
   return (
     <div
       ref={drag}
-      className={`tree-node ${isClicked ? 'clicked' : ''}`}
+      className={`tree-nodeqb ${isClicked ? 'clicked' : ''}`}
       onClick={() => {
         onToggle();
         onDataUpdate && onDataUpdate(node);
@@ -48,7 +48,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
 
 const SimpleNode = ({ node, onToggle, onCombinedToggle  }) => {
   return (
-    <div className="tree-node">
+    <div className="tree-nodeqb">
       {node.droppable && (
         <span onClick={() => onCombinedToggle(node)}>
           {node.isOpen ? (

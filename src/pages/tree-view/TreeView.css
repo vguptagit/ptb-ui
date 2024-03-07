@@ -14,7 +14,7 @@
   padding: 5px 0px;
 }
 
-.tree-node {
+.tree-nodeqb {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
@@ -23,14 +23,15 @@
   font-size: 14px;
   color: #4d4d4d;
   line-height: 1em;
+  margin-left: -5px;
 }
 
-.tree-node span {
+.tree-nodeqb span {
   cursor: pointer;
   margin-right: 10px;
 }
 
-.tree-node.custom-style {
+.tree-nodeqb.custom-style {
   background: #e0e0e0;
   height: 40px;
   border-bottom: 1px solid #d0d0d0;
@@ -47,7 +48,7 @@
   color: white;
 }
 
-.clicked .tree-node,
+.clicked .tree-nodeqb,
 .clicked .lens-icon {
   color: white;
 }
