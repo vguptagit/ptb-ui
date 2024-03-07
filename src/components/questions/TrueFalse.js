@@ -192,7 +192,7 @@ return (
       Save
     </Link>
     <Link className="deletelink" onClick={handleDelete}>
-      Delete
+      Remove
     </Link>
   </div>
 </Form>
