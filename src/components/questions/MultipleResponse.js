@@ -132,21 +132,23 @@ const MultipleResponse = (props) => {
                             {formData?.Options?.length > 0 &&
                                 formData?.Options.map((optItem, index) => {
                                     return (
-                                        <Form.Group key={index} className="mb-2 w-100 ">
-                                            <div className="d-flex align-items-center">
+                                        <Form.Group key={index} className="mc-flex-row mb-2">
+                                            <div className="mc-col mc-col-1">
                                                 <Form.Check
                                                     type="checkbox"
                                                     checked={formData.CorrectAnswer.includes(index)}
                                                     value={index}
-                                                    className="me-2"
+                                                    className="item-1"
                                                     name="CorrectAnswer"
                                                     onChange={handleChange}
                                                 />
+                                                </div>
+                                                <div className="mc-col mc-col-2">
                                                 <Form.Control
                                                     onChange={handleOptionsChange}
                                                     value={optItem}
                                                     name={index}
-                                                    className="mb-2"
+                                                    className="item-2"
                                                     type="text"
                                                     placeholder="Enter Answer"
                                                 />
@@ -177,7 +179,7 @@ const MultipleResponse = (props) => {
                 className="mr-5"
                 name="Orientation"
                 value="false"
-                label="Horizontal Question Display"
+                label="Horizontal Displays"
             />
             
             <Form.Check
@@ -187,7 +189,7 @@ const MultipleResponse = (props) => {
                 className=""
                 name="Orientation"
                 value="true"
-                label="Vertical Question Display"
+                label="Vertical Display"
             />
         </div>
       </div>
@@ -197,7 +199,7 @@ const MultipleResponse = (props) => {
                             Save
                         </Link>
                         <Link className="deletelink" onClick={handleDelete}>
-                            Delete
+                            Remove
                         </Link>
                     </div>
                 </Form>
