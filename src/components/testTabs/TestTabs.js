@@ -319,7 +319,7 @@ const TestTabs = () => {
           <FormattedMessage id="testtabs.save" />
         </Dropdown.Item>
         <Dropdown.Item href="#" onClick={(e) => handleSaveAs(e,selectedTest)}>
-         <Modalpopup  width='40%'show={showModal}
+         <Modalpopup  show={showModal}
         handleCloseModal={handleCloseModal} 
         selectedTest={selectedTest}
         handleSave={handleSave}
