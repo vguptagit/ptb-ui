@@ -48,15 +48,18 @@ const AppProvider = ({ children }) => {
         return;
       case "UPDATE_TEST_TITLE":
         const tabTitle =
-          payload.title.length > 6
-            ? payload.title.substring(0, 8) + "..."
+          payload.title.length > 7
+            ? payload.title.substring(0, 8) + ".."
             : payload.title;
         // Assuming payload has 'id' and 'title' properties
+        console.log(tests);
+        
         setTests(
           tests.map((test) =>
             test.id === payload.id ? { ...test, title: tabTitle } : test
           )
-        );
+          );
+          console.log(tests);
         return;
       default:
         return;
