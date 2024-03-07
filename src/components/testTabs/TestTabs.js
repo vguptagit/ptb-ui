@@ -29,20 +29,20 @@ const TestTabs = () => {
     setEllipsisDropdownItems(ellipsisItems);
 
     // Select the first "Untitled" tab by default if no test is already selected
-    if (
-      !selectedTest ||
-      !selectedTest.title ||
-      !selectedTest.title.startsWith("Untitled")
-    ) {
-      const untitledTest = tests?.find(
-        (test) => test.title && test.title.startsWith("Untitled")
-      );
-      if (untitledTest) {
-        dispatchEvent("SELECT_TEST", untitledTest);
-      } else if (tests && tests.length > 0) {
-        dispatchEvent("SELECT_TEST", tests[0]);
-      }
-    }
+    // if (
+    //   !selectedTest ||
+    //   !selectedTest.title ||
+    //   !selectedTest.title.startsWith("Untitled")
+    // ) {
+    //   const untitledTest = tests?.find(
+    //     (test) => test.title && test.title.startsWith("Untitled")
+    //   );
+    //   if (untitledTest) {
+    //     dispatchEvent("SELECT_TEST", untitledTest);
+    //   } else if (tests && tests.length > 0) {
+    //     dispatchEvent("SELECT_TEST", tests[0]);
+    //   }
+    // }
   }, [tests, selectedTest, dispatchEvent]);
 
   useEffect(() => {
