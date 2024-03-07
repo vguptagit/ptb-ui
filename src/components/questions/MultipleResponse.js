@@ -111,7 +111,7 @@ const MultipleResponse = (props) => {
           <i className="bi bi-pencil-fill"></i>
         </button>
         <button className="deletebtn" onClick={handleDelete}>
-          <i className="bi bi-archive-fill"></i>
+          <i className="bi bi-trash"></i>
         </button>
       </div>
                 </div>
