@@ -36,6 +36,19 @@ const TreeView = ({ data, renderQuestions }) => {
       insertionIndex = dropTargetNodeIndex + 1;
     }
     updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
+
+    updatedTreeData.forEach((node, index) => {
+      if (node.content.props.questionNodeIndex !== undefined) {
+        const updatedContentProps = { ...node.content.props };
+        updatedContentProps.questionNodeIndex = index;
+        const updatedContent = React.cloneElement(
+          node.content,
+          updatedContentProps
+        );
+        node.content = updatedContent;
+      }
+    });
+
     setTreeData(updatedTreeData);
   };
 
