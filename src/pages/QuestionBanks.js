@@ -9,9 +9,11 @@ const QuestionBanks = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+
   const handleSelectItem = (item) => {
     setSelectedItems([...selectedItems, item]);
   };
+ 
   useEffect(() => {
     // Fetch data from the API using getAllBooks
     getUserDisciplines()
@@ -37,7 +39,8 @@ const QuestionBanks = () => {
         handleSelectItem={handleSelectItem}
       />
       <div className="questionBank">
-        <QuestBanks />
+        <QuestBanks 
+        />
       </div>
       {disciplineData.length > 0 && (
         <div>
