@@ -39,11 +39,14 @@ li[qstntemplate='true'] .printViewContainer .optionLabelView {
 
 li[qstntemplate='true'] .matchOptionContainer {
 	width: 95%;
+	/* margin-top: -9px; */
 }
 
 li[qstntemplate='true'] .matchingOption {
     min-width: 30%;
-    float: left;
+	float: left;
+	white-space: nowrap;
+	margin-top: -12px;
 }
 
 li[qstntemplate='true'] .matchRight {
@@ -55,6 +58,7 @@ li[qstntemplate=true] .printViewContainer  .qti-blockquote .matchIndex {
 }
 .printViewContainer .mOptionLabel {
 	padding-left: 6px;
+	margin-top: 3px;
 }
 
 li[printmode='true'] .matchingOption {
@@ -62,12 +66,15 @@ li[printmode='true'] .matchingOption {
 	padding-right: 6px;
 	display: block;
 	float: left;
+	
 }
 
 .rightMatchingOption {
 	width: 50%;
 	display: block;
 	float: right;
+	white-space: nowrap;
+	margin-top: -8px;
 }
 
 .divider {
@@ -147,5 +154,10 @@ li[qstntemplate='true'] .qti-itemBody>blockquote:first-child>div.optionLabelView
 }
 .qti-assessmentItem{
 	margin-left: -11px;
-    margin-right: -11px;
+	margin-right: -11px;
+	margin-bottom: 3px;
+}
+
+.printViewContainer{
+	margin: -7px;
 }
