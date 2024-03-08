@@ -69,10 +69,24 @@
   
   .test-title {
     text-align: center;
+    white-space: nowrap; 
+    max-width: 80px; 
+    min-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .close-tab-wrapper {
     position: absolute; /* Position the close button absolutely */
     top: 0; /* Adjust as needed to position vertically */
-    right: 0; /* Adjust as needed to position horizontally */
+    right: -10px; /* Adjust as needed to position horizontally */
+  }
+
+  .floatRight{
+    float: right;
+    margin-right: -6px;
+  }
+  .floatLeft{
+    float: left;
+    height: 102%;
   }

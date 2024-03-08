@@ -25,9 +25,7 @@ const AppProvider = ({ children }) => {
   const addTest = (newTest) => {
     setTests([...tests, newTest]);
     // Pre Select if test legth is 1
-    if (tests.length === 1) {
-      setSelectedTest(newTest);
-    }
+    setSelectedTest(newTest);
   };
 
   const deleteTest = (testSelected) => {
@@ -47,16 +45,10 @@ const AppProvider = ({ children }) => {
         setTests(tests.filter((test) => test.id !== payload.test.id));
         return;
       case "UPDATE_TEST_TITLE":
-        const tabTitle =
-          payload.title.length > 7
-            ? payload.title.substring(0, 8) + ".."
-            : payload.title;
-        // Assuming payload has 'id' and 'title' properties
         console.log(tests);
-        
         setTests(
           tests.map((test) =>
-            test.id === payload.id ? { ...test, title: tabTitle } : test
+            test.id === payload.id ? { ...test, title: payload.title } : test
           )
           );
           console.log(tests);

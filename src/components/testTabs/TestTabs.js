@@ -365,16 +365,16 @@ const TestTabs = () => {
                   }}
                   className={
                     selectedTest && selectedTest.id === test.id
-                      ? "active"
-                      : ""
+                      ? "active floatLeft"
+                      : "floatLeft"
                   }
                   id="test-tabs-navlink"
                 >
                   <div className="tab-label">
-                    <span>{test.title}</span>
+                  <div className="test-title floatLeft" title={test.title}>{test.title}</div>
                     {/* Always render the close button */}
                     {tests.length > 1 && (
-                      <Button
+                      <div className="floatRight"><Button
                         className="close-tab"
                         aria-label="close"
                         aria-roledescription=" "
@@ -383,6 +383,7 @@ const TestTabs = () => {
                       >
                         <i className="fas fa-times"></i>
                       </Button>
+                      </div>
                     )}
                   </div>
                 </Nav.Link>
@@ -399,9 +400,9 @@ const TestTabs = () => {
                   {ellipsisDropdownItems.map((test, index) => (
                     <Dropdown.Item onClick={() => handleNodeSelect(test)}>
                       <div className="tab-label" id="tab-label-dropdown">
-                        <span className="test-title">
+                        <div className="test-title" title={test.title}>
                           {test.title}
-                        </span>
+                        </div>
                         {/* Always render the close button */}
                         {tests.length > 1 && (
                           <div className="close-tab-wrapper">
