@@ -20,17 +20,19 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
     onLensClick(node);
   };
 
+  const handleCaretClick = (e) => {
+    e.stopPropagation();
+    onToggle();
+    onDataUpdate && onDataUpdate(node);
+  };
+
   return (
     <div
       ref={drag}
       className={`tree-nodeqb ${isClicked ? 'clicked' : ''}`}
-      onClick={() => {
-        onToggle();
-        onDataUpdate && onDataUpdate(node);
-      }}
     >
       {node.droppable && (
-        <span>
+        <span onClick={handleCaretClick}>
           {node.isOpen ? (
             <i className="bi bi-caret-down-fill"></i>
           ) : (
