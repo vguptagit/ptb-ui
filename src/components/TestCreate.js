@@ -33,18 +33,18 @@ const TestCreate = () => {
 
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
-
-    // Remove any characters that are not special characters, numbers, or alphabets
-    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>]/g, "");
-
+  
+    // Allow special characters, numbers, alphabets, and spaces
+    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, "");
+  
     if (newTitle.length > 255) {
       newTitle = newTitle.slice(0, 255);
     }
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-
+  
     setTabTitle(newTitle);
     setIsEditing(true);
-
+  
     if (selectedTest && selectedTest.id) {
       dispatchEvent("UPDATE_TEST_TITLE", {
         id: selectedTest.id,
@@ -52,6 +52,7 @@ const TestCreate = () => {
       });
     }
   };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
