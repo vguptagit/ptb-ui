@@ -108,10 +108,10 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
       node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
     );
     if (!hasNodeTypes) {
-      Toastify({ message: "No Selected Nodes to search", type: "warn" });
+      Toastify({ message: "User must select the Books", type: "warn" });
      }
     else if (finalFinalFilteredData.length === 0) {
-      Toastify({ message: "No results found for the search term.", type: "info" });
+      Toastify({ message: "No Matching chapters found", type: "info" });
     }
     setSearchableTreeDataFilter(finalFinalFilteredData);
    }
