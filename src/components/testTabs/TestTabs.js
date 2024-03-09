@@ -12,6 +12,7 @@ import QtiService from "../../utils/qtiService";
 import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
+import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
@@ -22,6 +23,7 @@ const TestTabs = () => {
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -285,12 +287,27 @@ const TestTabs = () => {
     e.stopPropagation();
   };
 
+  const handleClosePrintModal = (e) => {
+  
+    setShowPrintModal(!showPrintModal);
+
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const handleSaveAs = () => {
     console.log("handleSaveAs 1",showModal);
 
     setShowModal(true); 
     console.log("handleSaveAs 2",showModal);
   };
+
+  const handlePrint = () => {
+    console.log("handlePrint",showPrintModal);
+
+    setShowPrintModal(true);
+    console.log("handlePrint",showPrintModal);
+  }
 
   const areQuestionsAvailable = (test) => {
     console.log("enable dropdown");
@@ -332,7 +349,11 @@ const TestTabs = () => {
               id="dropdown-item-button"
               title="Print"
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
+              onClick={(e) => handlePrint(e)}
             >
+              <PrintTestModalpopup width='80%' show={showPrintModal}
+                handleClosePrintModal={handleClosePrintModal}
+              />
               <FormattedMessage id="testtabs.print" />
             </Button>
 
