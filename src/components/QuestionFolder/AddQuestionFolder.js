@@ -20,7 +20,8 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [selectedFolderGuid, setSelectedFolderGuid] = useState(null); // State to track the selected folder's GUID
+
   async function fetchRootFolderGuid() {
     try {
       const rootFolder = await getUserQuestionFoldersRoot();
@@ -139,11 +140,12 @@ const QuestionFolder = ({ userId }) => {
     }
   };
 
-  const handleFolderSelect = (folderTitle) => {
+  const handleFolderSelect = (folderTitle, folderGuid) => {
     setFolderName(folderTitle);
     setEditFolderName(folderTitle);
     setShowTextBox(true);
     setIsEditing(true);
+    setSelectedFolderGuid(folderGuid);
   };
 
   const onNodeUpdate = async (changedNode) => {
@@ -152,9 +154,17 @@ const QuestionFolder = ({ userId }) => {
       Toastify({ message: "Folder rearranged successfully", type: "success" });
     } catch (error) {
       console.error("Error rearranging folder:", error);
-      Toastify({ message: "Failed to rearrange Folder", type: "error" });
+      if (error?.message?.response?.request?.status === 409) {
+        Toastify({
+          message: error.message.response.data.message,
+          type: "error",
+        });
+      } else {
+        Toastify({ message: "Failed to rearrange folder", type: "error" });
+      }
     }
   };
+  
 
   return (
     <div className="p-2">
@@ -164,7 +174,7 @@ const QuestionFolder = ({ userId }) => {
           variant="outline-light"
           onClick={handleAddQuestionFolderClick}
         >
-          <i className="fa-solid fa-plus"></i>&nbsp;
+          <i className="fa-solid fa-plus mr-2"></i>&nbsp;
           <FormattedMessage id="yourquestions.addquestionfolder" />
         </Button>
       </div>
@@ -211,6 +221,7 @@ const QuestionFolder = ({ userId }) => {
             onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
+            selectedFolderGuid={selectedFolderGuid}
           />
         )}
       </div>
