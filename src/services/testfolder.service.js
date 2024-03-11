@@ -43,3 +43,17 @@ export const getRootTestFolders = () => {
       });
     });
 };
+
+export const getUserTestFolders = (folderId) => {
+  return httpInterceptor
+    .get(`${url}/my/folders/${folderId}/folders`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
