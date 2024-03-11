@@ -1,28 +1,11 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import "./Booktab.css";
+import "./AddBookspopup.css";
 import Loader from "../../components/common/loader/Loader";
 import { getDisciplineBooks, saveUserBooks } from "../../services/book.service";
 import { saveUserDiscipline } from "../../services/discipline.service";
 
-const LeftContent = () => {
-  return (
-    <div className="left-content">
-      <ul>
-        <li>
-          <FormattedMessage id="booktab.steps.2" />
-        </li>
-        <li>
-          <FormattedMessage id="booktab.steps.3" />
-        </li>
-        <li>
-          <FormattedMessage id="booktab.steps.4" />
-        </li>
-      </ul>
-    </div>
-  );
-};
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -115,7 +98,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     </div>
   );
 };
-const Booktab = () => {
+const AddBookspopup = ({ handleBack }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -125,8 +108,7 @@ const Booktab = () => {
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-  const disciplines = new URLSearchParams(location.search).get("disciplines");
-  const selectedDisciplines = disciplines.split(",");
+  const selectedDisciplines = JSON.parse(sessionStorage.getItem('selectedDisciplines'));
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -136,7 +118,7 @@ const Booktab = () => {
       setLoading(true);
       try {
 
-        if (disciplines) {
+        if (selectedDisciplines) {
 
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
@@ -191,9 +173,7 @@ const Booktab = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/discipline");
-  };
+  
 
   const handleSearch = (e) => {
     const term = e.target.value;
@@ -248,18 +228,19 @@ const Booktab = () => {
         <Loader show="true" />
       ) : (
         <>
-          <div className="top-container">
-            <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
+          <div className="top-containerbooks">
+          <h2 className="choose-your-books-or-topics">Add Books</h2>
+
             <button className="booktab btn btn-secondary" onClick={handleBack}>
-              Back
+              change discipline 
             </button>
             <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
               Next
             </button>
           </div>
-          <div className="booktab d-flex justify-content-between">
-            <LeftContent />
-            <div className="discipline search-container">
+        
+           
+         
               <div className="discipline input-group rounded">
                 <input
                   type="search"
@@ -288,8 +269,7 @@ const Booktab = () => {
                   treeData={treeData}
                 />
               </ul>
-            </div>
-          </div>
+          
         </>
       )}
 
@@ -297,4 +277,4 @@ const Booktab = () => {
   );
 };
 
-export default Booktab;
+export default AddBookspopup;

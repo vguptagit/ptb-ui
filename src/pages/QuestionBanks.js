@@ -1,5 +1,5 @@
 import TreeView from "./tree-view/TreeView";
-import QuestBanks from "../components/AddQuestionsBanks";
+import QuestBanks from "../components/AddQuestionbankfolder/AddQuestionsBanks";
 import { getUserDisciplines } from "../services/discipline.service";
 import React, { useState, useEffect } from "react";
 import SearchBox from "../components/SearchBox/SearchBox";
