@@ -27,7 +27,8 @@ const Discipline = () => {
 
   const handleNext = () => {
     if (selectedItems.length > 0) {
-      navigate(`/booktab?disciplines=${selectedItems.join(',')}`);
+      sessionStorage.setItem("selectedDiscipline",selectedItems)
+      navigate(`/booktab`);
     }
     console.log("selected items discipline ", selectedItems)
   };

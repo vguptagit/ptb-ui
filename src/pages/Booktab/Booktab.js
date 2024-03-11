@@ -125,7 +125,7 @@ const Booktab = () => {
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-  const disciplines = new URLSearchParams(location.search).get("disciplines");
+  const disciplines = sessionStorage.getItem("selectedDiscipline");
   const selectedDisciplines = disciplines.split(",");
   useEffect(() => {
     document.title = "Choose Your Books or Topics";

@@ -12,7 +12,7 @@ import QtiService from "../../utils/qtiService";
 import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
-import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
+import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
