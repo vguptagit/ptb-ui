@@ -14,19 +14,17 @@ function TreeView({
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [clickedNodes, setClickedNodes] = useState([]);
 
   const fetchChildFolders = async (parentNode) => {
     try {
-      if(!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
-        const childFolders = await getUserTestFolders(
-          parentNode.data.guid
-        );
-        const childTests = await getFolderTests(
-          parentNode.data.guid
-        );
+      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
+        const childFolders = await getUserTestFolders(parentNode.data.guid);
+        const childTests = await getFolderTests(parentNode.data.guid);
+  
         const childNodes = [
           ...childFolders.map((childFolder, childIndex) => ({
-            id: `${parentNode.id}.${childIndex + 1}`,
+            id: `${parentNode.id}.folder.${childIndex + 1}`,
             parent: parentNode.id,
             droppable: true,
             text: childFolder.title,
@@ -36,7 +34,7 @@ function TreeView({
             },
           })),
           ...childTests.map((childTest, childIndex) => ({
-            id: `${parentNode.id}.${childIndex + 1}`,
+            id: `${parentNode.id}.test.${childIndex + 1}`,
             parent: parentNode.id,
             droppable: false,
             text: childTest.title,
@@ -45,17 +43,16 @@ function TreeView({
             },
           })),
         ];
-
+  
         const updatedTreeData = [...treeData];
-        const nodeIndex = updatedTreeData.findIndex(
-          (n) => n.id === parentNode.id
-        );
-
+        const nodeIndex = updatedTreeData.findIndex((n) => n.id === parentNode.id);
+  
         const existingChildNodes = updatedTreeData
           .slice(nodeIndex + 1)
           .filter((node) => node.parent === parentNode.id);
+  
         if (existingChildNodes.length === 0) {
-          updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes)
+          updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes);
           setTreeData(updatedTreeData);
         }
       }
@@ -163,63 +160,70 @@ function TreeView({
       onMouseUp={handleMouseUp}
     >
       <Tree
-        tree={treeData}
-        rootId={0}
-        render={(node, { isOpen, onToggle }) => (
-          <div className="tree-node">
-            {node.droppable && (
-              <span
-                onClick={() => {
-                  if (
-                    !isOpen &&
-                    (!node.children || node.children.length === 0)
-                  ) {
-                    fetchChildFolders(node);
-                  }
-                  onToggle();
-                }}
-                className="custom-caret"
-              >
-                {isOpen ? (
-                  <i className="fa fa-caret-down"></i>
-                ) : (
-                  <i className="fa fa-caret-right"></i>
-                )}
-              </span>
-            )}
-            {node.text}
-            {selectedFolder === node.text && (
-              <button
-                className="editbutton selected"
-                onClick={() => handleEditFolder(node.text)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
-            {selectedFolder !== node.text && (
-              <button
-                className={`editbutton ${node.droppable === false ? 'disabled' : ''}`}
-                onClick={() => handleEditFolder(node.text)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
+      tree={treeData}
+      rootId={0}
+      render={(node, { isOpen, onToggle }) => (
+        <div 
+          className={`tree-node ${clickedNodes.includes(node.text) ? 'clicked' : ''}`}
+          onClick={() => {
+            if (
+              !isOpen &&
+              (!node.children || node.children.length === 0)
+            ) {
+              fetchChildFolders(node);
+            }
+            onToggle();
+            setClickedNodes(prevClickedNodes => {
+              if (prevClickedNodes.includes(node.text)) {
+                return prevClickedNodes.filter(item => item !== node.text);
+              } else {
+                return [...prevClickedNodes, node.text];
+              }
+            });
+          }}
+        >
+          {node.droppable && (
+            <span className="custom-caret">
+              {isOpen ? (
+                <i className="fa fa-caret-down"></i>
+              ) : (
+                <i className="fa fa-caret-right"></i>
+              )}
+            </span>
+          )}
+          {node.text}
+          {selectedFolder === node.text && (
             <button
-              className="deletebutton"
-              onClick={() => handleDeleteFolder(node.text)}
+              className="editbutton selected"
+              onClick={() => handleEditFolder(node.text)}
             >
-              <i className="bi bi-trash"></i>
+              <i className="bi bi-pencil-fill"></i>
             </button>
-          </div>
-        )}
-        dragPreviewRender={(monitorProps) => (
-          <div className="custom-drag-preview">{monitorProps.item.text}</div>
-        )}
-        onDrop={handleDrop}
-        dragPreviewClassName="custom-drag-preview"
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      />
+          )}
+          {selectedFolder !== node.text && (
+            <button
+              className={`editbutton ${node.droppable === false ? 'disabled' : ''}`}
+              onClick={() => handleEditFolder(node.text)}
+            >
+              <i className="bi bi-pencil-fill"></i>
+            </button>
+          )}
+          <button
+            className="deletebutton"
+            onClick={() => handleDeleteFolder(node.text)}
+          >
+            <i className="bi bi-trash"></i>
+          </button>
+        </div>
+      )}
+      dragPreviewRender={(monitorProps) => (
+        <div className="custom-drag-preview">{monitorProps.item.text}</div>
+      )}
+      onDrop={handleDrop}
+      dragPreviewClassName="custom-drag-preview"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    />
     </div>
   );
 }
