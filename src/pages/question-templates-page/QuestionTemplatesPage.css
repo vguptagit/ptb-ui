@@ -39,7 +39,9 @@ li[qstntemplate='true'] .printViewContainer .optionLabelView {
 
 li[qstntemplate='true'] .matchOptionContainer {
 	width: 95%;
-	/* margin-top: -9px; */
+	margin-left: 10px;
+	float: left;
+    margin-bottom: 12px;
 }
 
 li[qstntemplate='true'] .matchingOption {
@@ -55,6 +57,7 @@ li[qstntemplate='true'] .matchRight {
 li[qstntemplate=true] .printViewContainer  .qti-blockquote .matchIndex {
 	font-weight: normal;
 	font-size: 14px;
+	
 }
 .printViewContainer .mOptionLabel {
 	padding-left: 6px;
