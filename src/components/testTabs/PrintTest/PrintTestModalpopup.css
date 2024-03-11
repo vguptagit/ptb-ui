@@ -1,0 +1,45 @@
+.custom-modal .modal-content {
+}
+
+.custom-modal .modal-column {
+}
+
+.custom-modal .modal-column:last-child {
+  border-right: none; /* Remove vertical line for last column */
+}
+
+.print-options, .print-preview{
+  width: 522px;
+}
+
+.print-options{
+padding-left: 20px;
+}  
+
+.print-preview {
+    position: relative;
+    padding-left: 20px;
+}
+
+.button-footer{
+    top: 126px;
+}
+
+.print-preview .btn-close{
+    position: relative;
+    left: 32px;
+    bottom: 13px;
+}
+
+.info-print-export{
+    top: 60px;
+}
+
+.fa-solid.fa-circle-info {
+    color: blue;
+}
+
+.test-containers {
+    height: 420px; /* Adjust the height as needed */
+    overflow-x: auto;
+}
