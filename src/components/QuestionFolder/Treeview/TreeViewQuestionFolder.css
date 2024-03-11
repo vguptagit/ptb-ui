@@ -1,6 +1,6 @@
 .treeview {
   height: 100%;
-  cursor: grab;
+  cursor: pointer;
 }
 
 .treeview.grabbing {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react'
 import { Tree } from "@minoru/react-dnd-treeview";
-import '../../TreeView.css';
+import '../../TreeViewTestCreate.css';
 
 function PrintTestTreeView({ data, renderQuestions }) {
     const [treeData, setTreeData] = useState([]);
