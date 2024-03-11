@@ -90,3 +90,13 @@
     float: left;
     height: 102%;
   }
+
+  span.tab-separator {
+    margin-right: 5px;
+}
+
+a.active.custom-add-new-test.nav-link  {
+  background-color: rgb(159, 155, 155);
+  color: white;
+  padding: 8px 13px;
+}

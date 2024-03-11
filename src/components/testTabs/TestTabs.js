@@ -367,16 +367,17 @@ const TestTabs = () => {
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
           <Nav.Item>
-            <Nav.Link
+          <Nav.Link
               href="#"
               onClick={handleAddNewTestTab}
-              className="active"
+              className={"active custom-add-new-test"}
               aria-label="Add New Test"
             >
               <i className="fa-solid fa-plus"></i>
             </Nav.Link>
-          </Nav.Item>
 
+          </Nav.Item>
+          <span className="tab-separator"> </span>
           {tests.map((test, index) =>
             index < 4 ? (
               <Nav.Item key={test.id}>
