@@ -16,6 +16,7 @@ const TestFolder = ({ doReload, rootFolders, setDoReload }) => {
   const handleAddFolderClick = () => {
     setShowTextBox(true);
     setIsEditing(false);
+    setFolderName("");
     if (!isEditing) {
       setFolderName("");
     }

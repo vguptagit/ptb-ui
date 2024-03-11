@@ -65,6 +65,7 @@ const QuestionFolder = ({ userId }) => {
   const handleAddQuestionFolderClick = () => {
     setShowTextBox(true);
     setIsEditing(false);
+    setFolderName("");
     if (!isEditing) {
       setFolderName("");
     }
