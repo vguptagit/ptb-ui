@@ -13,6 +13,7 @@ import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/test
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
 import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
+import Modalpopupexport from './Modalpopupexport';
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
@@ -24,6 +25,7 @@ const TestTabs = () => {
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
+  const [showModalExport, setShowModalExport] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -302,6 +304,13 @@ const TestTabs = () => {
     console.log("handleSaveAs 2",showModal);
   };
 
+  const handleShowModalExport = () => {
+    // console.log("handleSaveAs 1", showModal);
+ 
+     setShowModalExport(true);
+     //console.log("handleSaveAs 2", showModal);
+   };
+
   const handlePrint = () => {
     console.log("handlePrint",showPrintModal);
 
@@ -357,9 +366,12 @@ const TestTabs = () => {
               <FormattedMessage id="testtabs.print" />
             </Button>
 
-            <Button className="btn-test mt-1 mt-sm-0" disabled>
+            <Button className="btn-test mt-1 mt-sm-0" onClick={handleShowModalExport}>
               <FormattedMessage id="testtabs.export" />
             </Button>
+            <Modalpopupexport 
+            show={showModalExport}
+            handleCloseModal={() => setShowModalExport(false)} />
           </div>
         </div>
       </div>
