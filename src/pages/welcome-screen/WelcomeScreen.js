@@ -32,7 +32,7 @@ const WelcomeScreen = () => {
             streamline all your test creation tasks.
           </Card.Text>
           <hr className="my-4" />
-          <Card.Text className="center-text">Three steps setup</Card.Text>
+          <Card.Text className="center-text">Three step setup</Card.Text>
         <div className="icon-container">
           <div>
             <span className="number">1</span>

@@ -52,23 +52,24 @@ function SessionJS() {
   const iesMxSessionGetToken = () => {
     if (window.piSession) {
       window.piSession.getToken((status, token) => {
-        sessionStorage.setItem('token',token);
-        sessionStorage.setItem('userId', window.piSession.userId())
-        
-        sessionStorage.setItem("toeknExpry" ,window.piSession.currentTokenExpiry())
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('userId', window.piSession.userId());
+        sessionStorage.setItem("tokenExpiry", window.piSession.currentTokenExpiry());
         console.log('getToken:', status, token);
         if (status === 'success' && token) {
+          // Set interval to check token expiry every minute
+          const interval = setInterval(() => {
+            if (window.piSession) {
+              sessionStorage.setItem("tokenExpiry", window.piSession.currentTokenExpiry());
+            }
+          }, 60000); // 1 minute in milliseconds
+
           // Call the login endpoint function from authService.js
           callLoginEndpoint(token)
             .then(response => {
               console.log('Login successful:', response);
-              // sessionStorage.setItem('userId', wi)
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
-          
-              // if (response.data && response.data.success) {
-              //   window.location.href = 'http://testbuilder.dev.pearsoncmg.com:3000/welcomescreen';
-              // }
             })
             .catch(error => {
               console.error('Error logging in:', error);

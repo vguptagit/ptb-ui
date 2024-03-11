@@ -274,6 +274,19 @@ input[type=search]:focus{
   opacity: 1 !important;
 }
 
+.Toastify__toast-theme--colored.Toastify__toast--info {
+  --toastify-color-info: #2480B3;
+}
+.Toastify__toast-theme--colored.Toastify__toast--success {
+  --toastify-color-success: #00A431;
+}
+.Toastify__toast-theme--colored.Toastify__toast--warning {
+  --toastify-color-warning: #EE802B;
+}
+.Toastify__toast-theme--colored.Toastify__toast--error {
+  --toastify-color-error: #D90012;
+}
+
 .close-tab:focus{
   outline: 2px solid #000 !important;
 }

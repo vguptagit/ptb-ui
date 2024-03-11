@@ -44,3 +44,17 @@ export const getFolderTests = (folderId) => {
       });
     });
 };
+
+export const getRootTests = () => {
+  return httpInterceptor
+    .get(`${url}/my/testroot`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};

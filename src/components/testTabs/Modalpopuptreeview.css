@@ -18,7 +18,6 @@
 }
 
 .root-folders-tests .tree-node {
-  margin-bottom: 5px;
 }
 
 .show-text-box {
@@ -36,6 +35,4 @@
 
 #folders-tests {
   max-height: 100%;
-  margin-left: -5px;
-  margin-top: 3px;
 }

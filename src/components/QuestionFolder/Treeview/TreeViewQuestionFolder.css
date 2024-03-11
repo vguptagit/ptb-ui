@@ -1,5 +1,10 @@
 .treeview {
   height: 100%;
+  cursor: grab;
+}
+
+.treeview.grabbing {
+  cursor: grabbing;
 }
 
 .treeview > ul {
@@ -58,4 +63,10 @@
 .editbutton.selected {
   border-color: #007fa9;
   background-color: #007fa9;
+}
+
+.custom-drag-preview {
+  padding: 10px;
+  background-color: #f8f8f8;
+  width: 50%;
 }

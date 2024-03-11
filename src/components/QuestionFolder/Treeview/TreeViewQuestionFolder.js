@@ -8,68 +8,60 @@ function TreeViewQuestionFolder({
   onNodeUpdate,
   folders,
   rootFolderGuid,
-  handleTextBoxClose,
+  selectedFolderGuid,
 }) {
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const fetchChildFolders = async (parentNode) => {
+    try {
+      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
+        const childFolders = await getChildQuestionFolders(
+          parentNode.data.guid
+        );
+        const childNodes = childFolders.map((childFolder, childIndex) => ({
+          id: `${parentNode.id}.${childIndex + 1}`,
+          parent: parentNode.id,
+          droppable: true,
+          text: childFolder.title,
+          data: {
+            guid: childFolder.guid,
+            sequence: childFolder.sequence,
+          },
+        }));
+
+        const updatedTreeData = [...treeData];
+        const nodeIndex = updatedTreeData.findIndex(
+          (n) => n.id === parentNode.id
+        );
+
+        const existingChildNodes = updatedTreeData
+          .slice(nodeIndex + 1)
+          .filter((node) => node.parent === parentNode.id);
+        if (existingChildNodes.length === 0) {
+          updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes);
+          setTreeData(updatedTreeData);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching child question folders:", error);
+    }
+  };
 
   useEffect(() => {
     if (folders && folders.length > 0) {
-      const fetchChildFolders = async () => {
-        const updatedTreeData = await Promise.all(
-          folders.map(async (folder, index) => {
-            const childFolders = await getChildQuestionFolders(folder.guid);
-            const childNodes = await Promise.all(
-              childFolders.map(async (childFolder, childIndex) => {
-                const grandChildFolders = await getChildQuestionFolders(
-                  childFolder.guid
-                );
-                const grandChildNodes = grandChildFolders.map(
-                  (grandChildFolder, grandChildIndex) => ({
-                    id: `${index + 1}.${childIndex + 1}.${grandChildIndex + 1}`,
-                    parent: `${index + 1}.${childIndex + 1}`,
-                    droppable: true,
-                    text: grandChildFolder.title,
-                    data: {
-                      guid: grandChildFolder.guid,
-                      sequence: grandChildFolder.sequence,
-                    },
-                  })
-                );
-                return [
-                  {
-                    id: `${index + 1}.${childIndex + 1}`,
-                    parent: index + 1,
-                    droppable: true,
-                    text: childFolder.title,
-                    data: {
-                      guid: childFolder.guid,
-                      sequence: childFolder.sequence,
-                    },
-                  },
-                  ...grandChildNodes,
-                ];
-              })
-            );
-            return [
-              {
-                id: index + 1,
-                parent: 0,
-                droppable: true,
-                text: folder.title,
-                data: {
-                  guid: folder.guid,
-                  sequence: folder.sequence,
-                },
-              },
-              ...childNodes.flat(),
-            ];
-          })
-        );
-        setTreeData(updatedTreeData.flat());
-      };
-
-      fetchChildFolders();
+      const updatedTreeData = folders.map((folder, index) => ({
+        id: folder.guid,
+        parent: 0,
+        droppable: true,
+        text: folder.title,
+        data: {
+          guid: folder.guid,
+          sequence: folder.sequence,
+        },
+      }));
+      setTreeData(updatedTreeData);
     }
   }, [folders]);
 
@@ -128,19 +120,50 @@ function TreeViewQuestionFolder({
     }
   };
 
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   const handleDeleteFolder = (folderTitle) => {
     console.log("Delete folder:", folderTitle);
   };
 
   return (
-    <div className="treeview">
+    <div
+      className={`treeview ${isDragging ? "grabbing" : ""}`}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
       <Tree
         tree={treeData}
         rootId={0}
         render={(node, { isOpen, onToggle }) => (
           <div className="tree-node">
             {node.droppable && (
-              <span onClick={onToggle} className="custom-caret">
+              <span
+                onClick={() => {
+                  if (
+                    !isOpen &&
+                    (!node.children || node.children.length === 0)
+                  ) {
+                    fetchChildFolders(node);
+                  }
+                  onToggle();
+                }}
+                className="custom-caret"
+              >
                 {isOpen ? (
                   <i className="fa fa-caret-down"></i>
                 ) : (
@@ -178,6 +201,8 @@ function TreeViewQuestionFolder({
         )}
         onDrop={handleDrop}
         dragPreviewClassName="custom-drag-preview"
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
       />
     </div>
   );
