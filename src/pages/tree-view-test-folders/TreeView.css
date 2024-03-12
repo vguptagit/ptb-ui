@@ -74,3 +74,8 @@
 .editbutton.disabled{
   opacity: 0.3;
 }
+
+.tree-node.clicked {
+  background-color: #007FA9;
+  color: white;
+}

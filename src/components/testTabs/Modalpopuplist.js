@@ -1,20 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import Toastify from '../common/Toastify';
 import TreeView from "../../pages/tree-view-test-folders/TreeView";
 import { saveTestFolder, updateTestFolder } from '../../services/testfolder.service';
+import { getRootTests } from '../../services/testcreate.service';
 import './Modalpopuplist.css';
 import Modalpopuptreeview from './Modalpopuptreeview';
 
-const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }) => {
+const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, fetchUserFolders }) => {
   
     const [showTextBox, setShowTextBox] = useState(false);
     const [folderName, setFolderName] = useState('');
     const [editFolderName, setEditFolderName] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [updateKey, setUpdateKey] = useState(0);
+    const [savedFolders, setSavedFolders] = useState([]);
+    const [rootFolderGuid, setRootFolderGuid] = useState("");
+
   
+    useEffect(() => {
+      const savedFoldersFromStorage = JSON.parse(
+        localStorage.getItem("savedFolders")
+      );
+      if(savedFoldersFromStorage) {
+        setSavedFolders(savedFoldersFromStorage);
+      }
+      }, []);
+
+      useEffect(() => {
+        fetchRootFolders();
+      }, []);
+
+      const fetchRootFolders = async () => {
+        const rootFolder = await getRootTests();
+          setRootFolderGuid(rootFolder.guid);
+          console.log(rootFolderGuid);
+      }   
+
     const handleAddFolderClick = () => {
       setShowTextBox(true);
       setIsEditing(false);
@@ -29,55 +52,70 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId }
   
     // need to update this
     const handleSaveFolder = async () => {
-      if (folderName.trim() !== '') {
+      if (folderName.trim() !== "") {
+        try {
+          const maxSequence = savedFolders.reduce((max, folder) => {
+            return folder.sequence > max ? folder.sequence : max;
+          }, 1);
+          const newSequence = maxSequence + 1;
+  
         if (isEditing) {
           // If editing, update the folder
-          const editedFolderIndex = rootFolders.findIndex(
+          const editedFolderIndex = savedFolders.findIndex(
             (folder) => folder.title === editFolderName
           );
-          const editedFolder = rootFolders[editedFolderIndex];
+          const editedFolder = savedFolders[editedFolderIndex];
           const updatedFolderData = {
             guid: editedFolder.guid,
+            parentId: editedFolder.parentId,
             sequence: editedFolder.sequence,
             title: folderName,
-            extUserId: sessionStorage.getItem('userId'),
+            //extUserId: sessionStorage.getItem("userId"),
           };
-          try {
-            await updateTestFolder(
-              updatedFolderData
+          const updateFolder =  await updateTestFolder(
+            updatedFolderData
             );
+            const updatedFolders = [...savedFolders, updateFolder];
+            setSavedFolders(updatedFolders);
+            localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
             setUpdateKey(updateKey + 1);
             Toastify({ message: "Folder updated successfully", type: "success" });
-            setDoReload(!doReload);
-          } catch (error) {
-            Toastify({ message: 'Failed to update folder', type: 'error' });
-          }
         } else {
           const newFolderData = {
-            parentId: 0,
-            sequence: rootFolders.length + 1,
+            parentId: rootFolderGuid,
+            sequence: newSequence,
             title: folderName,
-            extUserId: sessionStorage.getItem('userId'),
+            //extUserId: sessionStorage.getItem("userId"),
           };
-  
-          try {
-            await saveTestFolder(newFolderData);
-            setFolderName('');
-            setShowTextBox(false);
-            Toastify({ message: 'Folder saved successfully', type: 'success' });
-            setDoReload(!doReload);
-          } catch (error) {
-            if (error?.message?.response?.request?.status === 409) {
-              Toastify({ message: error.message.response.data.message, type: 'error' });
-            } else {
-              Toastify({ message: 'Failed to save folder', type: 'error' });
-            }
-          }
+          const savedFolder = await saveTestFolder(
+            newFolderData,
+            // userId
+          );
+          const updatedFolders = [...savedFolders, savedFolder];
+          setSavedFolders(updatedFolders);
+          localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
+          setUpdateKey(updateKey + 1);
+          Toastify({ message: "Folder saved successfully", type: "success" });
         }
+  
         setFolderName("");
         setShowTextBox(false);
+  
+        // Fetch the updated folders immediately after saving or updating
+        fetchUserFolders();
+      } catch (error) {
+        console.error("Error saving folder:", error);
+        if (error?.message?.response?.request?.status === 409) {
+          Toastify({
+            message: error.message.response.data.message,
+            type: "error",
+          });
+        } else {
+          Toastify({ message: "Failed to save folder", type: "error" });
+        }
       }
-    };
+    }
+  };
   
     const handleFolderSelect = (folderTitle) => {
       setFolderName(folderTitle);
