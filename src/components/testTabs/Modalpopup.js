@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FormattedMessage } from "react-intl";
-import { getRootTestFolders } from '../../services/testfolder.service';
+import { getUserTestFolders } from '../../services/testfolder.service';
+import { getRootTests } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify';
 import Modalpopuplist from './Modalpopuplist';
 
@@ -12,25 +13,38 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   const [rootFolders, setRootFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [doReload, setDoReload] = useState(false);
+  const [rootFolderGuid, setRootFolderGuid] = useState("");
+  const [savedFolders, setSavedFolders] = useState([]);
   console.log("ddddddddddddddddddddd",selectedFolderId)
   useEffect(() => {
     document.title = "Your Tests";
   }, []);
 
   useEffect(() => {
-    getRootTestFolders()
-      .then((rootFolders) => {
-        setRootFolders(rootFolders);
+    fetchUserFolders();
+  }, []);
+
+  const fetchUserFolders = async () => {
+    const rootFolder = await getRootTests();
+      setRootFolderGuid(rootFolder.guid);
+      console.log(rootFolderGuid);
+      
+    Promise.all([getUserTestFolders(rootFolder.guid)])
+      .then(([rootFoldersResponse]) => {
+        //const combinedData = [...rootFoldersResponse];
+        setSavedFolders(rootFoldersResponse);
+        setRootFolders(rootFoldersResponse)
+        //localStorage.setItem("savedFolders", JSON.stringify(combinedData));
       })
       .catch((error) => {
-        console.error('Error getting root folders:', error);
+        console.error('Error getting root folders or folder tests:', error);
         if (error?.message?.response?.request?.status === 409) {
-          Toastify({ message: error.message.response.data.message, type: 'error' });
+            Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
-          Toastify({ message: 'Failed to get root folders', type: 'error' });
+            Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
         }
-      });
-  }, [doReload]);
+    });
+  }
 
   useEffect(() => {
     const storedSelectedFolderId = sessionStorage.getItem('selectedFolderId');

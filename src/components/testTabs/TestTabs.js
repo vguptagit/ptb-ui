@@ -9,7 +9,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Nav from "react-bootstrap/Nav";
 import "./TestTabs.css";
 import QtiService from "../../utils/qtiService";
-import { getFolderTests, saveMyQuestions, saveMyTest, getPrintsettings } from '../../services/testcreate.service';
+import { getFolderTests, saveMyQuestions, saveMyTest} from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
 import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
@@ -306,13 +306,13 @@ const TestTabs = () => {
 
   const handleShowModalExport = () => {
     // console.log("handleSaveAs 1", showModal);
-    getPrintsettings().then( (data) => {
+    // getPrintsettings().then( (data) => {
 
-      console.log("print settings are as follows", data);
-    },
-    (error) => {
-      console.log(error);
-    });
+    //   console.log("print settings are as follows", data);
+    // },
+    // (error) => {
+    //   console.log(error);
+    // });
      setShowModalExport(true);
      //console.log("handleSaveAs 2", showModal);
    };

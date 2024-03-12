@@ -103,3 +103,7 @@ a.active.custom-add-new-test.nav-link  {
   color: white;
   padding: 8px 13px;
 }
+
+.tab-label .test-title {
+  text-align: left;
+}
