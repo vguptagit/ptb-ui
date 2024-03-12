@@ -13,7 +13,7 @@ import TrueFalse from "./questions/TrueFalse";
 import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
 import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
-import TreeView from "./TreeView";
+import TreeViewTestCreate from "./TreeViewTestCreate";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
@@ -213,7 +213,7 @@ const TestCreate = () => {
       </div>
       <div className="test-container">
         {selectedTest && selectedTest.questions && (
-          <TreeView
+          <TreeViewTestCreate
             data={selectedTest.questions}
             renderQuestions={renderQuestions}
           />

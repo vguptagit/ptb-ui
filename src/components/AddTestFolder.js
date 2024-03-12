@@ -79,6 +79,7 @@ const TestFolder = ({ userId }) => {
   const handleAddFolderClick = () => {
     setShowTextBox(true);
     setIsEditing(false);
+    setFolderName("");
     if (!isEditing) {
       setFolderName("");
     }

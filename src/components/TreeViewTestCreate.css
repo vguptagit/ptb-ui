@@ -1,6 +1,7 @@
 .tree-container ul {
   list-style: none;
   margin-left: -28px;
+  cursor: pointer;
 }
 
 .mc-flex-row {

@@ -9,7 +9,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Nav from "react-bootstrap/Nav";
 import "./TestTabs.css";
 import QtiService from "../../utils/qtiService";
-import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
+import { getFolderTests, saveMyQuestions, saveMyTest, getPrintsettings } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
 import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
@@ -24,6 +24,7 @@ const TestTabs = () => {
   const [selectedTestTitle, setSelectedTestTitle] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
+  const [showModalExport, setShowModalExport] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -302,6 +303,19 @@ const TestTabs = () => {
     console.log("handleSaveAs 2",showModal);
   };
 
+  const handleShowModalExport = () => {
+    // console.log("handleSaveAs 1", showModal);
+    getPrintsettings().then( (data) => {
+
+      console.log("print settings are as follows", data);
+    },
+    (error) => {
+      console.log(error);
+    });
+     setShowModalExport(true);
+     //console.log("handleSaveAs 2", showModal);
+   };
+
   const handlePrint = () => {
     console.log("handlePrint",showPrintModal);
 
@@ -357,9 +371,12 @@ const TestTabs = () => {
               <FormattedMessage id="testtabs.print" />
             </Button>
 
-            <Button className="btn-test mt-1 mt-sm-0" disabled>
+            <Button className="btn-test mt-1 mt-sm-0" onClick={handleShowModalExport}>
               <FormattedMessage id="testtabs.export" />
             </Button>
+            <Modalpopupexport 
+            show={showModalExport}
+            handleCloseModal={() => setShowModalExport(false)} />
           </div>
         </div>
       </div>
@@ -367,16 +384,17 @@ const TestTabs = () => {
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
           <Nav.Item>
-            <Nav.Link
+          <Nav.Link
               href="#"
               onClick={handleAddNewTestTab}
-              className="active"
+              className={"active custom-add-new-test"}
               aria-label="Add New Test"
             >
               <i className="fa-solid fa-plus"></i>
             </Nav.Link>
-          </Nav.Item>
 
+          </Nav.Item>
+          <span className="tab-separator"> </span>
           {tests.map((test, index) =>
             index < 4 ? (
               <Nav.Item key={test.id}>

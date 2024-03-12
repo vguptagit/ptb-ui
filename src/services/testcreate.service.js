@@ -31,6 +31,20 @@ export const saveMyTest = (test, folderId) => {
     });
 };
 
+export const getPrintsettings = async () => {
+    try {
+        const response = await httpInterceptor.get(`${url}/settings/printsettings`);
+        console.log("API Response:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("API Error:", error);
+        throw {
+            type: "error",
+            message: error
+        };
+    }
+};
+
 export const getFolderTests = (folderId) => {
   return httpInterceptor
     .get(`${url}/my/folders/${folderId}/tests`)
