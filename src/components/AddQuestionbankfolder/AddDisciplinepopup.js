@@ -10,7 +10,10 @@ const AddDisciplinepopup = ({ handleNext }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [allData, setAllData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState(() => {
+        const storedItems = sessionStorage.getItem("selectedDiscipline");
+        return storedItems ? JSON.parse(storedItems) : [];
+      });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -55,8 +58,8 @@ const AddDisciplinepopup = ({ handleNext }) => {
 
     const handleNextStep = () => {
         if (selectedItems.length > 0) {
-            // Store selected disciplines in sessionStorage
-            sessionStorage.setItem('selectedDisciplines', JSON.stringify(selectedItems));
+        
+            sessionStorage.setItem("selectedDiscipline", JSON.stringify(selectedItems));
             handleNext();
         }
     };

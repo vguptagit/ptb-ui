@@ -10,7 +10,7 @@ export default httpInterceptor;
 
 httpInterceptor.interceptors.request.use(
     config =>{
-        const tokenExpiry = sessionStorage.getItem("toeknExpry");
+        const tokenExpiry = sessionStorage.getItem("tokenExpiry");
         if (tokenExpiry) {
             const expiryDate = new Date(tokenExpiry);
           

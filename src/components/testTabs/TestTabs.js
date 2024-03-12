@@ -12,8 +12,8 @@ import QtiService from "../../utils/qtiService";
 import { getFolderTests, saveMyQuestions, saveMyTest} from '../../services/testcreate.service';
 import Toastify from '../common/Toastify'; 
 import Modalpopup from './Modalpopup';
-import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
-import Modalpopupexport from './Modalpopupexport';
+import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
+import Modalpopupexport from './Modalpopupexport'
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
@@ -375,7 +375,8 @@ const TestTabs = () => {
             <Button className="btn-test mt-1 mt-sm-0" onClick={handleShowModalExport}>
               <FormattedMessage id="testtabs.export" />
             </Button>
-            <Modalpopupexport 
+            <Modalpopupexport
+
             show={showModalExport}
             handleCloseModal={() => setShowModalExport(false)} />
           </div>
