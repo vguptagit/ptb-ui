@@ -26,9 +26,13 @@ const LeftContent = () => {
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
   const hasChildNodes = node.nodes && node.nodes.length > 0;
+  const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
 
+  useEffect(() => {
+    setIsSelected(selectedItems.includes(node.id));
+  }, [selectedItems, node.id]);
+  
   const handleNodeClick = () => {
     setIsOpen(!isOpen);
   };
@@ -77,6 +81,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   );
 };
 
+
 const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
     return nodes.flatMap((node) => {
@@ -115,6 +120,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     </div>
   );
 };
+
 const Booktab = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -126,7 +132,8 @@ const Booktab = () => {
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
   const disciplines = sessionStorage.getItem("selectedDiscipline");
-  const selectedDisciplines = disciplines.split(",");
+  const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
+  
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -135,9 +142,7 @@ const Booktab = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-
         if (disciplines) {
-
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
             let newData = [];
@@ -179,13 +184,14 @@ const Booktab = () => {
     };
 
     fetchData();
-  }, [location.search, getDisciplineBooks]);
+  }, [location.search, getDisciplineBooks, selectedDisciplines]);
 
   const handleNext = () => {
     const parentIds = bookDetails.map(book => book.id);
     // const disciplines = bookDetails.map(discipline => discipline.discipline)
     saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
+    sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
     }
@@ -201,28 +207,14 @@ const Booktab = () => {
     const inputWidth = Math.max(200, e.target.scrollWidth);
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
-
-  // const handleSelectItem = (node) => {
-  //   if (!node.droppable) {
-  //     const bookDetail = {
-  //       id: `${node.id}`,
-  //       title: node.text,
-  //       discipline: treeData.find(item => item.id === node.parentId)?.text
-  //     };
-  //     setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
-  //     setSelectedBooks((prevSelectedBooks) => {
-  //       const key = `${node.id}`;
-  //       if (prevSelectedBooks.includes(key)) {
-  //         return prevSelectedBooks.filter((item) => item !== key);
-  //       } else {
-  //         return [...prevSelectedBooks, key];
-  //       }
-  //     });
-  //   }
-  // };
+  useEffect(() => {
+    const storedSelectedBooks = sessionStorage.getItem("selectedBooks");
+    if (storedSelectedBooks) {
+      setSelectedBooks(JSON.parse(storedSelectedBooks));
+    }
+  }, [sessionStorage.getItem("selectedBooks")]);
   const handleSelectItem = (node) => {
     if (!node.droppable) {
-      // Only select if the node is a book
       const bookDetail = {
         id: `${node.id}`,
         title: node.text,
@@ -237,9 +229,9 @@ const Booktab = () => {
           return [...prevSelectedBooks, key];
         }
       });
+      sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
     }
   };
-
   console.log("books", bookDetails)
 
   return (
@@ -292,7 +284,6 @@ const Booktab = () => {
           </div>
         </>
       )}
-
     </div>
   );
 };

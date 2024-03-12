@@ -31,7 +31,9 @@ const QuestBanks = () => {
             <div>
                 <Modal show={showModal} onHide={handleClose}
                     size="lg"
-                    aria-labelledby="example-custom-modal-styling-title" centered >
+                    dialogClassName="modal-90w"
+                    
+                   centered >
                     <Modal.Header>
                     </Modal.Header>
                     <Modal.Body>
@@ -45,9 +47,7 @@ const QuestBanks = () => {
                         <Button variant="secondary" onClick={handleClose}>
                             Cancel
                         </Button>
-                        <Button variant='primary' >
-                            Save
-                        </Button>
+                       
                     </Modal.Footer>
                 </Modal>
             </div>

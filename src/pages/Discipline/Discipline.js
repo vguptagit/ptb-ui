@@ -22,12 +22,15 @@ const Discipline = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [allData, setAllData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(() => {
+    const storedItems = sessionStorage.getItem("selectedDiscipline");
+    return storedItems ? JSON.parse(storedItems) : [];
+  });
   const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
     if (selectedItems.length > 0) {
-      sessionStorage.setItem("selectedDiscipline",selectedItems)
+      sessionStorage.setItem("selectedDiscipline", JSON.stringify(selectedItems));
       navigate(`/booktab`);
     }
     console.log("selected items discipline ", selectedItems)
