@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeViewQuestionFolder.css";
 import { getChildQuestionFolders } from "../../../services/userfolder.service";
+import Toastify from "../../common/Toastify";
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -82,6 +83,12 @@ function TreeViewQuestionFolder({
     };
 
     try {
+
+      const isDuplicate = newTree.some(node => node.text === nodeToBeUpdated.title && node.data.guid !== nodeToBeUpdated.guid);
+      if (isDuplicate) {
+        Toastify({ message: "Duplicate folder. Please choose a different name.", type: "error" });
+        return;
+      }
       const childFolders = await getChildQuestionFolders(parentId);
       const childNodes = childFolders.map((childFolder, index) => ({
         id: `${parentId}.${index + 1}`,
