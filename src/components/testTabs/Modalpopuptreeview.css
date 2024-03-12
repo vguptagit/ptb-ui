@@ -1,36 +1,79 @@
-/* Modalpopuplist.css */
-
-.button-container {
-  /* margin-bottom: 10px; */
+.treeview {
+  height: 100%;
+  cursor: grab;
 }
 
-.color-black {
-  color: black;
+.treeview.grabbing {
+  cursor: grabbing;
 }
 
-.button-container button {
+.treeview > ul {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 5px 0px;
+  list-style: none;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  color: #4d4d4d;
+  position: relative;
+  line-height: 1em;
+}
+
+.tree-node span {
+  cursor: pointer;
   margin-right: 10px;
 }
 
-.root-folders-tests {
-  max-height: 300px; /* Set a maximum height for the container */
-  overflow-y: auto; /* Enable vertical scrollbar if content exceeds container height */
+.custom-drag-preview {
+  font-size: 14px;
 }
 
-.root-folders-tests .tree-node {
+.editbutton,
+.deletebutton {
+  position: absolute;
+  top: 1px;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: #f8f8f8;
+  border: none;
+  padding: 8px;
 }
 
-.show-text-box {
-  display: flex;
+.editbutton {
+  right: 40px;
 }
 
-.show-text-box .form-control {
-  margin-bottom: 10px;
-  width: 360px;
+.deletebutton {
+  right: 2px;
 }
 
-.show-text-box button {
-  margin-left: 5px;
+.editbutton:hover,
+.deletebutton:hover {
+  border-color: #007fa9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.editbutton.selected {
+  border-color: #007fa9;
+  background-color: #007fa9;
+}
+
+.custom-drag-preview {
+  padding: 10px;
+  background-color: #f8f8f8;
+  width: 50%;
+}
+
+.tree-node.clicked {
+  background-color: #007FA9;
+  color: white;
 }
 
 #folders-tests {

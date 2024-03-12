@@ -1,141 +1,201 @@
 import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./Modalpopuptreeview.css";
+import { getUserTestFolders } from "../../services/testfolder.service";
+import { getFolderTests } from "../../services/testcreate.service";
 
-
-    const DraggableNode = ({
-        node,
-        onToggle,
-        folderId,
-        depth,
-        isOpen,
-        selectedFolderId,
-        handleFolderSelect,
-      }) => {
-        const handleNodeClick = () => {
-          if (selectedFolderId !== node.data.guid) {
-            handleFolderSelect(node.data.guid);
-          } else {
-            handleFolderSelect(null);
-          }
-          onToggle(); 
-        };
-      
-        return (
-          <div
-            className={`tree-node ${selectedFolderId === node.data.guid ? 'selected' : ''}`}
-            onClick={handleNodeClick}
-            style={{ marginInlineStart: depth * 10 }}
-          >
-            {node.droppable && (
-              <span>
-                {isOpen ? (
-                  <i className="bi bi-caret-down-fill"></i>
-                ) : (
-                  <i className="bi bi-caret-right-fill"></i>
-                )}
-              </span>
-            )}
-            {node.text}
-          </div>
-        );
-      };
-
-function Modalpopuptreeview({ testFolders, folderId, onNodeUpdate, handleFolderSelectOnParent}) {
+function Modalpopuptreeview({ 
+  onFolderSelect,
+  onNodeUpdate,
+  folders,
+  rootFolderGuid,
+  selectedFolderGuid,
+}) {
   const [treeData, setTreeData] = useState([]);
-  const [selectedFolderId, setSelectedFolderId] = useState(null);
-  console.log("selectedfolderID",selectedFolderId);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [clickedNodes, setClickedNodes] = useState([]);
+
+  const fetchChildFolders = async (parentNode) => {
+    try {
+      sessionStorage.setItem('selectedFolderId', JSON.stringify(parentNode.data.guid));
+      console.log(parentNode.data.guid);
+      if(!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
+        const childFolders = await getUserTestFolders(
+          parentNode.data.guid
+        );
+        const childNodes = [
+          ...childFolders.map((childFolder, childIndex) => ({
+            id: `${parentNode.id}.${childIndex + 1}`,
+            parent: parentNode.id,
+            droppable: true,
+            text: childFolder.title,
+            data: {
+              guid: childFolder.guid,
+              sequence: childFolder.sequence,
+            },
+          })),
+        ];
+
+        const updatedTreeData = [...treeData];
+        const nodeIndex = updatedTreeData.findIndex(
+          (n) => n.id === parentNode.id
+        );
+
+        const existingChildNodes = updatedTreeData
+          .slice(nodeIndex + 1)
+          .filter((node) => node.parent === parentNode.id);
+        if (existingChildNodes.length === 0) {
+          updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes)
+          setTreeData(updatedTreeData);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching child question folders:", error);
+    }
+  };
+
   useEffect(() => {
-    sessionStorage.setItem('selectedFolderId', JSON.stringify(selectedFolderId));
-  }, [selectedFolderId]);
-  const handleDrop = (newTree, { dragSource, dropTarget, destinationIndex }) => {
-    setTreeData(newTree);
+    if (folders && folders.length > 0) {
+      const updatedTreeData = folders.map((folder, index) => ({
+        id: folder.guid,
+        parent: 0,
+        droppable: folder.parentId ? true : false,
+        text: folder.title,
+        data: {
+          guid: folder.guid,
+          sequence: folder.sequence,
+        },
+      }));
+      setTreeData(updatedTreeData);
+    }
+  }, [folders]);
+
+  const handleDrop = async (newTree, { dragSource, dropTarget }) => {
+    let parentId;
+
+    if(dropTarget && dropTarget.data) {
+      parentId = dropTarget.data.guid;
+    } else {
+      parentId = rootFolderGuid;
+    }
+
     const nodeToBeUpdated = {
       guid: dragSource.data.guid,
-      parentId: dropTarget === undefined ? 0 : dropTarget.data.guid,
-      sequence: dropTarget === undefined ? getNextSequenceWithoutParentId(dragSource) : getNextSequenceForParentFolderId(dropTarget.data.guid),
-      extUserId: sessionStorage.getItem('userId'),
+      parentId: parentId,
+      sequence: dropTarget ? dropTarget.data.sequence : 0,
+      title: dragSource.text,
+    };
+
+    try{
+      const childFolders = await getUserTestFolders(parentId);
+      const childNodes = childFolders.map((childFolder, index) => ({
+        id: `${parentId}.${index + 1}`,
+        parent: parentId,
+        droppable: true,
+        text: childFolder.title,
+        data: {
+          guid: childFolder.guid,
+          sequence: childFolder.sequence,
+        },
+      }));
+      const parentIndex = newTree.findIndex((node) => node.id === parentId);
+      const isChildNode = parentId.toString().includes(".");
+      const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
+      const updatedTreeData = [...newTree];
+      updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
+      setTreeData(updatedTreeData);
+    } catch (error) {
+      console.error("Error fetching child question folders:", error);
     }
     onNodeUpdate(nodeToBeUpdated);
   };
 
-  
-  function getIndexByParentGuid(parentGuid) {
-    return testFolders.findIndex(ele => ele.guid === parentGuid);
-  }
-
-  function getNextSequenceForParentFolderId(parentFolderId) {
-    let maxSequence = 0;
-    for (const folder of testFolders) {
-      if (folder.parentId === parentFolderId && folder.sequence > maxSequence) {
-        maxSequence = folder.sequence;
+  const handleEditFolder = (folderTitle) => {
+    console.log("Edit folder:", folderTitle);
+    if (selectedFolder === folderTitle) {
+      setSelectedFolder(null);
+      if (onFolderSelect) {
+        onFolderSelect("");
       }
-    }
-    return maxSequence + 1;
-  }
-
-  function getNextSequenceWithoutParentId(dragSource) {
-    return dragSource.data.sequence;
-  }
-
-  useEffect(() => {
-    if (testFolders && testFolders.length > 0) {
-      const biggestSequence = testFolders.reduce((maxSequence, folder) => {
-        return Math.max(maxSequence, folder.sequence);
-    }, -Infinity);
-      const specifiedSequence = biggestSequence;
-      const folderNodes = testFolders.map((folder, index) => ({
-        id: index + 1, 
-        parent: getIndexByParentGuid(folder.parentId) !== 0 ? getIndexByParentGuid(folder.parentId) + 1 : 0,
-        droppable: true,
-        text: folder.title,
-        data: {
-            guid: folder.guid,
-            sequence: folder.sequence,
-        }
-    }));
-      folderNodes.sort((a, b) => a.data.sequence - b.data.sequence);
-      
-      const insertIndex = folderNodes.findIndex(node => node.data.sequence === specifiedSequence);
-
-
-      if (insertIndex !== -1) {
-        const movedFolders = folderNodes.splice(insertIndex);
-        folderNodes.unshift(...movedFolders);
+    } else {
+      if (onFolderSelect) {
+        onFolderSelect(folderTitle);
       }
-
-      setTreeData(folderNodes);
+      setSelectedFolder(folderTitle);
     }
-  }, [testFolders]);
+  }
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleDeleteFolder = (folderTitle) => {
+    console.log("Delete folder:", folderTitle);
+  };
 
   return (
-    <>
-      <div className="treeview">
-        <Tree
-          tree={treeData}
-          rootId={0}
-          render={(node, { depth, isOpen, onToggle }) => {
-            return (
-                <DraggableNode
-                    node={node}
-                    isOpen={isOpen}
-                    folderId={folderId}
-                    depth={depth}
-                    onToggle={onToggle}
-                    selectedFolderId={selectedFolderId}
-                    handleFolderSelect={setSelectedFolderId}
-                    handleFolderSelectOnParent={handleFolderSelectOnParent}
-                />
-            );
-        }}
-          dragPreviewRender={(monitorProps) => (
-            <div>{monitorProps.item.node?.text}</div>
+    <div
+      className={`treeview ${isDragging ? "grabbing" : ""}`}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      <Tree
+      tree={treeData}
+      rootId={0}
+      render={(node, { isOpen, onToggle }) => (
+        <div 
+          className={`tree-node ${clickedNodes.includes(node.id) ? 'clicked' : ''}`}
+          onClick={() => {
+            if (
+              !isOpen &&
+              (!node.children || node.children.length === 0)
+            ) {
+              fetchChildFolders(node);
+            }
+            onToggle();
+            setClickedNodes(prevClickedNodes => {
+              if (prevClickedNodes.includes(node.id)) {
+                return prevClickedNodes.filter(item => item !== node.id);
+              } else {
+                return [...prevClickedNodes, node.id];
+              }
+            });
+          }}
+        >
+          {node.droppable && (
+            <span className="custom-caret">
+              {isOpen ? (
+                <i className="fa fa-caret-down"></i>
+              ) : (
+                <i className="fa fa-caret-right"></i>
+              )}
+            </span>
           )}
-          onDrop={handleDrop}
-          sort={false}
-        />
-      </div>
-    </>
+          {node.text}
+        </div>
+      )}
+      dragPreviewRender={(monitorProps) => (
+        <div className="custom-drag-preview">{monitorProps.item.text}</div>
+      )}
+      onDrop={handleDrop}
+      dragPreviewClassName="custom-drag-preview"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    />
+    </div>
   );
 }
 
