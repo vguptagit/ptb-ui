@@ -164,7 +164,7 @@ function TreeView({
       rootId={0}
       render={(node, { isOpen, onToggle }) => (
         <div 
-          className={`tree-node ${clickedNodes.includes(node.text) ? 'clicked' : ''}`}
+          className={`tree-node ${clickedNodes.includes(node.id) ? 'clicked' : ''}`}
           onClick={() => {
             if (
               !isOpen &&
@@ -174,10 +174,10 @@ function TreeView({
             }
             onToggle();
             setClickedNodes(prevClickedNodes => {
-              if (prevClickedNodes.includes(node.text)) {
-                return prevClickedNodes.filter(item => item !== node.text);
+              if (prevClickedNodes.includes(node.id)) {
+                return prevClickedNodes.filter(item => item !== node.id);
               } else {
-                return [...prevClickedNodes, node.text];
+                return [...prevClickedNodes, node.id];
               }
             });
           }}
@@ -196,14 +196,16 @@ function TreeView({
             <button
               className="editbutton selected"
               onClick={() => handleEditFolder(node.text)}
+              disabled={!node.droppable} // Disable the button if node.droppable is false
             >
               <i className="bi bi-pencil-fill"></i>
             </button>
           )}
-          {selectedFolder !== node.text && (
+          {selectedFolder !== node.text && node.droppable && ( // Render the button only if node.droppable is true
             <button
-              className={`editbutton ${node.droppable === false ? 'disabled' : ''}`}
+              className="editbutton"
               onClick={() => handleEditFolder(node.text)}
+              disabled={!node.droppable} // Disable the button if node.droppable is false
             >
               <i className="bi bi-pencil-fill"></i>
             </button>
