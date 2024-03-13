@@ -253,7 +253,7 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                 <Modal.Title>
                   <h3>Print Preview</h3>
                 </Modal.Title>
-                <button className="closebtn" onClick={handleClosePrintModal}>
+                <button className="closebutton" onClick={handleClosePrintModal}>
                   <i class="bi bi-x"></i>
                 </button>
               </Modal.Header>
