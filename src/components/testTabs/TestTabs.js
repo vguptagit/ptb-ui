@@ -289,12 +289,12 @@ const TestTabs = () => {
     e.stopPropagation();
   };
 
-  const handleClosePrintModal = (e) => {
+  const handleClosePrintModal = (event) => {
   
     setShowPrintModal(!showPrintModal);
 
-    e.preventDefault();
-    e.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   const handleSaveAs = () => {

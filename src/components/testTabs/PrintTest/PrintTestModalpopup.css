@@ -43,3 +43,28 @@ padding-left: 20px;
     height: 420px; /* Adjust the height as needed */
     overflow-x: auto;
 }
+
+.closebtn {
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 28px;
+    margin-right: -17px;
+    margin-top: -19px;
+}
+
+i.bi.bi-info-circle-fill.me-1 {
+    color: #145ae1;
+    font-size: 19px;
+}
+
+.text-muted {
+    --bs-text-opacity: 1;
+    color: var(--bs-secondary-color) !important;
+    font-style: oblique;
+    font-weight: bold;
+    font-size: larger;
+    margin-left: -5px;
+    margin-top: 24px;
+    text-align: center;
+}
