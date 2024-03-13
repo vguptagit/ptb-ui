@@ -15,7 +15,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   const [doReload, setDoReload] = useState(false);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [savedFolders, setSavedFolders] = useState([]);
-  console.log("ddddddddddddddddddddd",selectedFolderId)
+  
   useEffect(() => {
     document.title = "Your Tests";
   }, []);
