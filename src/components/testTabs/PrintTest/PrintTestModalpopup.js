@@ -180,7 +180,7 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                               max={selectedTest?.questions.length}
                             />
                           </div>
-                          <div className="d-flex gap-1 flex-wrap justify-content-center">
+                          <div className="add-remove-buttons d-flex gap-1 flex-wrap">
                             <Button size="sm" onClick={handleAddLine}>
                               Add line
                             </Button>

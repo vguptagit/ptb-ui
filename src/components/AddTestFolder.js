@@ -176,6 +176,7 @@ const TestFolder = ({ userId }) => {
         message: error.message.response.data.message,
         type: "error",
       });
+      fetchUserFolders();
     } else {
       Toastify({ message: "Failed to rearrange folder", type: "error" });
     }
