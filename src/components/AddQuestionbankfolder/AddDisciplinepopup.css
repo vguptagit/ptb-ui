@@ -21,7 +21,7 @@
   margin-bottom: 20px;
 }
 
-.discipline.search-container {
+.disciplinePopup.search-container {
   width: 55%;
   display: flex;
   margin-right: 10px;
@@ -29,17 +29,17 @@
   align-items: flex-end;
 }
 
-.discipline.btn.btn-primary {
+.disciplinePopup.btn.btn-primary {
   font-size: 14px;
 }
 
 
-.discipline.input-group {
+.disciplinePopup.input-group {
   position: relative;
   width: 100%;
 }
 
-.discipline.input-group-append {
+.disciplinePopup.input-group-append {
   position: absolute;
   top: 0;
   right: 0;
@@ -49,22 +49,22 @@
   padding: 0px 5px 5px;
 }
 
-.discipline.search-input {
+.disciplinePopup.search-input {
   min-width: 200px;
   width: 100%;
   transition: none;
 }
 
-.discipline.result-list {
+.disciplinePopup.result-list {
   width: 99%;
   list-style: none;
   padding: 0;
   position: relative;
-  height: calc(77vh - 85px);
+  height: calc(50vh - 85px);
   overflow: auto;
 }
 
-.discipline.result-list li {
+.disciplinePopup.result-list li {
   padding-block-start: inherit;
   cursor: pointer;
   border-top: 1px solid #D0D0D0;
@@ -72,12 +72,12 @@
   padding: 5px;
 }
 
-.discipline.result-list li:last-child {
+.disciplinePopup.result-list li:last-child {
   border-bottom: 1px solid #D0D0D0;
   ;
 }
 
-.discipline.result-list li.selected {
+.disciplinePopup.result-list li.selected {
   background-color: #007FA9;
   Box-Shadow: 3px - Inset top, #006A8D;
   Color: #FFFFFF
