@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, ModalFooter } from 'react-bootstrap';
 import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
 
@@ -29,30 +29,32 @@ const QuestBanks = () => {
                 </Button>
             </div>
             <div>
-                <Modal show={showModal} onHide={handleClose}
+            <Modal 
+                    show={showModal} 
+                    onHide={handleClose}
                     size="lg"
-                    dialogClassName="modal-90w"
-                    
-                   centered >
-                    <Modal.Header>
-                    </Modal.Header>
+                    dialogClassName="modal-dialog-centered"
+                >
                     <Modal.Body>
-                        {step === 1 ? (
-                            <AddDisciplinepopup handleNext={handleNext} />
-                        ) : (
-                            <AddBookspopup handleBack={handleBack} />
-                        )}
+                        <div className="modal-content-wrapper">
+                            {step === 1 ? (
+                                <AddDisciplinepopup handleNext={handleNext} />
+                            ) : (
+                                <AddBookspopup handleBack={handleBack} />
+                            )}
+                        </div>
+                      
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                    < ModalFooter>
+                    <Button variant="secondary" onClick={handleClose}>
                             Cancel
                         </Button>
-                       
-                    </Modal.Footer>
+                    </ModalFooter>
                 </Modal>
             </div>
         </>
     );
 };
+
 
 export default QuestBanks;

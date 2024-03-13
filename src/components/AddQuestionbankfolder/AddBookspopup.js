@@ -112,7 +112,7 @@ const AddBookspopup = ({ handleBack }) => {
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
-  const disciplines = sessionStorage.getItem("selectedDiscipline");
+  const disciplines = sessionStorage.getItem("selectedDisciplinesAddpopup");
   const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
@@ -173,9 +173,7 @@ const AddBookspopup = ({ handleBack }) => {
     // const disciplines = bookDetails.map(discipline => discipline.discipline)
     saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-    sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
     if (selectedBooks.length > 0) {
-
       navigate(`/home?books=${bookDetails.join(',')}`);
     }
   };
@@ -213,7 +211,7 @@ const AddBookspopup = ({ handleBack }) => {
     if (storedSelectedBooks) {
       setSelectedBooks(JSON.parse(storedSelectedBooks));
     }
-  }, [sessionStorage.getItem("selectedBooks")]);
+  }, []);
   const handleSelectItem = (node) => {
     if (!node.droppable) {
       // Only select if the node is a book

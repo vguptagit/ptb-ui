@@ -3,18 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './AddDisciplinepopup.css';
 import Loader from "../common/loader/Loader";
-import { getAllDisciplines } from "../../services/discipline.service";
+import { getAllDisciplines, getUserDisciplines } from "../../services/discipline.service";
 
 const AddDisciplinepopup = ({ handleNext }) => {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
     const [allData, setAllData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
-    const [selectedItems, setSelectedItems] = useState(() => {
-        const storedItems = sessionStorage.getItem("selectedDiscipline");
-        return storedItems ? JSON.parse(storedItems) : [];
-      });
+    const [selectedItems, setSelectedItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userDisciplineData, setUserDisciplineData] = useState([]);
 
     useEffect(() => {
         document.title = "Choose Your Discipline";
@@ -35,6 +33,28 @@ const AddDisciplinepopup = ({ handleNext }) => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        getUserDisciplines()
+          .then((data) => {
+            if (data) {
+              setUserDisciplineData(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setLoading(false);
+          });
+      }, []);
+
+    useEffect(() => {
+        if (userDisciplineData.length > 0) {
+            setSelectedItems(prevSelectedItems => {
+                const selectedItems = allData.filter(item => userDisciplineData.includes(item));
+                return [...prevSelectedItems, ...selectedItems];
+            });
+        }
+    }, [userDisciplineData, allData]);
 
     const handleSearch = (e) => {
         const term = e.target.value;
@@ -58,11 +78,12 @@ const AddDisciplinepopup = ({ handleNext }) => {
 
     const handleNextStep = () => {
         if (selectedItems.length > 0) {
-        
-            sessionStorage.setItem("selectedDiscipline", JSON.stringify(selectedItems));
+            // Store selected disciplines in sessionStorage
+            sessionStorage.setItem('selectedDisciplinesAddpopup', JSON.stringify(selectedItems));
             handleNext();
         }
     };
+    
 
     return (
         <div className="discipline-container">
@@ -76,7 +97,6 @@ const AddDisciplinepopup = ({ handleNext }) => {
                         <h2 className="choose-your-books-or-topics">Add Discipline</h2>
                         <button className="discipline btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
                     </div>
-
                     <div className="discipline input-group rounded">
                         <input
                             type="search"
@@ -113,7 +133,6 @@ const AddDisciplinepopup = ({ handleNext }) => {
                             </li>
                         ))}
                     </ul>
-
                 </>
             )}
         </div>
