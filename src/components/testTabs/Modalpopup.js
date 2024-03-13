@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { FormattedMessage } from "react-intl";
-import { getUserTestFolders } from '../../services/testfolder.service';
 import { getRootTests } from '../../services/testcreate.service';
+import { getUserTestFolders } from '../../services/testfolder.service';
 import Toastify from '../common/Toastify';
 import Modalpopuplist from './Modalpopuplist';
 
@@ -46,12 +46,6 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
     });
   }
 
-  useEffect(() => {
-    const storedSelectedFolderId = sessionStorage.getItem('selectedFolderId');
-    if (storedSelectedFolderId) {
-      setSelectedFolderId(JSON.parse(storedSelectedFolderId));
-    }
-  }, []);
   console.log("selected fldrr id in modalpopup",selectedFolderId)
   useEffect(() => {
     if (selectedTest) {
@@ -65,10 +59,14 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
 
   console.log("edited ",editFolderName)
   const handleSaveClick = (e) => {
+    const storedSelectedFolderId = sessionStorage.getItem('selectedFolderId');
+    if (storedSelectedFolderId) {
+      setSelectedFolderId(JSON.parse(storedSelectedFolderId));
+    }
     if (editFolderName.length > 0) {
        selectedTest.title = editFolderName;
     }
-    handleSave(e, selectedTest, selectedFolderId);
+    handleSave(e, selectedTest, storedSelectedFolderId);
   };
 
  
@@ -97,6 +95,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
           <Modalpopuplist rootFolders={rootFolders}
            doReload={doReload} setDoReload={setDoReload}
             selectedFolderId={selectedFolderId}
+            fetchUserFolders={fetchUserFolders}
           />
         </div>
       

@@ -18,7 +18,6 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
     const [savedFolders, setSavedFolders] = useState([]);
     const [rootFolderGuid, setRootFolderGuid] = useState("");
 
-  
     useEffect(() => {
       const savedFoldersFromStorage = JSON.parse(
         localStorage.getItem("savedFolders")
@@ -36,8 +35,8 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
         const rootFolder = await getRootTests();
           setRootFolderGuid(rootFolder.guid);
           console.log(rootFolderGuid);
-      }   
-
+      }    
+  
     const handleAddFolderClick = () => {
       setShowTextBox(true);
       setIsEditing(false);
@@ -117,24 +116,30 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
     }
   };
   
-    const handleFolderSelect = (folderTitle) => {
-      setFolderName(folderTitle);
-      setEditFolderName(folderTitle);
-      setShowTextBox(true);
-      setIsEditing(true);
-    };
+  const handleFolderSelect = (folderTitle, folderGuid) => {
+    setFolderName(folderTitle);
+    setEditFolderName(folderTitle);
+    setShowTextBox(true);
+    setIsEditing(true);
+    //setSelectedFolderGuid(folderGuid);
+  };
   
-    const onNodeUpdate = (changedNode) => {
-      updateTestFolder(changedNode)
-        .then(() => {
-          Toastify({ message: 'Folder rearranged successfully', type: 'success' });
-          setDoReload(!doReload);
-        })
-        .catch((error) => {
-          console.error('Error getting root folders:', error);
-          Toastify({ message: 'Failed to rearrange Folder', type: 'error' });
-        })
+  const onNodeUpdate = async (changedNode) => {
+    try{
+    await updateTestFolder(changedNode);
+    Toastify({ message: "Folder rearranged successfully", type: "success" });
+  } catch (error) {
+    console.error("Error rearranging folder:", error);
+    if (error?.message?.response?.request?.status === 409) {
+      Toastify({
+        message: error.message.response.data.message,
+        type: "error",
+      });
+    } else {
+      Toastify({ message: "Failed to rearrange folder", type: "error" });
     }
+  }
+};
   
   return (
     <>
@@ -169,11 +174,12 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
       <div className="root-folders-tests">
         {rootFolders && rootFolders.length > 0 && (
           <Modalpopuptreeview
-            folderName={editFolderName}
-            testFolders={rootFolders}
+            key={updateKey}
+            folders={rootFolders}
+            onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
-            handleFolderSelectOnParent={handleFolderSelect}
-            selectedFolderId={selectedFolderId} 
+            rootFolderGuid={rootFolderGuid}
+            // selectedFolderGuid={selectedFolderGuid}
           />
         )}
       </div>

@@ -155,17 +155,9 @@ const QuestionFolder = ({ userId }) => {
       Toastify({ message: "Folder rearranged successfully", type: "success" });
     } catch (error) {
       console.error("Error rearranging folder:", error);
-      if (error?.message?.response?.request?.status === 409) {
-        Toastify({
-          message: error.message.response.data.message,
-          type: "error",
-        });
-      } else {
-        Toastify({ message: "Failed to rearrange folder", type: "error" });
-      }
+      Toastify({ message: "Failed to rearrange folder", type: "error" });
     }
   };
-  
 
   return (
     <div className="p-2">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import './PrintTestModalpopup.css'; // Import CSS file for styling
 import PrintTestTreeView from './PrintTestTreeView';
@@ -12,9 +12,11 @@ import MultipleChoice from "../../questions/MultipleChoice";
 import MultipleResponse from "../../questions/MultipleResponse";
 import TrueFalse from "../../questions/TrueFalse";
 import Toastify from '../../common/Toastify';
+import ReactToPrint from "react-to-print";
 
 function PrintTestModalpopup({ show, handleClosePrintModal }) {
   console.log("show", show);
+  const printableContentRef = useRef();
   const [count, setCount] = useState(1);
   const [isChecked, setIsChecked] = useState("none");
   const { selectedTest } = useAppContext();
@@ -172,13 +174,13 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                   </div>
                   <div>
                     <input
-                      checked={isChecked == "spaceBetween" && true}
+                      checked={isChecked == "betweenQuestions" && true}
                       onClick={(e) => setIsChecked(e.target.name)}
-                      name="spaceBetween"
+                      name="betweenQuestions"
                       type="radio"
                     />
                     <span className="ms-1 mt-2">Between Questions</span>
-                    {isChecked == "spaceBetween" && (
+                    {isChecked == "betweenQuestions" && (
                       <div>
                         <div className="d-flex flex-wrap mb-2">
                           Enter Question no:
@@ -219,15 +221,21 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                   </div>
                   <div>      
                     <input
+                      checked={isChecked == "leftSide" && true}
+                      onClick={(e) => setIsChecked(e.target.name)}
+                      //onClick={(e) => handleLeftSidePage(e)}
+                      name="leftSide"
                       type="radio"
-                      // onClick={(e) => handleLeftSidePage(e)}
                     />
                     <span className="ms-1 mt-2">Left side of the page</span>
                   </div>
                   <div>      
                     <input
+                      checked={isChecked == "blankPage" && true}
+                      onClick={(e) => setIsChecked(e.target.name)}
+                      //onClick={(e) => handleBlankLastPage(e)}
+                      name="blankPage"
                       type="radio"
-                      onClick={(e) => handleBlankLastPage(e)}
                     />
                     <span className="ms-1 mt-2">Blank last page</span>
                   </div>
@@ -252,7 +260,15 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                 <Button variant="secondary" onClick={handleClosePrintModal}>
                   Cancel
                 </Button>
-                <Button variant='primary'> Print </Button>
+                <ReactToPrint
+                  trigger={() => (
+                    <Button variant="primary">
+                      Print
+                    </Button>
+                  )}
+                  content={() => printableContentRef.current}
+                  removeAfterPrint
+                />
               </Modal.Footer>
             </div>
           </Col>
@@ -265,11 +281,11 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
               </Modal.Header>
               <Modal.Body className='questions-list'>
               <div className="test-containers">
-                <div>With and Without metadata - {savedQuestions?.length} Questions</div>
                 {savedQuestions && (
                   <div className="print-tree-view-container">
                   <PrintTestTreeView
                     data={savedQuestions}
+                    ref={printableContentRef}
                     renderQuestions={renderQuestions}
                   />
                 </div>
