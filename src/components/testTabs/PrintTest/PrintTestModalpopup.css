@@ -8,63 +8,91 @@
   border-right: none; /* Remove vertical line for last column */
 }
 
-.print-options, .print-preview{
+.print-options,
+.print-preview {
   width: 522px;
 }
 
-.print-options{
-padding-left: 20px;
-}  
+.print-options {
+  padding-left: 20px;
+}
 
 .print-preview {
-    position: relative;
-    padding-left: 20px;
+  position: relative;
+  padding-left: 20px;
 }
 
-.button-footer{
-    top: 126px;
+.button-footer {
+  top: 126px;
 }
 
-.print-preview .btn-close{
-    position: relative;
-    left: 32px;
-    bottom: 13px;
+.print-preview .btn-close {
+  position: relative;
+  left: 32px;
+  bottom: 13px;
 }
 
-.info-print-export{
-    top: 60px;
+.info-print-export {
+  top: 60px;
 }
 
 .fa-solid.fa-circle-info {
-    color: blue;
+  color: blue;
 }
 
 .test-containers {
-    height: 420px; /* Adjust the height as needed */
-    overflow-x: auto;
+  height: 420px; /* Adjust the height as needed */
+  overflow-x: auto;
+}
+
+.question-no {
+  position: relative;
+  left: 17px;
+}
+
+.add-remove-line {
+  position: relative;
+  left: 19px;
+}
+
+.print-test-treeview {
+  list-style-type: none;
+}
+
+.treeview > ul {
+  list-style: none;
+}
+
+.question-numbers > ul {
+  list-style-type: none;
+}
+
+#questions {
+  position: relative;
+  right: 10px;
 }
 
 .closebutton {
-    border: none;
-    background-color: white;
-    color: black;
-    font-size: 28px;
-    margin-right: -17px;
-    margin-top: -19px;
+  border: none;
+  background-color: white;
+  color: black;
+  font-size: 28px;
+  margin-right: -17px;
+  margin-top: -19px;
 }
 
 i.bi.bi-info-circle-fill.me-1 {
-    color: #145ae1;
-    font-size: 19px;
+  color: #145ae1;
+  font-size: 19px;
 }
 
 .text-muted {
-    --bs-text-opacity: 1;
-    color: var(--bs-secondary-color) !important;
-    font-style: oblique;
-    font-weight: bold;
-    font-size: larger;
-    margin-left: -5px;
-    margin-top: 24px;
-    text-align: center;
+  --bs-text-opacity: 1;
+  color: var(--bs-secondary-color) !important;
+  font-style: oblique;
+  font-weight: bold;
+  font-size: larger;
+  margin-left: -5px;
+  margin-top: 24px;
+  text-align: center;
 }
