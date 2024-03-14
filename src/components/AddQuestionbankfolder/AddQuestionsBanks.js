@@ -37,6 +37,7 @@ const QuestBanks = () => {
                 >
                     <Modal.Body>
                         <div className="modal-content-wrapper">
+                            
                             {step === 1 ? (
                                 <AddDisciplinepopup handleNext={handleNext} />
                             ) : (

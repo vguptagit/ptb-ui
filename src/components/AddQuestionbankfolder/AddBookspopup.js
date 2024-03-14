@@ -169,16 +169,20 @@ const AddBookspopup = ({ handleBack }) => {
   }, [location.search, getDisciplineBooks, selectedDisciplines]);
 
   const handleNext = () => {
-    const parentIds = bookDetails.map(book => book.id);
-    // const disciplines = bookDetails.map(discipline => discipline.discipline)
-    saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
-    saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-    if (selectedBooks.length > 0) {
-      navigate(`/home?books=${bookDetails.join(',')}`);
+    let parentIds = [];
+    if (bookDetails.length > 0) {
+
+      parentIds = bookDetails.map(book => book.id);
+    } else {
+      parentIds = userbooksData;
     }
+   saveUserBooks(parentIds, sessionStorage.getItem("userId"));
+    const uniqueDisciplines = new Set(selectedDisciplines);
+    const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
+    saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem("userId"));
+   handleSave();
   };
 
-  
 
   const handleSearch = (e) => {
     const term = e.target.value;
