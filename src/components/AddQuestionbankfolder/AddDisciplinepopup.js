@@ -95,21 +95,21 @@ const AddDisciplinepopup = ({ handleNext }) => {
                 <>
                     <div className="top-container">
                         <h2 className="choose-your-books-or-topics">Add Discipline</h2>
-                        <button className="discipline btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
+                        <button className="disciplinePopup btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
                     </div>
-                    <div className="discipline input-group rounded">
+                    <div className="disciplinePopup input-group rounded">
                         <input
                             type="search"
                             width="100%"
-                            className="discipline form-control rounded search-input"
+                            className="disciplinePopup form-control rounded search-input"
                             placeholder="Search Discipline"
                             aria-label="Search"
                             aria-describedby="search-addon"
                             value={searchTerm}
                             onChange={handleSearch}
                         />
-                        <div className="discipline input-group-append">
-                            <span className="discipline input-group-text border-0" id="search-addon">
+                        <div className="disciplinePopup input-group-append">
+                            <span className="disciplinePopup input-group-text border-0" id="search-addon">
                                 <i className="fas fa-search"></i>
                             </span>
                         </div>
@@ -117,7 +117,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
                     {searchResults.length === 0 && (
                         <div className="no-matching-discipline-message">"No matching disciplines found"</div>
                     )}
-                    <ul className="discipline result-list mt-3">
+                    <ul className="disciplinePopup result-list mt-3">
                         {searchResults.map((item, index) => (
                             <li
                                 tabIndex="0"

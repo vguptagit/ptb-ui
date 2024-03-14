@@ -151,6 +151,7 @@ function Modalpopuptreeview({
       className={`treeview ${isDragging ? "grabbing" : ""}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      id="modal-treeview"
     >
       <Tree
       tree={treeData}
