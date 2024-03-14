@@ -1,17 +1,17 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import './PrintTestModalpopup.css'; // Import CSS file for styling
-import PrintTestTreeView from './PrintTestTreeView';
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import "./PrintTestModalpopup.css"; // Import CSS file for styling
+import PrintTestTreeView from "./PrintTestTreeView";
 import QtiService from "../../../utils/qtiService";
 import { useAppContext } from "../../../context/AppContext";
 import CustomQuestionBanksService from "../../../services/CustomQuestionBanksService";
-import Essay from "../../questions/Essay";
-import FillInBlanks from "../../questions/Essay";
-import Matching from "../../questions/Matching";
 import MultipleChoice from "../../questions/MultipleChoice";
 import MultipleResponse from "../../questions/MultipleResponse";
 import TrueFalse from "../../questions/TrueFalse";
-import Toastify from '../../common/Toastify';
+import Matching from "../../questions/Matching";
+import FillInBlanks from "../../questions/FillInBlanks";
+import Essay from "../../questions/Essay";
+import Toastify from "../../common/Toastify";
 import ReactToPrint from "react-to-print";
 
 function PrintTestModalpopup({ show, handleClosePrintModal }) {
@@ -108,45 +108,31 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
         );
       case CustomQuestionBanksService.TrueFalse:
         return (
-          <TrueFalse
-            questionNode={questionNode}
-            questionNodeIndex={index}
-          />
+          <TrueFalse questionNode={questionNode} questionNodeIndex={index} />
         );
       case CustomQuestionBanksService.Matching:
         return (
-          <Matching
-            questionNode={questionNode}
-            questionNodeIndex={index}
-          />
+          <Matching questionNode={questionNode} questionNodeIndex={index} />
         );
       case CustomQuestionBanksService.FillInBlanks:
         return (
-          <FillInBlanks
-            questionNode={questionNode}
-            questionNodeIndex={index}
-          />
+          <FillInBlanks questionNode={questionNode} questionNodeIndex={index} />
         );
       case CustomQuestionBanksService.Essay:
-        return (
-          <Essay
-            questionNode={questionNode}
-            questionNodeIndex={index}
-          />
-        );
+        return <Essay questionNode={questionNode} questionNodeIndex={index} />;
       default:
         return null;
     }
   };
 
   return (
-    <Modal 
+    <Modal
       show={show}
       handleClosePrintModal={handleClosePrintModal}
       className="custom-modal"
       size="xl"
       centered
-      style={{ maxHeight: '100vh' }}
+      style={{ maxHeight: "100vh" }}
     >
       <div className="modal-content">
         <Row>
@@ -158,114 +144,103 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
-              <Row>
-                <Col md={4}>
-                  <div>Student answer area</div>
-                </Col>
-                <Col md={8}>
-                  <div>
-                    <input
-                      checked={isChecked == "none" && true}
-                      onClick={(e) => setIsChecked(e.target.name)}
-                      name="none"
-                      type="radio"
-                    />
-                    <span className="ms-1 mt-2">None</span>
-                  </div>
-                  <div>
-                    <input
-                      checked={isChecked == "betweenQuestions" && true}
-                      onClick={(e) => setIsChecked(e.target.name)}
-                      name="betweenQuestions"
-                      type="radio"
-                    />
-                    <span className="ms-1 mt-2">Between Questions</span>
-                    {isChecked == "betweenQuestions" && (
-                      <div>
-                        <div className="d-flex flex-wrap mb-2">
-                          Enter Question no:
-                          <Form.Control
-                            style={{ width: "80px" }}
-                            className="ms-2"
-                            type="number"
-                            onChange={(e) => setCount(e.target.value)}
-                            value={count}
-                            min={1}
-                            max={selectedTest?.questions.length}
-                          />
+                <Row>
+                  <Col md={4}>
+                    <div>Student answer area</div>
+                  </Col>
+                  <Col md={8}>
+                    <div>
+                      <input
+                        checked={isChecked == "none" && true}
+                        onClick={(e) => setIsChecked(e.target.name)}
+                        name="none"
+                        type="radio"
+                      />
+                      <span className="ms-1 mt-2">None</span>
+                    </div>
+                    <div>
+                      <input
+                        checked={isChecked == "spaceBetween" && true}
+                        onClick={(e) => setIsChecked(e.target.name)}
+                        name="spaceBetween"
+                        type="radio"
+                      />
+                      <span className="ms-1 mt-2">Between Questions</span>
+                      {isChecked == "spaceBetween" && (
+                        <div>
+                          <div className="question-no d-flex flex-wrap mb-2">
+                            Enter Question no:
+                            <Form.Control
+                              style={{ width: "80px" }}
+                              className="ms-2"
+                              type="number"
+                              onChange={(e) => setCount(e.target.value)}
+                              value={count}
+                              min={1}
+                              max={selectedTest?.questions.length}
+                            />
+                          </div>
+                          <div className="add-remove-buttons d-flex gap-1 flex-wrap">
+                            <Button size="sm" onClick={handleAddLine}>
+                              Add line
+                            </Button>
+                            <Button size="sm" onClick={handleDecreaseLine}>
+                              Remove line
+                            </Button>
+                          </div>
                         </div>
-                        <div className="d-flex gap-1 flex-wrap justify-content-center">
-                          <Button size="sm" onClick={handleDecreaseLine}>
-                            Remove line
-                          </Button>
-                          <Button size="sm" onClick={handleAddLine}>
-                            Add line
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="primary"
-                            onClick={handleAddBlankPage}
-                          >
-                            Add blank page
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="primary"
-                            onClick={handleRemoveBlankPage}
-                          >
-                            Remove all line
-                          </Button>
-                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <div>      
+                      )}
+                    </div>
+                    <div>
+                      <input
+                        checked={isChecked == "leftSide" && true}
+                        onClick={(e) => setIsChecked(e.target.name)}
+                        //onClick={(e) => handleLeftSidePage(e)}
+                        name="leftSide"
+                        type="radio"
+                      />
+                      <span className="ms-1 mt-2">Left side of the page</span>
+                    </div>
+                    <div>
+                      <input
+                        checked={isChecked == "blankPage" && true}
+                        onClick={(e) => setIsChecked(e.target.name)}
+                        //onClick={(e) => handleBlankLastPage(e)}
+                        name="blankPage"
+                        type="radio"
+                      />
+                      <span className="ms-1 mt-2">Blank last page</span>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="mt-3">
+                  <Col md={4}>
+                    <div>Labels</div>
+                  </Col>
+                  <Col md={8}>
                     <input
-                      checked={isChecked == "leftSide" && true}
-                      onClick={(e) => setIsChecked(e.target.name)}
-                      //onClick={(e) => handleLeftSidePage(e)}
-                      name="leftSide"
-                      type="radio"
+                      type="checkbox"
+                      // onClick={(e) => setAddStudentName(e.target.checked)}
                     />
-                    <span className="ms-1 mt-2">Left side of the page</span>
+                    <span className="ms-1 mt-2">
+                      Add student name label and space
+                    </span>
+                  </Col>
+                  <div className="mt-4 d-flex align-items-center">
+                    <i className="bi bi-info-circle-fill large-icon me-1"></i>
+                    <span className="TextFormat text-muted">
+                      For more total format options, cancel print, and select
+                      the export button
+                    </span>
                   </div>
-                  <div>      
-                    <input
-                      checked={isChecked == "blankPage" && true}
-                      onClick={(e) => setIsChecked(e.target.name)}
-                      //onClick={(e) => handleBlankLastPage(e)}
-                      name="blankPage"
-                      type="radio"
-                    />
-                    <span className="ms-1 mt-2">Blank last page</span>
-                  </div>
-                </Col>
-              </Row>
-              <Row className="mt-3">
-                <Col md={4}>
-                  <div>Labels</div>
-                </Col>
-                <Col md={8}>
-                  <input
-                    type="checkbox"
-                    // onClick={(e) => setAddStudentName(e.target.checked)}
-                  />
-                  <span className="ms-1 mt-2">
-                    Add student name label and space
-                  </span>
-                </Col>
-              </Row>
+                </Row>
               </Modal.Body>
-              <Modal.Footer className='button-footer'>
+              <Modal.Footer className="button-footer">
                 <Button variant="secondary" onClick={handleClosePrintModal}>
                   Cancel
                 </Button>
                 <ReactToPrint
-                  trigger={() => (
-                    <Button variant="primary">
-                      Print
-                    </Button>
-                  )}
+                  trigger={() => <Button variant="primary">Print</Button>}
                   content={() => printableContentRef.current}
                   removeAfterPrint
                 />
@@ -274,30 +249,33 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
           </Col>
           <Col md={6}>
             <div className="print-preview">
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>
                   <h3>Print Preview</h3>
                 </Modal.Title>
+                <button className="closebutton" onClick={handleClosePrintModal}>
+                  <i class="bi bi-x"></i>
+                </button>
               </Modal.Header>
-              <Modal.Body className='questions-list'>
-              <div className="test-containers">
-                {savedQuestions && (
-                  <div className="print-tree-view-container">
-                  <PrintTestTreeView
-                    data={savedQuestions}
-                    ref={printableContentRef}
-                    renderQuestions={renderQuestions}
-                  />
+              <Modal.Body className="questions-list">
+                <div className="test-containers">
+                  {savedQuestions && (
+                    <div className="print-tree-view-container">
+                      <PrintTestTreeView
+                        data={savedQuestions}
+                        ref={printableContentRef}
+                        renderQuestions={renderQuestions}
+                      />
+                    </div>
+                  )}
                 </div>
-                )}
-              </div>
               </Modal.Body>
             </div>
           </Col>
         </Row>
       </div>
     </Modal>
-  )
+  );
 }
 
-export default PrintTestModalpopup
+export default PrintTestModalpopup;

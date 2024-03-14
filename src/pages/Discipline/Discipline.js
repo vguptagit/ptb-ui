@@ -85,7 +85,7 @@ const Discipline = () => {
       ) : (
         <>
           <div className="top-container">
-            <h4><FormattedMessage id="discipline.steps.2" /></h4>
+            <h2><FormattedMessage id="discipline.steps.2" /></h2>
             <button className="discipline btn btn-primary" onClick={handleNext} disabled={selectedItems.length === 0}>Next</button>
           </div>
           <div className="discipline d-flex justify-content-between">
