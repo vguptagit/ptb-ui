@@ -32,7 +32,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   useEffect(() => {
     setIsSelected(selectedItems.includes(node.id));
   }, [selectedItems, node.id]);
-  
+
   const handleNodeClick = () => {
     setIsOpen(!isOpen);
   };
@@ -56,8 +56,8 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
             {isOpen ? (
               <i className="fa fa-caret-down"></i>
             ) : (
-              <i className="fa fa-caret-right"></i>
-            )}
+                <i className="fa fa-caret-right"></i>
+              )}
           </div>
         )}
         <span>{node.text}</span>
@@ -108,15 +108,15 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
       {searchTerm && filteredTreeData.length === 0 ? (
         <div className="no-matching-books-message">"No matching books found"</div>
       ) : (
-        filteredTreeData.map((node) => (
-          <TreeNode
-            key={node.id}
-            node={node}
-            onSelectItem={onSelectItem}
-            selectedItems={selectedItems}
-          />
-        ))
-      )}
+          filteredTreeData.map((node) => (
+            <TreeNode
+              key={node.id}
+              node={node}
+              onSelectItem={onSelectItem}
+              selectedItems={selectedItems}
+            />
+          ))
+        )}
     </div>
   );
 };
@@ -133,7 +133,7 @@ const Booktab = () => {
   const prevDisciplines = useRef([]);
   const disciplines = sessionStorage.getItem("selectedDiscipline");
   const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
-  
+
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -159,7 +159,7 @@ const Booktab = () => {
                     nodes: data
                       .filter(title => title.discipline === item.discipline)
                       .map((title, index) => ({
-                        id: `${title?.guid}`,
+                        id: `${title ?.guid}`,
                         text: `${title.title}`,
                         droppable: false,
                         parentId: item.guid,
@@ -218,20 +218,23 @@ const Booktab = () => {
       const bookDetail = {
         id: `${node.id}`,
         title: node.text,
-        discipline: treeData.find(item => item.id === node.parentId)?.text
+        discipline: treeData.find(item => item.id === node.parentId) ?.text
       };
-      setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
-      setSelectedBooks((prevSelectedBooks) => {
-        const key = `${node.id}`;
-        if (prevSelectedBooks.includes(key)) {
-          return prevSelectedBooks.filter((item) => item !== key);
-        } else {
-          return [...prevSelectedBooks, key];
-        }
-      });
-      sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
+      const isBookSelected = selectedBooks.includes(bookDetail.id);
+      if (isBookSelected) {
+        setSelectedBooks(prevSelectedBooks =>
+          prevSelectedBooks.filter(item => item !== bookDetail.id)
+        );
+        setBookDetails(prevBookDetails =>
+          prevBookDetails.filter(book => book.id !== bookDetail.id)
+        );
+      } else {
+        setSelectedBooks(prevSelectedBooks => [...prevSelectedBooks, bookDetail.id]);
+        setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
+      }
     }
   };
+
   console.log("books", bookDetails)
 
   return (
@@ -239,51 +242,51 @@ const Booktab = () => {
       {loading ? (
         <Loader show="true" />
       ) : (
-        <>
-          <div className="top-container">
-            <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
-            <button className="booktab btn btn-secondary" onClick={handleBack}>
-              Back
+          <>
+            <div className="top-container">
+              <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
+              <button className="booktab btn btn-secondary" onClick={handleBack}>
+                Back
             </button>
-            <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-              Next
+              <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
+                Next
             </button>
-          </div>
-          <div className="booktab d-flex justify-content-between">
-            <LeftContent />
-            <div className="discipline search-container">
-              <div className="discipline input-group rounded">
-                <input
-                  type="search"
-                  width="100%"
-                  className="discipline form-control rounded search-input"
-                  placeholder="Search Books"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
-                <div className="discipline input-group-append">
-                  <span
-                    className="discipline input-group-text border-0"
-                    id="search-addon"
-                  >
-                    <i className="fas fa-search"></i>
-                  </span>
-                </div>
-              </div>
-              <ul className="discipline result-list mt-3">
-                <TreeView
-                  selectedItems={selectedBooks}
-                  onSelectItem={handleSelectItem}
-                  searchTerm={searchTerm}
-                  treeData={treeData}
-                />
-              </ul>
             </div>
-          </div>
-        </>
-      )}
+            <div className="booktab d-flex justify-content-between">
+              <LeftContent />
+              <div className="discipline search-container">
+                <div className="discipline input-group rounded">
+                  <input
+                    type="search"
+                    width="100%"
+                    className="discipline form-control rounded search-input"
+                    placeholder="Search Books"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                  />
+                  <div className="discipline input-group-append">
+                    <span
+                      className="discipline input-group-text border-0"
+                      id="search-addon"
+                    >
+                      <i className="fas fa-search"></i>
+                    </span>
+                  </div>
+                </div>
+                <ul className="discipline result-list mt-3">
+                  <TreeView
+                    selectedItems={selectedBooks}
+                    onSelectItem={handleSelectItem}
+                    searchTerm={searchTerm}
+                    treeData={treeData}
+                  />
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
     </div>
   );
 };
