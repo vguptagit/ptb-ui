@@ -105,21 +105,3 @@ export const saveUserBooks = (books, userid) => {
             });
         });
 };
-
-
-
-
-export const getUserBooks = () => {
-   
-    return httpInterceptor
-        .get(`${url}/settings/books`)
-        .then((response) => {
-            return response?.data;
-        })
-        .catch((error) => {
-            return Promise.reject({
-                type: "error",
-                message: error
-            });
-        });
-};
