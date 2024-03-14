@@ -254,27 +254,27 @@ const AddBookspopup = ({ handleBack }) => {
         
            
          
-              <div className="disciplinePopup input-group rounded">
+              <div className="discipline input-group rounded">
                 <input
                   type="search"
                   width="100%"
-                  className="disciplinePopup form-control rounded search-input"
+                  className="discipline form-control rounded search-input"
                   placeholder="Search Books"
                   aria-label="Search"
                   aria-describedby="search-addon"
                   value={searchTerm}
                   onChange={handleSearch}
                 />
-                <div className="disciplinePopup input-group-append">
+                <div className="discipline input-group-append">
                   <span
-                    className="disciplinePopup input-group-text border-0"
+                    className="discipline input-group-text border-0"
                     id="search-addon"
                   >
                     <i className="fas fa-search"></i>
                   </span>
                 </div>
               </div>
-              <ul className="disciplinePopup result-list mt-3">
+              <ul className="discipline result-list mt-3">
                 <TreeView
                   selectedItems={selectedBooks}
                   onSelectItem={handleSelectItem}
