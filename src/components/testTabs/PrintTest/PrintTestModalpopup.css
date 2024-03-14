@@ -23,7 +23,9 @@
 }
 
 .button-footer {
-  top: 126px;
+    position: absolute;
+    top: 444px;
+    padding-left: 342px !important;
 }
 
 .print-preview .btn-close {
@@ -77,8 +79,8 @@
   background-color: white;
   color: black;
   font-size: 28px;
-  margin-right: -17px;
-  margin-top: -19px;
+  margin-right: -45px;
+  margin-top: -22px;
 }
 
 i.bi.bi-info-circle-fill.me-1 {
@@ -95,4 +97,13 @@ i.bi.bi-info-circle-fill.me-1 {
   margin-left: -5px;
   margin-top: 24px;
   text-align: center;
+}
+
+.add-remove-buttons{
+    position: relative;
+    left: 20px;
+}
+
+#modal-treeview{
+    overflow: hidden;
 }

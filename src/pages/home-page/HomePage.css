@@ -21,10 +21,16 @@
     height: 100%;
     width: 10px;
 }
-.container-resource, .container-test{
+.container-resource{
     height: calc(89vh - 85px);
     overflow:auto;
 }
+
+.container-test{
+    height: calc(89vh - 85px);
+    overflow:auto;
+}
+
 .button-container {
     display: flex;
     gap: 3px; /* Adjusted gap between buttons */
