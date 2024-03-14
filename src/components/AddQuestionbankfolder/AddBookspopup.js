@@ -3,18 +3,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 import "./AddBookspopup.css";
 import Loader from "../../components/common/loader/Loader";
-import { getDisciplineBooks, saveUserBooks } from "../../services/book.service";
+import { getDisciplineBooks, getUserBooks, saveUserBooks } from "../../services/book.service";
 import { saveUserDiscipline } from "../../services/discipline.service";
-
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
   const hasChildNodes = node.nodes && node.nodes.length > 0;
+
   useEffect(() => {
     setIsSelected(selectedItems.includes(node.id));
   }, [selectedItems, node.id]);
-  
 
   const handleNodeClick = () => {
     setIsOpen(!isOpen);
@@ -30,8 +29,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   return (
     <div>
       <div
-        className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""
-          }`}
+        className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""}`}
         onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
       >
         {hasChildNodes && (
@@ -102,7 +100,8 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     </div>
   );
 };
-const AddBookspopup = ({ handleBack }) => {
+
+const AddBookspopup = ({ handleBack,handleSave }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -112,8 +111,10 @@ const AddBookspopup = ({ handleBack }) => {
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
+  const [userbooksData, setUserbooksData] = useState([]);
   const disciplines = sessionStorage.getItem("selectedDisciplinesAddpopup");
   const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
+
   useEffect(() => {
     document.title = "Choose Your Books or Topics";
   }, []);
@@ -122,9 +123,7 @@ const AddBookspopup = ({ handleBack }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-
         if (selectedDisciplines) {
-
           if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
             prevDisciplines.current = selectedDisciplines;
             let newData = [];
@@ -168,6 +167,24 @@ const AddBookspopup = ({ handleBack }) => {
     fetchData();
   }, [location.search, getDisciplineBooks, selectedDisciplines]);
 
+  useEffect(() => {
+    getUserBooks()
+      .then((data) => {
+        if (data) {
+          setUserbooksData(data);
+
+          const userBookIds = data.map(book => book);
+          setSelectedBooks(userBookIds);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
+  console.log("api dayta of user ", userbooksData)
+  console.log("selctedboos in api pass", selectedBooks)
+
   const handleNext = () => {
     let parentIds = [];
     if (bookDetails.length > 0) {
@@ -176,11 +193,17 @@ const AddBookspopup = ({ handleBack }) => {
     } else {
       parentIds = userbooksData;
     }
-   saveUserBooks(parentIds, sessionStorage.getItem("userId"));
+
+
+    saveUserBooks(parentIds, sessionStorage.getItem("userId"));
+
+  
     const uniqueDisciplines = new Set(selectedDisciplines);
+
     const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
     saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem("userId"));
-   handleSave();
+
+  handleSave();
   };
 
 
@@ -190,54 +213,34 @@ const AddBookspopup = ({ handleBack }) => {
     const inputWidth = Math.max(200, e.target.scrollWidth);
     document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
-
-  // const handleSelectItem = (node) => {
-  //   if (!node.droppable) {
-  //     const bookDetail = {
-  //       id: `${node.id}`,
-  //       title: node.text,
-  //       discipline: treeData.find(item => item.id === node.parentId)?.text
-  //     };
-  //     setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
-  //     setSelectedBooks((prevSelectedBooks) => {
-  //       const key = `${node.id}`;
-  //       if (prevSelectedBooks.includes(key)) {
-  //         return prevSelectedBooks.filter((item) => item !== key);
-  //       } else {
-  //         return [...prevSelectedBooks, key];
-  //       }
-  //     });
-  //   }
-  // };
-
-  useEffect(() => {
-    const storedSelectedBooks = sessionStorage.getItem("selectedBooks");
-    if (storedSelectedBooks) {
-      setSelectedBooks(JSON.parse(storedSelectedBooks));
-    }
-  }, []);
   const handleSelectItem = (node) => {
     if (!node.droppable) {
-      // Only select if the node is a book
-      const bookDetail = {
-        id: `${node.id}`,
-        title: node.text,
-        discipline: treeData.find(item => item.id === node.parentId)?.text
-      };
-      setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
-      setSelectedBooks((prevSelectedBooks) => {
-        const key = `${node.id}`;
-        if (prevSelectedBooks.includes(key)) {
-          return prevSelectedBooks.filter((item) => item !== key);
+      const bookId = `${node.id}`;
+      // Check if the book is already selected
+      if (!selectedBooks.includes(bookId)) {
+        const bookDetail = {
+          id: bookId,
+          title: node.text,
+          discipline: treeData.find(item => item.id === node.parentId)?.text
+        };
+        setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
+      }
+
+      // Update selectedBooks state to include both the newly selected book ID and previously selected user book IDs
+      setSelectedBooks(prevSelectedBooks => {
+        if (prevSelectedBooks.includes(bookId)) {
+          return prevSelectedBooks.filter(id => id !== bookId);
         } else {
-          return [...prevSelectedBooks, key];
+          return [...prevSelectedBooks, bookId];
         }
       });
-      sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
     }
   };
 
-  console.log("books", bookDetails)
+
+  console.log("book details ", bookDetails)
+
+
 
   return (
     <div className="booktab-container">
@@ -246,8 +249,7 @@ const AddBookspopup = ({ handleBack }) => {
       ) : (
         <>
           <div className="top-containerbooks">
-          <h2 className="choose-your-books-or-topics">Add Books</h2>
-
+            <h2 className="choose-your-books-or-topics">Add Books</h2>
             <button className="booktab btn btn-secondary" onClick={handleBack}>
               Back
             </button>
@@ -255,41 +257,36 @@ const AddBookspopup = ({ handleBack }) => {
               Save
             </button>
           </div>
-        
-           
-         
-              <div className="discipline input-group rounded">
-                <input
-                  type="search"
-                  width="100%"
-                  className="discipline form-control rounded search-input"
-                  placeholder="Search Books"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
-                <div className="discipline input-group-append">
-                  <span
-                    className="discipline input-group-text border-0"
-                    id="search-addon"
-                  >
-                    <i className="fas fa-search"></i>
-                  </span>
-                </div>
-              </div>
-              <ul className="discipline result-list mt-3">
-                <TreeView
-                  selectedItems={selectedBooks}
-                  onSelectItem={handleSelectItem}
-                  searchTerm={searchTerm}
-                  treeData={treeData}
-                />
-              </ul>
-          
+          <div className="discipline input-group rounded">
+            <input
+              type="search"
+              width="100%"
+              className="discipline form-control rounded search-input"
+              placeholder="Search Books"
+              aria-label="Search"
+              aria-describedby="search-addon"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+            <div className="discipline input-group-append">
+              <span
+                className="discipline input-group-text border-0"
+                id="search-addon"
+              >
+                <i className="fas fa-search"></i>
+              </span>
+            </div>
+          </div>
+          <ul className="booktabaddpopup result-list mt-3">
+            <TreeView
+              selectedItems={selectedBooks}
+              onSelectItem={handleSelectItem}
+              searchTerm={searchTerm}
+              treeData={treeData}
+            />
+          </ul>
         </>
       )}
-
     </div>
   );
 };

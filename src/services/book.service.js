@@ -1,3 +1,4 @@
+
 import httpInterceptor from "../httpHelper/httpHelper";
 
 const url = process.env.REACT_APP_API_URL
@@ -96,6 +97,24 @@ export const saveUserBooks = (books, userid) => {
         .post(`${url}/settings/books?extUserId=`+ userid, books)
         .then((response) => {
             console.log("selected books", response);
+            return response?.data;
+        })
+        .catch((error) => {
+            return Promise.reject({
+                type: "error",
+                message: error
+            });
+        });
+};
+
+
+
+
+export const getUserBooks = () => {
+   
+    return httpInterceptor
+        .get(`${url}/settings/books`)
+        .then((response) => {
             return response?.data;
         })
         .catch((error) => {
