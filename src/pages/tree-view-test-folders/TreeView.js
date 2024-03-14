@@ -7,6 +7,7 @@ import {
   deleteTest,
 } from "../../services/testfolder.service";
 import { getFolderTests } from "../../services/testcreate.service";
+import Toastify from "../../components/common/Toastify";
 
 function TreeView({
   onFolderSelect,
@@ -168,8 +169,10 @@ function TreeView({
         (node) => node.data.guid !== folderIdToDelete
       );
       setTreeData(updatedTreeData);
+      Toastify({ message: "Folder deleted successfully", type: "success" });
     } catch (error) {
       console.error("Error deleting folder:", error);
+      Toastify({ message: "Failed to delete Folder", type: "error" });
     }
     setShowModal(false);
     setSelectedFolderToDelete(null);
@@ -179,42 +182,48 @@ function TreeView({
     try {
       await deleteTest(folderId, testId);
       console.log("Test deleted:", testId);
+      Toastify({ message: "Test deleted successfully", type: "success" });
     } catch (error) {
       console.error("Error deleting test:", error);
+      Toastify({ message: "Failed to delete Test", type: "error" });
     }
   };
 
   const handleDeleteTest = (folderId, testId) => {
-    setSelectedTestToDelete({ folderId, testId });
-    setShowTestDeleteModal(true);
+    if (!folderId) {
+      setSelectedTestToDelete({ folderId: rootFolderGuid, testId });
+      setShowTestDeleteModal(true);
+    } else {
+      setSelectedTestToDelete({ folderId, testId });
+      setShowTestDeleteModal(true);
+    }
   };
 
   const handleConfirmDeleteTest = async () => {
     try {
       const { folderId, testId } = selectedTestToDelete;
-      // Delete the test
       await deleteTestInsideFolder(folderId, testId);
-  
-      // After successful deletion, update the tree data
-      const updatedTreeData = treeData.map(node => {
-        if (node.id.startsWith(`${folderId}.test`) && node.data.guid === testId) {
-          // Filter out the deleted test node
-          return null;
-        }
-        return node;
-      }).filter(Boolean); // Remove null entries
-  
-      // Update the state with the new tree data
+      const updatedTreeData = treeData
+        .map((node) => {
+          if (
+            (node.id.startsWith(`${folderId}.test`) &&
+              node.data.guid === testId) ||
+            (folderId === rootFolderGuid &&
+              node.data &&
+              node.data.guid === testId)
+          ) {
+            return null;
+          }
+          return node;
+        })
+        .filter(Boolean);
       setTreeData(updatedTreeData);
     } catch (error) {
       console.error("Error deleting test:", error);
     }
-    
-    // Close the delete modal and reset selected test to delete
     setShowTestDeleteModal(false);
     setSelectedTestToDelete(null);
   };
-  
 
   const handleDragStart = () => {
     setIsDragging(true);
