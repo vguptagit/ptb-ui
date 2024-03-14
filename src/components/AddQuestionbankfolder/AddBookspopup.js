@@ -193,17 +193,11 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
     } else {
       parentIds = userbooksData;
     }
-
-
-    saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-
-  
+   saveUserBooks(parentIds, sessionStorage.getItem("userId"));
     const uniqueDisciplines = new Set(selectedDisciplines);
-
     const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
     saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem("userId"));
-
-  handleSave();
+   handleSave();
   };
 
 
