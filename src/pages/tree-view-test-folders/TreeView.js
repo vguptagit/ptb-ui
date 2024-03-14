@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Tree } from "@minoru/react-dnd-treeview";
 import "./TreeView.css";
-import { getUserTestFolders } from "../../services/testfolder.service";
+import {
+  deleteTestFolder,
+  getUserTestFolders,
+  deleteTest,
+} from "../../services/testfolder.service";
 import { getFolderTests } from "../../services/testcreate.service";
 
-function TreeView({ 
+function TreeView({
   onFolderSelect,
   onNodeUpdate,
   folders,
@@ -15,13 +19,33 @@ function TreeView({
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [clickedNodes, setClickedNodes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFolderToDelete, setSelectedFolderToDelete] = useState(null);
+  const [selectedTestToDelete, setSelectedTestToDelete] = useState(null);
+  const [showTestDeleteModal, setShowTestDeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (folders && folders.length > 0) {
+      const updatedTreeData = folders.map((folder, index) => ({
+        id: folder.guid,
+        parent: 0,
+        droppable: folder.parentId ? true : false,
+        text: folder.title,
+        data: {
+          guid: folder.guid,
+          sequence: folder.sequence,
+        },
+      }));
+      setTreeData(updatedTreeData);
+    }
+  }, [folders]);
 
   const fetchChildFolders = async (parentNode) => {
     try {
       if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
         const childFolders = await getUserTestFolders(parentNode.data.guid);
         const childTests = await getFolderTests(parentNode.data.guid);
-  
+
         const childNodes = [
           ...childFolders.map((childFolder, childIndex) => ({
             id: `${parentNode.id}.folder.${childIndex + 1}`,
@@ -43,14 +67,16 @@ function TreeView({
             },
           })),
         ];
-  
+
         const updatedTreeData = [...treeData];
-        const nodeIndex = updatedTreeData.findIndex((n) => n.id === parentNode.id);
-  
+        const nodeIndex = updatedTreeData.findIndex(
+          (n) => n.id === parentNode.id
+        );
+
         const existingChildNodes = updatedTreeData
           .slice(nodeIndex + 1)
           .filter((node) => node.parent === parentNode.id);
-  
+
         if (existingChildNodes.length === 0) {
           updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes);
           setTreeData(updatedTreeData);
@@ -61,26 +87,10 @@ function TreeView({
     }
   };
 
-  useEffect(() => {
-    if (folders && folders.length > 0) {
-      const updatedTreeData = folders.map((folder, index) => ({
-        id: folder.guid,
-        parent: 0,
-        droppable: folder.parentId ? true : false,
-        text: folder.title,
-        data: {
-          guid: folder.guid,
-          sequence: folder.sequence,
-        },
-      }));
-      setTreeData(updatedTreeData);
-    }
-  }, [folders]);
-
   const handleDrop = async (newTree, { dragSource, dropTarget }) => {
     let parentId;
 
-    if(dropTarget && dropTarget.data) {
+    if (dropTarget && dropTarget.data) {
       parentId = dropTarget.data.guid;
     } else {
       parentId = rootFolderGuid;
@@ -93,7 +103,7 @@ function TreeView({
       title: dragSource.text,
     };
 
-    try{
+    try {
       const childFolders = await getUserTestFolders(parentId);
       const childNodes = childFolders.map((childFolder, index) => ({
         id: `${parentId}.${index + 1}`,
@@ -130,7 +140,81 @@ function TreeView({
       }
       setSelectedFolder(folderTitle);
     }
-  }
+  };
+
+  const handleDeleteFolder = (folderTitle) => {
+    setSelectedFolderToDelete(folderTitle);
+    setShowModal(true);
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+    setSelectedFolderToDelete(null);
+  };
+
+  const handleModalConfirmDelete = async () => {
+    try {
+      const folderToDelete = folders.find(
+        (folder) => folder.title === selectedFolderToDelete
+      );
+      if (!folderToDelete) {
+        console.error("Folder not found:", selectedFolderToDelete);
+        return;
+      }
+      const folderIdToDelete = folderToDelete.guid;
+      await deleteTestFolder(folderIdToDelete);
+      console.log("Folder deleted:", selectedFolderToDelete);
+      const updatedTreeData = treeData.filter(
+        (node) => node.data.guid !== folderIdToDelete
+      );
+      setTreeData(updatedTreeData);
+    } catch (error) {
+      console.error("Error deleting folder:", error);
+    }
+    setShowModal(false);
+    setSelectedFolderToDelete(null);
+  };
+
+  const deleteTestInsideFolder = async (folderId, testId) => {
+    try {
+      await deleteTest(folderId, testId);
+      console.log("Test deleted:", testId);
+    } catch (error) {
+      console.error("Error deleting test:", error);
+    }
+  };
+
+  const handleDeleteTest = (folderId, testId) => {
+    setSelectedTestToDelete({ folderId, testId });
+    setShowTestDeleteModal(true);
+  };
+
+  const handleConfirmDeleteTest = async () => {
+    try {
+      const { folderId, testId } = selectedTestToDelete;
+      // Delete the test
+      await deleteTestInsideFolder(folderId, testId);
+  
+      // After successful deletion, update the tree data
+      const updatedTreeData = treeData.map(node => {
+        if (node.id.startsWith(`${folderId}.test`) && node.data.guid === testId) {
+          // Filter out the deleted test node
+          return null;
+        }
+        return node;
+      }).filter(Boolean); // Remove null entries
+  
+      // Update the state with the new tree data
+      setTreeData(updatedTreeData);
+    } catch (error) {
+      console.error("Error deleting test:", error);
+    }
+    
+    // Close the delete modal and reset selected test to delete
+    setShowTestDeleteModal(false);
+    setSelectedTestToDelete(null);
+  };
+  
 
   const handleDragStart = () => {
     setIsDragging(true);
@@ -147,11 +231,6 @@ function TreeView({
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-  
-  const handleDeleteFolder = (folderTitle) => {
-    console.log("Delete folder:", folderTitle);
-  };
-  
 
   return (
     <div
@@ -160,72 +239,150 @@ function TreeView({
       onMouseUp={handleMouseUp}
     >
       <Tree
-      tree={treeData}
-      rootId={0}
-      render={(node, { isOpen, onToggle }) => (
-        <div 
-          className={`tree-node ${clickedNodes.includes(node.id) ? 'clicked' : ''}`}
-          onClick={() => {
-            if (
-              !isOpen &&
-              (!node.children || node.children.length === 0)
-            ) {
-              fetchChildFolders(node);
-            }
-            onToggle();
-            setClickedNodes(prevClickedNodes => {
-              if (prevClickedNodes.includes(node.id)) {
-                return prevClickedNodes.filter(item => item !== node.id);
-              } else {
-                return [...prevClickedNodes, node.id];
+        tree={treeData}
+        rootId={0}
+        render={(node, { isOpen, onToggle }) => (
+          <div
+            className={`tree-node ${
+              clickedNodes.includes(node.id) ? "clicked" : ""
+            }`}
+            onClick={() => {
+              if (!isOpen && (!node.children || node.children.length === 0)) {
+                fetchChildFolders(node);
               }
-            });
-          }}
-        >
-          {node.droppable && (
-            <span className="custom-caret">
-              {isOpen ? (
-                <i className="fa fa-caret-down"></i>
-              ) : (
-                <i className="fa fa-caret-right"></i>
-              )}
-            </span>
-          )}
-          {node.text}
-          {selectedFolder === node.text && (
-            <button
-              className="editbutton selected"
-              onClick={() => handleEditFolder(node.text)}
-              disabled={!node.droppable} // Disable the button if node.droppable is false
-            >
-              <i className="bi bi-pencil-fill"></i>
-            </button>
-          )}
-          {selectedFolder !== node.text && node.droppable && ( // Render the button only if node.droppable is true
-            <button
-              className="editbutton"
-              onClick={() => handleEditFolder(node.text)}
-              disabled={!node.droppable} // Disable the button if node.droppable is false
-            >
-              <i className="bi bi-pencil-fill"></i>
-            </button>
-          )}
-          <button
-            className="deletebutton"
-            onClick={() => handleDeleteFolder(node.text)}
+              onToggle();
+              setClickedNodes((prevClickedNodes) => {
+                if (prevClickedNodes.includes(node.id)) {
+                  return prevClickedNodes.filter((item) => item !== node.id);
+                } else {
+                  return [...prevClickedNodes, node.id];
+                }
+              });
+            }}
           >
-            <i className="bi bi-trash"></i>
-          </button>
+            {node.droppable && (
+              <span className="custom-caret">
+                {isOpen ? (
+                  <i className="fa fa-caret-down"></i>
+                ) : (
+                  <i className="fa fa-caret-right"></i>
+                )}
+              </span>
+            )}
+            {node.text}
+            {selectedFolder === node.text && (
+              <button
+                className="editbutton selected"
+                onClick={() => handleEditFolder(node.text)}
+                disabled={!node.droppable}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            {selectedFolder !== node.text && node.droppable && (
+              <button
+                className="editbutton"
+                onClick={() => handleEditFolder(node.text)}
+                disabled={!node.droppable}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            <button
+              className="deletebutton"
+              onClick={() => handleDeleteFolder(node.text)}
+            >
+              <i className="bi bi-trash"></i>
+            </button>
+            {!node.droppable && (
+              <button
+                className="deletebutton"
+                onClick={() => handleDeleteTest(node.parent, node.data.guid)}
+              >
+                <i className="bi bi-trash"></i>
+              </button>
+            )}
+          </div>
+        )}
+        dragPreviewRender={(monitorProps) => (
+          <div className="custom-drag-preview">{monitorProps.item.text}</div>
+        )}
+        onDrop={handleDrop}
+        dragPreviewClassName="custom-drag-preview"
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      />
+      {showModal && (
+        <div
+          className="modal fade show"
+          tabIndex="-1"
+          role="dialog"
+          style={{ display: "block" }}
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Delete Folder</h5>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to delete folder "{selectedFolderToDelete}
+                "?
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleModalCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleModalConfirmDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-      dragPreviewRender={(monitorProps) => (
-        <div className="custom-drag-preview">{monitorProps.item.text}</div>
+      {showTestDeleteModal && (
+        <div
+          className="modal fade show"
+          tabIndex="-1"
+          role="dialog"
+          style={{ display: "block" }}
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Delete Test</h5>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to delete this test?
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowTestDeleteModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleConfirmDeleteTest}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
-      onDrop={handleDrop}
-      dragPreviewClassName="custom-drag-preview"
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    />
     </div>
   );
 }

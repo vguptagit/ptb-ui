@@ -57,3 +57,31 @@ export const getUserTestFolders = (folderId) => {
       });
     });
 };
+
+export const deleteTestFolder = (folderId) => {
+  return httpInterceptor
+    .delete(`${url}/folders/${folderId}`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
+export const deleteTest = (folderId, testId) => {
+  return httpInterceptor
+    .delete(`${url}/folders/${folderId}/tests/${testId}`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
