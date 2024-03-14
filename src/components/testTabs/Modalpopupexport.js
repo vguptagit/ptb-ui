@@ -61,17 +61,16 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
     const fetchPrintSettings = async () => {
       try {
         const settings = await getPrintsettings();
-
-        const format = exportFileFormats.find(f => f.value === settings.exportFormat) || exportFileFormats[0];
+        const format = exportFileFormats.find(f => f.value === settings.exportFileFormat) || exportFileFormats[0];
         setSelectedFormat(format);
         setShowMSWordSetting(isMSWordOrPDFSelected(format.value));
         setSelectedAnswerArea(answerAreas.find(a => a.value === settings.includeAreaForStudentResponse) || answerAreas[0]);
         setSelectedAnswerKey(answerKeys.find(k => k.value === settings.includeAnswerKeyIn) || answerKeys[0]);
         setSelectedPageNumber(pageNumbers.find(p => p.value === settings.pageNumberDisplay) || pageNumbers[0]);
        
-        setSelectedMargin(margins.find(m => m.value === settings.margin) || margins[1]);
+        setSelectedMargin(margins.find(m => m.value === settings.topMargin) || margins[1]);
         setIsIncludeStudentName(settings.includeStudentName);
-        setIsIncludeRandomizedTest(settings.includeRandomizedTest);
+        setIsIncludeRandomizedTest(settings.includeRandomizedTests);
         // Set other states as needed based on the fetched settings
       } catch (error) {
         console.error("Failed to fetch print settings:", error);
@@ -95,7 +94,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
 
   const handleExport = async () => {
     if (!isSaveSettingsAsDefault) {
-      Toastify({ message: 'Please check "Save settings as default" before exporting.', type: 'error' });
+      //Toastify({ message: 'Please check "Save settings as default" before exporting.', type: 'error' });
       return;
     }
 
@@ -135,7 +134,10 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
   };
 
   return (
-    <Modal show={show} onHide={handleCloseModal} centered>
+    <Modal show={show} onHide={handleCloseModal} className="custom-modal"
+    size="l"
+    centered
+    style={{ maxHeight: "100vh"}}>
       <Modal.Header closeButton>
         <Modal.Title>Export Tests</Modal.Title>
       </Modal.Header>
@@ -144,8 +146,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       <Modal.Body>
         <Form>
           <Form.Group as={Row}>
+          <Col sm="6">
             <Form.Label column sm="6">Export Format:</Form.Label>
-            <Col sm="6">
+            
               {exportFileFormats.map((format, index) => (
                 <Form.Check
                   type="radio"
@@ -157,29 +160,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 />
               ))}
             </Col>
-          </Form.Group>
-          {showMSWordSetting && (
-            <>
-          {/* Margins Section */}
-          <Form.Group as={Row}>
-            <Form.Label column sm="6">Margins:</Form.Label>
             <Col sm="6">
-              {margins.map((margin, index) => (
-                <Form.Check
-                  type="radio"
-                  label={margin.text}
-                  name="margins"
-                  id={`margin-${index}`}
-                  checked={selectedMargin.value === margin.value}
-                  onChange={() => setSelectedMargin(margin)}
-                />
-              ))}
-            </Col>
-          </Form.Group>
-          {/* Answer Area Section */}
-          <Form.Group as={Row}>
             <Form.Label column sm="6">Answer Area:</Form.Label>
-            <Col sm="6">
+            
               {answerAreas.map((area, index) => (
                 <Form.Check
                   type="radio"
@@ -193,10 +176,29 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               ))}
             </Col>
           </Form.Group>
-          {/* Answer Key Section */}
+          
+          <hr/>
+          {showMSWordSetting && (
+            <>
+          {/* Margins Section */}
           <Form.Group as={Row}>
-            <Form.Label column sm="6">Answer Key:</Form.Label>
+          <Col sm="6">
+            <Form.Label column sm="6">Margins:</Form.Label>
+            
+              {margins.map((margin, index) => (
+                <Form.Check
+                  type="radio"
+                  label={margin.text}
+                  name="margins"
+                  id={`margin-${index}`}
+                  checked={selectedMargin.value === margin.value}
+                  onChange={() => setSelectedMargin(margin)}
+                />
+              ))}
+            </Col>
             <Col sm="6">
+            <Form.Label column sm="6">Answer Key:</Form.Label>
+            
               {answerKeys.map((key, index) => (
                 <Form.Check
                   type="radio"
@@ -208,11 +210,13 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 />
               ))}
             </Col>
-          </Form.Group>
-          {/* Page Number Section */}
+         </Form.Group>
+         <hr/>
+          {/*  Answer Area Section */}
           <Form.Group as={Row}>
+          <Col sm="6">
             <Form.Label column sm="6">Page Number:</Form.Label>
-            <Col sm="6">
+           
               {pageNumbers.map((number, index) => (
                 <Form.Check
                   type="radio"
@@ -224,12 +228,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 />
               ))}
             </Col>
-          </Form.Group>
-
-          {/* Additional Options */}
-          <Form.Group as={Row}>
-          <Form.Label column sm="6">Labels and Versions:</Form.Label>
             <Col sm="6">
+          <Form.Label column sm="6">Labels and Versions:</Form.Label>
+            
               <Form.Check
                 type="checkbox"
                 label="Add student name label & space"
@@ -264,7 +265,6 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       />
     </Modal.Footer>
     </Modal >
-    
   );
 
 };
