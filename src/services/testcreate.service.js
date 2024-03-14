@@ -45,6 +45,20 @@ export const getPrintsettings = async () => {
     }
 };
 
+export const savePrintsettings = (data) => {
+  return httpInterceptor
+    .post(`${url}/settings/printsettings`, data)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
 export const getFolderTests = (folderId) => {
   return httpInterceptor
     .get(`${url}/my/folders/${folderId}/tests`)
