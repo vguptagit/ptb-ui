@@ -23,6 +23,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
   const handleCaretClick = (e) => {
     e.stopPropagation();
     onToggle();
+    node.isOpen = !node.isOpen;
     onDataUpdate && onDataUpdate(node);
   };
 
@@ -135,20 +136,12 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     setSearchableTreeData(updatedSearchableTreeData);
   };
   const handleCombinedToggle = (node, onToggle) => {
-    onToggle(); 
+    onToggle();
+    //node.isOpen = true;
     handleSimpleToggle(node);
   };
 
   const handleNodeClick = (clickedNode) => {
-    const updatedTreeData = treeData.map((node) => {
-      if (node.id === clickedNode.id && node.droppable) {
-        return { ...node, isOpen: !node.isOpen };
-      }
-      return node;
-    });
-
-    setTreeData(updatedTreeData);
-
     if (clickedNode.droppable) {
       if (clickedNode.type === "book" && !addedNodes.has(clickedNode.bookGuid))
         getBookNodes(clickedNode);
@@ -309,7 +302,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
      {
       isSearchTermPresent &&(
         <>
-      <div className="treeview">
+      <div className="treeviewqb">
         <Tree
           tree={searchableTreeDataFilter}
           rootId={0}

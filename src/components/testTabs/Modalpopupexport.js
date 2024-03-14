@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from "react-intl";
 import Toastify from '../common/Toastify';
-import {getPrintsettings } from '../../services/testcreate.service';
+import {getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
+//exportFileFormat
 const exportFileFormats = [
   { value: 'doc', text: 'MS Word' },
   { value: 'pdf', text: 'PDF' },
@@ -10,31 +11,37 @@ const exportFileFormats = [
   { value: 'bbtm', text: 'Blackboard Test manager' },
   { value: 'qti21', text: 'QTI 2.1' }
 ];
-
+//"includeAreaForStudentResponse": "NONE", - Answer Area
 const answerAreas = [
   { value: 'NONE', isDisabled: false, text: 'None' },
   { value: 'BETWEENQUESTIONS', isDisabled: false, text: 'Between questions' },
   { value: 'LEFTSIDE', isDisabled: false, text: 'Left side of the page' },
   { value: 'LASTPAGE', isDisabled: false, text: 'Blank last page' },
 ];
-
+//"includeAnswerKeyIn": "NONE",  - Answer Key:
 const answerKeys = [
   { value: 'NONE', text: 'None' },
   { value: 'SAMEFILE', text: 'Same file' },
   { value: 'SEPARATEFILE', text: 'Separate file' },
 ];
 
+// "topMargin": "1.9", - Margins:
+//     "bottomMargin": "1.9", - Margins:
+//     "leftMargin": "1.9", - Margins:
+//     "rightMargin": "1.9", - Margins:
 const margins = [
   { value: '0.5', text: '0.5 inch' },
   { value: '1.0', text: '1 inch' },
   { value: '1.5', text: '1.5 inch' },
 ];
-
+// "pageNumberDisplay": "BOTTOMRIGHT"
 const pageNumbers = [
   { value: 'BOTTOMMIDDLE', text: 'Bottom middle' },
   { value: 'BOTTOMRIGHT', text: 'Bottom right' },
   { value: 'TOPRIGHT', text: 'Top right' },
 ];
+//  "includeRandomizedTests": false, - Labels and Versions:
+//"includeStudentName": true, - Labels and Versions:
 
 
 function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, showModalExport }) {
@@ -82,21 +89,49 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
   };
 
   const handleFormatChange = (format) => {
-    //const formatValue = event.target.value;
-    //const format = exportFileFormats.find(f => f.value === formatValue);
     setSelectedFormat(format);
     setShowMSWordSetting(isMSWordOrPDFSelected(format.value));
   };
 
-  const handleExport = () => {
-    // Implement export functionality here
-    console.log("Exporting Test...");
-    // Close the popup or navigate as necessary
-  };
+  const handleExport = async () => {
+    if (!isSaveSettingsAsDefault) {
+      Toastify({ message: 'Please check "Save settings as default" before exporting.', type: 'error' });
+      return;
+    }
 
-  const handleCancel = () => {
-    // Close the popup or navigate as necessary
-    console.log("Cancel");
+    // Implement export functionality here
+    const payload = {
+      multipleVersions: false, // isIncludeRandomizedTest
+      numberOfVersions: 0, // assuming it's always 1
+      scrambleOrder: "Scramble question order", 
+      includeAreaForStudentResponse: selectedAnswerArea.value,
+      includeAnswerKeyIn: selectedAnswerKey.value,
+      includeAnwserFeedback: true, 
+      includeQuestionHints: true, 
+      topMargin: selectedMargin.value,
+      bottomMargin: selectedMargin.value, 
+      leftMargin: selectedMargin.value,
+      rightMargin: selectedMargin.value,
+      headerSpace: "1.2", 
+      footerSpace: "1.2", 
+      font: "Helvetica, Arial", 
+      fontSize: "12", // assuming this is a static value
+      exportFileFormat: selectedFormat.value,
+      includeRandomizedTests: isIncludeRandomizedTest,
+      includeStudentName: isIncludeStudentName,
+      pageNumberDisplay: selectedPageNumber.value
+    };
+    
+    try {
+      const response = await savePrintsettings(payload);
+      Toastify({ message: 'Export successful', type: 'success' }); // Display success message
+      console.log("Export successful:", response);
+      handleCloseModal(); // Close the modal upon successful export
+    } catch (error) {
+      Toastify({ message: `Export failed! ${error.message}`, type: 'error' }); // Display error message
+      console.error("Export failed:", error);
+    }
+
   };
 
   return (
