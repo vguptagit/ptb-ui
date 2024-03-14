@@ -386,7 +386,7 @@ const TestTabs = () => {
               <FormattedMessage id="testtabs.export" />
             </Button>
             <Modalpopupexport
-
+             width='80%'
             show={showModalExport}
             handleCloseModal={() => setShowModalExport(false)} />
           </div>
