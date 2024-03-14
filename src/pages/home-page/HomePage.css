@@ -23,7 +23,7 @@
 }
 .container-resource, .container-test{
     height: calc(89vh - 85px);
-    overflow:hidden;
+    overflow:auto;
 }
 .button-container {
     display: flex;
