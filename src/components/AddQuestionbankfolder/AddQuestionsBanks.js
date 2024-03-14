@@ -18,6 +18,9 @@ const QuestBanks = () => {
     const handleBack = () => {
         setStep(step - 1);
     };
+    const handleSave = () =>{
+        setShowModal(false);
+    }
 
 
     return (
@@ -40,7 +43,7 @@ const QuestBanks = () => {
                             {step === 1 ? (
                                 <AddDisciplinepopup handleNext={handleNext} />
                             ) : (
-                                <AddBookspopup handleBack={handleBack} />
+                                <AddBookspopup handleBack={handleBack}  handleSave={handleSave} />
                             )}
                         </div>
                       
