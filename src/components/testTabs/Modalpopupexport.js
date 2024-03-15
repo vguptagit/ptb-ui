@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
 import { FormattedMessage } from "react-intl";
 import Toastify from '../common/Toastify';
-import {getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
+import { getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
+import "./Modalpopupexport.css";
 //exportFileFormat
 const exportFileFormats = [
   { value: 'doc', text: 'MS Word' },
@@ -44,7 +45,7 @@ const pageNumbers = [
 //"includeStudentName": true, - Labels and Versions:
 
 
-function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, showModalExport }) {
+function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, showModalExport, backdrop, keyboard, width }) {
   const [selectedFormat, setSelectedFormat] = useState(exportFileFormats[0]);
   const [selectedAnswerArea, setSelectedAnswerArea] = useState(answerAreas[0]);
   const [selectedAnswerKey, setSelectedAnswerKey] = useState(answerKeys[0]);
@@ -55,31 +56,31 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
   const [isIncludeRandomizedTest, setIsIncludeRandomizedTest] = useState(false);
   const [isIncludeStudentName, setIsIncludeStudentName] = useState(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (show) {
-    console.log("use effect called")
-    const fetchPrintSettings = async () => {
-      try {
-        const settings = await getPrintsettings();
-        const format = exportFileFormats.find(f => f.value === settings.exportFileFormat) || exportFileFormats[0];
-        setSelectedFormat(format);
-        setShowMSWordSetting(isMSWordOrPDFSelected(format.value));
-        setSelectedAnswerArea(answerAreas.find(a => a.value === settings.includeAreaForStudentResponse) || answerAreas[0]);
-        setSelectedAnswerKey(answerKeys.find(k => k.value === settings.includeAnswerKeyIn) || answerKeys[0]);
-        setSelectedPageNumber(pageNumbers.find(p => p.value === settings.pageNumberDisplay) || pageNumbers[0]);
-       
-        setSelectedMargin(margins.find(m => m.value === settings.topMargin) || margins[1]);
-        setIsIncludeStudentName(settings.includeStudentName);
-        setIsIncludeRandomizedTest(settings.includeRandomizedTests);
-        // Set other states as needed based on the fetched settings
-      } catch (error) {
-        console.error("Failed to fetch print settings:", error);
-        // Handle error (e.g., show error message)
-      }
-    };
-     
-    fetchPrintSettings();
-  }
+      console.log("use effect called")
+      const fetchPrintSettings = async () => {
+        try {
+          const settings = await getPrintsettings();
+          const format = exportFileFormats.find(f => f.value === settings.exportFileFormat) || exportFileFormats[0];
+          setSelectedFormat(format);
+          setShowMSWordSetting(isMSWordOrPDFSelected(format.value));
+          setSelectedAnswerArea(answerAreas.find(a => a.value === settings.includeAreaForStudentResponse) || answerAreas[0]);
+          setSelectedAnswerKey(answerKeys.find(k => k.value === settings.includeAnswerKeyIn) || answerKeys[0]);
+          setSelectedPageNumber(pageNumbers.find(p => p.value === settings.pageNumberDisplay) || pageNumbers[0]);
+
+          setSelectedMargin(margins.find(m => m.value === settings.topMargin) || margins[1]);
+          setIsIncludeStudentName(settings.includeStudentName);
+          setIsIncludeRandomizedTest(settings.includeRandomizedTests);
+          // Set other states as needed based on the fetched settings
+        } catch (error) {
+          console.error("Failed to fetch print settings:", error);
+          // Handle error (e.g., show error message)
+        }
+      };
+
+      fetchPrintSettings();
+    }
 
   }, [show]);
 
@@ -102,25 +103,25 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
     const payload = {
       multipleVersions: false, // isIncludeRandomizedTest
       numberOfVersions: 0, // assuming it's always 1
-      scrambleOrder: "Scramble question order", 
+      scrambleOrder: "Scramble question order",
       includeAreaForStudentResponse: selectedAnswerArea.value,
       includeAnswerKeyIn: selectedAnswerKey.value,
-      includeAnwserFeedback: true, 
-      includeQuestionHints: true, 
+      includeAnwserFeedback: true,
+      includeQuestionHints: true,
       topMargin: selectedMargin.value,
-      bottomMargin: selectedMargin.value, 
+      bottomMargin: selectedMargin.value,
       leftMargin: selectedMargin.value,
       rightMargin: selectedMargin.value,
-      headerSpace: "1.2", 
-      footerSpace: "1.2", 
-      font: "Helvetica, Arial", 
+      headerSpace: "1.2",
+      footerSpace: "1.2",
+      font: "Helvetica, Arial",
       fontSize: "12", // assuming this is a static value
       exportFileFormat: selectedFormat.value,
       includeRandomizedTests: isIncludeRandomizedTest,
       includeStudentName: isIncludeStudentName,
       pageNumberDisplay: selectedPageNumber.value
     };
-    
+
     try {
       const response = await savePrintsettings(payload);
       Toastify({ message: 'Export successful', type: 'success' }); // Display success message
@@ -130,14 +131,13 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       Toastify({ message: `Export failed! ${error.message}`, type: 'error' }); // Display error message
       console.error("Export failed:", error);
     }
-
   };
 
   return (
-    <Modal show={show} onHide={handleCloseModal} className="custom-modal"
-    size="l"
-    centered
-    style={{ maxHeight: "100vh"}}>
+    <Modal className="custom-modal-size" show={show} onHide={handleCloseModal}
+      centered
+      backdrop={backdrop}
+      keyboard={keyboard}>
       <Modal.Header closeButton>
         <Modal.Title>Export Tests</Modal.Title>
       </Modal.Header>
@@ -146,9 +146,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       <Modal.Body>
         <Form>
           <Form.Group as={Row}>
-          <Col sm="6">
-            <Form.Label column sm="6">Export Format:</Form.Label>
-            
+            <Col sm="6">
+              <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>Export Format:</Form.Label>
+
               {exportFileFormats.map((format, index) => (
                 <Form.Check
                   type="radio"
@@ -161,8 +161,8 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               ))}
             </Col>
             <Col sm="6">
-            <Form.Label column sm="6">Answer Area:</Form.Label>
-            
+              <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Answer Area:</Form.Label>
+
               {answerAreas.map((area, index) => (
                 <Form.Check
                   type="radio"
@@ -176,94 +176,102 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               ))}
             </Col>
           </Form.Group>
-          
-          <hr/>
+
+          <hr />
           {showMSWordSetting && (
             <>
-          {/* Margins Section */}
-          <Form.Group as={Row}>
-          <Col sm="6">
-            <Form.Label column sm="6">Margins:</Form.Label>
-            
-              {margins.map((margin, index) => (
-                <Form.Check
-                  type="radio"
-                  label={margin.text}
-                  name="margins"
-                  id={`margin-${index}`}
-                  checked={selectedMargin.value === margin.value}
-                  onChange={() => setSelectedMargin(margin)}
-                />
-              ))}
-            </Col>
-            <Col sm="6">
-            <Form.Label column sm="6">Answer Key:</Form.Label>
-            
-              {answerKeys.map((key, index) => (
-                <Form.Check
-                  type="radio"
-                  label={key.text}
-                  name="answerKey"
-                  id={`answerKey-${index}`}
-                  checked={selectedAnswerKey.value === key.value}
-                  onChange={() => setSelectedAnswerKey(key)}
-                />
-              ))}
-            </Col>
-         </Form.Group>
-         <hr/>
-          {/*  Answer Area Section */}
-          <Form.Group as={Row}>
-          <Col sm="6">
-            <Form.Label column sm="6">Page Number:</Form.Label>
-           
-              {pageNumbers.map((number, index) => (
-                <Form.Check
-                  type="radio"
-                  label={number.text}
-                  name="pageNumber"
-                  id={`pageNumber-${index}`}
-                  checked={selectedPageNumber.value === number.value}
-                  onChange={() => setSelectedPageNumber(number)}
-                />
-              ))}
-            </Col>
-            <Col sm="6">
-          <Form.Label column sm="6">Labels and Versions:</Form.Label>
-            
-              <Form.Check
-                type="checkbox"
-                label="Add student name label & space"
-                checked={isIncludeStudentName}
-                onChange={(e) => setIsIncludeStudentName(e.target.checked)}
-              />
-            
-              <Form.Check
-                type="checkbox"
-                label="Include all test versions"
-                checked={isIncludeRandomizedTest}
-                onChange={(e) => setIsIncludeRandomizedTest(e.target.checked)}
-              />
-            </Col>
-          </Form.Group>
-          </>
+              {/* Margins Section */}
+              <Form.Group as={Row}>
+                <Col sm="6">
+                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Margins:</Form.Label>
+
+                  {margins.map((margin, index) => (
+                    <Form.Check
+                      type="radio"
+                      label={margin.text}
+                      name="margins"
+                      id={`margin-${index}`}
+                      checked={selectedMargin.value === margin.value}
+                      onChange={() => setSelectedMargin(margin)}
+                    />
+                  ))}
+                </Col>
+                <Col sm="6">
+                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Answer Key:</Form.Label>
+
+                  {answerKeys.map((key, index) => (
+                    <Form.Check
+                      type="radio"
+                      label={key.text}
+                      name="answerKey"
+                      id={`answerKey-${index}`}
+                      checked={selectedAnswerKey.value === key.value}
+                      onChange={() => setSelectedAnswerKey(key)}
+                    />
+                  ))}
+                </Col>
+              </Form.Group>
+              <hr />
+              {/*  Answer Area Section */}
+              <Form.Group as={Row}>
+                <Col sm="6">
+                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Page Number:</Form.Label>
+
+                  {pageNumbers.map((number, index) => (
+                    <Form.Check
+                      type="radio"
+                      label={number.text}
+                      name="pageNumber"
+                      id={`pageNumber-${index}`}
+                      checked={selectedPageNumber.value === number.value}
+                      onChange={() => setSelectedPageNumber(number)}
+                    />
+                  ))}
+                </Col>
+                <Col sm="6">
+                  <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>Labels and Versions:</Form.Label>
+
+                  <Form.Check
+                    type="checkbox"
+                    label="Add student name label & space"
+                    checked={isIncludeStudentName}
+                    onChange={(e) => setIsIncludeStudentName(e.target.checked)}
+                  />
+
+                  <Form.Check
+                    type="checkbox"
+                    label="Include all test versions"
+                    checked={isIncludeRandomizedTest}
+                    onChange={(e) => setIsIncludeRandomizedTest(e.target.checked)}
+                  />
+                </Col>
+              </Form.Group>
+            </>
           )}
         </Form>
       </Modal.Body >
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleCloseModal}>
-        Cancel
-      </Button>
-      <Button variant="primary" onClick={handleExport}>
-        Export
-      </Button>
-      <Form.Check
-        type="checkbox"
-        label="Save settings as default"
-        checked={isSaveSettingsAsDefault}
-        onChange={(e) => setIsSaveSettingsAsDefault(e.target.checked)}
-      />
-    </Modal.Footer>
+      <Modal.Footer>
+        <Container fluid>
+          <Row className="align-items-center">
+            <Col xs={6}>
+              <Form.Check
+                type="checkbox"
+                label="Save settings as default"
+                checked={isSaveSettingsAsDefault}
+                onChange={(e) => setIsSaveSettingsAsDefault(e.target.checked)}
+              />
+            </Col>
+            <Col xs={6} className="text-right">
+              <Button variant="secondary" onClick={handleCloseModal} style={{ marginRight: '10px' }}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleExport}>
+                Export
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      </Modal.Footer>
     </Modal >
   );
 
