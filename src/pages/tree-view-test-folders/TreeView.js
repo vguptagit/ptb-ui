@@ -43,7 +43,7 @@ function TreeView({
 
   const fetchChildFolders = async (parentNode) => {
     try {
-      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
+      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid && parentNode.droppable === true) {
         const childFolders = await getUserTestFolders(parentNode.data.guid);
         const childTests = await getFolderTests(parentNode.data.guid);
 
