@@ -26,7 +26,6 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
-  const [isTestSaved, setIsTestSaved] = useState(false);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -53,7 +52,6 @@ const TestTabs = () => {
   useEffect(() => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
-    setIsTestSaved(false);
   }, [selectedTest]);
 
   const handleNodeSelect = (item) => {
@@ -148,7 +146,6 @@ const TestTabs = () => {
   
       let questionBindings = await saveQuestions(test);
       saveTest(test, questionBindings);
-      setIsTestSaved(true);
     }
   };
   const saveTest = async (test, questionBindings) => {
@@ -199,6 +196,7 @@ const TestTabs = () => {
         Toastify({ message: "Failed to save Test", type: "error" });
       }
     }
+    sessionStorage.removeItem('selectedFolderId');
   };
 
   const saveQuestions = async (test) => {
@@ -305,7 +303,6 @@ const TestTabs = () => {
 
     setShowModal(true); 
     console.log("handleSaveAs 2",showModal);
-    setIsTestSaved(true);
   };
 
   const handleShowModalExport = () => {
@@ -322,15 +319,9 @@ const TestTabs = () => {
    };
 
   const handlePrint = () => {
-    if (isTestSaved) {
       // Open print modal
       setShowPrintModal(true);
       console.log("handlePrint",showPrintModal);
-    }
-    else {
-      // Show toast or alert indicating that the test needs to be saved first
-      Toastify({ message: "Please save the test before printing", type: "warn" });
-    }
   }
 
   const areQuestionsAvailable = (test) => {
@@ -374,7 +365,6 @@ const TestTabs = () => {
               title="Print"
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
               onClick={(e) => handlePrint(e)}
-              disabled={!isTestSaved}
             >
               <PrintTestModalpopup width='80%' show={showPrintModal}
                 handleClosePrintModal={handleClosePrintModal}
