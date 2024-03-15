@@ -334,8 +334,8 @@ function TreeView({
                 <h5 className="modal-title">Delete Folder</h5>
               </div>
               <div className="modal-body">
-                Are you sure you want to delete folder "{selectedFolderToDelete}
-                "?
+                Deleting folder will delete inner folders and tests. This action
+                can't be undo. Do you really want to delete the folder?
               </div>
               <div className="modal-footer">
                 <button
@@ -370,7 +370,8 @@ function TreeView({
                 <h5 className="modal-title">Delete Test</h5>
               </div>
               <div className="modal-body">
-                Are you sure you want to delete this test?
+                You are deleting test. This action can't be undo. Do you really
+                want to delete the test?
               </div>
               <div className="modal-footer">
                 <button
