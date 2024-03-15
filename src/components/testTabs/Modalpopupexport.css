@@ -7,5 +7,21 @@
   .settings-block {
     margin-bottom: 1rem;
   }
+ 
+  .custom-modal-size .modal-dialog {
+    max-width: 45%; /* Increase width up to 90% of the viewport width */
+    margin: 0 auto; /* Centers the modal */
+  }
   
-  
+  .custom-modal-size .modal-content {
+    
+  }
+
+  .custom-modal-size .modal-header,
+.custom-modal-size .modal-body,
+.custom-modal-size .modal-footer {
+  padding-top: 5px; /* Remove top padding */
+  padding-bottom: 5px; /* Remove bottom padding */
+  padding-left: 20px; /* Keep left padding */
+  padding-right: 20px; /* Keep right padding */
+}

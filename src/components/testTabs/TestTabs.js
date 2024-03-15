@@ -388,7 +388,9 @@ const TestTabs = () => {
             <Modalpopupexport
              width='80%'
             show={showModalExport}
-            handleCloseModal={() => setShowModalExport(false)} />
+            handleCloseModal={() => setShowModalExport(false)} 
+            backdrop="static"
+            keyboard={false}/>
           </div>
         </div>
       </div>
