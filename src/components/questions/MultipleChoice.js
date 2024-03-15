@@ -14,10 +14,18 @@ const MultipleChoice = (props) => {
         Orientation: questionNode.qtiModel ? "true" : "false"
     };
     const [formData, setFormData] = useState(initFormData);
+    const [emptyQuestion,setEmptyQuestion] = useState(()=> {
+        let emptyOptions = formData.Options.filter((option) => option == "");
+        return (formData.Caption == "" || emptyOptions.length > 0);
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        setEmptyQuestion(()=> {
+            let emptyOptions = formData.Options.filter((option) => option == "");
+            return (value == "" || emptyOptions.length > 0);
+        })
     };
 
     const handleOptionsChange = (e) =>{
@@ -27,6 +35,10 @@ const MultipleChoice = (props) => {
         //findIndex to find location of item we need to update
         tempOptions[name] = value;        
         setFormData({ ...formData, Options: tempOptions })
+        setEmptyQuestion(()=> {
+            let emptyOptions = tempOptions.filter((option) => option == "");
+            return (formData.Caption == "" || emptyOptions.length > 0);
+        })
     }
 
     const handleSubmit = (e) => {
@@ -179,7 +191,7 @@ return (
       </div>
  </Collapse>
   <div className="mb-1 d-flex justify-content-end">
-    <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
+    <Link className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
       Save
     </Link>
     <Link className="deletelink" onClick={handleDelete}>
