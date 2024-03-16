@@ -160,6 +160,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 />
               ))}
             </Col>
+            {showMSWordSetting && (
             <Col sm="6">
               <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Answer Area:</Form.Label>
 
@@ -175,11 +176,13 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 />
               ))}
             </Col>
+            )}
           </Form.Group>
 
-          <hr />
+          
           {showMSWordSetting && (
             <>
+            <hr />
               {/* Margins Section */}
               <Form.Group as={Row}>
                 <Col sm="6">
@@ -253,15 +256,16 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       <Modal.Footer>
         <Container fluid>
           <Row className="align-items-center">
-            <Col xs={6}>
+            <Col xs={6} >
               <Form.Check
+              style={{paddingLeft: '10px'}}
                 type="checkbox"
                 label="Save settings as default"
                 checked={isSaveSettingsAsDefault}
                 onChange={(e) => setIsSaveSettingsAsDefault(e.target.checked)}
               />
             </Col>
-            <Col xs={6} className="text-right">
+            <Col xs={6} className="text-right"  style={{paddingLeft: '115px'}}>
               <Button variant="secondary" onClick={handleCloseModal} style={{ marginRight: '10px' }}>
                 Cancel
               </Button>
