@@ -124,7 +124,7 @@ const TestTabs = () => {
     // 2. Save questions
     // 3. Save tests
     if (!areQuestionsAvailable(test)) {
-      Toastify({ message: "No unchanged questions to Save!", type: "warn" });
+      Toastify({ message: "One or more question/s is/are in edit state, please save!", type: "warn" });
       return;
     }
   
@@ -300,7 +300,10 @@ const TestTabs = () => {
 
   const handleSaveAs = () => {
     console.log("handleSaveAs 1",showModal);
-
+    if (!areQuestionsAvailable(selectedTest)) {
+      Toastify({ message: "One or more question/s is/are in edit state, please save!", type: "warn" });
+      return;
+    }
     setShowModal(true); 
     console.log("handleSaveAs 2",showModal);
   };
@@ -320,6 +323,10 @@ const TestTabs = () => {
 
   const handlePrint = () => {
       // Open print modal
+      if (!areQuestionsAvailable(selectedTest)) {
+        Toastify({ message: "One or more question/s is/are in edit state, please save!", type: "warn" });
+        return;
+      }
       setShowPrintModal(true);
       console.log("handlePrint",showPrintModal);
   }
