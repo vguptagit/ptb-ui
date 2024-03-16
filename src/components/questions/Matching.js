@@ -10,16 +10,39 @@ const Matching = (props) => {
     const initFormData = {
         Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
         Options: questionNode.qtiModel ? questionNode.qtiModel.Options : [{ option: "", matchingOption: "" }],
+        Orientation: questionNode.qtiModel ? "true" : "false"
+
     };
 
+    const [selectedIndexes, setSelectedIndexes] = useState([]);
     const [formData, setFormData] = useState(initFormData);
 
+    const handleChange = (e) => {
+        const { name, value, checked } = e.target;
+
+        if (checked) {
+            // Add the selected index to selectedIndexes array
+            setSelectedIndexes(prevIndexes => [...prevIndexes, parseInt(value)]);
+        } else {
+            // Remove the deselected index from selectedIndexes array
+            setSelectedIndexes(prevIndexes => prevIndexes.filter(index => index !== parseInt(value)));
+        }
+
+        setFormData({ ...formData, [name]: value });
+    };
     const handleOptionsChange = (e, index) => {
         const { name, value } = e.target;
         const tempOptions = [...formData.Options];
         tempOptions[index][name] = value;
         setFormData({ ...formData, Options: tempOptions });
     };
+    useEffect(() => {
+        // Update the formData's CorrectAnswer with selected indexes
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            CorrectAnswer: selectedIndexes
+        }));
+    }, [selectedIndexes]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -63,15 +86,16 @@ const Matching = (props) => {
                             <div className="mr-2">{questionNodeIndex + 1}) <span dangerouslySetInnerHTML={sanitizedData(questionNode.qtiModel.Caption)}></span></div>
                         </div>
                         <div className="w-100" style={{ paddingTop: "15px" }}>
-                            {questionNode.qtiModel.Options.map((option, index) => (
-                                <div key={index} className="view-question">
-                                    <div className="text-section d-flex flex-wrap">
-                                        <span className="ml-3 ml-md-0" style={{ minWidth: "250px" }}>{`A${index + 1}) ${option.option}`}</span>
-                                        <span className="ml-3 ml-md-0" style={{ minWidth: "00px" }}>{`B${index + 1}) ${option.matchingOption}`}</span>
-                                    </div>
-                                </div>
+                        {questionNode.qtiModel.Options.map((option, index) => (
+    <div key={index} className="view-question">
+        <div className="text-section d-flex flex-wrap">
+            <span className="ml-3 ml-md-0" style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 15 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
+            <span className="ml-3 ml-md-0" style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 15 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
+        </div>
+    </div>
+))}
 
-                            ))}
+
                         </div>
                     </div>
                     <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
@@ -79,14 +103,14 @@ const Matching = (props) => {
                             <i className="bi bi-pencil-fill"></i>
                         </button>
                         <button className="deletebtn" onClick={handleDelete}>
-                            <i className="bi bi-archive-fill"></i>
+                            <i className="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
             ) : (
                 <Form className="editmode border rounded p-3 bg-light">
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+                        <Form.Label className="mb-1" style={{ fontSize: '0.9em' }}>{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
                         <Form.Control
                             name="Caption"
                             onChange={(e) => setFormData({ ...formData, Caption: e.target.value })}
@@ -129,41 +153,6 @@ const Matching = (props) => {
                         </Form.Group>
 
                     </Form.Group>
-                    <div onClick={() => setOpen(!open)} className="d-flex align-items-center mb-3" style={{ cursor: "pointer" }}>
-                        {open ? (
-                            <i className="bi bi-caret-down-fill"></i>
-                        ) : (
-                            <i className="bi bi-caret-right-fill"></i>
-                        )}
-                        <span className="ms-2">Format and add metadata</span>
-                    </div>
-                    <Collapse key={open ? "open" : "closed"} in={open}>
-                        <div className="metadata-container">
-                            <div className="mb-2">
-                                <span className="caption-metadata">Format</span><span className="normal-text"> (visible in Print View) </span>
-                            </div>
-                            <div className="d-flex mc--orientation">
-                                <Form.Check
-                                    type="radio"
-                                    onChange={(e) => setFormData({ ...formData, Orientation: e.target.value })}
-                                    checked={"false" === formData.Orientation}
-                                    className="mr-5"
-                                    name="Orientation"
-                                    value="false"
-                                    label="Horizontal Displays"
-                                />
-                                <Form.Check
-                                    type="radio"
-                                    onChange={(e) => setFormData({ ...formData, Orientation: e.target.value })}
-                                    checked={"true" === formData.Orientation}
-                                    className=""
-                                    name="Orientation"
-                                    value="true"
-                                    label="Vertical Display"
-                                />
-                            </div>
-                        </div>
-                    </Collapse>
 
                     <div className="mb-1 d-flex justify-content-end " >
                         <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
