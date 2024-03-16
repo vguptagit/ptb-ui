@@ -265,11 +265,11 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                 onChange={(e) => setIsSaveSettingsAsDefault(e.target.checked)}
               />
             </Col>
-            <Col xs={6} className="text-right"  style={{paddingLeft: '115px'}}>
-              <Button variant="secondary" onClick={handleCloseModal} style={{ marginRight: '10px' }}>
+            <Col xs={6} className="text-right"  style={{paddingLeft: '105px', paddingRight: '0px'}}>
+              <Button variant="secondary" onClick={handleCloseModal} style={{ marginLeft : '10px' }}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={handleExport}>
+              <Button variant="primary" onClick={handleExport} style={{ float : 'right' }}> 
                 Export
               </Button>
             </Col>
