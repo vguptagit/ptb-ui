@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalFooter } from 'react-bootstrap';
 import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
@@ -21,6 +21,12 @@ const QuestBanks = () => {
      const handleSave = () => {
         setShowModal(false)
      }
+     useEffect(() => {
+      
+        if (showModal) {
+            setStep(1);
+        }
+    }, [showModal]);
 
 
     return (
@@ -37,6 +43,8 @@ const QuestBanks = () => {
                     onHide={handleClose}
                     size="lg"
                     dialogClassName="modal-dialog-centered"
+                    backdrop="static"
+                    keyboard={false}
                 >
                     <Modal.Body>
                         <div className="modal-content-wrapper">
