@@ -22,7 +22,6 @@ const FillInBlanks = (props) => {
 
             EditableCorrectAnswers : []
         }
-        
         var domContent = jquery(jquery.parseHTML(initFormData.CorrectAnswerHtml));
         
         domContent.each((index,item) => {
@@ -41,26 +40,11 @@ const FillInBlanks = (props) => {
         return initFormData;
     });
     const text = useRef(questionNode.qtiModel.Caption);
-
-    const getInitFormState = (questionNode) => {
-        let initFormData = {
-            Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : "",
-            Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ["","","",""],
-            CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : -1,
-            CorrectAnswerHtml: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswerHtml : "",
-            EditableCorrectAnswers : []
-        }
-        
-        var domContent = jquery(jquery.parseHTML(initFormData.CorrectAnswerHtml));
-        text.current = initFormData.Caption;
-
-        return initFormData;
-    }
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const [emptyQuestion,setEmptyQuestion] = useState(()=> {
+        let emptyAnswers = formData.EditableCorrectAnswers.filter((item) => item.answer == "");
+        return (text.current == "" || emptyAnswers.length > 0);
+    });
+    
 
     const handleFIBBlankSpace = (value) => {
         let FIBBlankSpace = "FIBBlankSpace";
@@ -68,21 +52,35 @@ const FillInBlanks = (props) => {
       };
 
     const handleContentChange = evt => {
-        text.current = evt.target.value;
+        console.log(evt.target.value);
+        let currentTextValue = evt.target.value;
+        let buttons = (currentTextValue.match(/RESPONSE_\d{1}/g) || []);
+        if(buttons.length != formData.EditableCorrectAnswers.length) {
+            let modifiedCorrectAnswers = formData.EditableCorrectAnswers.filter((item) => {
+                return buttons.includes(item.name);
+            });
+            setFormData({ ...formData, EditableCorrectAnswers: modifiedCorrectAnswers }) 
+        }
+        text.current = currentTextValue;
+        setEmptyQuestion(()=> {
+            let emptyAnswers = formData.EditableCorrectAnswers.filter((item) => item.answer == "");
+            return (text.current == "" || emptyAnswers.length > 0);
+        })
     };
     
     const handleContentBlur = () => {
+        setEmptyQuestion(()=> {
+            let emptyAnswers = formData.EditableCorrectAnswers.filter((item) => item.answer == "");
+            return (text.current == "" || emptyAnswers.length > 0);
+        })
     };
 
     const handleBlank = (e) => {
         const { name, value } = e.target;
         var textEntryInteraction = '<button id="RESPONSE_$index" class="blankFIBButton">'+
 				'<span contenteditable="false" class="blankWidth editView"><b contenteditable="false">$charIndex.</b>Fill Blank</span></button> &nbsp;';
-        var domContent = jquery(jquery.parseHTML(text.current));
-        var buttons = jquery.grep(domContent, function(v) {
-            return v.nodeName === "BUTTON";
-        });
-        var blankCount = buttons.length;
+        
+        var blankCount = formData.EditableCorrectAnswers.length;
         blankCount = blankCount + 1;
         textEntryInteraction = textEntryInteraction.replace("$index",blankCount);
 		textEntryInteraction = textEntryInteraction.replace("$charIndex",String.fromCharCode(65 + blankCount -1));
@@ -108,6 +106,9 @@ const FillInBlanks = (props) => {
         };
         tempArray.push(item);
         setFormData({ ...formData, EditableCorrectAnswers: tempArray })
+        setEmptyQuestion(()=> {
+            return true;
+        })
     }
 
     const handleAnswerChange = (e) =>{
@@ -118,6 +119,10 @@ const FillInBlanks = (props) => {
         let item = tempAnswers.filter(item => item.name === name);
         item[0].answer = value;        
         setFormData({ ...formData, EditableCorrectAnswers: tempAnswers })
+        setEmptyQuestion(()=> {
+            let emptyAnswers = formData.EditableCorrectAnswers.filter((item) => item.answer == "");
+            return (text.current == "" || emptyAnswers.length > 0);
+        })
     }
 
     const handleOptionsChange = (e) =>{
@@ -132,10 +137,22 @@ const FillInBlanks = (props) => {
     const getPrintModeFbCaption = (Caption) => {
         try {
             var htmlText = Caption.trim().replace(/&nbsp;/, " ");
+            htmlText = htmlText.replaceAll("&lt;","<").replaceAll("&gt;",">");
             var element = jquery('<p></p>');
             jquery(element).append(htmlText);
-            element.find("button").each(	function(i, obj) {
-                jquery(obj).replaceWith("<span class='blank'> _____________________ </span>");
+            element.find("button").each(function(i, obj) {
+                let blankSpace = "<span class='blank'> _____________________ </span>";
+                switch(formData.FIBBlankSpace){
+                    case "100":
+                        blankSpace = "<span class='blank'>____________________________________________________________________________________________________</span>";
+                        break;
+                    case "50":
+                        blankSpace = "<span class='blank'>__________________________________________________</span>";
+                        break;
+                    default:
+                        blankSpace = "<span class='blank'>____________________</span>";
+                }
+                jquery(obj).replaceWith(blankSpace);
             });			
             return element[0].innerHTML;		
         } catch (e) {
@@ -165,7 +182,7 @@ const FillInBlanks = (props) => {
     const handleEdit = (e) => {
         e.preventDefault();
         questionNode.qtiModel.EditOption = true;
-        text.current = questionNode.qtiModel.Caption;
+        text.current = questionNode.qtiModel.Caption.replaceAll("<p></p>","");
         props.onQuestionStateChange(true);
     };
 
@@ -190,33 +207,35 @@ return (
     <div id={questionNode.itemId}>
         {!questionNode.qtiModel.EditOption ? (
             <div className="mb-3 d-flex align-items-center m-2 addfolder-container">
-                <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center">
+                <div className="flex-grow-1 d-flex ml-7 d-flex align-items-start">
                     <div className="mr-2"> {questionNodeIndex + 1}) </div>
                     <div dangerouslySetInnerHTML={sanitizedData(getPrintModeFbCaption(text.current))}></div>
                 </div>
-                <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+                {!props.isPrint ? (
+                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
                     <button className="editbtn" onClick={handleEdit}>
-                    <i className="bi bi-pencil-fill"></i>
+                        <i className="bi bi-pencil-fill"></i>
                     </button>
                     <button className="deletebtn" onClick={handleDelete}>
-                    <i className="bi bi-trash"></i>
+                        <i className="bi bi-trash"></i>
                     </button>
                 </div>
+                ) : ('')}
             </div>
         ) : (
         <Form className="editmode border rounded p-3 bg-light">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+                <Form.Label className="mb-1"><b>{props.questionNode.qtiModel.QstnSectionTitle}</b></Form.Label>
                 <ContentEditable html={text.current} onBlur={handleContentBlur} onChange={handleContentChange} className="rounded form-control fib-content-area"/>
-                <Button
+                <div className="float-right"><Button
                     id="dropdown-item-button"
                     title="Add Blank"
                     className="btn-test mt-3 mb-1 mb-sm-0 mr-sm-1 mr-1"
                     onClick={(e) => handleBlank(e)}>
                     Add Blank
-                </Button>
-                <div className="fib-answers-area mt-3">
-                    Correct Answer
+                </Button></div>
+                <div className="fib-answers-area mt-3 clear-both">
+                    <b>Correct Answer</b>
                     <div id="fbAnswerContainer" className="mb-1 mt-3 d-flex flex-wrap">
                         { 
                             formData.EditableCorrectAnswers.map((item,index) => {
@@ -246,7 +265,7 @@ return (
                     ) : (
                         <i className="bi bi-caret-right-fill"></i>
                     )}
-                    <span className="ms-2">Format and add metadata</span>
+                    <span className="ms-2"><b>Format and add metadata</b></span>
         </div>
         <Collapse key={open ? "open" : "closed"} in={open}>        
         <div id="example-collapse-text" className={`d-flex gap-2 ${open ? "visible" : "invisible"}`}>
@@ -281,7 +300,7 @@ return (
               </div>
         </Collapse>
         <div className="mb-1 d-flex justify-content-end">
-            <Link className="savelink" onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
+            <Link className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
             Save
             </Link>
             <Link className="deletelink" onClick={handleDelete}>
