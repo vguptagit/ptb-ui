@@ -33,7 +33,7 @@ const Discipline = () => {
       sessionStorage.setItem("selectedDiscipline", JSON.stringify(selectedItems));
       navigate(`/booktab`);
     }
-    console.log("selected items discipline ", selectedItems)
+    // console.log("selected items discipline ", selectedItems)
   };
 
   useEffect(() => {

@@ -191,7 +191,7 @@ const Booktab = () => {
     // const disciplines = bookDetails.map(discipline => discipline.discipline)
     saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-    sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
+    // sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
     }

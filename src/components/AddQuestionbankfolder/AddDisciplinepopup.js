@@ -36,16 +36,16 @@ const AddDisciplinepopup = ({ handleNext }) => {
 
     useEffect(() => {
         getUserDisciplines()
-          .then((data) => {
-            if (data) {
-              setUserDisciplineData(data);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-            setLoading(false);
-          });
-      }, []);
+            .then((data) => {
+                if (data) {
+                    setUserDisciplineData(data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+                setLoading(false);
+            });
+    }, []);
 
     useEffect(() => {
         if (userDisciplineData.length > 0) {
@@ -83,18 +83,18 @@ const AddDisciplinepopup = ({ handleNext }) => {
             handleNext();
         }
     };
-    
+
 
     return (
-        <div className="discipline-container">
+        <div className="disciplineaddpopup-container">
             {loading ? (
                 <Loader show={true} />
             ) : allData.length === 0 ? (
                 <div className="no-data-message">No disciplines available</div>
             ) : (
                 <>
-                    <div className="top-container">
-                        <h2 className="choose-your-books-or-topics">Add Discipline</h2>
+                    <div className="disciplineaddpopup-top-container">
+                        <h4 className="choose-your-books-or-topics">Add Discipline</h4>
                         <button className="disciplinePopup btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
                     </div>
                     <div className="disciplinePopup input-group rounded">
