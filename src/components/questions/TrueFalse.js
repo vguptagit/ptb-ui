@@ -79,11 +79,11 @@ return (
                     return (
                     <div className="view-question">
                         <div className="icon-section">
-                        {formData.CorrectAnswer == index ? 
+                        {formData.CorrectAnswer == index && !props.isPrint ? 
                                 <i className="bi bi-check" style={{ color: "green"}}></i>
                                         : <span className="icon-ml"></span>} 
                         </div>
-                        <div className= {formData.CorrectAnswer == index ? "text-section checked" : "text-section"}>
+                        <div className= {formData.CorrectAnswer == index && !props.isPrint ? "text-section checked" : "text-section"}>
                             <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span> 
                             <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>                        </div>
                     </div>);
@@ -91,14 +91,16 @@ return (
             }
             </div>
       </div>
-      <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
-        <button className="editbtn" onClick={handleEdit}>
-          <i className="bi bi-pencil-fill"></i>
-        </button>
-        <button className="deletebtn" onClick={handleDelete}>
-          <i className="bi bi-trash"></i>
-        </button>
-      </div>
+      {!props.isPrint ? (
+            <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+            <button className="editbtn" onClick={handleEdit}>
+                <i className="bi bi-pencil-fill"></i>
+            </button>
+            <button className="deletebtn" onClick={handleDelete}>
+                <i className="bi bi-trash"></i>
+            </button>
+        </div>
+        ) : ('')}
     </div>
   ) : (
 <Form className="editmode border rounded p-3 bg-light">

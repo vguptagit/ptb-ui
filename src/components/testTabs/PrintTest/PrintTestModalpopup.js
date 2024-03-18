@@ -97,6 +97,7 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
           <MultipleChoice
             questionNode={questionNode}
             questionNodeIndex={index}
+            isPrint={true}
           />
         );
       case CustomQuestionBanksService.MultipleResponse:
@@ -104,22 +105,23 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
           <MultipleResponse
             questionNode={questionNode}
             questionNodeIndex={index}
+            isPrint={true}
           />
         );
       case CustomQuestionBanksService.TrueFalse:
         return (
-          <TrueFalse questionNode={questionNode} questionNodeIndex={index} />
+          <TrueFalse questionNode={questionNode} questionNodeIndex={index} isPrint={true}/>
         );
       case CustomQuestionBanksService.Matching:
         return (
-          <Matching questionNode={questionNode} questionNodeIndex={index} />
+          <Matching questionNode={questionNode} questionNodeIndex={index} isPrint={true} />
         );
       case CustomQuestionBanksService.FillInBlanks:
         return (
-          <FillInBlanks questionNode={questionNode} questionNodeIndex={index} />
+          <FillInBlanks questionNode={questionNode} questionNodeIndex={index} isPrint={true} />
         );
       case CustomQuestionBanksService.Essay:
-        return <Essay questionNode={questionNode} questionNodeIndex={index} />;
+        return <Essay questionNode={questionNode} questionNodeIndex={index} isPrint={true}/>;
       default:
         return null;
     }

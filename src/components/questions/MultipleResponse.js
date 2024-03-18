@@ -94,11 +94,11 @@ const MultipleResponse = (props) => {
                                 return (
                                     <div className="view-question"  >
                                         <div className="icon-section">
-                                            {formData.CorrectAnswer.includes(index) ?
+                                            {formData.CorrectAnswer.includes(index) && !props.isPrint?
                                                 <i className="bi bi-check" style={{ color: "green", marginRight: "2px" }} ></i>
                                                 : <span className="icon-ml"></span>}
                                         </div>
-                                        <div className={formData.CorrectAnswer.includes(index) ? "text-section checked" : "text-section"} >
+                                        <div className={formData.CorrectAnswer.includes(index) && !props.isPrint ? "text-section checked" : "text-section"} >
                                             <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
                                             <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>
                                         </div>
@@ -107,7 +107,8 @@ const MultipleResponse = (props) => {
                             )}
                         </div>
                     </div>
-                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+                    {!props.isPrint ? (
+                        <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
                         <button className="editbtn" onClick={handleEdit}>
                             <i className="bi bi-pencil-fill"></i>
                         </button>
@@ -115,6 +116,7 @@ const MultipleResponse = (props) => {
                             <i className="bi bi-trash"></i>
                         </button>
                     </div>
+                    ) : ('')}
                 </div>
             ) : (
                 <Form className="editmode border rounded p-3 bg-light">

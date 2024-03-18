@@ -98,14 +98,16 @@ const Matching = (props) => {
 
                         </div>
                     </div>
-                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
-                        <button className="editbtn" onClick={handleEdit}>
-                            <i className="bi bi-pencil-fill"></i>
-                        </button>
-                        <button className="deletebtn" onClick={handleDelete}>
-                            <i className="bi bi-trash"></i>
-                        </button>
-                    </div>
+                    {!props.isPrint ? (
+                        <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+                            <button className="editbtn" onClick={handleEdit}>
+                                <i className="bi bi-pencil-fill"></i>
+                            </button>
+                            <button className="deletebtn" onClick={handleDelete}>
+                                <i className="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        ) : ('')}
                 </div>
             ) : (
                 <Form className="editmode border rounded p-3 bg-light">

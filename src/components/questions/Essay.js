@@ -65,20 +65,22 @@ const Essay = (props) => {
             <div className="mr-2">{questionNodeIndex + 1})</div>
             <div dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
           </div>
-          <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end">
-            <button className="editbtn" onClick={handleEdit}>
-              <i className="bi bi-pencil-fill"></i>
-            </button>
-            <button className="deletebtn" onClick={handleDelete}>
-              <i className="bi bi-trash"></i>
-            </button>
+          {!props.isPrint ? (
+              <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+              <button className="editbtn" onClick={handleEdit}>
+                  <i className="bi bi-pencil-fill"></i>
+              </button>
+              <button className="deletebtn" onClick={handleDelete}>
+                  <i className="bi bi-trash"></i>
+              </button>
           </div>
+          ) : ('')}
         </div>
       ) : (
         <div className="m-2">
           <Form onSubmit={handleSubmit} className="editmode border rounded p-3 bg-light">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label className="mb-1">{questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+              <Form.Label className="mb-1"><b>{questionNode.qtiModel.QstnSectionTitle}</b></Form.Label>
               <Form.Control
                 type="text"
                 name="question"
@@ -87,7 +89,7 @@ const Essay = (props) => {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label className="mb-1">{questionNode.qtiModel.EditRecommendedAnswer}</Form.Label>
+              <Form.Label className="mb-1"><b>{questionNode.qtiModel.EditRecommendedAnswer}</b></Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
@@ -102,7 +104,7 @@ const Essay = (props) => {
               ) : (
                 <i className="bi bi-caret-right-fill"></i>
               )}
-              <span className="ms-2">Format and add metadata</span>
+              <span className="ms-2"><b>Format and add metadata</b></span>
             </div>
             <Collapse key={open ? "open" : "closed"} in={open}>
               <div id="example-collapse-text" className={`d-flex gap-2 ${open ? "visible" : "invisible"}`}>
