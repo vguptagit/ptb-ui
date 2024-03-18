@@ -26,6 +26,7 @@
     position: absolute;
     top: 444px;
     padding-left: 342px !important;
+    border-bottom: 0px;
 }
 
 .print-preview .btn-close {
@@ -93,7 +94,7 @@ i.bi.bi-info-circle-fill.me-1 {
   color: var(--bs-secondary-color) !important;
   font-style: oblique;
   font-weight: bold;
-  font-size: larger;
+  font-size: medium;
   margin-left: -5px;
   margin-top: 24px;
   text-align: center;
@@ -106,4 +107,13 @@ i.bi.bi-info-circle-fill.me-1 {
 
 #modal-treeview{
     overflow: hidden;
+}
+.print-preview {
+  border-left: 1px solid #ccc; /* Adjust the color and style as needed */
+  height: 100%; /* Adjust the height of the line */
+}
+
+#element{
+  position: relative;
+  bottom: 16px;
 }
