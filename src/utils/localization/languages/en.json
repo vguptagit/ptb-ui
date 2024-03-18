@@ -35,6 +35,7 @@
 
     "yourquestions.addquestionfolder":"Add Question Folder",
     "questionbanks.addquestionsbanks":"Add Questions Banks",
-    "testName": "Test Name"
+    "testName": "Test Name",
+    "settings metadata":"Select the information you want when you create questions"
    
 }
