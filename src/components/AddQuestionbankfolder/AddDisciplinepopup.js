@@ -94,6 +94,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
             ) : (
                 <>
                     <div className="disciplineaddpopup-top-container">
+                        
                         <h4 className="choose-your-books-or-topics">Add Discipline</h4>
                         <button className="disciplinePopup btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
                     </div>
@@ -101,7 +102,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
                         <input
                             type="search"
                             width="100%"
-                            className="disciplinePopup form-control rounded search-input"
+                            className="disciplinePopup form-control  search-input"
                             placeholder="Search Discipline"
                             aria-label="Search"
                             aria-describedby="search-addon"
@@ -113,10 +114,13 @@ const AddDisciplinepopup = ({ handleNext }) => {
                                 <i className="fas fa-search"></i>
                             </span>
                         </div>
+
                     </div>
+                    
                     {searchResults.length === 0 && (
                         <div className="no-matching-discipline-message">"No matching disciplines found"</div>
                     )}
+                  
                     <ul className="disciplinePopup result-list mt-3">
                         {searchResults.map((item, index) => (
                             <li

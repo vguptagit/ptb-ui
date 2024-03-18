@@ -8,7 +8,9 @@
   color: #4D4D4D;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-around; */
+  max-height: 430px;
+  min-height: 430px;
+
 }
 
 .disciplineaddpopup-top-container {
@@ -54,11 +56,7 @@
   padding: 0px 5px 5px;
 }
 
-.disciplinePopup.search-input {
-  min-width: 200px;
-  width: 100%;
-  transition: none;
-}
+
 
 .disciplinePopup.result-list {
   width: 99%;
@@ -95,8 +93,8 @@
 
 .no-matching-discipline-message {
   align-self: center;
-  padding-inline-start: 10px;
-  padding-top: 30px;
+    padding-inline-start: 10px;
+    padding-top: 10px;
 
 }
 .no-data-message{
