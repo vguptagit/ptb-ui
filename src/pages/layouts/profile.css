@@ -80,3 +80,11 @@
     #help-tooltip{
         margin-top: 7px;
     }
+
+
+    .settings-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px;
+    }
