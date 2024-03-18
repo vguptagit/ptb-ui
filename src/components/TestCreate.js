@@ -30,7 +30,6 @@ const TestCreate = () => {
     setTabTitle(selectedTest?.title || "");
     setInitialTabTitle(selectedTest?.title || "");
   }, [selectedTest]);
-
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
   
@@ -45,14 +44,17 @@ const TestCreate = () => {
     setTabTitle(newTitle);
     setIsEditing(true);
   
+    // Update the title in the selectedTest object
     if (selectedTest && selectedTest.id) {
-      dispatchEvent("UPDATE_TEST_TITLE", {
-        id: selectedTest.id,
-        title: newTitle,
-      });
+      // Create a copy of the selectedTest object
+      const updatedSelectedTest = { ...selectedTest };
+      // Update the title property with the new title
+      updatedSelectedTest.title = newTitle;
+      // Dispatch an action to update the selectedTest object in the context
+      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
   };
-  
+  console.log("updatedtitle",tabTitle)
 
   const handleSubmit = (event) => {
     event.preventDefault();
