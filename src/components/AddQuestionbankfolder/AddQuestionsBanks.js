@@ -3,6 +3,8 @@ import { Button, Modal, ModalFooter } from 'react-bootstrap';
 import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
 
+
+
 const QuestBanks = () => {
     const [showModal, setShowModal] = useState(false);
     const [step, setStep] = useState(1);
@@ -38,7 +40,7 @@ const QuestBanks = () => {
                 </Button>
             </div>
             <div>
-            <Modal 
+            <Modal  
                     show={showModal} 
                     onHide={handleClose}
                     size="lg"

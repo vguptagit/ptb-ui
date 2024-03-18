@@ -5,6 +5,7 @@ import "./AddBookspopup.css";
 import Loader from "../../components/common/loader/Loader";
 import { getDisciplineBooks, getUserBooks, saveUserBooks } from "../../services/book.service";
 import { saveUserDiscipline } from "../../services/discipline.service";
+import Toastify from "../common/Toastify";
 
 const TreeNode = ({ node, onSelectItem, selectedItems }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -188,23 +189,23 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
   const handleNext = () => {
     let parentIds = [];
     if (bookDetails.length > 0) {
-
       parentIds = bookDetails.map(book => book.id);
     } else {
       parentIds = userbooksData;
     }
 
-
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-
   
     const uniqueDisciplines = new Set(selectedDisciplines);
-
     const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
     saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem("userId"));
 
-  handleSave();
+    handleSave(); 
+
+    
+    Toastify({ message: "Books and Discipline  have been saved successfully!", type: "success" });
   };
+
 
 
   const handleSearch = (e) => {
@@ -261,7 +262,7 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
             <input
               type="search"
               width="100%"
-              className="discipline form-control rounded search-input"
+              className=" form-control search-input"
               placeholder="Search Books"
               aria-label="Search"
               aria-describedby="search-addon"
