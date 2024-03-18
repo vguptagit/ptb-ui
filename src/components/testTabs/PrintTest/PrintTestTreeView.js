@@ -23,7 +23,7 @@ const PrintTestTreeView = React.forwardRef(
 
     return (
       <div className={`p-3`} ref={ref} id="element">
-        <div className='question-numbers'>With and Without metadata - {treeData?.length} Questions
+        <div className='question-numbers'>No of Questions: {treeData?.length}
           {treeData && (
             <Tree className="print-test-treeview"
               tree={treeData}
