@@ -163,7 +163,7 @@ const FillInBlanks = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(questionNode) {
-            questionNode.qtiModel.Caption = "<p>" + text.current +"</p>";
+            questionNode.qtiModel.Caption = '<div class="__marker__">' + text.current +"</div>";
             questionNode.qtiModel.EditableCorrectAnswers = formData.EditableCorrectAnswers;
             questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;
             let fullAnswerHtml = ""
@@ -182,7 +182,11 @@ const FillInBlanks = (props) => {
     const handleEdit = (e) => {
         e.preventDefault();
         questionNode.qtiModel.EditOption = true;
-        text.current = questionNode.qtiModel.Caption.replaceAll("<p></p>","");
+        let textContent = questionNode.qtiModel.Caption;
+        if(textContent.includes("__marker__")) {
+            textContent = textContent.replace('<div class="__marker__">',"").replace(/<\/div>$/,"");
+        }
+        text.current = textContent;
         props.onQuestionStateChange(true);
     };
 
@@ -209,7 +213,7 @@ return (
             <div className="mb-3 d-flex align-items-center m-2 addfolder-container">
                 <div className="flex-grow-1 d-flex ml-7 d-flex align-items-start">
                     <div className="mr-2"> {questionNodeIndex + 1}) </div>
-                    <div dangerouslySetInnerHTML={sanitizedData(getPrintModeFbCaption(text.current))}></div>
+                    <div className="view-content" dangerouslySetInnerHTML={sanitizedData(getPrintModeFbCaption(text.current))}></div>
                 </div>
                 {!props.isPrint ? (
                     <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
