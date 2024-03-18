@@ -44,17 +44,19 @@ const AppProvider = ({ children }) => {
       case "REMOVE_TEST":
         setTests(tests.filter((test) => test.id !== payload.test.id));
         return;
-      case "UPDATE_TEST_TITLE":
-        console.log(tests);
-        setTests(
-          tests.map((test) =>
-            test.id === payload.id ? { ...test, title: payload.title } : test
-          )
+        case "UPDATE_TEST_TITLE":
+          console.log("Updating test title:", payload.title);
+          setTests(
+            tests.map((test) =>
+              test.id === payload.id ? { ...test, title: payload.title } : test
+            )
           );
-          console.log(tests);
-        return;
-      default:
-        return;
+        
+          if (selectedTest && selectedTest.id === payload.id) {
+            setSelectedTest({ ...selectedTest, title: payload.title });
+          }
+          return;
+        
     }
   };
 
