@@ -88,6 +88,7 @@ const TestFolder = ({ userId }) => {
   const handleTextBoxClose = () => {
     setShowTextBox(false);
     setFolderName("");
+    setUpdateKey(updateKey + 1);
   };
 
   // need to update this
@@ -109,7 +110,7 @@ const TestFolder = ({ userId }) => {
           guid: editedFolder.guid,
           parentId: editedFolder.parentId,
           sequence: editedFolder.sequence,
-          title: folderName,
+          title: folderName.trim(),
           //extUserId: sessionStorage.getItem("userId"),
         };
         const updateFolder =  await updateTestFolder(
@@ -124,7 +125,7 @@ const TestFolder = ({ userId }) => {
         const newFolderData = {
           parentId: rootFolderGuid,
           sequence: newSequence,
-          title: folderName,
+          title: folderName.trim(),
           //extUserId: sessionStorage.getItem("userId"),
         };
         const savedFolder = await saveTestFolder(

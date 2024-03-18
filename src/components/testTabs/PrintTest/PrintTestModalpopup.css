@@ -26,6 +26,7 @@
     position: absolute;
     top: 444px;
     padding-left: 342px !important;
+    border-bottom: 0px;
 }
 
 .print-preview .btn-close {
