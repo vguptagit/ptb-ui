@@ -153,3 +153,11 @@
   text-decoration: none;
   opacity: 0.75;
 }
+
+#delete-modal-header{
+  padding: 10px;
+}
+
+#delete-modal-footer{
+  padding: 10px;
+}

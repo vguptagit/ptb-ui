@@ -330,14 +330,14 @@ function TreeView({
         >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
-              <div className="modal-header">
+              <div className="modal-header" id="delete-modal-header">
                 <h5 className="modal-title">Delete Folder</h5>
               </div>
               <div className="modal-body">
-                Deleting folder will delete inner folders and tests. This action
-                can't be undo. Do you really want to delete the folder?
+              <i class="fa-solid fa-circle-question"></i>
+                &nbsp;Deleting folder will delete the child folders and tests. Are you sure you want to delete the folder? This action cannot be undone.
               </div>
-              <div className="modal-footer">
+              <div className="modal-footer" id="delete-modal-footer">
                 <button
                   type="button"
                   className="btn btn-secondary"
@@ -366,14 +366,15 @@ function TreeView({
         >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
-              <div className="modal-header">
+              <div className="modal-header" id="delete-modal-header">
                 <h5 className="modal-title">Delete Test</h5>
               </div>
               <div className="modal-body">
-                You are deleting test. This action can't be undo. Do you really
-                want to delete the test?
+              <i class="fa-solid fa-circle-question"></i>
+                &nbsp;
+                Are you sure you want to delete the test? This action cannot be undone.
               </div>
-              <div className="modal-footer">
+              <div className="modal-footer" id="delete-modal-footer">
                 <button
                   type="button"
                   className="btn btn-secondary"
