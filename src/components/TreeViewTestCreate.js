@@ -29,14 +29,15 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
     const dropTargetNodeIndex = updatedTreeData.findIndex(
       (node) => node.id === dropTargetNode.id
     );
-    let insertionIndex;
-    if (draggedNodeIndex > dropTargetNodeIndex) {
+    let insertionIndex = dropTargetNodeIndex;
+    if (dropTargetNode.children) {
+      insertionIndex = 0;
+    } else if (draggedNodeIndex > dropTargetNodeIndex) {
       insertionIndex = dropTargetNodeIndex;
     } else {
       insertionIndex = dropTargetNodeIndex + 1;
     }
     updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
-
     updatedTreeData.forEach((node, index) => {
       if (node.content.props.questionNodeIndex !== undefined) {
         const updatedContentProps = { ...node.content.props };
@@ -48,7 +49,6 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
         node.content = updatedContent;
       }
     });
-
     setTreeData(updatedTreeData);
   };
 

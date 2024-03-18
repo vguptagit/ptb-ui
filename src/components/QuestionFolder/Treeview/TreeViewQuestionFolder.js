@@ -74,19 +74,25 @@ function TreeViewQuestionFolder({
     } else {
       parentId = rootFolderGuid;
     }
-
+    const folderName = dragSource.text.trim();
     const nodeToBeUpdated = {
       guid: dragSource.data.guid,
       parentId: parentId,
       sequence: dropTarget ? dropTarget.data.sequence : 0,
-      title: dragSource.text,
+      title: folderName,
     };
 
     try {
-
-      const isDuplicate = newTree.some(node => node.text === nodeToBeUpdated.title && node.data.guid !== nodeToBeUpdated.guid);
+      const isDuplicate = newTree.some(
+        (node) =>
+          node.text === nodeToBeUpdated.title &&
+          node.data.guid !== nodeToBeUpdated.guid
+      );
       if (isDuplicate) {
-        Toastify({ message: "Duplicate folder. Please choose a different name.", type: "error" });
+        Toastify({
+          message: "Duplicate folder. Please choose a different name.",
+          type: "error",
+        });
         return;
       }
       const childFolders = await getChildQuestionFolders(parentId);
@@ -210,6 +216,8 @@ function TreeViewQuestionFolder({
         dragPreviewClassName="custom-drag-preview"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        canDrag={() => true}
+        canDrop={() => true}
       />
     </div>
   );

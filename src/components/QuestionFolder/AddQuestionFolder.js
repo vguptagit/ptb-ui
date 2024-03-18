@@ -77,7 +77,9 @@ const QuestionFolder = ({ userId }) => {
   };
 
   const handleSaveFolder = async () => {
-    if (folderName.trim() !== "") {
+    const trimmedFolderName = folderName.trim();
+
+    if (trimmedFolderName !== "") {
       try {
         const maxSequence = savedFolders.reduce((max, folder) => {
           return folder.sequence > max ? folder.sequence : max;
@@ -94,12 +96,13 @@ const QuestionFolder = ({ userId }) => {
             guid: editedFolder.guid,
             parentId: editedFolder.parentId,
             sequence: editedFolder.sequence,
-            title: folderName,
+            title: trimmedFolderName,
           };
           const updateFolder = await updateUserQuestionFolders(
             updatedFolderData
           );
-          const updatedFolders = [...savedFolders, updateFolder];
+          const updatedFolders = [...savedFolders];
+          updatedFolders[editedFolderIndex] = updateFolder;
           setSavedFolders(updatedFolders);
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
@@ -109,7 +112,7 @@ const QuestionFolder = ({ userId }) => {
           const newFolderData = {
             parentId: rootFolderGuid,
             sequence: newSequence,
-            title: folderName,
+            title: trimmedFolderName,
           };
           const savedFolder = await saveUserQuestionFolder(
             newFolderData,
@@ -138,6 +141,8 @@ const QuestionFolder = ({ userId }) => {
           Toastify({ message: "Failed to save folder", type: "error" });
         }
       }
+    } else {
+      Toastify({ message: "Folder name cannot be empty", type: "error" });
     }
   };
 
