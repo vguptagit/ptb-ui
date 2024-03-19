@@ -5,7 +5,7 @@ import callLoginEndpoint from '../../services/authentication';
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
   const apiurl = process.env.REACT_APP_API_URL;
-
+  const loginurl =process.env.REACT_APP_AUTH_Login_URL ;
   useEffect(() => {
     console.log("sessionjs onmount");
     createScriptElement();
@@ -16,7 +16,7 @@ function SessionJS() {
 
   const createScriptElement = () => {
     const script = document.createElement('script');
-    script.src = "https://login-stg.pearson.com/v1/piapi-int/login/js/v2/session.js";
+    script.src = loginurl;
     script.id = 'pi_session';
 
     if (!document.getElementById('pi_session')) {

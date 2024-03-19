@@ -60,6 +60,11 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
           render={(node) => <div>{node.content}</div>}
           onDrop={handleDrop}
           canDrop={() => true}
+          classes={{
+          root: "treeRoot",
+          draggingSource: "draggingSource",
+          dropTarget: "dropTarget"
+        }}
         />
       )}
     </div>

@@ -49,11 +49,17 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
   );
 };
 
-const SimpleNode = ({ node, onToggle, onCombinedToggle  }) => {
+const SimpleNode = ({ node, onToggle  }) => {
+
+  const handleCaretClick = (e) => {
+    e.stopPropagation();
+    onToggle();
+    node.isOpen = !node.isOpen;
+  };
   return (
     <div className="tree-nodeqb">
       {node.droppable && (
-        <span onClick={() => onCombinedToggle(node)}>
+        <span onClick={handleCaretClick}>
           {node.isOpen ? (
             <i className="bi bi-caret-down-fill"></i>
           ) : (
@@ -123,23 +129,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   }
     console.log("new searchable tree data is as  follows",searchableTreeData);
   }, [searchTerm]);
-
-
-  const handleSimpleToggle = (node) => {
-    const updatedSearchableTreeData = searchableTreeData.map((item) => {
-      if (item.id === node.id && item.droppable) {
-        return { ...item, isOpen: !item.isOpen };
-      }
-      return item;
-    });
-
-    setSearchableTreeData(updatedSearchableTreeData);
-  };
-  const handleCombinedToggle = (node, onToggle) => {
-    onToggle();
-    //node.isOpen = true;
-    handleSimpleToggle(node);
-  };
 
   const handleNodeClick = (clickedNode) => {
     if (clickedNode.droppable) {
@@ -308,8 +297,8 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
           rootId={0}
           render={(node, { onToggle }) => (
             <SimpleNode
+              onToggle={onToggle}
               node={node}
-              onCombinedToggle={() => handleCombinedToggle(node, onToggle)}
             />
           )}
         />
