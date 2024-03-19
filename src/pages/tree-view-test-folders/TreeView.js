@@ -255,6 +255,7 @@ function TreeView({
             className={`tree-node ${
               clickedNodes.includes(node.id) ? "clicked" : ""
             }`}
+            id="tree-node-clicked"
             onClick={() => {
               if (!isOpen && (!node.children || node.children.length === 0)) {
                 fetchChildFolders(node);
