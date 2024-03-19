@@ -13,13 +13,13 @@ const HomePage = () => {
     return (
         <>
             <div className="row scree-height">
-                <div className="col panel panel-left">
+                <div className="col-6 panel panel-left">
                     <ResourceTab />
                     <div className="container-resource">
                         <Outlet />
                     </div>
                 </div>
-                <div className="col panel panel-right">
+                <div className="col-6 panel panel-right">
                     <TestTabs />
                     <div className="container-test">
                         <TestCreate />
