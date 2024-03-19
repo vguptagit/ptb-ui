@@ -59,6 +59,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
   useEffect(() => {
     if (show) {
       console.log("use effect called")
+      setShowMSWordSetting(true);
       const fetchPrintSettings = async () => {
         try {
           const settings = await getPrintsettings();
