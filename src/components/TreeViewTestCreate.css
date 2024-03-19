@@ -70,3 +70,7 @@
   text-align: left;
   padding-left: 2px;
 }
+
+.view-content {
+  word-break: break-all;
+}

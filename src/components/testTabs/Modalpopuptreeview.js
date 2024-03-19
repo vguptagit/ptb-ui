@@ -14,7 +14,7 @@ function Modalpopuptreeview({
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [clickedNodes, setClickedNodes] = useState([]);
+  const [clickedNode, setClickedNode] = useState(null); // State to store the clicked node
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -142,6 +142,10 @@ function Modalpopuptreeview({
     setIsDragging(false);
   };
 
+  const handleNodeClick = (nodeId) => {
+    setClickedNode(nodeId); // Set the clicked node
+  };
+
   const handleDeleteFolder = (folderTitle) => {
     console.log("Delete folder:", folderTitle);
   };
@@ -158,7 +162,7 @@ function Modalpopuptreeview({
       rootId={0}
       render={(node, { isOpen, onToggle }) => (
         <div 
-          className={`tree-node ${clickedNodes.includes(node.id) ? 'clicked' : ''}`}
+          className={`tree-node ${clickedNode === node.id ? 'clicked' : ''}`} // Apply the 'clicked' class conditionally
           onClick={() => {
             if (
               !isOpen &&
@@ -167,13 +171,7 @@ function Modalpopuptreeview({
               fetchChildFolders(node);
             }
             onToggle();
-            setClickedNodes(prevClickedNodes => {
-              if (prevClickedNodes.includes(node.id)) {
-                return prevClickedNodes.filter(item => item !== node.id);
-              } else {
-                return [...prevClickedNodes, node.id];
-              }
-            });
+            handleNodeClick(node.id); // Call handleNodeClick to set the clicked node
           }}
         >
           {node.droppable && (
