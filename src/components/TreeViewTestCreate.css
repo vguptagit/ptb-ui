@@ -74,3 +74,12 @@
 .view-content {
   word-break: break-all;
 }
+
+.draggingSource {
+  opacity: 0.3;
+}
+
+.dropTarget {
+  background-color: #E0E0E0;
+  border-bottom: 2px solid  #666E6B;
+}
