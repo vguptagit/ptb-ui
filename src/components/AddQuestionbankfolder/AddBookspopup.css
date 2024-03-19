@@ -46,6 +46,8 @@
     background-color: #ffff;
     color: #4d4d4d;
     justify-content: space-around;
+    max-height: 430px;
+    min-height: 430px;
   }
   
   .top-containerbooks {
