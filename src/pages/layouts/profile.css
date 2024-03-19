@@ -82,9 +82,7 @@
     }
 
 
-    .settings-container{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px;
+    .settings-modal{
+        max-height: 430px;
+    min-height: 430px;
     }

@@ -3,16 +3,28 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { getUserProfilesettings, userProfilesettings } from "../../services/profile.service";
 import { FormattedMessage } from "react-intl";
 import Toastify from "../../components/common/Toastify";
+import Loader from "../../components/common/loader/Loader";
+
+const hardcodedSettings = [
+    "Difficulty",
+    "Topic",
+    "Objective",
+    "PageReference",
+    "Question ID",
+    "Skill"
+];
 
 const SettingsModal = ({ show, handleClose }) => {
     const [userProfileSettings, setUserProfileSettings] = useState([]);
     const [selectedSettings, setSelectedSettings] = useState([]);
+    const [initialSettings, setInitialSettings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const handleSave = () => {
         userProfilesettings(selectedSettings)
             .then((response) => {
                 console.log("Successfully updated settings");
-                Toastify({ message: "Settings been saved successfully!", type: "success" });
+                Toastify({ message: "Settings have been saved successfully!", type: "success" });
             })
             .catch((error) => {
                 console.log(`Error updating settings: ${error}`);
@@ -21,22 +33,30 @@ const SettingsModal = ({ show, handleClose }) => {
         handleClose();
     };
 
-
     useEffect(() => {
-        // Fetch user profile settings from API
+        setLoading(true); 
         getUserProfilesettings()
             .then((data) => {
                 if (data) {
-                    setUserProfileSettings(data);
-                    setSelectedSettings(data);
+                    // Merge the API response with the hardcoded settings
+                    const mergedSettings = [...new Set([...data, ...hardcodedSettings])];
+                    // Filter out settings that are not in the merged array
+                    const filteredSettings = mergedSettings.filter(setting => hardcodedSettings.includes(setting));
+                    // Set selectedSettings to only include settings that are both in filteredSettings and data
+                    const defaultSelectedSettings = data.filter(setting => filteredSettings.includes(setting));
+                    setUserProfileSettings(filteredSettings);
+                    setSelectedSettings(defaultSelectedSettings);
+                    setInitialSettings(defaultSelectedSettings);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
+            })
+            .finally(() => {
+                setLoading(false); 
             });
     }, []);
-
-    // Handle checkbox change
+    
     const handleCheckboxChange = (settingName, isChecked) => {
         setSelectedSettings(prevState => {
             if (isChecked) {
@@ -47,12 +67,17 @@ const SettingsModal = ({ show, handleClose }) => {
         });
     };
 
-    useEffect(() => {
-        console.log("Selected settings:", selectedSettings);
-    }, [selectedSettings]);
+    const handleCloseWithoutSave = () => {
+        setSelectedSettings(initialSettings); 
+        handleClose();
+    };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleCloseWithoutSave}
+            backdrop="static"
+            keyboard={false}
+            centered
+            className="settings-modal">
             <Modal.Header closeButton>
                 <Modal.Title>
                     Metadata
@@ -60,32 +85,37 @@ const SettingsModal = ({ show, handleClose }) => {
             </Modal.Header>
 
             <Modal.Body>
-                <Form.Label><FormattedMessage id="settings metadata" /></Form.Label>
-                <Form>
-                    <Form.Group as={Row}>
-                        <Col>
-                            {userProfileSettings.map((setting, index) => (
-                                <Form.Check
-                                    key={index}
-                                    type="checkbox"
-                                    label={setting}
-                                    id={`${index}`}
-                                    checked={selectedSettings.includes(setting)}
-                                    onChange={(e) => handleCheckboxChange(setting, e.target.checked)}
-                                />
-                            ))}
-                        </Col>
-                    </Form.Group>
-                </Form>
+                {loading ? ( 
+                    <Loader />
+                ) : (
+                    <>
+                        <Form.Label><FormattedMessage id="settings metadata" /></Form.Label>
+                        <Form>
+                            <Form.Group as={Row}>
+                                <Col>
+                                    {hardcodedSettings.map((setting, index) => (
+                                        <Form.Check
+                                            key={index}
+                                            type="checkbox"
+                                            label={setting}
+                                            id={`${index}`}
+                                            checked={selectedSettings.includes(setting)}
+                                            onChange={(e) => handleCheckboxChange(setting, e.target.checked)}
+                                        />
+                                    ))}
+                                </Col>
+                            </Form.Group>
+                        </Form>
+                    </>
+                )}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={handleCloseWithoutSave}>
                     Close
                 </Button>
-                <button className=" btn btn-primary" onClick={handleSave}>
+                <Button variant="primary" onClick={handleSave}>
                     Save
-                </button>
-
+                </Button>
             </Modal.Footer>
         </Modal>
     );
