@@ -17,3 +17,19 @@ export const getUserProfilesettings = () => {
             });
         });
 };
+
+export const userProfilesettings = (selectedSettings) => {
+    return httpInterceptor
+      .post(`${url}/settings/questionmetadata`,  selectedSettings )
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        return Promise.reject({
+          type: "error",
+          message: error,
+        });
+      });
+};
+
+  

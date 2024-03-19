@@ -190,6 +190,8 @@ function Modalpopuptreeview({
         <div className="custom-drag-preview">{monitorProps.item.text}</div>
       )}
       onDrop={handleDrop}
+      canDrop={() => false}
+      canDrag={() => false}
       dragPreviewClassName="custom-drag-preview"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
