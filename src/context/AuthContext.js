@@ -20,14 +20,14 @@ export const AuthProvider = ({ children }) => {
         setUser(user);
         console.log("setIsAuthenticated", isAuthenticated);
     }
+    
     const logout = () => {
         setIsAuthenticated(false);
-         sessionStorage.removeItem("toeknExpry")
+       // sessionStorage.removeItem('isAuthenticated');
+        sessionStorage.clear();
         window.piSession.logout();
-       
+       // navigate('/welcomescreen');
         console.log("setIsAuthenticated", isAuthenticated);
-
-      //  navigate('/logout');
     }
     useEffect(() => {        
         const familyName = sessionStorage.getItem('familyName') ;
