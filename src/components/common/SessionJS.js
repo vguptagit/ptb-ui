@@ -1,13 +1,11 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import callLoginEndpoint from '../../services/authentication';
-import { Navigate } from 'react-router-dom';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
   const apiurl = process.env.REACT_APP_API_URL;
-  const loginUrl= process.env.REACT_APP_AUTH_Login_URL;
-
+  const loginurl =process.env.REACT_APP_AUTH_Login_URL ;
   useEffect(() => {
     console.log("sessionjs onmount");
     createScriptElement();
@@ -18,7 +16,7 @@ function SessionJS() {
 
   const createScriptElement = () => {
     const script = document.createElement('script');
-    script.src = loginUrl;
+    script.src = loginurl;
     script.id = 'pi_session';
 
     if (!document.getElementById('pi_session')) {
@@ -72,7 +70,6 @@ function SessionJS() {
               console.log('Login successful:', response);
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
-              Navigate('/welcomescreen')
             })
             .catch(error => {
               console.error('Error logging in:', error);
