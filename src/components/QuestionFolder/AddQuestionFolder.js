@@ -177,40 +177,38 @@ const QuestionFolder = ({ userId }) => {
         </Button>
       </div>
       {showTextBox && (
-       <div className="text-box d-flex align-items-center p-2">
-       <div className="flex-grow-1 mr-2">
-         <Form.Control
-           type="text"
-           placeholder="Enter folder name"
-           value={folderName}
-           onChange={(e) => setFolderName(e.target.value)}
-           className="rounded"
-         />
-       </div>
-       <div className="d-flex align-items-center">
-         <Button
-           onClick={handleSaveFolder}
-           className="btn mr-2" // Added margin to separate the buttons
-           aria-label="tick mark"
-           style={{
-             color: "black",
-             backgroundColor: "white",
-           }}
-         >
-           <i className="fa-solid fa-check"></i>
-         </Button>
-         <Button
-           onClick={handleTextBoxClose}
-           className="closebtn" // Removed unnecessary margin class
-           aria-label="close mark"
-           style={{ color: "black", backgroundColor: "white" }}
-         >
-           <i className="fa-solid fa-xmark"></i>
-         </Button>
-       </div>
-     </div>
-     
-     
+        <div className="text-box d-flex align-items-center p-2">
+          <div className="flex-grow-1 mr-4">
+            <Form.Control
+              type="text"
+              placeholder="Enter folder name"
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
+              className="rounded"
+            />
+          </div>
+          <div className="d-flex">
+            <Button
+              onClick={handleSaveFolder}
+              className="btn"
+              aria-label="tick mark"
+              style={{
+                color: "black",
+                backgroundColor: "white",
+              }}
+            >
+              <i className="fa-solid fa-check"></i>
+            </Button>
+            <Button
+              onClick={handleTextBoxClose}
+              className="closebtn"
+              aria-label="close mark"
+              style={{ color: "black", backgroundColor: "white" }}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </Button>
+          </div>
+        </div>
       )}
       {/* Render saved folders */}
       <div className="saved-folders">
