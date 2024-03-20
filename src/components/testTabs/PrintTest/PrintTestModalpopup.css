@@ -23,10 +23,11 @@
 }
 
 .button-footer {
-    position: absolute;
-    top: 444px;
-    padding-left: 342px !important;
-    border-bottom: 0px;
+  position: absolute;
+  top: 445px;
+  padding-left: 420px !important;
+  border-bottom: 0px;
+  left: -1px;
 }
 
 .print-preview .btn-close {
@@ -68,6 +69,9 @@
 
 .question-numbers > ul {
   list-style-type: none;
+  text-align: initial;
+  margin-left: -55px;
+  margin-top: -15px;
 }
 
 #questions {
@@ -80,7 +84,7 @@
   background-color: white;
   color: black;
   font-size: 28px;
-  margin-right: -45px;
+  margin-right: -4px;
   margin-top: -22px;
 }
 
@@ -100,20 +104,35 @@ i.bi.bi-info-circle-fill.me-1 {
   text-align: center;
 }
 
-.add-remove-buttons{
-    position: relative;
-    left: 20px;
+.add-remove-buttons {
+  position: relative;
+  left: 20px;
 }
 
-#modal-treeview{
-    overflow: hidden;
+#modal-treeview {
+  overflow: hidden;
 }
 .print-preview {
-  border-left: 1px solid #ccc; /* Adjust the color and style as needed */
+  border-left: 5px solid #ccc; /* Adjust the color and style as needed */
   height: 100%; /* Adjust the height of the line */
 }
 
-#element{
+#element {
   position: relative;
   bottom: 16px;
+}
+
+.printoptions-header {
+  margin-left: -19px;
+  margin-right: -58px;
+}
+.printpreview-header{
+  margin-left: -21px;
+  margin-right: -33px;
+}
+.question-numbers{ 
+  text-align: end;
+}
+.printPreviewArea{
+  text-align: 20px;
 }

@@ -140,7 +140,7 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
         <Row>
           <Col md={6}>
             <div className="print-options">
-              <Modal.Header>
+              <Modal.Header className="printoptions-header">
                 <Modal.Title>
                   <h3>Print Options</h3>
                 </Modal.Title>
@@ -250,8 +250,8 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
             </div>
           </Col>
           <Col md={6}>
-            <div className="print-preview">
-              <Modal.Header>
+            <div className="print-preview" id="printPreviewArea">
+              <Modal.Header className="printpreview-header">
                 <Modal.Title>
                   <h3>Print Preview</h3>
                 </Modal.Title>
