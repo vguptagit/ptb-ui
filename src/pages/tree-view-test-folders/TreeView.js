@@ -8,6 +8,7 @@ import {
 } from "../../services/testfolder.service";
 import { getFolderTests } from "../../services/testcreate.service";
 import Toastify from "../../components/common/Toastify";
+import { useAppContext } from "../../context/AppContext";
 
 function TreeView({
   onFolderSelect,
@@ -16,6 +17,7 @@ function TreeView({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
+  const { handleEditTest } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -142,6 +144,11 @@ function TreeView({
       setSelectedFolder(folderTitle);
     }
   };
+
+  const handleAnotherFunction = (testTitle) => {
+    console.log("Test-title",testTitle);
+    handleEditTest(testTitle);
+    }
 
   const handleDeleteFolder = (folderTitle) => {
     setSelectedFolderToDelete(folderTitle);
@@ -280,11 +287,26 @@ function TreeView({
               </span>
             )}
             {node.text}
-            {selectedFolder === node.text && (
+            {selectedFolder === node.text && node.droppable && (
               <button
                 className="editbutton selected"
                 onClick={() => handleEditFolder(node.text)}
-                disabled={!node.droppable}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            {selectedFolder === node.text && (
+              <button
+                className="editbutton selected"
+                onClick={() => handleAnotherFunction(node)}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            {selectedFolder !== node.text && (
+              <button
+                className="editbutton"
+                onClick={() => handleAnotherFunction(node)}
               >
                 <i className="bi bi-pencil-fill"></i>
               </button>
@@ -293,7 +315,6 @@ function TreeView({
               <button
                 className="editbutton"
                 onClick={() => handleEditFolder(node.text)}
-                disabled={!node.droppable}
               >
                 <i className="bi bi-pencil-fill"></i>
               </button>

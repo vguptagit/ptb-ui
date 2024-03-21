@@ -16,7 +16,7 @@ import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
 import Modalpopupexport from './Modalpopupexport'
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent } =
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, testName } =
     useAppContext();
     
     console.log("selectedtest",selectedTest);
@@ -26,6 +26,14 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
+
+  useEffect(() => {
+    if (testName !== "") {
+      // Do something with the testName
+      console.log("Test name:", testName);
+      handleEditTestTab(testName);
+    }
+  }, [testName]);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -96,6 +104,20 @@ const TestTabs = () => {
     // Select the new test
     dispatchEvent("SELECT_TEST", newTest);
   };
+
+  const handleEditTestTab = (testName) => {
+      // Check if the test already exists
+    const existingTest = tests.find((test) => test.title === testName);
+    if (existingTest) {
+      // If the test exists, select it
+      dispatchEvent("SELECT_TEST", existingTest);
+    } else {
+      // If the test does not exist, create a new one
+      const newTest = new Test();
+      newTest.title = testName;
+      addTest(newTest);
+    }
+  }
 
   const removeTab = (e, testSelected) => {
     e.preventDefault();
