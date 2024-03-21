@@ -13,6 +13,7 @@ import TrueFalse from "./questions/TrueFalse";
 import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
 import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
+import "./_tables.css";
 import TreeViewTestCreate from "./TreeViewTestCreate";
 
 const TestCreate = () => {

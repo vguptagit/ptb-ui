@@ -83,3 +83,15 @@
   background-color: #E0E0E0;
   border-bottom: 2px solid  #666E6B;
 }
+
+.view-content ul {
+  list-style: disc;
+  margin-left: 0px;
+  cursor: default;
+}
+
+.view-content ol {
+  list-style: decimal;
+  margin-left: 0px;
+  cursor: default;
+}
