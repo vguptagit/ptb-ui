@@ -164,3 +164,7 @@ li[qstntemplate='true'] .qti-itemBody>blockquote:first-child>div.optionLabelView
 .printViewContainer{
 	margin: -7px;
 }
+.custom-tab {
+	height: calc(89vh - 85px);
+	overflow:auto;
+  }

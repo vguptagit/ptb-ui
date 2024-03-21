@@ -2,6 +2,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  height: calc(89vh - 85px);
+  overflow:auto;
 }
 
 .treeview ul {
@@ -147,4 +149,8 @@
   align-self: center;
   padding-inline-start: 10px;
   padding-top:20px;
+}
+#custom-ques {
+  height: calc(89vh - 85px);
+  overflow-x: auto; 
 }
