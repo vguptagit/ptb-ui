@@ -61,7 +61,7 @@ const Essay = (props) => {
     <div id={questionNode.itemId}>
       {!questionNode.qtiModel.EditOption ? (
         <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
-          <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center">
+          <div className="flex-grow-1 d-flex ml-7 d-flex">
             <div className="mr-2">{questionNodeIndex + 1})</div>
             <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
           </div>
