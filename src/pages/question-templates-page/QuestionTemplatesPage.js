@@ -38,7 +38,7 @@ const QuestionTemplatesPage = () => {
   }, []);
 
   return (
-    <div className="custom-questions-tab p-2" id="custom-ques">
+    <div className="custom-questions-tab p-2">
       <ul className="TemplateLayout">
         {questionTemplates.map((questionTemplate, index) => (
           <DraggableQuestionTemplate
