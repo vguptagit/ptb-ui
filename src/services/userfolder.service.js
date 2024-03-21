@@ -71,3 +71,17 @@ export const getChildQuestionFolders = (folderId) => {
       });
     });
 };
+
+export const getUserQuestions = (folderId) => {
+  return httpInterceptor
+    .get(`${url}/my/questions?folderId=${folderId}`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};

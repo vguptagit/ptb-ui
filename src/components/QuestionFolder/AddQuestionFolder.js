@@ -6,10 +6,19 @@ import {
   saveUserQuestionFolder,
   getUserQuestionFolders,
   updateUserQuestionFolders,
+  getUserQuestions,
 } from "../../services/userfolder.service";
 import Toastify from "../common/Toastify";
 import "./AddQuestionFolder.css";
 import TreeViewQuestionFolder from "./Treeview/TreeViewQuestionFolder";
+import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+import MultipleChoice from "../questions/MultipleChoice";
+import MultipleResponse from "../questions/MultipleResponse";
+import TrueFalse from "../questions/TrueFalse";
+import Matching from "../questions/Matching";
+import FillInBlanks from "../questions/FillInBlanks";
+import Essay from "../questions/Essay";
+import QtiService from "../../utils/qtiService";
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
@@ -20,7 +29,8 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedFolderGuid, setSelectedFolderGuid] = useState(null); // State to track the selected folder's GUID
+  const [savedQuestions, setSavedQuestions] = useState(null);
+  const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
 
   async function fetchRootFolderGuid() {
     try {
@@ -61,6 +71,33 @@ const QuestionFolder = ({ userId }) => {
       console.error("Error fetching user folders:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (rootFolderGuid) {
+          const fetchedQuestions = await getUserQuestions(rootFolderGuid);
+          const questionsWithQtiModels = fetchedQuestions.map((question) => {
+            const {
+              qtixml,
+              metadata: { quizType },
+            } = question;
+            const qtiModel = QtiService.getQtiModel(qtixml, quizType);
+            qtiModel.EditOption = false;
+            return {
+              ...question,
+              qtiModel,
+            };
+          });
+          setSavedQuestions(questionsWithQtiModels);
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    fetchData();
+  }, [rootFolderGuid]);
 
   const handleAddQuestionFolderClick = () => {
     setShowTextBox(true);
@@ -152,6 +189,7 @@ const QuestionFolder = ({ userId }) => {
     setShowTextBox(true);
     setIsEditing(true);
     setSelectedFolderGuid(folderGuid);
+    console.log(savedQuestions);
   };
 
   const onNodeUpdate = async (changedNode) => {
@@ -163,6 +201,81 @@ const QuestionFolder = ({ userId }) => {
       Toastify({ message: "Failed to rearrange folder", type: "error" });
     }
   };
+
+  const renderQuestions = () => {
+    if (!savedQuestions) {
+      return null;
+    }
+    return savedQuestions.map((question, index) => {
+      const key = question.guid;
+      const { qtiModel } = question;
+      switch (question.metadata.quizType) {
+        case CustomQuestionBanksService.MultipleChoice:
+          return (
+            <MultipleChoice
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.MultipleResponse:
+          return (
+            <MultipleResponse
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.TrueFalse:
+          return (
+            <TrueFalse
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.Matching:
+          return (
+            <Matching
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.FillInBlanks:
+          return (
+            <FillInBlanks
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.Essay:
+          return (
+            <Essay
+              key={key}
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          );
+        default:
+          return null;
+      }
+    });
+  };
+  
 
   return (
     <div className="p-2">
@@ -220,9 +333,11 @@ const QuestionFolder = ({ userId }) => {
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
+            renderQuestions={renderQuestions}
           />
         )}
       </div>
+      <div className="saved-questions">{renderQuestions()}</div>
     </div>
   );
 };
