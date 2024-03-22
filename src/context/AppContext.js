@@ -14,6 +14,11 @@ const AppContext = createContext({
 const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
+  const [testName, setTestName] = useState("");
+
+  const handleEditTest = (name) => {
+    setTestName(name.text);
+  };
 
   const selectTest = (item) => {
     const selectedItem = tests.filter((test) => test.id === item.id);
@@ -82,6 +87,8 @@ const AppProvider = ({ children }) => {
         addTest,
         deleteTest,
         dispatchEvent,
+        testName,
+        handleEditTest,
       }}
     >
       {children}
