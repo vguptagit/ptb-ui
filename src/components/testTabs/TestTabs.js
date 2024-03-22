@@ -9,20 +9,24 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Nav from "react-bootstrap/Nav";
 import "./TestTabs.css";
 import QtiService from "../../utils/qtiService";
-import { getFolderTests, saveMyQuestions, saveMyTest} from '../../services/testcreate.service';
-import Toastify from '../common/Toastify'; 
-import Modalpopup from './Modalpopup';
-import PrintTestModalpopup from './PrintTest/PrintTestModalpopup'
-import Modalpopupexport from './Modalpopupexport'
+import {
+  getFolderTests,
+  saveMyQuestions,
+  saveMyTest,
+} from "../../services/testcreate.service";
+import Toastify from "../common/Toastify";
+import Modalpopup from "./Modalpopup";
+import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
+import Modalpopupexport from "./Modalpopupexport";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent, testName } =
     useAppContext();
-    
-    console.log("selectedtest",selectedTest);
+
+  console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
   const [ellipsisDropdownItems, setEllipsisDropdownItems] = useState([]);
-  const [selectedTestTitle, setSelectedTestTitle] = useState('');
+  const [selectedTestTitle, setSelectedTestTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
@@ -64,19 +68,22 @@ const TestTabs = () => {
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
-    const isWithinFirstFour = tests.slice(0, 4).some((test) => test.id === item.id);
-  
+    const isWithinFirstFour = tests
+      .slice(0, 4)
+      .some((test) => test.id === item.id);
+
     if (isWithinFirstFour) {
       dispatchEvent("SELECT_TEST", item);
     } else {
       // Find the selected tab in the ellipsis dropdown items
-      const ellipsisItem = ellipsisDropdownItems.find((test) => test.id === item.id);
+      const ellipsisItem = ellipsisDropdownItems.find(
+        (test) => test.id === item.id
+      );
       if (ellipsisItem) {
         dispatchEvent("SELECT_TEST", item);
       }
     }
   };
-  
 
   const handleAddNewTestTab = () => {
     const newTest = new Test();
@@ -106,7 +113,7 @@ const TestTabs = () => {
   };
 
   const handleEditTestTab = (testName) => {
-      // Check if the test already exists
+    // Check if the test already exists
     const existingTest = tests.find((test) => test.title === testName);
     if (existingTest) {
       // If the test exists, select it
@@ -117,17 +124,25 @@ const TestTabs = () => {
       newTest.title = testName;
       addTest(newTest);
     }
-  }
+  };
 
   const removeTab = (e, testSelected) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (selectedTest && selectedTest.id === testSelected.id) {
-      const index = tests.findIndex((test) => test.id === testSelected.id);
-      const newSelectedTest =
-        tests[index - 1] ||
-        tests.find((test) => test.title.startsWith("Untitled"));
+    if (!testSelected) {
+      // If testSelected is undefined, handle the case gracefully
+      console.error("Error: testSelected is undefined");
+      return;
+    }
+
+    const index = tests.findIndex((test) => test.id === testSelected.id);
+    const newSelectedTest =
+      tests[index - 1] || // Try selecting the previous test
+      tests[index + 1] || // If previous test doesn't exist, try selecting the next test
+      tests.find((test) => test.title.startsWith("Untitled")); // If both previous and next tests don't exist, select an untitled test
+
+    if (newSelectedTest) {
       dispatchEvent("SELECT_TEST", newSelectedTest);
     }
 
@@ -146,26 +161,31 @@ const TestTabs = () => {
     // 2. Save questions
     // 3. Save tests
     if (!areQuestionsAvailable(test)) {
-      Toastify({ message: "There are no questions or one or more question(s) is(are) in edit state, Please add or save!", type: "warn" });
+      Toastify({
+        message:
+          "There are no questions or one or more question(s) is(are) in edit state, Please add or save!",
+        type: "warn",
+      });
       return;
     }
-  
+
     let isDuplicate = await isDuplicateTest(test);
     if (isDuplicate) {
-      Toastify({ message: "Test already exists with this name. Please save with another", type: "warn" });
+      Toastify({
+        message: "Test already exists with this name. Please save with another",
+        type: "warn",
+      });
     } else {
       // Proceed to save
       if (!test.title.trim()) {
         // If the test title is empty or only contains whitespace, set it to a default value
         test.title = `Untitled ${tests.length}`;
       }
-  
-      
-      const folderGuid = JSON.parse(sessionStorage.getItem('selectedFolderId'));
-  
-    
+
+      const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
+
       test.folderGuid = folderGuid;
-  
+
       let questionBindings = await saveQuestions(test);
       saveTest(test, questionBindings);
     }
@@ -218,7 +238,7 @@ const TestTabs = () => {
         Toastify({ message: "Failed to save Test", type: "error" });
       }
     }
-    sessionStorage.removeItem('selectedFolderId');
+    sessionStorage.removeItem("selectedFolderId");
   };
 
   const saveQuestions = async (test) => {
@@ -298,14 +318,11 @@ const TestTabs = () => {
     }
   };
 
-
-  
   const handleShowModal = () => {
     setShowModal(true);
   };
 
   const handleCloseModal = (e) => {
-  
     setShowModal(!showModal);
 
     e.preventDefault();
@@ -313,7 +330,6 @@ const TestTabs = () => {
   };
 
   const handleClosePrintModal = (event) => {
-  
     setShowPrintModal(!showPrintModal);
 
     event.preventDefault();
@@ -321,13 +337,17 @@ const TestTabs = () => {
   };
 
   const handleSaveAs = () => {
-    console.log("handleSaveAs 1",showModal);
+    console.log("handleSaveAs 1", showModal);
     if (!areQuestionsAvailable(selectedTest)) {
-      Toastify({ message: "There are no questions or one or more question(s) is(are) in edit state, Please add or save!", type: "warn" });
+      Toastify({
+        message:
+          "There are no questions or one or more question(s) is(are) in edit state, Please add or save!",
+        type: "warn",
+      });
       return;
     }
-    setShowModal(true); 
-    console.log("handleSaveAs 2",showModal);
+    setShowModal(true);
+    console.log("handleSaveAs 2", showModal);
   };
 
   const handleShowModalExport = () => {
@@ -339,19 +359,23 @@ const TestTabs = () => {
     // (error) => {
     //   console.log(error);
     // });
-     setShowModalExport(true);
-     //console.log("handleSaveAs 2", showModal);
-   };
+    setShowModalExport(true);
+    //console.log("handleSaveAs 2", showModal);
+  };
 
   const handlePrint = () => {
-      // Open print modal
-      if (!areQuestionsAvailable(selectedTest)) {
-        Toastify({ message: "There are no questions or one or more question(s) is(are) in edit state, Please add or save!", type: "warn" });
-        return;
-      }
-      setShowPrintModal(true);
-      console.log("handlePrint",showPrintModal);
-  }
+    // Open print modal
+    if (!areQuestionsAvailable(selectedTest)) {
+      Toastify({
+        message:
+          "There are no questions or one or more question(s) is(are) in edit state, Please add or save!",
+        type: "warn",
+      });
+      return;
+    }
+    setShowPrintModal(true);
+    console.log("handlePrint", showPrintModal);
+  };
 
   const areQuestionsAvailable = (test) => {
     console.log("enable dropdown");
@@ -375,19 +399,30 @@ const TestTabs = () => {
           </Button>
 
           <div className="d-flex flex-column flex-sm-row align-items-start">
-          <DropdownButton id="dropdown-item-button" title="Save" className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1">
-        <Dropdown.Item href="#" onClick={(e) => handleSave(e, selectedTest)}>
-          <FormattedMessage id="testtabs.save" />
-        </Dropdown.Item>
-        <Dropdown.Item href="#" onClick={(e) => handleSaveAs(e,selectedTest)}>
-         <Modalpopup  show={showModal}
-        handleCloseModal={handleCloseModal} 
-        selectedTest={selectedTest}
-        handleSave={handleSave}
-         />
-          <FormattedMessage id="testtabs.saveas" />
-        </Dropdown.Item>  
-      </DropdownButton>
+            <DropdownButton
+              id="dropdown-item-button"
+              title="Save"
+              className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
+            >
+              <Dropdown.Item
+                href="#"
+                onClick={(e) => handleSave(e, selectedTest)}
+              >
+                <FormattedMessage id="testtabs.save" />
+              </Dropdown.Item>
+              <Dropdown.Item
+                href="#"
+                onClick={(e) => handleSaveAs(e, selectedTest)}
+              >
+                <Modalpopup
+                  show={showModal}
+                  handleCloseModal={handleCloseModal}
+                  selectedTest={selectedTest}
+                  handleSave={handleSave}
+                />
+                <FormattedMessage id="testtabs.saveas" />
+              </Dropdown.Item>
+            </DropdownButton>
 
             <Button
               id="dropdown-item-button"
@@ -395,21 +430,27 @@ const TestTabs = () => {
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
               onClick={(e) => handlePrint(e)}
             >
-              <PrintTestModalpopup width='80%' show={showPrintModal}
+              <PrintTestModalpopup
+                width="80%"
+                show={showPrintModal}
                 handleClosePrintModal={handleClosePrintModal}
               />
               <FormattedMessage id="testtabs.print" />
             </Button>
 
-            <Button className="btn-test mt-1 mt-sm-0" onClick={handleShowModalExport}>
+            <Button
+              className="btn-test mt-1 mt-sm-0"
+              onClick={handleShowModalExport}
+            >
               <FormattedMessage id="testtabs.export" />
             </Button>
             <Modalpopupexport
-             width='80%'
-            show={showModalExport}
-            handleCloseModal={() => setShowModalExport(false)} 
-            backdrop="static"
-            keyboard={false}/>
+              width="80%"
+              show={showModalExport}
+              handleCloseModal={() => setShowModalExport(false)}
+              backdrop="static"
+              keyboard={false}
+            />
           </div>
         </div>
       </div>
@@ -417,7 +458,7 @@ const TestTabs = () => {
       <div className="tabs-and-buttons-container">
         <Nav variant="tabs">
           <Nav.Item>
-          <Nav.Link
+            <Nav.Link
               href="#"
               onClick={handleAddNewTestTab}
               className={"active custom-add-new-test"}
@@ -425,7 +466,6 @@ const TestTabs = () => {
             >
               <i className="fa-solid fa-plus"></i>
             </Nav.Link>
-
           </Nav.Item>
           <span className="tab-separator"> </span>
           {tests.map((test, index) =>
@@ -443,18 +483,21 @@ const TestTabs = () => {
                   id="test-tabs-navlink"
                 >
                   <div className="tab-label">
-                  <div className="test-title floatLeft" title={test.title}>{test.title}</div>
+                    <div className="test-title floatLeft" title={test.title}>
+                      {test.title}
+                    </div>
                     {/* Always render the close button */}
                     {tests.length > 1 && (
-                      <div className="floatRight"><Button
-                        className="close-tab"
-                        aria-label="close"
-                        aria-roledescription=" "
-                        variant="link"
-                        onClick={(e) => removeTab(e, test)}
-                      >
-                        <i className="fas fa-times"></i>
-                      </Button>
+                      <div className="floatRight">
+                        <Button
+                          className="close-tab"
+                          aria-label="close"
+                          aria-roledescription=" "
+                          variant="link"
+                          onClick={(e) => removeTab(e, test)}
+                        >
+                          <i className="fas fa-times"></i>
+                        </Button>
                       </div>
                     )}
                   </div>
