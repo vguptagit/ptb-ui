@@ -11,7 +11,7 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
 
   const renderTreeNodes = (nodes) => {
     return nodes.map((node, index) => ({
-      id: node.itemId || "",
+      id: node.itemId || node.guid || index,
       content: renderQuestions(node, index),
       children:
         node.children && node.children.length > 0
@@ -61,10 +61,10 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
           onDrop={handleDrop}
           canDrop={() => true}
           classes={{
-          root: "treeRoot",
-          draggingSource: "draggingSource",
-          dropTarget: "dropTarget"
-        }}
+            root: "treeRoot",
+            draggingSource: "draggingSource",
+            dropTarget: "dropTarget",
+          }}
         />
       )}
     </div>

@@ -158,6 +158,7 @@ function TreeViewQuestionFolder({
       className={`treeview ${isDragging ? "grabbing" : ""}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      style={{ marginBottom: "-47px" }}
     >
       <Tree
         tree={treeData}

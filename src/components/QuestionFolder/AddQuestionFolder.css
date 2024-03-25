@@ -1,3 +1,11 @@
 .closebtn {
-    margin-left: 8px;
+  margin-left: 8px;
+}
+
+.saved-questions {
+  background-color: #f8f8f8;
+}
+
+.saved-questions > div {
+  border: 1px solid white;
 }
