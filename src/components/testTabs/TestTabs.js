@@ -30,6 +30,9 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
+  const [setTests] = useState([{ title: '' }]);
+
+
 
   useEffect(() => {
     if (editTest !== null) {
@@ -38,7 +41,7 @@ const TestTabs = () => {
   }, [editTest]);
 
   useEffect(() => {
-    const ellipsisItems = tests?.slice(4);
+    const ellipsisItems = tests ?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
 
@@ -63,6 +66,20 @@ const TestTabs = () => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
   }, [selectedTest]);
+
+  const handleTitleChange = (e, index) => {
+    const updatedTests = [...tests];
+    const newTitle = e.target.value.trim(); // Trim whitespace from the input
+    updatedTests[index].title = newTitle;
+    if (newTitle === '') {
+      // If the new title is empty, set background color to red
+      e.target.style.backgroundColor = 'red';
+    } else {
+      // If the new title is not empty, set background color to transparent
+      e.target.style.backgroundColor = 'transparent';
+    }
+    setTests(updatedTests);
+  };
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
@@ -110,17 +127,17 @@ const TestTabs = () => {
     dispatchEvent("SELECT_TEST", newTest);
   };
 
-  const handleEditTestTab = (editTest) => {
+  const handleEditTestTab = (testName) => {
     // Check if the test already exists
-    const existingTest = tests.find((test) => test.id === editTest?.id);
+    const existingTest = tests.find((test) => test.title === testName);
     if (existingTest) {
       // If the test exists, select it
       dispatchEvent("SELECT_TEST", existingTest);
     } else {
       // If the test does not exist, create a new one
       const newTest = new Test();
-      newTest.title = editTest?.text;
-      newTest.id = editTest?.id;
+      newTest.title = testName;
+      // newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -228,7 +245,7 @@ const TestTabs = () => {
       }
     } catch (error) {
       console.error("Error saving Test:", error);
-      if (error?.message?.response?.request?.status === 409) {
+      if (error ?.message ?.response ?.request ?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -263,7 +280,7 @@ const TestTabs = () => {
       });
     } catch (error) {
       console.error("Error saving Questions:", error);
-      if (error?.message?.response?.request?.status === 409) {
+      if (error ?.message ?.response ?.request ?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -426,11 +443,11 @@ const TestTabs = () => {
             >
               <FormattedMessage id="testtabs.print" />
             </Button>
-              <PrintTestModalpopup
-                width="80%"
-                show={showPrintModal}
-                handleCloseModal={() => setShowPrintModal(false)}
-              />
+            <PrintTestModalpopup
+              width="80%"
+              show={showPrintModal}
+              handleCloseModal={() => setShowPrintModal(false)}
+            />
 
             <Button
               className="btn-test mt-1 mt-sm-0"
@@ -476,7 +493,7 @@ const TestTabs = () => {
                 >
                   <div className="tab-label">
                     <div className="test-title floatLeft" title={test.title}>
-                      {test.title}
+                      {test.title.trim() !== "" ? test.title : "Untitled"}
                     </div>
                     {/* Always render the close button */}
                     {tests.length > 1 && (
