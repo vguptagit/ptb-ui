@@ -194,7 +194,7 @@ return (
  </Collapse>
   <div className="mb-1 d-flex justify-content-end">
     <Link className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
-      Save
+      View
     </Link>
     <Link className="deletelink" onClick={handleDelete}>
       Remove

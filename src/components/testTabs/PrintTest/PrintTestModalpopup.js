@@ -231,8 +231,8 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                   <div className="mt-4 d-flex align-items-center">
                     <i className="bi bi-info-circle-fill large-icon me-1"></i>
                     <span className="TextFormat text-muted">
-                      For more total format options, cancel print, and select
-                      the export button
+                      For more test format options, cancel print, and select
+                      the export button.
                     </span>
                   </div>
                 </Row>

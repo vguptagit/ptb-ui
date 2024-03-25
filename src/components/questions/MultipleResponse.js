@@ -199,7 +199,7 @@ const MultipleResponse = (props) => {
                     </Collapse>
                     <div className="mb-1 d-flex justify-content-end " >
                         <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
-                            Save
+                            View
                         </Link>
                         <Link className="deletelink" onClick={handleDelete}>
                             Remove

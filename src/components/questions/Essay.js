@@ -149,7 +149,7 @@ const Essay = (props) => {
             </Collapse>
             <div className="mb-1 d-flex justify-content-end">
               <Link className="savelink" onClick={handleSubmit}>
-                Save
+                View
               </Link>
               <Link className="deletelink" onClick={handleDelete}>
                 Delete

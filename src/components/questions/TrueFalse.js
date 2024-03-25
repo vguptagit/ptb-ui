@@ -191,7 +191,7 @@ return (
       }
       handleSubmit(e);
     }}>
-      Save
+      View
     </Link>
     <Link className="deletelink" onClick={handleDelete}>
       Remove
