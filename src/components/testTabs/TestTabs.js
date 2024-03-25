@@ -20,7 +20,7 @@ import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
 import Modalpopupexport from "./Modalpopupexport";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, testName } =
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest } =
     useAppContext();
 
   console.log("selectedtest", selectedTest);
@@ -32,12 +32,10 @@ const TestTabs = () => {
   const [showModalExport, setShowModalExport] = useState(false);
 
   useEffect(() => {
-    if (testName !== "") {
-      // Do something with the testName
-      console.log("Test name:", testName);
-      handleEditTestTab(testName);
+    if (editTest !== null) {
+      handleEditTestTab(editTest);
     }
-  }, [testName]);
+  }, [editTest]);
 
   useEffect(() => {
     const ellipsisItems = tests?.slice(4);
@@ -112,16 +110,17 @@ const TestTabs = () => {
     dispatchEvent("SELECT_TEST", newTest);
   };
 
-  const handleEditTestTab = (testName) => {
+  const handleEditTestTab = (editTest) => {
     // Check if the test already exists
-    const existingTest = tests.find((test) => test.title === testName);
+    const existingTest = tests.find((test) => test.id === editTest?.id);
     if (existingTest) {
       // If the test exists, select it
       dispatchEvent("SELECT_TEST", existingTest);
     } else {
       // If the test does not exist, create a new one
       const newTest = new Test();
-      newTest.title = testName;
+      newTest.title = editTest?.text;
+      newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -329,15 +328,13 @@ const TestTabs = () => {
     e.stopPropagation();
   };
 
-  const handleClosePrintModal = (event) => {
-    setShowPrintModal(!showPrintModal);
-
-    event.preventDefault();
-    event.stopPropagation();
-  };
+  // const handleClosePrintModal = (event) => {
+  //   setShowPrintModal(!showPrintModal);
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // };
 
   const handleSaveAs = () => {
-    console.log("handleSaveAs 1", showModal);
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
         message:
@@ -374,11 +371,9 @@ const TestTabs = () => {
       return;
     }
     setShowPrintModal(true);
-    console.log("handlePrint", showPrintModal);
   };
 
   const areQuestionsAvailable = (test) => {
-    console.log("enable dropdown");
     return (
       test &&
       test.questions.length > 0 &&
@@ -426,17 +421,16 @@ const TestTabs = () => {
 
             <Button
               id="dropdown-item-button"
-              title="Print"
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
-              onClick={(e) => handlePrint(e)}
+              onClick={handlePrint}
             >
+              <FormattedMessage id="testtabs.print" />
+            </Button>
               <PrintTestModalpopup
                 width="80%"
                 show={showPrintModal}
-                handleClosePrintModal={handleClosePrintModal}
+                handleCloseModal={() => setShowPrintModal(false)}
               />
-              <FormattedMessage id="testtabs.print" />
-            </Button>
 
             <Button
               className="btn-test mt-1 mt-sm-0"
@@ -448,8 +442,6 @@ const TestTabs = () => {
               width="80%"
               show={showModalExport}
               handleCloseModal={() => setShowModalExport(false)}
-              backdrop="static"
-              keyboard={false}
             />
           </div>
         </div>

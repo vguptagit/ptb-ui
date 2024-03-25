@@ -13,9 +13,9 @@ import FillInBlanks from "../../questions/FillInBlanks";
 import Essay from "../../questions/Essay";
 import Toastify from "../../common/Toastify";
 import ReactToPrint from "react-to-print";
+import { FormattedMessage } from "react-intl";
 
-function PrintTestModalpopup({ show, handleClosePrintModal }) {
-  console.log("show", show);
+function PrintTestModalpopup({ show, handleCloseModal }) {
   const printableContentRef = useRef();
   const [count, setCount] = useState(1);
   const [isChecked, setIsChecked] = useState("none");
@@ -130,7 +130,7 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
   return (
     <Modal
       show={show}
-      handleClosePrintModal={handleClosePrintModal}
+      onHide={handleCloseModal}
       className="custom-modal"
       size="xl"
       centered
@@ -238,8 +238,8 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
                 </Row>
               </Modal.Body>
               <Modal.Footer className="button-footer">
-                <Button variant="secondary" onClick={handleClosePrintModal}>
-                  Cancel
+                <Button variant="secondary" onClick={handleCloseModal}>
+                  <FormattedMessage id="print.popup.cancel" />
                 </Button>
                 <ReactToPrint
                   trigger={() => <Button variant="primary">Print</Button>}
@@ -251,13 +251,10 @@ function PrintTestModalpopup({ show, handleClosePrintModal }) {
           </Col>
           <Col md={6}>
             <div className="print-preview" id="printPreviewArea">
-              <Modal.Header className="printpreview-header">
+              <Modal.Header className="printpreview-header" closeButton>
                 <Modal.Title>
-                  <h3>Print Preview</h3>
+                  <h3><FormattedMessage id="print.preview" /></h3>
                 </Modal.Title>
-                <button className="closebutton" onClick={handleClosePrintModal}>
-                  <i class="bi bi-x"></i>
-                </button>
               </Modal.Header>
               <Modal.Body className="questions-list">
                 <div className="test-containers">

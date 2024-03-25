@@ -145,9 +145,9 @@ function TreeView({
     }
   };
 
-  const handleAnotherFunction = (testTitle) => {
-    console.log("Test-title",testTitle);
-    handleEditTest(testTitle);
+  const handleAnotherFunction = (editTest) => {
+    console.log("Edit-test",editTest);
+    handleEditTest(editTest);
     }
 
   const handleDeleteFolder = (folderTitle) => {

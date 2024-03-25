@@ -14,10 +14,10 @@ const AppContext = createContext({
 const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
-  const [testName, setTestName] = useState("");
+  const [editTest, setEditTest] = useState(null);
 
-  const handleEditTest = (name) => {
-    setTestName(name.text);
+  const handleEditTest = (clickedTest) => {
+    setEditTest(clickedTest);
   };
 
   const selectTest = (item) => {
@@ -28,9 +28,8 @@ const AppProvider = ({ children }) => {
   };
 
   const addTest = (newTest) => {
-    setTests([...tests, newTest]);
-    // Pre Select if test legth is 1
-    setSelectedTest(newTest);
+      setTests([...tests, newTest]);
+      setSelectedTest(newTest);
   };
 
   const deleteTest = (testSelected) => {
@@ -87,7 +86,7 @@ const AppProvider = ({ children }) => {
         addTest,
         deleteTest,
         dispatchEvent,
-        testName,
+        editTest,
         handleEditTest,
       }}
     >
