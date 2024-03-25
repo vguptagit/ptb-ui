@@ -18,33 +18,34 @@ import TreeViewTestCreate from "./TreeViewTestCreate";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
-  const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
+  const [tabTitle, setTabTitle] = useState(selectedTest ?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(
-    selectedTest?.title || ""
+    selectedTest ?.title || ""
   );
   const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
   const [formSubmittedOnce, setFormSubmittedOnce] = useState(false);
+  const [isTitleValid, setIsTitleValid] = useState(false);
 
   useEffect(() => {
-    setTabTitle(selectedTest?.title || "");
-    setInitialTabTitle(selectedTest?.title || "");
+    setTabTitle(selectedTest ?.title || "");
+    setInitialTabTitle(selectedTest ?.title || "");
   }, [selectedTest]);
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
-  
+
     // Allow special characters, numbers, alphabets, and spaces
     newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, "");
-  
+
     if (newTitle.length > 255) {
       newTitle = newTitle.slice(0, 255);
     }
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-  
+
     setTabTitle(newTitle);
     setIsEditing(true);
-  
+
     // Update the title in the selectedTest object
     if (selectedTest && selectedTest.id) {
       // Create a copy of the selectedTest object
@@ -55,7 +56,7 @@ const TestCreate = () => {
       dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
   };
-  console.log("updatedtitle",tabTitle)
+  console.log("updatedtitle", tabTitle)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -204,10 +205,10 @@ const TestCreate = () => {
               <Form.Control
                 type="text"
                 name="title"
-                placeholder="Enter Test title "
+                placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className="rounded"
+                className={`rounded ${!isTitleValid && tabTitle.trim() === '' ? 'is-invalid' : ''}`}
                 required={true}
               />
             </Form>
@@ -226,18 +227,18 @@ const TestCreate = () => {
         ref={drop}
         className={`test-container ${
           canDrop && isOver && !isEditing ? "drop-active" : ""
-        }`}
+          }`}
       >
         <div>
           {selectedTest &&
-          selectedTest.questions &&
-          selectedTest.questions.length !== 0 ? (
-            <div className="drag-container align-items-center d-flex justify-content-center">
-              Drag Questions Here{" "}
-            </div>
-          ) : (
-            <QuestionsBanksTips />
-          )}
+            selectedTest.questions &&
+            selectedTest.questions.length !== 0 ? (
+              <div className="drag-container align-items-center d-flex justify-content-center">
+                Drag Questions Here{" "}
+              </div>
+            ) : (
+              <QuestionsBanksTips />
+            )}
         </div>
       </div>
     </div>
