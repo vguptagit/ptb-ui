@@ -1,6 +1,9 @@
 // context/AppContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import Test from "../entities/Test.Entity";
+import {getTestQuestions} from '../services/testcreate.service';
+import QtiService from "../utils/qtiService";
+import Toastify from "../components/common/Toastify";
 
 const AppContext = createContext({
   tests: [],
@@ -16,9 +19,53 @@ const AppProvider = ({ children }) => {
   const [selectedTest, setSelectedTest] = useState();
   const [testName, setTestName] = useState("");
 
-  const handleEditTest = (name) => {
-    setTestName(name.text);
+  const getQuestionFromDto = (questionDto) => {
+    let question = questionDto;
+    var qtiModel = QtiService.getQtiModel(
+      question.qtixml,
+      question.metadata.quizType
+    );
+    qtiModel.EditOption = false;
+    question.qtiModel = qtiModel;
+    question.itemId = questionDto.guid;
+    question.quizType = question.metadata.quizType;
+    question.data = question.qtixml;
+    console.log(question);
+    return question;
   };
+
+  const handleEditTest = (node) => {
+    console.log("adding test ");
+    //setTestName(name.text);
+    makeTestQuestion(node);
+  };
+  const makeTestQuestion = async (node) => {
+    try {
+      console.log(node);
+      let questions = await getTestQuestions(node.id);
+      if (questions) {
+        let test = new Test();
+        test.title = node.text;
+        test.tabTitle = node.text;
+        test.folderGuid = node.parent == 0 ? null : node.parent;
+        test.testId = node.id;
+        questions.forEach((question) => {
+          test.questions.push(getQuestionFromDto(question));
+        });
+        addTest(test);
+      }
+    } catch (error) {
+      console.error("Error getting test :", error);
+      if (error?.message?.response?.request?.status === 409) {
+        Toastify({
+          message: error.message.response.data.message,
+          type: "error",
+        });
+      } else {
+        Toastify({ message: "Error while fetching test", type: "error" });
+      }
+    }
+  }
 
   const selectTest = (item) => {
     const selectedItem = tests.filter((test) => test.id === item.id);

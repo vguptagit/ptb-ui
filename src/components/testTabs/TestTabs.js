@@ -183,11 +183,12 @@ const TestTabs = () => {
       }
 
       const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
-
       test.folderGuid = folderGuid;
 
       let questionBindings = await saveQuestions(test);
-      saveTest(test, questionBindings);
+      if(questionBindings && questionBindings.length != 0) {
+        saveTest(test, questionBindings);
+      }    
     }
   };
   const saveTest = async (test, questionBindings) => {
@@ -270,7 +271,7 @@ const TestTabs = () => {
           type: "error",
         });
       } else {
-        Toastify({ message: "Failed to save Questions", type: "error" });
+        Toastify({ message: "Failed to save Test", type: "error" });
       }
     }
     return questionBindings;
@@ -311,7 +312,7 @@ const TestTabs = () => {
       const folderTests = await getFolderTests(test.folderGuid);
       return folderTests.some(
         (folderTest) =>
-          folderTest.title === test.title && folderTest.id !== test.id
+          folderTest.title === test.title && folderTest.guid !== test.testId
       );
     } catch (error) {
       console.error("Error fetching folder tests:", error);

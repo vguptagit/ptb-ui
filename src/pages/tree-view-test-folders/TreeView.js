@@ -145,9 +145,11 @@ function TreeView({
     }
   };
 
-  const handleAnotherFunction = (testTitle) => {
-    console.log("Test-title",testTitle);
-    handleEditTest(testTitle);
+  const handleAnotherFunction = (node) => {
+
+    console.log("node",node);
+    //handleAddNewTestTab(node.id, node.text, node.parent);
+    handleEditTest(node);
     }
 
   const handleDeleteFolder = (folderTitle) => {
