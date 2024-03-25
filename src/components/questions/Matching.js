@@ -83,7 +83,7 @@ const Matching = (props) => {
                 <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
                     <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
                         <div className="w-100 ml-1">
-                            <div className="mr-2">{questionNodeIndex + 1}) <span dangerouslySetInnerHTML={sanitizedData(questionNode.qtiModel.Caption)}></span></div>
+                            <div className="mr-2">{questionNodeIndex + 1}) <span className= "view-content" dangerouslySetInnerHTML={sanitizedData(questionNode.qtiModel.Caption)}></span></div>
                         </div>
                         <div className="w-100" style={{ paddingTop: "15px" }}>
                         {questionNode.qtiModel.Options.map((option, index) => (
