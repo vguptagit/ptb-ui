@@ -20,6 +20,7 @@ import FillInBlanks from "../questions/FillInBlanks";
 import Essay from "../questions/Essay";
 import QtiService from "../../utils/qtiService";
 import { useDrag } from "react-dnd";
+import Loader from "../common/loader/Loader";
 
 const DraggableQuestion = ({ question, index }) => {
   const [, drag] = useDrag({
@@ -113,6 +114,7 @@ const QuestionFolder = ({ userId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [savedQuestions, setSavedQuestions] = useState(null);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   async function fetchRootFolderGuid() {
     try {
@@ -172,9 +174,11 @@ const QuestionFolder = ({ userId }) => {
             };
           });
           setSavedQuestions(questionsWithQtiModels);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching questions:", error);
+        setLoading(false);
       }
     };
 
@@ -357,7 +361,15 @@ const QuestionFolder = ({ userId }) => {
           />
         )}
       </div>
-      <div className="saved-questions">{renderQuestions()}</div>
+      {loading ? (
+        <Loader show={true} />
+      ) : savedQuestions.length === 0 ? (
+        <div className="no-data-message">No questions available</div>
+      ) : (
+        <>
+          <div className="saved-questions">{renderQuestions()}</div>
+        </>
+      )}
     </div>
   );
 };
