@@ -17,7 +17,7 @@ const AppContext = createContext({
 const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
-  const [testName, setTestName] = useState("");
+  const [editTest, setEditTest] = useState(null);
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -40,6 +40,7 @@ const AppProvider = ({ children }) => {
     //setTestName(name.text);
     makeTestQuestion(node);
   };
+  
   const makeTestQuestion = async (node) => {
     try {
       console.log(node);
@@ -77,9 +78,8 @@ const AppProvider = ({ children }) => {
   };
 
   const addTest = (newTest) => {
-    setTests([...tests, newTest]);
-    // Pre Select if test legth is 1
-    setSelectedTest(newTest);
+      setTests([...tests, newTest]);
+      setSelectedTest(newTest);
   };
 
   const deleteTest = (testSelected) => {
@@ -136,7 +136,7 @@ const AppProvider = ({ children }) => {
         addTest,
         deleteTest,
         dispatchEvent,
-        testName,
+        editTest,
         handleEditTest,
       }}
     >

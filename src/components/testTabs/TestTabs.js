@@ -21,7 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, testName } =
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest } =
     useAppContext();
 
   console.log("selectedtest", selectedTest);
@@ -31,17 +31,18 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
+  const [setTests] = useState([{ title: '' }]);
+
+
 
   useEffect(() => {
-    if (testName !== "") {
-      // Do something with the testName
-      console.log("Test name:", testName);
-      handleEditTestTab(testName);
+    if (editTest !== null) {
+      handleEditTestTab(editTest);
     }
-  }, [testName]);
+  }, [editTest]);
 
   useEffect(() => {
-    const ellipsisItems = tests?.slice(4);
+    const ellipsisItems = tests ?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
 
@@ -66,6 +67,20 @@ const TestTabs = () => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
   }, [selectedTest]);
+
+  const handleTitleChange = (e, index) => {
+    const updatedTests = [...tests];
+    const newTitle = e.target.value.trim(); // Trim whitespace from the input
+    updatedTests[index].title = newTitle;
+    if (newTitle === '') {
+      // If the new title is empty, set background color to red
+      e.target.style.backgroundColor = 'red';
+    } else {
+      // If the new title is not empty, set background color to transparent
+      e.target.style.backgroundColor = 'transparent';
+    }
+    setTests(updatedTests);
+  };
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
@@ -123,6 +138,7 @@ const TestTabs = () => {
       // If the test does not exist, create a new one
       const newTest = new Test();
       newTest.title = testName;
+      // newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -234,7 +250,7 @@ const TestTabs = () => {
       }
     } catch (error) {
       console.error("Error saving Test:", error);
-      if (error?.message?.response?.request?.status === 409) {
+      if (error ?.message ?.response ?.request ?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -269,7 +285,7 @@ const TestTabs = () => {
       });
     } catch (error) {
       console.error("Error saving Questions:", error);
-      if (error?.message?.response?.request?.status === 409) {
+      if (error ?.message ?.response ?.request ?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -337,15 +353,13 @@ const TestTabs = () => {
     e.stopPropagation();
   };
 
-  const handleClosePrintModal = (event) => {
-    setShowPrintModal(!showPrintModal);
-
-    event.preventDefault();
-    event.stopPropagation();
-  };
+  // const handleClosePrintModal = (event) => {
+  //   setShowPrintModal(!showPrintModal);
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // };
 
   const handleSaveAs = () => {
-    console.log("handleSaveAs 1", showModal);
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
         message:
@@ -382,11 +396,9 @@ const TestTabs = () => {
       return;
     }
     setShowPrintModal(true);
-    console.log("handlePrint", showPrintModal);
   };
 
   const areQuestionsAvailable = (test) => {
-    console.log("enable dropdown");
     return (
       test &&
       test.questions.length > 0 &&
@@ -434,17 +446,16 @@ const TestTabs = () => {
 
             <Button
               id="dropdown-item-button"
-              title="Print"
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
-              onClick={(e) => handlePrint(e)}
+              onClick={handlePrint}
             >
-              <PrintTestModalpopup
-                width="80%"
-                show={showPrintModal}
-                handleClosePrintModal={handleClosePrintModal}
-              />
               <FormattedMessage id="testtabs.print" />
             </Button>
+            <PrintTestModalpopup
+              width="80%"
+              show={showPrintModal}
+              handleCloseModal={() => setShowPrintModal(false)}
+            />
 
             <Button
               className="btn-test mt-1 mt-sm-0"
@@ -456,8 +467,6 @@ const TestTabs = () => {
               width="80%"
               show={showModalExport}
               handleCloseModal={() => setShowModalExport(false)}
-              backdrop="static"
-              keyboard={false}
             />
           </div>
         </div>
@@ -492,7 +501,7 @@ const TestTabs = () => {
                 >
                   <div className="tab-label">
                     <div className="test-title floatLeft" title={test.title}>
-                      {test.title}
+                      {test.title.trim() !== "" ? test.title : "Untitled"}
                     </div>
                     {/* Always render the close button */}
                     {tests.length > 1 && (
