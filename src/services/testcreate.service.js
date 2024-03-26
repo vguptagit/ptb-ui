@@ -1,4 +1,5 @@
 import httpInterceptor from "../httpHelper/httpHelper";
+import questions from "../mocks/questions.json";
 
 const url = process.env.REACT_APP_API_URL;
 
@@ -76,6 +77,26 @@ export const getFolderTests = (folderId) => {
 export const getRootTests = () => {
   return httpInterceptor
     .get(`${url}/my/testroot`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
+export const getTestQuestions = (testId) => {
+  console.log(testId);
+  console.log(window.mock);
+  if(window.mock) {
+    console.log(questions);
+    return questions;
+  }
+  return httpInterceptor
+    .get(`${url}/test/${testId}/questions`)
     .then((response) => {
       return response?.data;
     })

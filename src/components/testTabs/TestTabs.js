@@ -18,6 +18,7 @@ import Toastify from "../common/Toastify";
 import Modalpopup from "./Modalpopup";
 import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
 import Modalpopupexport from "./Modalpopupexport";
+import deepEqual from "deep-equal";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest } =
@@ -199,11 +200,12 @@ const TestTabs = () => {
       }
 
       const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
-
       test.folderGuid = folderGuid;
 
       let questionBindings = await saveQuestions(test);
-      saveTest(test, questionBindings);
+      if(questionBindings && questionBindings.length != 0) {
+        saveTest(test, questionBindings);
+      }    
     }
   };
   const saveTest = async (test, questionBindings) => {
@@ -237,6 +239,9 @@ const TestTabs = () => {
     try {
       let testResult = await saveMyTest(testcreationdata, test.folderGuid);
       if (testResult) {
+        test.questions.forEach((qstn, index) => {
+          qstn.masterData = JSON.parse(JSON.stringify(qstn.qtiModel));
+        }); 
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -286,7 +291,7 @@ const TestTabs = () => {
           type: "error",
         });
       } else {
-        Toastify({ message: "Failed to save Questions", type: "error" });
+        Toastify({ message: "Failed to save Test", type: "error" });
       }
     }
     return questionBindings;
@@ -294,7 +299,10 @@ const TestTabs = () => {
 
   const buildQuestionEnvelop = (qstn, userSettings) => {
     qstn.data = QtiService.getQtiXML(qstn);
-    qstn.IsEdited = true; // TODO: Update this based on required functionality
+    qstn.IsEdited = false; 
+    if(!deepEqual(qstn.masterData,qstn.qtiModel)) {
+      qstn.IsEdited = true;
+    }
     var qstnExtMetadata = buildQuestionMetadata(qstn, userSettings);
     var QuestionEnvelop = {
       metadata: {
@@ -327,7 +335,7 @@ const TestTabs = () => {
       const folderTests = await getFolderTests(test.folderGuid);
       return folderTests.some(
         (folderTest) =>
-          folderTest.title === test.title && folderTest.id !== test.id
+          folderTest.title === test.title && folderTest.guid !== test.testId
       );
     } catch (error) {
       console.error("Error fetching folder tests:", error);
