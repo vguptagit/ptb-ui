@@ -27,6 +27,7 @@ const AppProvider = ({ children }) => {
     );
     qtiModel.EditOption = false;
     question.qtiModel = qtiModel;
+    question.masterData = JSON.parse(JSON.stringify(qtiModel));
     question.itemId = questionDto.guid;
     question.quizType = question.metadata.quizType;
     question.data = question.qtixml;
@@ -49,6 +50,7 @@ const AppProvider = ({ children }) => {
         test.tabTitle = node.text;
         test.folderGuid = node.parent == 0 ? null : node.parent;
         test.testId = node.id;
+        test.metadata = {};
         questions.forEach((question) => {
           test.questions.push(getQuestionFromDto(question));
         });

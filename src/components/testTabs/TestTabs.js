@@ -18,6 +18,7 @@ import Toastify from "../common/Toastify";
 import Modalpopup from "./Modalpopup";
 import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
 import Modalpopupexport from "./Modalpopupexport";
+import deepEqual from "deep-equal";
 
 const TestTabs = () => {
   const { tests, addTest, deleteTest, selectedTest, dispatchEvent, testName } =
@@ -222,6 +223,9 @@ const TestTabs = () => {
     try {
       let testResult = await saveMyTest(testcreationdata, test.folderGuid);
       if (testResult) {
+        test.questions.forEach((qstn, index) => {
+          qstn.masterData = JSON.parse(JSON.stringify(qstn.qtiModel));
+        }); 
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -279,7 +283,10 @@ const TestTabs = () => {
 
   const buildQuestionEnvelop = (qstn, userSettings) => {
     qstn.data = QtiService.getQtiXML(qstn);
-    qstn.IsEdited = true; // TODO: Update this based on required functionality
+    qstn.IsEdited = false; 
+    if(!deepEqual(qstn.masterData,qstn.qtiModel)) {
+      qstn.IsEdited = true;
+    }
     var qstnExtMetadata = buildQuestionMetadata(qstn, userSettings);
     var QuestionEnvelop = {
       metadata: {
