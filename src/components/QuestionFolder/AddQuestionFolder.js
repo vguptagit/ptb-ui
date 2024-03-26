@@ -19,6 +19,88 @@ import Matching from "../questions/Matching";
 import FillInBlanks from "../questions/FillInBlanks";
 import Essay from "../questions/Essay";
 import QtiService from "../../utils/qtiService";
+import { useDrag } from "react-dnd";
+
+const DraggableQuestion = ({ question, index }) => {
+  const [, drag] = useDrag({
+    type: "SAVED_QUESTION",
+    item: { question },
+  });
+
+  const key = question.guid;
+  const { qtiModel } = question;
+
+  switch (question.metadata.quizType) {
+    case CustomQuestionBanksService.MultipleChoice:
+      return (
+        <div key={key} ref={drag}>
+          <MultipleChoice
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    case CustomQuestionBanksService.MultipleResponse:
+      return (
+        <div key={key} ref={drag}>
+          <MultipleResponse
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    case CustomQuestionBanksService.TrueFalse:
+      return (
+        <div key={key} ref={drag}>
+          <TrueFalse
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    case CustomQuestionBanksService.Matching:
+      return (
+        <div key={key} ref={drag}>
+          <Matching
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    case CustomQuestionBanksService.FillInBlanks:
+      return (
+        <div key={key} ref={drag}>
+          <FillInBlanks
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    case CustomQuestionBanksService.Essay:
+      return (
+        <div key={key} ref={drag}>
+          <Essay
+            questionNode={question}
+            questionNodeIndex={index}
+            qtiModel={qtiModel}
+            isPrint={true}
+          />
+        </div>
+      );
+    default:
+      return null;
+  }
+};
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
@@ -206,76 +288,14 @@ const QuestionFolder = ({ userId }) => {
     if (!savedQuestions) {
       return null;
     }
-    return savedQuestions.map((question, index) => {
-      const key = question.guid;
-      const { qtiModel } = question;
-      switch (question.metadata.quizType) {
-        case CustomQuestionBanksService.MultipleChoice:
-          return (
-            <MultipleChoice
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        case CustomQuestionBanksService.MultipleResponse:
-          return (
-            <MultipleResponse
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        case CustomQuestionBanksService.TrueFalse:
-          return (
-            <TrueFalse
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        case CustomQuestionBanksService.Matching:
-          return (
-            <Matching
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        case CustomQuestionBanksService.FillInBlanks:
-          return (
-            <FillInBlanks
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        case CustomQuestionBanksService.Essay:
-          return (
-            <Essay
-              key={key}
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              isPrint={true}
-            />
-          );
-        default:
-          return null;
-      }
-    });
+    return savedQuestions.map((question, index) => (
+      <DraggableQuestion
+        key={question.guid}
+        question={question}
+        index={index}
+      />
+    ));
   };
-  
 
   return (
     <div className="p-2">

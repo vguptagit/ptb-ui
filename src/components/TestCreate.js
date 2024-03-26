@@ -18,9 +18,9 @@ import TreeViewTestCreate from "./TreeViewTestCreate";
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent } = useAppContext();
-  const [tabTitle, setTabTitle] = useState(selectedTest ?.title || "");
+  const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(
-    selectedTest ?.title || ""
+    selectedTest?.title || ""
   );
   const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
@@ -29,8 +29,8 @@ const TestCreate = () => {
   const [isTitleValid, setIsTitleValid] = useState(false);
 
   useEffect(() => {
-    setTabTitle(selectedTest ?.title || "");
-    setInitialTabTitle(selectedTest ?.title || "");
+    setTabTitle(selectedTest?.title || "");
+    setInitialTabTitle(selectedTest?.title || "");
   }, [selectedTest]);
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
@@ -56,7 +56,7 @@ const TestCreate = () => {
       dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
   };
-  console.log("updatedtitle", tabTitle)
+  console.log("updatedtitle", tabTitle);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -74,7 +74,7 @@ const TestCreate = () => {
   };
 
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: ["QUESTION_TEMPLATE", "TREE_NODE"],
+    accept: ["QUESTION_TEMPLATE", "TREE_NODE", "SAVED_QUESTION"],
     drop: (item) => {
       console.log("Dropped node:", item);
       let copyItem = JSON.parse(JSON.stringify(item));
@@ -82,6 +82,8 @@ const TestCreate = () => {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.type === "TREE_NODE") {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
+      } else if (item.question) {
+        selectedTest.questions.push(item.question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
@@ -120,76 +122,143 @@ const TestCreate = () => {
   };
 
   const renderQuestions = (questionNode, index) => {
-    const key = questionNode.itemId;
-    switch (questionNode.quizType) {
-      case CustomQuestionBanksService.MultipleChoice:
-        return (
-          <MultipleChoice
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      case CustomQuestionBanksService.MultipleResponse:
-        return (
-          <MultipleResponse
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      case CustomQuestionBanksService.TrueFalse:
-        return (
-          <TrueFalse
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      case CustomQuestionBanksService.Matching:
-        return (
-          <Matching
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      case CustomQuestionBanksService.FillInBlanks:
-        return (
-          <FillInBlanks
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      case CustomQuestionBanksService.Essay:
-        return (
-          <Essay
-            questionNode={questionNode}
-            key={key}
-            questionNodeIndex={index}
-            questionNodeIsEdit={questionNode.qtiModel.EditOption}
-            onQuestionStateChange={handleQuestionState}
-            onQuestionDelete={handleQuestionDelete}
-          />
-        );
-      default:
-        return null;
+    const key = questionNode.itemId || questionNode.guid;
+    if (questionNode.quizType) {
+      switch (questionNode.quizType) {
+        case CustomQuestionBanksService.MultipleChoice:
+          return (
+            <MultipleChoice
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        case CustomQuestionBanksService.MultipleResponse:
+          return (
+            <MultipleResponse
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        case CustomQuestionBanksService.TrueFalse:
+          return (
+            <TrueFalse
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        case CustomQuestionBanksService.Matching:
+          return (
+            <Matching
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        case CustomQuestionBanksService.FillInBlanks:
+          return (
+            <FillInBlanks
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        case CustomQuestionBanksService.Essay:
+          return (
+            <Essay
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          );
+        default:
+          return null;
+      }
+    } else if (questionNode.metadata && questionNode.metadata.quizType) {
+      switch (questionNode.metadata.quizType) {
+        case CustomQuestionBanksService.MultipleChoice:
+          return (
+            <MultipleChoice
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.MultipleResponse:
+          return (
+            <MultipleResponse
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.TrueFalse:
+          return (
+            <TrueFalse
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.Matching:
+          return (
+            <Matching
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.FillInBlanks:
+          return (
+            <FillInBlanks
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        case CustomQuestionBanksService.Essay:
+          return (
+            <Essay
+              questionNode={questionNode}
+              key={key}
+              questionNodeIndex={index}
+              questionNodeIsEdit={questionNode.qtiModel.EditOption}
+              isPrint={true}
+            />
+          );
+        default:
+          return null;
+      }
     }
   };
 
@@ -208,7 +277,9 @@ const TestCreate = () => {
                 placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className={`rounded ${!isTitleValid && tabTitle.trim() === '' ? 'is-invalid' : ''}`}
+                className={`rounded ${
+                  !isTitleValid && tabTitle.trim() === "" ? "is-invalid" : ""
+                }`}
                 required={true}
               />
             </Form>
@@ -227,18 +298,18 @@ const TestCreate = () => {
         ref={drop}
         className={`test-container ${
           canDrop && isOver && !isEditing ? "drop-active" : ""
-          }`}
+        }`}
       >
         <div>
           {selectedTest &&
-            selectedTest.questions &&
-            selectedTest.questions.length !== 0 ? (
-              <div className="drag-container align-items-center d-flex justify-content-center">
-                Drag Questions Here{" "}
-              </div>
-            ) : (
-              <QuestionsBanksTips />
-            )}
+          selectedTest.questions &&
+          selectedTest.questions.length !== 0 ? (
+            <div className="drag-container align-items-center d-flex justify-content-center">
+              Drag Questions Here{" "}
+            </div>
+          ) : (
+            <QuestionsBanksTips />
+          )}
         </div>
       </div>
     </div>
