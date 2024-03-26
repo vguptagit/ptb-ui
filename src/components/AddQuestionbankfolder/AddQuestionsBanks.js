@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalFooter } from 'react-bootstrap';
 import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
-
-
+import { FormattedMessage } from 'react-intl';
 
 const QuestBanks = () => {
     const [showModal, setShowModal] = useState(false);
@@ -61,8 +60,8 @@ const QuestBanks = () => {
                     </Modal.Body>
                     < ModalFooter>
                     <Button variant="secondary" onClick={handleClose}>
-                            Cancel
-                        </Button>
+                        <FormattedMessage id="cancelButton" defaultMessage="Cancel" />
+                    </Button>
                     </ModalFooter>
                 </Modal>
             </div>

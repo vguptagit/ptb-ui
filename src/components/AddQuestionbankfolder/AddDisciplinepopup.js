@@ -90,12 +90,16 @@ const AddDisciplinepopup = ({ handleNext }) => {
             {loading ? (
                 <Loader show={true} />
             ) : allData.length === 0 ? (
-                <div className="no-data-message">No disciplines available</div>
+                <div className="no-data-message">
+                    <FormattedMessage id="noDisciplinesAvailable" defaultMessage="No disciplines available" />
+               </div>
             ) : (
                 <>
                     <div className="disciplineaddpopup-top-container">
                         
-                        <h4 className="choose-your-books-or-topics">Add Discipline</h4>
+                    <h4 className="choose-your-books-or-topics">
+                        <FormattedMessage id="addDiscipline" defaultMessage="Add Discipline" />
+                  </h4>
                         <button className="disciplinePopup btn btn-primary" onClick={handleNextStep} disabled={selectedItems.length === 0}>Next</button>
                     </div>
                     <div className="disciplinePopup input-group rounded">
@@ -118,7 +122,9 @@ const AddDisciplinepopup = ({ handleNext }) => {
                     </div>
                     
                     {searchResults.length === 0 && (
-                        <div className="no-matching-discipline-message">"No matching disciplines found"</div>
+                        <div className="no-matching-discipline-message">
+                        <FormattedMessage id="noMatchingDisciplines" defaultMessage="No matching disciplines found" />
+                       </div>
                     )}
                   
                     <ul className="disciplinePopup result-list mt-3">
