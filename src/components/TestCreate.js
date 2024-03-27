@@ -32,6 +32,8 @@ const TestCreate = () => {
     setTabTitle(selectedTest?.title || "");
     setInitialTabTitle(selectedTest?.title || "");
   }, [selectedTest]);
+
+  
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
 
@@ -283,9 +285,7 @@ const TestCreate = () => {
                 placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className={`rounded ${
-                  !isTitleValid && tabTitle.trim() === "" ? "is-invalid" : ""
-                }`}
+                className="rounded"
                 required={true}
               />
             </Form>
