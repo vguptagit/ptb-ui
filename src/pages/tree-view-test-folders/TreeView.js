@@ -52,24 +52,27 @@ function TreeView({
   }, [folders]);
 
   useEffect(() => {
-    const fetchUserBooks = async () => {
-      try {
-        const books = await getUserBooks();
-        console.log("Books:", books);
-        if (books && books.length > 0) {
-          const selectedBookId = books[0];
-          console.log("Selected Book ID:", selectedBookId);
-          setSelectedBookId(selectedBookId);
-        } else {
-          console.error("No valid books found in the response.");
+    if (isOpen) {
+      const fetchUserBooks = async () => {
+        try {
+          const books = await getUserBooks();
+          console.log("Books:", books);
+          if (books && books.length > 0) {
+            const selectedBookId = books[0];
+            console.log("Selected Book ID:", selectedBookId);
+            setSelectedBookId(selectedBookId);
+          } else {
+            console.error("No valid books found in the response.");
+          }
+        } catch (error) {
+          console.error("Error fetching user books:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user books:", error);
-      }
-    };
-
-    fetchUserBooks();
-  }, []);
+      };
+  
+      fetchUserBooks();
+    }
+  }, [isOpen]);
+  
 
   const fetchChildFolders = async (parentNode) => {
     try {
