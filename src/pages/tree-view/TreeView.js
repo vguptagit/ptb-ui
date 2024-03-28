@@ -8,6 +8,16 @@ import {
   getAllBookNodeSubNodes,
 } from "../../services/book.service";
 import Toastify from "../../components/common/Toastify";
+import { getAllQuestions } from "../../services/userfolder.service";
+import QtiService from "../../utils/qtiService";
+import MultipleChoice from "../../components/questions/MultipleChoice";
+import MultipleResponse from "../../components/questions/MultipleResponse";
+import TrueFalse from "../../components/questions/TrueFalse";
+import Matching from "../../components/questions/Matching";
+import FillInBlanks from "../../components/questions/FillInBlanks";
+import Essay from "../../components/questions/Essay";
+import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+
 
 const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds  }) => {
   const [, drag] = useDrag({
@@ -79,6 +89,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   const [addedNodes, setAddedNodes] = useState(new Set());
   const [clickedNodeIds, setClickedNodeIds] = useState([]);
   const [isSearchTermPresent, setIsSearchTermPresent] = useState(false);
+  const [finalQuestions, setFinalquestions] = useState([]);
   const handleDrop = (newTree) => {
     setTreeData(newTree);
     onDataUpdate(newTree);
@@ -235,6 +246,38 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
 
   const getBookNodeSubNodes = (node) => {
     let nodeList = [];
+    
+  
+    getAllQuestions(node.bookGuid, node.nodeGuid).then(
+      (questions) => {
+        console.log("questions:", questions);
+        
+        if (Array.isArray(questions)) {
+          const questionsWithQtiModels = questions.map((question) => {
+            const {
+              qtixml,
+              metadata: { quizType },
+            } = question;
+            const qtiModel = QtiService.getQtiModel(qtixml, quizType);
+            qtiModel.EditOption = false;
+            return {
+              ...question,
+              qtiModel,
+            };
+          });
+          
+          setFinalquestions(questionsWithQtiModels);
+
+        } else {
+          console.error("Expected an array of questions but received:", questions);
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    
+   
     getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
       (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
@@ -251,16 +294,129 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         }
         setTreeData([...treeData, ...nodeList]);
         setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
+        
       },
       (error) => {
         console.log(error);
       }
     );
   };
+ 
+    
+  const renderQuestionContent = (qtiModel) => {
+    if (qtiModel) {
+      switch (qtiModel.questionType) {
+        case CustomQuestionBanksService.MultipleChoice:
+          return <MultipleChoice qtiModel={qtiModel} />;
+        case CustomQuestionBanksService.MultipleResponse:
+          return <MultipleResponse qtiModel={qtiModel} />;
+        case CustomQuestionBanksService.TrueFalse:
+          return <TrueFalse qtiModel={qtiModel} />;
+        case CustomQuestionBanksService.Matching:
+          return <Matching qtiModel={qtiModel} />;
+        case CustomQuestionBanksService.FillInBlanks:
+          return <FillInBlanks qtiModel={qtiModel} />;
+        case CustomQuestionBanksService.Essay:
+          return <Essay qtiModel={qtiModel} />;
+        default:
+          return null;
+      }
+    }
+  };
 
   useEffect(() => {
     console.log("Dropped Node in TreeView:-->", droppedNode);
   }, [droppedNode]);
+   
+  const renderQuestions = () => {
+    if (!finalQuestions) {
+      return null;
+    }
+    return finalQuestions.map((question, index) => (
+      <DraggableQuestion
+        key={question.guid}
+        question={question}
+        index={index}
+      />
+    ));
+  };
+
+  const DraggableQuestion = ({ question, index }) => {
+  
+    const key = question.guid;
+    const { qtiModel } = question;
+  
+    switch (question.metadata.quizType) {
+      case CustomQuestionBanksService.MultipleChoice:
+        return (
+          <div key={key}>
+            <MultipleChoice
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.MultipleResponse:
+        return (
+          <div key={key}>
+            <MultipleResponse
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.TrueFalse:
+        return (
+          <div key={key}>
+            <TrueFalse
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.Matching:
+        return (
+          <div key={key}>
+            <Matching
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.FillInBlanks:
+        return (
+          <div key={key}>
+            <FillInBlanks
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.Essay:
+        return (
+          <div key={key}>
+            <Essay
+              questionNode={question}
+              questionNodeIndex={index}
+              qtiModel={qtiModel}
+              isPrint={true}
+            />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -285,6 +441,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
           )}
           onDrop={handleDrop}
         />
+         <div className="saved-questions">{renderQuestions()}</div>
       </div>
       )}
      
@@ -303,6 +460,15 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
           )}
         />
       </div>
+      {/* <div>{finalQuestions.length !== 0 ? (
+        finalQuestions.map((question, index) => (
+          <div key={index}>
+            <div>{question.metadata.quizType}</div>
+          </div>
+        ))
+      ) : (
+        "No questions found."
+      )}</div> */}
       </>
       )}
     </>

@@ -85,3 +85,20 @@ export const getUserQuestions = (folderId) => {
       });
     });
 };
+
+
+
+
+export const getAllQuestions = (bookid, nodeId) => {
+  return httpInterceptor
+    .get(`${url}/books/${bookid}/nodes/${nodeId}/questions`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
