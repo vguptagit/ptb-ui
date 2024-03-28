@@ -87,7 +87,9 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   return (
     <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-        <div className="no-matching-books-message">"No matching books found"</div>
+       <h2 className="choose-your-books-or-topics">
+          <FormattedMessage id="addBooks" />
+      </h2>
       ) : (
         filteredTreeData.map((node) => (
           <TreeNode
@@ -251,13 +253,15 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
       ) : (
         <>
           <div className="top-containerbooks">
-            <h2 className="choose-your-books-or-topics">Add Books</h2>
-            <button className="booktab btn btn-secondary" onClick={handleBack}>
-              Back
-            </button>
-            <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-              Save
-            </button>
+          <h2 className="choose-your-books-or-topics">
+              <FormattedMessage id="addBooks" defaultMessage="Add Books" />
+         </h2>
+          <button className="booktab btn btn-secondary" onClick={handleBack}>
+              <FormattedMessage id="backButton" defaultMessage="Back" />
+          </button>
+          <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
+              <FormattedMessage id="saveButton" defaultMessage="Save" />
+          </button>
           </div>
           <div className="discipline input-group rounded">
             <input

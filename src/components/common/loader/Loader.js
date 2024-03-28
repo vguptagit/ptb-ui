@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import "./Loader.css";
+import { FormattedMessage } from 'react-intl';
 
 function Loader(props) {
   const [show, setShow] = useState(false);
@@ -53,7 +54,9 @@ function Loader(props) {
           <div className="fallback-spinner">
             <div className="loading"  aria-label="loading screen">
               <Spinner className="spinner" animation="border" role="status" tabindex="0">
-                <span className="visually-hidden">Loading...</span>
+              <span className="visually-hidden">
+                  <FormattedMessage id="loading" defaultMessage="Loading..." />
+              </span>
               </Spinner>
             </div>
           </div>
