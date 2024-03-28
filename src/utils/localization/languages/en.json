@@ -83,5 +83,6 @@
     "formatTrueFalse":"Format",
     "visibleInPrintViewTrueFalse":"(visible in Print View)",
     "viewTrueFalse" : "View",
-    "removeTrueFalse" : "Remove"
+    "removeTrueFalse" : "Remove",
+    "publishertests" : "Publisher Tests"
 }

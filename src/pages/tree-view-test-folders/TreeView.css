@@ -76,7 +76,7 @@
   color: white;
 } */
 
-#tree-node-clicked{
+#tree-node-clicked {
   background-color: #f8f8f8;
   color: #4d4d4d;
 }
@@ -160,10 +160,37 @@
   opacity: 0.75;
 }
 
-#delete-modal-header{
+#delete-modal-header {
   padding: 10px;
 }
 
-#delete-modal-footer{
+#delete-modal-footer {
   padding: 10px;
+}
+
+.testbtn {
+  border: none;
+  text-align: justify;
+  padding: 5px;
+  margin-top: 6px;
+  margin-bottom: -5px;
+  background-color: #f8f8f8;
+  color: #4d4d4d;
+  font-size: 14px;
+  position: relative;
+}
+
+.testbtn i {
+  margin-left: 5px;
+}
+
+.test-dropdown {
+  margin-top: 6px;
+  margin-bottom: -6px;
+  background-color: #f8f8f8;
+  color: #4d4d4d;
+  text-align: justify;
+  padding: 5px;
+  font-size: 14px;
+  position: relative;
 }

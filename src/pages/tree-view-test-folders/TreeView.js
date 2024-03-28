@@ -6,9 +6,14 @@ import {
   getUserTestFolders,
   deleteTest,
 } from "../../services/testfolder.service";
-import { getFolderTests } from "../../services/testcreate.service";
+import {
+  getFolderTests,
+  getPublisherTestsByBookId,
+} from "../../services/testcreate.service";
 import Toastify from "../../components/common/Toastify";
 import { useAppContext } from "../../context/AppContext";
+import { getUserBooks } from "../../services/book.service";
+import { FormattedMessage } from "react-intl";
 
 function TreeView({
   onFolderSelect,
@@ -26,6 +31,9 @@ function TreeView({
   const [selectedFolderToDelete, setSelectedFolderToDelete] = useState(null);
   const [selectedTestToDelete, setSelectedTestToDelete] = useState(null);
   const [showTestDeleteModal, setShowTestDeleteModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [publisherTests, setPublisherTests] = useState([]);
+  const [selectedBookId, setSelectedBookId] = useState(null);
 
   useEffect(() => {
     if (folders && folders.length > 0) {
@@ -43,9 +51,33 @@ function TreeView({
     }
   }, [folders]);
 
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      try {
+        const books = await getUserBooks();
+        console.log("Books:", books);
+        if (books && books.length > 0) {
+          const selectedBookId = books[0];
+          console.log("Selected Book ID:", selectedBookId);
+          setSelectedBookId(selectedBookId);
+        } else {
+          console.error("No valid books found in the response.");
+        }
+      } catch (error) {
+        console.error("Error fetching user books:", error);
+      }
+    };
+
+    fetchUserBooks();
+  }, []);
+
   const fetchChildFolders = async (parentNode) => {
     try {
-      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid && parentNode.droppable === true) {
+      if (
+        !parentNode.children &&
+        parentNode.data.guid !== selectedFolderGuid &&
+        parentNode.droppable === true
+      ) {
         const childFolders = await getUserTestFolders(parentNode.data.guid);
         const childTests = await getFolderTests(parentNode.data.guid);
 
@@ -146,11 +178,10 @@ function TreeView({
   };
 
   const handleAnotherFunction = (node) => {
-
-    console.log("node",node);
+    console.log("node", node);
     //handleAddNewTestTab(node.id, node.text, node.parent);
     handleEditTest(node);
-    }
+  };
 
   const handleDeleteFolder = (folderTitle) => {
     setSelectedFolderToDelete(folderTitle);
@@ -250,12 +281,42 @@ function TreeView({
     setIsDragging(false);
   };
 
+  const handleGetPublisherTests = async () => {
+    try {
+      const tests = await getPublisherTestsByBookId(selectedBookId);
+      setPublisherTests(tests);
+    } catch (error) {
+      console.error("Error fetching publisher tests:", error);
+    }
+  };
+
   return (
     <div
       className={`treeview ${isDragging ? "grabbing" : ""}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
+      <button
+        className="testbtn"
+        onClick={() => {
+          setIsOpen(!isOpen);
+          handleGetPublisherTests();
+        }}
+      >
+        {isOpen ? (
+          <i className="fa fa-caret-down"></i>
+        ) : (
+          <i className="fa fa-caret-right"></i>
+        )}
+        <span style={{ marginLeft: "9px" }}><FormattedMessage id="Publisher Tests" /></span>
+      </button>
+      {isOpen && (
+        <div className="test-dropdown">
+          {publisherTests.map((test) => (
+            <div key={test.guid}>{test.title}</div>
+          ))}
+        </div>
+      )}
       <Tree
         tree={treeData}
         rootId={0}
@@ -358,8 +419,10 @@ function TreeView({
                 <h5 className="modal-title">Delete Folder</h5>
               </div>
               <div className="modal-body">
-              <i class="fa-solid fa-circle-question"></i>
-                &nbsp;Deleting folder will delete the child folders and tests. Are you sure you want to delete the folder? This action cannot be undone.
+                <i class="fa-solid fa-circle-question"></i>
+                &nbsp;Deleting folder will delete the child folders and tests.
+                Are you sure you want to delete the folder? This action cannot
+                be undone.
               </div>
               <div className="modal-footer" id="delete-modal-footer">
                 <button
@@ -394,9 +457,9 @@ function TreeView({
                 <h5 className="modal-title">Delete Test</h5>
               </div>
               <div className="modal-body">
-              <i class="fa-solid fa-circle-question"></i>
-                &nbsp;
-                Are you sure you want to delete the test? This action cannot be undone.
+                <i class="fa-solid fa-circle-question"></i>
+                &nbsp; Are you sure you want to delete the test? This action
+                cannot be undone.
               </div>
               <div className="modal-footer" id="delete-modal-footer">
                 <button
