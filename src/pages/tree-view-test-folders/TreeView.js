@@ -52,6 +52,12 @@ function TreeView({
   }, [folders]);
 
   useEffect(() => {
+    if (isOpen && selectedBookId) {
+      handleGetPublisherTests();
+    }
+  }, [isOpen, selectedBookId]);
+
+  useEffect(() => {
     if (isOpen) {
       const fetchUserBooks = async () => {
         try {
@@ -306,17 +312,18 @@ function TreeView({
         return;
       }
 
-      const testsPromises = validBookIds.map(async (bookId) => {
-        try {
-          const tests = await getPublisherTestsByBookId(bookId);
-          return tests;
-        } catch (error) {
-          console.error(`Error fetching tests for book ID ${bookId}:`, error);
-          return [];
-        }
-      });
+      const testsArrays = await Promise.all(
+        validBookIds.map(async (bookId) => {
+          try {
+            const tests = await getPublisherTestsByBookId(bookId);
+            return tests;
+          } catch (error) {
+            console.error(`Error fetching tests for book ID ${bookId}:`, error);
+            return [];
+          }
+        })
+      );
 
-      const testsArrays = await Promise.all(testsPromises);
       const allTests = testsArrays.flat();
       setPublisherTests(allTests);
     } catch (error) {
