@@ -17,16 +17,18 @@ import Matching from "../../components/questions/Matching";
 import FillInBlanks from "../../components/questions/FillInBlanks";
 import Essay from "../../components/questions/Essay";
 import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+import Loader from "../../components/common/loader/Loader";
 
-
-const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds  }) => {
+const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds }) => {
   const [, drag] = useDrag({
     type: "TREE_NODE",
     item: { node },
   });
+
   const isClicked = clickedNodeIds.includes(node.id);
+
   const handleLensClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     onLensClick(node);
   };
 
@@ -38,10 +40,7 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
   };
 
   return (
-    <div
-      ref={drag}
-      className={`tree-nodeqb ${isClicked ? 'clicked' : ''}`}
-    >
+    <div ref={drag} className={`tree-nodeqb ${isClicked ? 'clicked' : ''}`}>
       {node.droppable && (
         <span onClick={handleCaretClick}>
           {node.isOpen ? (
@@ -51,21 +50,23 @@ const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeI
           )}
         </span>
       )}
-      {node.type !== "book" &&(node.text)}
-      {node.type === "book" && (<span onClick={handleLensClick}>
-        {node.text}
-      </span>)}
+      {node.type !== "book" && node.text}
+      {node.type === "book" && (
+        <span onClick={handleLensClick}>
+          {node.text}
+        </span>
+      )}
     </div>
   );
 };
 
-const SimpleNode = ({ node, onToggle  }) => {
-
+const SimpleNode = ({ node, onToggle }) => {
   const handleCaretClick = (e) => {
     e.stopPropagation();
     onToggle();
     node.isOpen = !node.isOpen;
   };
+
   return (
     <div className="tree-nodeqb">
       {node.droppable && (
@@ -82,14 +83,16 @@ const SimpleNode = ({ node, onToggle  }) => {
   );
 };
 
-function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
+function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const [treeData, setTreeData] = useState([]);
   const [searchableTreeData, setSearchableTreeData] = useState([]);
   const [searchableTreeDataFilter, setSearchableTreeDataFilter] = useState([]);
   const [addedNodes, setAddedNodes] = useState(new Set());
   const [clickedNodeIds, setClickedNodeIds] = useState([]);
   const [isSearchTermPresent, setIsSearchTermPresent] = useState(false);
-  const [finalQuestions, setFinalquestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+
   const handleDrop = (newTree) => {
     setTreeData(newTree);
     onDataUpdate(newTree);
@@ -103,42 +106,46 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
       text: discipline,
       type: "discipline",
     }));
+
     for (let i = 0; i < convertedList.length; i++) {
       getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
     }
-    console.log("use effect called main")
+
     setSearchableTreeData(convertedList);
     setTreeData(convertedList);
-    
   }, []);
+
   useEffect(() => {
-    if(searchTerm != '')
-   { 
-    const hasNodeTypes = searchableTreeData.some(node => node.type === "node");     
-    setIsSearchTermPresent(true);
-    const filteredData = searchableTreeData.filter(node => 
-      node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const parentIDsOfMatchedNodes = new Set(filteredData.filter(node => node.type === "node").map(node => node.parent));
-    const finalFilteredData = filteredData.filter(node => 
-      node.type !== "book" || (node.type === "book" && parentIDsOfMatchedNodes.has(node.id))
-    );
-    const parentIDsOfMatchedBooks = new Set(finalFilteredData.filter(node => node.type === "book").map(node => node.parent));
-    const finalFinalFilteredData = finalFilteredData.filter(node => 
-      node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
-    );
-    if (!hasNodeTypes) {
-      Toastify({ message: "User must select the Books", type: "warn" });
-     }
-    else if (finalFinalFilteredData.length === 0) {
-      Toastify({ message: "No Matching chapters found", type: "info" });
+    if (searchTerm !== '') {
+      const hasNodeTypes = searchableTreeData.some(node => node.type === "node");
+      setIsSearchTermPresent(true);
+
+      const filteredData = searchableTreeData.filter(node =>
+        node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      const parentIDsOfMatchedNodes = new Set(filteredData.filter(node => node.type === "node").map(node => node.parent));
+
+      const finalFilteredData = filteredData.filter(node =>
+        node.type !== "book" || (node.type === "book" && parentIDsOfMatchedNodes.has(node.id))
+      );
+
+      const parentIDsOfMatchedBooks = new Set(finalFilteredData.filter(node => node.type === "book").map(node => node.parent));
+
+      const finalFinalFilteredData = finalFilteredData.filter(node =>
+        node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
+      );
+
+      if (!hasNodeTypes) {
+        Toastify({ message: "User must select the Books", type: "warn" });
+      } else if (finalFinalFilteredData.length === 0) {
+        Toastify({ message: "No Matching chapters found", type: "info" });
+      }
+
+      setSearchableTreeDataFilter(finalFinalFilteredData);
+    } else {
+      setIsSearchTermPresent(false);
     }
-    setSearchableTreeDataFilter(finalFinalFilteredData);
-   }
-  else{
-    setIsSearchTermPresent(false);
-  }
-    console.log("new searchable tree data is as  follows",searchableTreeData);
   }, [searchTerm]);
 
   const handleNodeClick = (clickedNode) => {
@@ -149,12 +156,13 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         clickedNode.type === "node" &&
         !addedNodes.has(clickedNode.bookGuid + clickedNode.nodeGuid)
       )
-      getBookNodeSubNodes(clickedNode);
+        getBookNodeSubNodes(clickedNode);
     }
   };
+  
 
   const getBooksList = (discipline, disciplineId, booksList) => {
-    getAllBooks(discipline,true).then(
+    getAllBooks(discipline, true).then(
       (books) => {
         for (let i = 0; i < books.length; i++) {
           const newItem = {
@@ -174,8 +182,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     );
   };
 
-  
-
   const handleLensClick = (node) => {
     setClickedNodeIds(prevClickedNodeIds => {
       const isAlreadyClicked = prevClickedNodeIds.includes(node.id);
@@ -185,15 +191,13 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
             return !(item.type === "node" && item.bookGuid === node.bookGuid);
           });
         });
-        return prevClickedNodeIds.filter(id => id !== node.id); 
+        return prevClickedNodeIds.filter(id => id !== node.id);
       } else {
         getBookNodesFlat(node, { flat: 1 });
-        return [...prevClickedNodeIds, node.id]; 
+        return [...prevClickedNodeIds, node.id];
       }
-    });    
-    
+    });
   };
-
 
   const getBookNodesFlat = (node, queryParams = {}) => {
     let nodeList = [];
@@ -245,13 +249,9 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
   };
 
   const getBookNodeSubNodes = (node) => {
-    let nodeList = [];
-    
-  
+    setLoadingQuestions(true);
     getAllQuestions(node.bookGuid, node.nodeGuid).then(
       (questions) => {
-        console.log("questions:", questions);
-        
         if (Array.isArray(questions)) {
           const questionsWithQtiModels = questions.map((question) => {
             const {
@@ -265,91 +265,73 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
               qtiModel,
             };
           });
-          
-          setFinalquestions(questionsWithQtiModels);
 
+          const questionNodes = questionsWithQtiModels.map((question, index) => ({
+            id: `${node.bookGuid}-${node.nodeGuid}-question-${index}`,
+            parent: node.id,
+            droppable: false,
+            questionGuid: question.guid,
+            text: <DraggableQuestion
+              key={question.guid}
+              question={question}
+              index={index}
+            />,
+            type: "question",
+          }));
+          setLoadingQuestions(false);
+          setTreeData([...treeData, ...questionNodes]);
         } else {
           console.error("Expected an array of questions but received:", questions);
         }
       },
       (error) => {
+        setLoadingQuestions(false);
         console.log(error);
       }
     );
-    
-   
-    getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
-      (nodes) => {
-        for (let i = 0; i < nodes.length; i++) {
-          const newItemNode = {
-            id: treeData.length + nodeList.length + 1,
-            parent: node.id,
-            droppable: true,
-            bookGuid: node.bookGuid,
-            nodeGuid: nodes[i].guid,
-            text: `${nodes[i].title}_${node.text}`,
-            type: "node",
-          };
-          nodeList.push(newItemNode);
-        }
-        setTreeData([...treeData, ...nodeList]);
-        setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
-        
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  };
- 
-    
-  const renderQuestionContent = (qtiModel) => {
-    if (qtiModel) {
-      switch (qtiModel.questionType) {
-        case CustomQuestionBanksService.MultipleChoice:
-          return <MultipleChoice qtiModel={qtiModel} />;
-        case CustomQuestionBanksService.MultipleResponse:
-          return <MultipleResponse qtiModel={qtiModel} />;
-        case CustomQuestionBanksService.TrueFalse:
-          return <TrueFalse qtiModel={qtiModel} />;
-        case CustomQuestionBanksService.Matching:
-          return <Matching qtiModel={qtiModel} />;
-        case CustomQuestionBanksService.FillInBlanks:
-          return <FillInBlanks qtiModel={qtiModel} />;
-        case CustomQuestionBanksService.Essay:
-          return <Essay qtiModel={qtiModel} />;
-        default:
-          return null;
-      }
-    }
+
+    setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
   };
 
+  getAllBookNodeSubNodes(node.bookGuid, node.nodeGuid).then(
+    (nodes) => {
+      for (let i = 0; i < nodes.length; i++) {
+        const newItemNode = {
+          id: treeData.length + nodeList.length + 1,
+          parent: node.id,
+          droppable: true,
+          bookGuid: node.bookGuid,
+          nodeGuid: nodes[i].guid,
+          text: `${nodes[i].title}_${node.text}`,
+          type: "node",
+        };
+        nodeList.push(newItemNode);
+      }
+      setTreeData([...treeData, ...nodeList,]);
+      setAddedNodes(new Set(addedNodes).add(node.bookGuid + node.nodeGuid));
+      
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
   useEffect(() => {
     console.log("Dropped Node in TreeView:-->", droppedNode);
   }, [droppedNode]);
-   
-  const renderQuestions = () => {
-    if (!finalQuestions) {
-      return null;
-    }
-    return finalQuestions.map((question, index) => (
-      <DraggableQuestion
-        key={question.guid}
-        question={question}
-        index={index}
-      />
-    ));
-  };
 
   const DraggableQuestion = ({ question, index }) => {
-  
+    const [, drag] = useDrag({
+      type: "SAVED_QUESTION",
+      item: { question },
+    });
+
     const key = question.guid;
     const { qtiModel } = question;
-  
+
     switch (question.metadata.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <MultipleChoice
               questionNode={question}
               questionNodeIndex={index}
@@ -360,7 +342,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         );
       case CustomQuestionBanksService.MultipleResponse:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <MultipleResponse
               questionNode={question}
               questionNodeIndex={index}
@@ -371,7 +353,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         );
       case CustomQuestionBanksService.TrueFalse:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <TrueFalse
               questionNode={question}
               questionNodeIndex={index}
@@ -382,7 +364,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         );
       case CustomQuestionBanksService.Matching:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <Matching
               questionNode={question}
               questionNodeIndex={index}
@@ -393,7 +375,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         );
       case CustomQuestionBanksService.FillInBlanks:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <FillInBlanks
               questionNode={question}
               questionNodeIndex={index}
@@ -404,7 +386,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
         );
       case CustomQuestionBanksService.Essay:
         return (
-          <div key={key}>
+          <div key={key} ref={drag}>
             <Essay
               questionNode={question}
               questionNodeIndex={index}
@@ -420,56 +402,47 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
 
   return (
     <>
-    {
-      !isSearchTermPresent &&(
-      <div className="treeviewqb">
-        <Tree
-          tree={treeData}
-          rootId={0}
-          render={(node, { onToggle }) => (
-            <DraggableNode
-              node={node}
-              onToggle={onToggle}
-              onDataUpdate={handleNodeClick}
-              onLensClick={handleLensClick}
-              clickedNodeIds={clickedNodeIds}
-              isClicked={clickedNodeIds.includes(node.id)}
-            />
-          )}
-          dragPreviewRender={(monitorProps) => (
-            <div>{monitorProps.item.node.text}</div>
-          )}
-          onDrop={handleDrop}
-        />
-         <div className="saved-questions">{renderQuestions()}</div>
-      </div>
+      {!isSearchTermPresent && (
+        <div className="treeviewqb">
+          <Tree
+            tree={treeData}
+            rootId={0}
+            render={(node, { onToggle }) => (
+              <DraggableNode
+                node={node}
+                onToggle={onToggle}
+                onDataUpdate={handleNodeClick}
+                onLensClick={handleLensClick}
+                clickedNodeIds={clickedNodeIds}
+                isClicked={clickedNodeIds.includes(node.id)}
+              />
+            )}
+            dragPreviewRender={(monitorProps) => (
+              <div>{monitorProps.item.node.text}</div>
+            )}
+            onDrop={handleDrop}
+          />
+        </div>
       )}
-     
-     {
-      isSearchTermPresent &&(
-        <>
-      <div className="treeviewqb">
-        <Tree
-          tree={searchableTreeDataFilter}
-          rootId={0}
-          render={(node, { onToggle }) => (
-            <SimpleNode
-              onToggle={onToggle}
-              node={node}
-            />
-          )}
-        />
-      </div>
-      {/* <div>{finalQuestions.length !== 0 ? (
-        finalQuestions.map((question, index) => (
-          <div key={index}>
-            <div>{question.metadata.quizType}</div>
-          </div>
-        ))
+      {loadingQuestions ? (
+        <Loader show={true} />
       ) : (
-        "No questions found."
-      )}</div> */}
-      </>
+        isSearchTermPresent && (
+          <>
+            <div className="treeviewqb">
+              <Tree
+                tree={searchableTreeDataFilter}
+                rootId={0}
+                render={(node, { onToggle }) => (
+                  <SimpleNode
+                    onToggle={onToggle}
+                    node={node}
+                  />
+                )}
+              />
+            </div>
+          </>
+        )
       )}
     </>
   );

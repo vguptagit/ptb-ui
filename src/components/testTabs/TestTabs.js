@@ -15,7 +15,7 @@ import {
   saveMyTest,
 } from "../../services/testcreate.service";
 import Toastify from "../common/Toastify";
-import Modalpopup from "./Modalpopup";
+import Modalpopup from "./Saveasmodalpopup";
 import PrintTestModalpopup from "./PrintTest/PrintTestModalpopup";
 import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
