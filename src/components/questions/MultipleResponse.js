@@ -3,6 +3,8 @@ import { Collapse, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import DOMPurify from "dompurify";
 import { FormattedMessage } from 'react-intl';
+import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+import QtiService from "../../utils/qtiService";
 
 const MultipleResponse = (props) => {
     const [open, setOpen] = useState(false);
@@ -54,6 +56,15 @@ const MultipleResponse = (props) => {
             questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;
             questionNode.qtiModel.Orientation = formData.Orientation;
             questionNode.qtiModel.EditOption = false;
+            let jsonToXML = QtiService.getQtiXML(questionNode);
+            questionNode.data = jsonToXML;
+            const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
+
+            props.setSavedQuestions([
+                ...props.savedQuestions,
+                    { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
+                ]);
+            console.log(props.savedQuestions);
         }
         props.onQuestionStateChange(false);
     };
