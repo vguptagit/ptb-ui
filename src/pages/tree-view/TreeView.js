@@ -266,6 +266,24 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
             };
           });
           
+          const questionNodes = questionsWithQtiModels.map((question, index) => ({
+            id: `${node.bookGuid}-${node.nodeGuid}-question-${index}`,
+            parent: node.id,
+            droppable: false,
+            questionGuid: question.guid,
+            text: <DraggableQuestion
+                    key={question.guid}
+                    question={question}
+                    index={index}
+                  />,
+            type: "question",
+          }));
+  
+          nodeList.push(...questionNodes);
+  
+        
+          setTreeData([...treeData, ...nodeList]);
+
           setFinalquestions(questionsWithQtiModels);
 
         } else {
@@ -328,19 +346,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
     console.log("Dropped Node in TreeView:-->", droppedNode);
   }, [droppedNode]);
    
-  const renderQuestions = () => {
-    if (!finalQuestions) {
-      return null;
-    }
-    return finalQuestions.map((question, index) => (
-      <DraggableQuestion
-        key={question.guid}
-        question={question}
-        index={index}
-      />
-    ));
-  };
-
   const DraggableQuestion = ({ question, index }) => {
   
     const key = question.guid;
@@ -441,7 +446,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm  }) {
           )}
           onDrop={handleDrop}
         />
-         <div className="saved-questions">{renderQuestions()}</div>
       </div>
       )}
      
