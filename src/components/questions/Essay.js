@@ -3,6 +3,8 @@ import { Collapse, Form } from "react-bootstrap";
 import { useState } from "react";
 import DOMPurify from 'dompurify'
 import { FormattedMessage } from 'react-intl';
+import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+import QtiService from "../../utils/qtiService";
 
 const Essay = (props) => {
   const [open, setOpen] = useState(false);
@@ -27,6 +29,15 @@ const Essay = (props) => {
       questionNode.qtiModel.RecommendedAnswer = formData.answer;
       questionNode.qtiModel.EssayPageSize = formData.essayQuestionSize;
       questionNode.qtiModel.EditOption = false;
+      let jsonToXML = QtiService.getQtiXML(questionNode);
+      questionNode.data = jsonToXML;
+      const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
+
+      props.setSavedQuestions([
+          ...props.savedQuestions,
+              { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
+          ]);
+      console.log(props.savedQuestions);
     }
     props.onQuestionStateChange(false);
   };

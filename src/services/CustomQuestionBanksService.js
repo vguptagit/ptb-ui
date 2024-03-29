@@ -40,24 +40,39 @@ CustomQuestionBanksService.questionTemplates = function (qtiFormat) {
     ]
 
     QTI.initialize();
-
+  if (qtiFormat) {
+    var displayNode = $("<div></div>");
+    QTI.Attribute.id = 1;
+    QTI.BLOCKQUOTE.id = 0;
+    QTI.id = 1;
+    QTI.play(qtiFormat.data, displayNode, true, true, qtiFormat.quizType);
+    var node = {};
+    node.qstnTemplate = true;
+    node.optionsView = true;
+    node.quizType = qtiFormat.quizType;
+    node.data = qtiFormat.data;
+    node.textHTML = displayNode.html();
+    node.template = "questions_renderer.html";
+    qtiXmlNode.push(node);
+  } else {
     $.each(nodes, function (index, item) {
-        var displayNode = $("<div></div>");
-        QTI.Attribute.id = 1;
-        QTI.BLOCKQUOTE.id = 0;
-        QTI.id = 1;
-        QTI.play(item.qstnTemplate, displayNode, true, true, item.quizType);
-        var node = {};
-        node.qstnTemplate = true;
-        node.optionsView = true;
-        node.quizType = item.quizType;
-        node.data = item.qstnTemplate;
-        node.textHTML = displayNode.html();
-        node.template = 'questions_renderer.html';
-        qtiXmlNode.push(node);
-    })
+      var displayNode = $("<div></div>");
+      QTI.Attribute.id = 1;
+      QTI.BLOCKQUOTE.id = 0;
+      QTI.id = 1;
+      QTI.play(item.qstnTemplate, displayNode, true, true, item.quizType);
+      var node = {};
+      node.qstnTemplate = true;
+      node.optionsView = true;
+      node.quizType = item.quizType;
+      node.data = item.qstnTemplate;
+      node.textHTML = displayNode.html();
+      node.template = "questions_renderer.html";
+      qtiXmlNode.push(node);
+    });
+  }
 
-    return qtiXmlNode;
+  return qtiXmlNode;
 
 };
 

@@ -265,6 +265,27 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               qtiModel,
             };
           });
+          
+          const questionNodes = questionsWithQtiModels.map((question, index) => ({
+            id: `${node.bookGuid}-${node.nodeGuid}-question-${index}`,
+            parent: node.id,
+            droppable: false,
+            questionGuid: question.guid,
+            text: <DraggableQuestion
+                    key={question.guid}
+                    question={question}
+                    index={index}
+                  />,
+            type: "question",
+          }));
+  
+          nodeList.push(...questionNodes);
+  
+        
+          setTreeData([...treeData, ...nodeList]);
+
+          setFinalquestions(questionsWithQtiModels);
+
 
           const questionNodes = questionsWithQtiModels.map((question, index) => ({
             id: `${node.bookGuid}-${node.nodeGuid}-question-${index}`,
@@ -318,6 +339,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   useEffect(() => {
     console.log("Dropped Node in TreeView:-->", droppedNode);
   }, [droppedNode]);
+   
 
   const DraggableQuestion = ({ question, index }) => {
     const [, drag] = useDrag({
@@ -402,6 +424,28 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
 
   return (
     <>
+    {
+      !isSearchTermPresent &&(
+      <div className="treeviewqb">
+        <Tree
+          tree={treeData}
+          rootId={0}
+          render={(node, { onToggle }) => (
+            <DraggableNode
+              node={node}
+              onToggle={onToggle}
+              onDataUpdate={handleNodeClick}
+              onLensClick={handleLensClick}
+              clickedNodeIds={clickedNodeIds}
+              isClicked={clickedNodeIds.includes(node.id)}
+            />
+          )}
+          dragPreviewRender={(monitorProps) => (
+            <div>{monitorProps.item.node.text}</div>
+          )}
+          onDrop={handleDrop}
+        />
+      </div>
       {!isSearchTermPresent && (
         <div className="treeviewqb">
           <Tree

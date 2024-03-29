@@ -33,17 +33,17 @@ export const saveMyTest = (test, folderId) => {
 };
 
 export const getPrintsettings = async () => {
-    try {
-        const response = await httpInterceptor.get(`${url}/settings/printsettings`);
-        console.log("API Response:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("API Error:", error);
-        throw {
-            type: "error",
-            message: error
-        };
-    }
+  try {
+    const response = await httpInterceptor.get(`${url}/settings/printsettings`);
+    console.log("API Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw {
+      type: "error",
+      message: error,
+    };
+  }
 };
 
 export const savePrintsettings = (data) => {
@@ -91,12 +91,26 @@ export const getRootTests = () => {
 export const getTestQuestions = (testId) => {
   console.log(testId);
   console.log(window.mock);
-  if(window.mock) {
+  if (window.mock) {
     console.log(questions);
     return questions;
   }
   return httpInterceptor
     .get(`${url}/test/${testId}/questions`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
+export const getPublisherTestsByBookId = (bookId) => {
+  return httpInterceptor
+    .get(`${url}/books/${bookId}/tests`)
     .then((response) => {
       return response?.data;
     })

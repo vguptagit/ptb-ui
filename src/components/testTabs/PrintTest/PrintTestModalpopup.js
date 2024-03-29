@@ -15,12 +15,12 @@ import Toastify from "../../common/Toastify";
 import ReactToPrint from "react-to-print";
 import { FormattedMessage } from "react-intl";
 
-function PrintTestModalpopup({ show, handleCloseModal }) {
+function PrintTestModalpopup({ show, handleCloseModal, savedQuestions, setSavedQuestions }) {
   const printableContentRef = useRef();
   const [count, setCount] = useState(1);
   const [isChecked, setIsChecked] = useState("none");
   const { selectedTest } = useAppContext();
-  const [savedQuestions, setSavedQuestions] = useState(null);
+  const [addStudentName, setAddStudentName] = useState(false);
 
   useEffect(() => {
     if (selectedTest?.questions) {
@@ -49,7 +49,6 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
         spaceLine: updatedQuestions[count - 1].spaceLine + 1,
       };
       setSavedQuestions(updatedQuestions);
-      Toastify({ message: "1 line added", type: "Info" });
     }
   };
 
@@ -65,67 +64,29 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
   };
 
   const handleRemoveBlankPage = () => {
-    if (count >= 1 && count <= savedQuestions.length) {
-      const updatedQuestions = [...savedQuestions];
-      updatedQuestions[count - 1] = {
-        ...updatedQuestions[count - 1],
-        spaceLine: 0,
-      };
-      setSavedQuestions(updatedQuestions);
-    }
+    const updatedQuestions = savedQuestions.map(question => ({
+      ...question,
+      spaceLine: 0
+    }));
+  
+    setSavedQuestions(updatedQuestions);
   };
 
   const handleBlankLastPage = (e) => {
+    var updatedQuestions = savedQuestions.map(question => ({
+      ...question,
+      spaceLine: 0
+    }));
+    savedQuestions = [...updatedQuestions];
     const isChecked = e.target.checked;
-    const updatedQuestions = [...savedQuestions];
+    updatedQuestions = [...savedQuestions];
     updatedQuestions[savedQuestions.length - 1] = {
       ...updatedQuestions[savedQuestions.length - 1],
       spaceLine: isChecked ? 34 : 0,
     };
     setSavedQuestions(updatedQuestions);
-    Toastify({
-      message: isChecked ? "blank page added" : "blank page removed",
-      type: isChecked ? "Info" : "error",
-    });
   };
 
-  const renderQuestions = (questionNode, index) => {
-    const key = questionNode.itemId;
-    switch (questionNode.quizType) {
-      case CustomQuestionBanksService.MultipleChoice:
-        return (
-          <MultipleChoice
-            questionNode={questionNode}
-            questionNodeIndex={index}
-            isPrint={true}
-          />
-        );
-      case CustomQuestionBanksService.MultipleResponse:
-        return (
-          <MultipleResponse
-            questionNode={questionNode}
-            questionNodeIndex={index}
-            isPrint={true}
-          />
-        );
-      case CustomQuestionBanksService.TrueFalse:
-        return (
-          <TrueFalse questionNode={questionNode} questionNodeIndex={index} isPrint={true}/>
-        );
-      case CustomQuestionBanksService.Matching:
-        return (
-          <Matching questionNode={questionNode} questionNodeIndex={index} isPrint={true} />
-        );
-      case CustomQuestionBanksService.FillInBlanks:
-        return (
-          <FillInBlanks questionNode={questionNode} questionNodeIndex={index} isPrint={true} />
-        );
-      case CustomQuestionBanksService.Essay:
-        return <Essay questionNode={questionNode} questionNodeIndex={index} isPrint={true}/>;
-      default:
-        return null;
-    }
-  };
 
   return (
     <Modal
@@ -152,12 +113,14 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                   </Col>
                   <Col md={8}>
                     <div>
-                      <input
-                        checked={isChecked == "none" && true}
-                        onClick={(e) => setIsChecked(e.target.name)}
-                        name="none"
-                        type="radio"
-                      />
+                    <input
+                      checked={isChecked == "none" && true}
+                      onClick={(e) => {setIsChecked(e.target.name);
+                          handleRemoveBlankPage(e)
+                          }}
+                      name="none"
+                      type="radio"
+                    />
                       <span className="ms-1 mt-2">None</span>
                     </div>
                     <div>
@@ -194,23 +157,27 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                       )}
                     </div>
                     <div>
-                      <input
-                        checked={isChecked == "leftSide" && true}
-                        onClick={(e) => setIsChecked(e.target.name)}
-                        //onClick={(e) => handleLeftSidePage(e)}
-                        name="leftSide"
-                        type="radio"
-                      />
+                    <input
+                      checked={isChecked == "leftSide" && true}
+                      onClick={(e) => {setIsChecked(e.target.name);
+                          handleRemoveBlankPage()
+                          }}
+                      //onClick={(e) => handleLeftSidePage(e)}
+                      name="leftSide"
+                      type="radio"
+                    />
                       <span className="ms-1 mt-2">Left side of the page</span>
                     </div>
                     <div>
-                      <input
-                        checked={isChecked == "blankPage" && true}
-                        onClick={(e) => setIsChecked(e.target.name)}
-                        //onClick={(e) => handleBlankLastPage(e)}
-                        name="blankPage"
-                        type="radio"
-                      />
+                    <input
+                      checked={isChecked == "blankPage" && true}
+                      onClick={(e) => {
+                          setIsChecked(e.target.name);
+                          handleBlankLastPage(e);
+                      }}
+                      name="blankPage"
+                      type="radio"
+                    />
                       <span className="ms-1 mt-2">Blank last page</span>
                     </div>
                   </Col>
@@ -222,7 +189,7 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                   <Col md={8}>
                     <input
                       type="checkbox"
-                      // onClick={(e) => setAddStudentName(e.target.checked)}
+                      onClick={(e) => setAddStudentName(e.target.checked)}
                     />
                     <span className="ms-1 mt-2">
                       Add student name label and space
@@ -257,13 +224,15 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body className="questions-list">
-                <div className="test-containers">
+              <div className="test-containers" id="print-test">
                   {savedQuestions && (
                     <div className="print-tree-view-container">
                       <PrintTestTreeView
-                        data={savedQuestions}
+                        savedQuestions={savedQuestions}
                         ref={printableContentRef}
-                        renderQuestions={renderQuestions}
+                        addStudentName={addStudentName}
+                        isChecked={isChecked}
+                        setIsChecked={setIsChecked}
                       />
                     </div>
                   )}

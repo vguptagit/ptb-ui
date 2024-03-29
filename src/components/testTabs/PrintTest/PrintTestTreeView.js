@@ -1,41 +1,31 @@
 import React, { useState, useEffect }  from 'react'
 import { Tree } from "@minoru/react-dnd-treeview";
-import '../../TreeViewTestCreate.css';
+import './PrintTestTreeView.css';
 
 const PrintTestTreeView = React.forwardRef(
-  ({ data, renderQuestions }, ref) => {
-    const [treeData, setTreeData] = useState([]);
-
-    useEffect(() => {
-      setTreeData(renderTreeNodes(data));
-    }, [data, renderQuestions]);
-  
-    const renderTreeNodes = (nodes) => {
-      return nodes.map((node, index) => ({
-        id: node.itemId || "",
-        content: renderQuestions(node, index),
-        children:
-          node.children && node.children.length > 0
-            ? renderTreeNodes(node.children)
-            : undefined,
-      }));
-    };
-
+  ({ savedQuestions, addStudentName, isChecked, setIsChecked }, ref) => {
     return (
       <div className={`p-3`} ref={ref} id="element">
-        <div className='question-numbers'>No of Questions: {treeData?.length}
-          {treeData && (
-            <Tree className="print-test-treeview"
-              tree={treeData}
-              render={(node) => <div>{node.content}</div>}
-            />
-          )}
-        </div>
-        {treeData.map((item, index) => {
+        {addStudentName && (
+          <div className="">
+            <span>Student Name :</span>
+          </div>
+        )}
+        {savedQuestions.map((item, index) => {
           return (
-            <div key={index} className={`saved-content fs-6`}>
+            <div key={index} className={`saved-content fs-6 ${isChecked === "leftSide" ? 'left-side-margin' : ''}`}>
+              <div className="d-flex">
+                <span className="question-number mt-4">{index + 1})</span>
+                <div style={{ width: "100%" }}>
+                  <div
+                    className="printViewContainer mt-4"
+                    dangerouslySetInnerHTML={{ __html: item.textHTML }}
+                    id="print-popup-container"
+                  />
+                </div>
+              </div>
               {Array.from({ length: item.spaceLine }, (_, spaceIndex) => (
-                <div key={spaceIndex} className="w-100 p-3 bg-light mx-2"></div>
+                <div key={spaceIndex} className="w-100 p-3 mx-2"></div>
               ))}
             </div>
           );
@@ -44,46 +34,5 @@ const PrintTestTreeView = React.forwardRef(
     );
   }
 );
-
-// function PrintTestTreeView({ data, renderQuestions }, ref) {
-//     const [treeData, setTreeData] = useState([]);
-  
-//     useEffect(() => {
-//       setTreeData(renderTreeNodes(data));
-//     }, [data, renderQuestions]);
-  
-//     const renderTreeNodes = (nodes) => {
-//       return nodes.map((node, index) => ({
-//         id: node.itemId || "",
-//         content: renderQuestions(node, index),
-//         children:
-//           node.children && node.children.length > 0
-//             ? renderTreeNodes(node.children)
-//             : undefined,
-//       }));
-//     };
-  
-//     return (
-//       <div className="tree-container" ref={ref}>
-//         <div>
-//           {treeData && (
-//             <Tree
-//               tree={treeData}
-//               render={(node) => <div>{node.content}</div>}
-//             />
-//           )}
-//         </div>
-//         {treeData.map((item, index) => {
-//           return (
-//             <div key={index} className={`saved-content fs-6`}>
-//               {Array.from({ length: item.spaceLine }, (_, spaceIndex) => (
-//                 <div key={spaceIndex} className="w-100 p-3 bg-light mx-2"></div>
-//               ))}
-//             </div>
-//           );
-//         })}
-//       </div>
-//     );
-//   };
 
 export default PrintTestTreeView;

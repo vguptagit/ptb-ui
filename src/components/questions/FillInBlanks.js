@@ -7,6 +7,8 @@ import DOMPurify from 'dompurify';
 import jquery from 'jquery';
 import ContentEditable from 'react-contenteditable'
 import { FormattedMessage } from 'react-intl';
+import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
+import QtiService from "../../utils/qtiService";
 
 const FillInBlanks = (props) => {
     const [open, setOpen] = useState(false);
@@ -176,6 +178,15 @@ const FillInBlanks = (props) => {
             questionNode.qtiModel.CorrectAnswerHtml = fullAnswerHtml;
             questionNode.qtiModel.EditOption = false;
             questionNode.qtiModel.BlankSize = formData.FIBBlankSpace;
+            let jsonToXML = QtiService.getQtiXML(questionNode);
+            questionNode.data = jsonToXML;
+            const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
+
+            props.setSavedQuestions([
+                ...props.savedQuestions,
+                    { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
+                ]);
+            console.log(props.savedQuestions);
         }
         props.onQuestionStateChange(false);
     };
