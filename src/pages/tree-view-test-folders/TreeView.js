@@ -55,24 +55,26 @@ function TreeView({
     if (isOpen) {
       const fetchUserBooks = async () => {
         try {
-          const books = await getUserBooks();
-          console.log("Books:", books);
-          if (books && books.length > 0) {
-            const selectedBookId = books[0];
-            console.log("Selected Book ID:", selectedBookId);
-            setSelectedBookId(selectedBookId);
+          const bookIds = await getUserBooks();
+          console.log("Book IDs:", bookIds);
+          if (bookIds && bookIds.length > 0) {
+            const allBookIds = [];
+            bookIds.forEach((bookId) => {
+              console.log("Selected Book ID:", bookId);
+              allBookIds.push(bookId);
+            });
+            setSelectedBookId(allBookIds);
           } else {
-            console.error("No valid books found in the response.");
+            console.error("No valid book IDs found in the response.");
           }
         } catch (error) {
           console.error("Error fetching user books:", error);
         }
       };
-  
+
       fetchUserBooks();
     }
   }, [isOpen]);
-  
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -286,8 +288,37 @@ function TreeView({
 
   const handleGetPublisherTests = async () => {
     try {
-      const tests = await getPublisherTestsByBookId(selectedBookId);
-      setPublisherTests(tests);
+      if (!selectedBookId) {
+        console.error("No book IDs selected.");
+        return;
+      }
+
+      const validBookIds = Array.isArray(selectedBookId)
+        ? selectedBookId.filter(
+            (id) => typeof id === "string" && id.trim().length > 0
+          )
+        : typeof selectedBookId === "string" && selectedBookId.trim().length > 0
+        ? [selectedBookId]
+        : [];
+
+      if (validBookIds.length === 0) {
+        console.error("No valid book IDs selected.");
+        return;
+      }
+
+      const testsPromises = validBookIds.map(async (bookId) => {
+        try {
+          const tests = await getPublisherTestsByBookId(bookId);
+          return tests;
+        } catch (error) {
+          console.error(`Error fetching tests for book ID ${bookId}:`, error);
+          return [];
+        }
+      });
+
+      const testsArrays = await Promise.all(testsPromises);
+      const allTests = testsArrays.flat();
+      setPublisherTests(allTests);
     } catch (error) {
       console.error("Error fetching publisher tests:", error);
     }
@@ -311,12 +342,24 @@ function TreeView({
         ) : (
           <i className="fa fa-caret-right"></i>
         )}
-        <span style={{ marginLeft: "9px" }}><FormattedMessage id="Publisher Tests" /></span>
+        <span style={{ marginLeft: "9px" }}>
+          <FormattedMessage id="Publisher Tests" />
+        </span>
       </button>
-      {isOpen && (
+      {isOpen && publisherTests.length > 0 && (
         <div className="test-dropdown">
-          {publisherTests.map((test) => (
-            <div key={test.guid}>{test.title}</div>
+          {publisherTests.map((test, index) => (
+            <div
+              key={test.guid}
+              style={{
+                borderBottom:
+                  index !== publisherTests.length - 1
+                    ? "1px solid white"
+                    : "none",
+              }}
+            >
+              {test.title}
+            </div>
           ))}
         </div>
       )}
