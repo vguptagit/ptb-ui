@@ -31,6 +31,7 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
+  const [setTests] = useState([{ title: '' }]);
 
 
 
@@ -66,6 +67,20 @@ const TestTabs = () => {
     // Update the selectedTestTitle when the selectedTest changes
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
   }, [selectedTest]);
+
+  const handleTitleChange = (e, index) => {
+    const updatedTests = [...tests];
+    const newTitle = e.target.value.trim(); // Trim whitespace from the input
+    updatedTests[index].title = newTitle;
+    if (newTitle === '') {
+      // If the new title is empty, set background color to red
+      e.target.style.backgroundColor = 'red';
+    } else {
+      // If the new title is not empty, set background color to transparent
+      e.target.style.backgroundColor = 'transparent';
+    }
+    setTests(updatedTests);
+  };
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
@@ -113,17 +128,17 @@ const TestTabs = () => {
     dispatchEvent("SELECT_TEST", newTest);
   };
 
-  const handleEditTestTab = (editTest) => {
+  const handleEditTestTab = (testName) => {
     // Check if the test already exists
-    const existingTest = tests.find((test) => test.id === editTest ?.id);
+    const existingTest = tests.find((test) => test.title === testName);
     if (existingTest) {
       // If the test exists, select it
       dispatchEvent("SELECT_TEST", existingTest);
     } else {
       // If the test does not exist, create a new one
       const newTest = new Test();
-      newTest.title = editTest ?.text;
-      newTest.id = editTest ?.id;
+      newTest.title = testName;
+      // newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -185,15 +200,13 @@ const TestTabs = () => {
       }
 
       const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
-
       test.folderGuid = folderGuid;
 
       let questionBindings = await saveQuestions(test);
-      if (questionBindings && questionBindings.length != 0) {
+      if(questionBindings && questionBindings.length != 0) {
         saveTest(test, questionBindings);
-      }
+      }    
     }
-
   };
   const saveTest = async (test, questionBindings) => {
     // Building the json to create the test.
@@ -228,7 +241,7 @@ const TestTabs = () => {
       if (testResult) {
         test.questions.forEach((qstn, index) => {
           qstn.masterData = JSON.parse(JSON.stringify(qstn.qtiModel));
-        });
+        }); 
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -278,7 +291,7 @@ const TestTabs = () => {
           type: "error",
         });
       } else {
-        Toastify({ message: "Failed to save Questions", type: "error" });
+        Toastify({ message: "Failed to save Test", type: "error" });
       }
     }
     return questionBindings;
@@ -286,7 +299,10 @@ const TestTabs = () => {
 
   const buildQuestionEnvelop = (qstn, userSettings) => {
     qstn.data = QtiService.getQtiXML(qstn);
-    qstn.IsEdited = true; // TODO: Update this based on required functionality
+    qstn.IsEdited = false; 
+    if(!deepEqual(qstn.masterData,qstn.qtiModel)) {
+      qstn.IsEdited = true;
+    }
     var qstnExtMetadata = buildQuestionMetadata(qstn, userSettings);
     var QuestionEnvelop = {
       metadata: {
@@ -319,7 +335,7 @@ const TestTabs = () => {
       const folderTests = await getFolderTests(test.folderGuid);
       return folderTests.some(
         (folderTest) =>
-          folderTest.title === test.title && folderTest.id !== test.id
+          folderTest.title === test.title && folderTest.guid !== test.testId
       );
     } catch (error) {
       console.error("Error fetching folder tests:", error);
@@ -337,15 +353,13 @@ const TestTabs = () => {
     e.stopPropagation();
   };
 
-  const handleClosePrintModal = (event) => {
-    setShowPrintModal(!showPrintModal);
-
-    event.preventDefault();
-    event.stopPropagation();
-  };
+  // const handleClosePrintModal = (event) => {
+  //   setShowPrintModal(!showPrintModal);
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // };
 
   const handleSaveAs = () => {
-    console.log("handleSaveAs 1", showModal);
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
         message:
@@ -382,11 +396,9 @@ const TestTabs = () => {
       return;
     }
     setShowPrintModal(true);
-    console.log("handlePrint", showPrintModal);
   };
 
   const areQuestionsAvailable = (test) => {
-    console.log("enable dropdown");
     return (
       test &&
       test.questions.length > 0 &&
@@ -434,17 +446,16 @@ const TestTabs = () => {
 
             <Button
               id="dropdown-item-button"
-              title="Print"
               className="btn-test mb-1 mb-sm-0 mr-sm-1 mr-1"
-              onClick={(e) => handlePrint(e)}
+              onClick={handlePrint}
             >
-              <PrintTestModalpopup
-                width="80%"
-                show={showPrintModal}
-                handleClosePrintModal={handleClosePrintModal}
-              />
               <FormattedMessage id="testtabs.print" />
             </Button>
+            <PrintTestModalpopup
+              width="80%"
+              show={showPrintModal}
+              handleCloseModal={() => setShowPrintModal(false)}
+            />
 
             <Button
               className="btn-test mt-1 mt-sm-0"
@@ -456,8 +467,6 @@ const TestTabs = () => {
               width="80%"
               show={showModalExport}
               handleCloseModal={() => setShowModalExport(false)}
-              backdrop="static"
-              keyboard={false}
             />
           </div>
         </div>
@@ -492,7 +501,7 @@ const TestTabs = () => {
                 >
                   <div className="tab-label">
                     <div className="test-title floatLeft" title={test.title}>
-                      {test.title}
+                      {test.title.trim() !== "" ? test.title : "Untitled"}
                     </div>
                     {/* Always render the close button */}
                     {tests.length > 1 && (

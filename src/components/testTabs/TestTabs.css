@@ -30,10 +30,10 @@
   }
   
   button.close-tab.btn.btn-link {
-    margin-top: -20px;
+    margin-top: -13px;
     color: black;
     padding: 0px 9px 0px 9px;
-    margin-right: -13px;
+    margin-right: -14px;
   }
   
   #dropdown-ellipsis.dropdown-toggle::after {
@@ -50,10 +50,10 @@
   }
   
   #tab-label-dropdown #close-tab-dropdown {
-    margin-top: -8px;
-    margin-left: -1px;
-    margin-right: -132px;
-}
+    margin-top: -10px;
+    margin-left: 42px;
+    margin-right: -11px;
+  }
   
   #test-tabs-navlink {
     padding-right: 17px;
@@ -64,7 +64,6 @@
     display: flex;
     justify-content: space-between;
     width: 83px;
-    align-items: center;
   }
   
   #close-tab-dropdown {
@@ -78,6 +77,12 @@
     min-width: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  .close-tab-wrapper {
+    position: absolute; /* Position the close button absolutely */
+    top: 0; /* Adjust as needed to position vertically */
+    right: -10px; /* Adjust as needed to position horizontally */
   }
 
   .floatRight{
@@ -102,4 +107,3 @@ a.active.custom-add-new-test.nav-link  {
 .tab-label .test-title {
   text-align: left;
 }
-
