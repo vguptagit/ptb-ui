@@ -135,3 +135,11 @@ i.bi.bi-info-circle-fill.me-1 {
 .printPreviewArea{
   text-align: 20px;
 }
+
+.question-number{
+  position: relative;
+}
+
+#print-test{
+  overflow-x: hidden;
+}
