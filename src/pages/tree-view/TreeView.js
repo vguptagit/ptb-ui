@@ -248,12 +248,13 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const getBookNodeSubNodes = (node) => {
     let nodeList = [];
 
-
+    setLoadingQuestions(true);
     getAllQuestions(node.bookGuid, node.nodeGuid).then(
       (questions) => {
         console.log("questions:", questions);
 
         if (Array.isArray(questions)) {
+          setLoadingQuestions(false); 
           const questionsWithQtiModels = questions.map((question) => {
             const {
               qtixml,
@@ -284,11 +285,12 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
 
 
           setTreeData([...treeData, ...nodeList]);
-          setLoadingQuestions(false);
+    
 
           setFinalquestions(questionsWithQtiModels);
 
         } else {
+          setLoadingQuestions(false); 
           console.error("Expected an array of questions but received:", questions);
         }
       },
