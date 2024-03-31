@@ -81,8 +81,20 @@
         margin-top: 7px;
     }
 
-
-    .settings-modal{
-        max-height: 430px;
-    min-height: 430px;
-    }
+    .settings-modal {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      
+      /* Ensure backdrop covers entire screen */
+      .modal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+      }

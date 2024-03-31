@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { getUserProfilesettings, userProfilesettings } from "../../services/profile.service";
 import { FormattedMessage } from "react-intl";
+import "./profile.css";
 import Toastify from "../../components/common/Toastify";
 import Loader from "../../components/common/loader/Loader";
 
@@ -71,20 +72,23 @@ const SettingsModal = ({ show, handleClose }) => {
         setSelectedSettings(initialSettings); 
         handleClose();
     };
-
     return (
-        <Modal show={show} onHide={handleCloseWithoutSave}
+        <div style={{ position: 'relative' }}>
+          <Modal 
+            show={show} 
+            onHide={handleCloseWithoutSave}
             backdrop="static"
             keyboard={false}
             centered
-            className="settings-modal">
-            <Modal.Header closeButton>
+            className="settings-modal"
+          >
+           <Modal.Header closeButton>
                 <Modal.Title>
                     Metadata
                 </Modal.Title>
             </Modal.Header>
 
-            <Modal.Body>
+            <Modal.Body >
                 {loading ? ( 
                     <Loader />
                 ) : (
@@ -117,8 +121,9 @@ const SettingsModal = ({ show, handleClose }) => {
                     Save
                 </Button>
             </Modal.Footer>
-        </Modal>
-    );
+          </Modal>
+        </div>
+      );
 };
 
 export default SettingsModal;
