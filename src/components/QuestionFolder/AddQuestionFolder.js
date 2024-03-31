@@ -112,7 +112,7 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [savedQuestions, setSavedQuestions] = useState(null);
+  const [savedQuestions, setSavedQuestions] = useState([]);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
   const [loading, setLoading] = useState(true);
 
