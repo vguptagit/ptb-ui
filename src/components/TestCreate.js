@@ -83,7 +83,9 @@ const TestCreate = () => {
       } else if (item.type === "TREE_NODE") {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.question) {
-        selectedTest.questions.push(item.question);
+        let question = item.question;
+        question.data = question.qtixml;
+        selectedTest.questions.push(question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
@@ -129,6 +131,7 @@ const TestCreate = () => {
           return (
             <MultipleChoice
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -142,6 +145,7 @@ const TestCreate = () => {
           return (
             <MultipleResponse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -155,6 +159,7 @@ const TestCreate = () => {
           return (
             <TrueFalse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -168,6 +173,7 @@ const TestCreate = () => {
           return (
             <Matching
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -181,6 +187,7 @@ const TestCreate = () => {
           return (
             <FillInBlanks
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -194,6 +201,7 @@ const TestCreate = () => {
           return (
             <Essay
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}

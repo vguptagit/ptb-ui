@@ -16,10 +16,16 @@ const Essay = (props) => {
     essayQuestionSize: questionNode.qtiModel ? questionNode.qtiModel.EssayPageSize : "",
   };
   const [formData, setFormData] = useState(initFormData);
+  const [emptyQuestion, setEmptyQuestion] = useState(() => {
+    return (formData.question == "" || formData.answer == "");
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setEmptyQuestion(() => {
+      return (value == "");
+    })
   };
 
   const handleSubmit = (e) => {
@@ -69,27 +75,9 @@ const Essay = (props) => {
     __html: DOMPurify.sanitize(data)
   })
 
-  return (
-    <div id={questionNode.itemId}>
-      {!questionNode.qtiModel.EditOption ? (
-        <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
-          <div className="flex-grow-1 d-flex ml-7 d-flex">
-            <div className="mr-2">{questionNodeIndex + 1})</div>
-            <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
-          </div>
-          {!props.isPrint ? (
-              <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
-              <button className="editbtn" onClick={handleEdit}>
-                  <i className="bi bi-pencil-fill"></i>
-              </button>
-              <button className="deletebtn" onClick={handleDelete}>
-                  <i className="bi bi-trash"></i>
-              </button>
-          </div>
-          ) : ('')}
-        </div>
-      ) : (
-        <div className="m-2">
+  const getEditView = () => {
+    return (
+      <div className="m-2">
           <Form onSubmit={handleSubmit} className="editmode border rounded p-3 bg-light">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className="mb-1"><b>{questionNode.qtiModel.QstnSectionTitle}</b></Form.Label>
@@ -172,15 +160,75 @@ const Essay = (props) => {
                 </div>
             </Collapse>
             <div className="mb-1 d-flex justify-content-end">
-              <Link className="savelink" onClick={handleSubmit}>
+              <Link className="savelink" className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
                   <FormattedMessage id="view" />
               </Link>
               <Link className="deletelink" onClick={handleDelete}>
-                  <FormattedMessage id="delete" />
+                  <FormattedMessage id="Remove" />
               </Link>
           </div>
           </Form>
         </div>
+    );
+  }
+
+  const getPrintOnlyView = () => {
+   return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintWithEditView = () => {
+    return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+        <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+            <button className="editbtn" onClick={handleEdit}>
+                <i className="bi bi-pencil-fill"></i>
+            </button>
+            <button className="deletebtn" onClick={handleDelete}>
+                <i className="bi bi-trash"></i>
+            </button>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintWithAnswerView = () => {
+    return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintView = (viewId) => {
+    if(viewId == 3) {
+      return getPrintWithAnswerView();
+    } else if (viewId == 2) {
+      return getPrintWithEditView();
+    } else {
+      return getPrintOnlyView();
+    }
+  }
+  
+  return (
+    <div id={questionNode.itemId}>
+      {!questionNode.qtiModel.EditOption ? (
+        getPrintView(props.printView)
+      ) : (
+        getEditView()
       )}
     </div>
   );
