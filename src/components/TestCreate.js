@@ -17,7 +17,7 @@ import "./_tables.css";
 import TreeViewTestCreate from "./TreeViewTestCreate";
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, savedQuestions, setSavedQuestions } = useAppContext();
+  const { selectedTest, dispatchEvent, setSelectedTest } = useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(
     selectedTest?.title || ""
@@ -136,8 +136,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.MultipleResponse:
@@ -150,8 +150,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.TrueFalse:
@@ -164,8 +164,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Matching:
@@ -178,8 +178,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.FillInBlanks:
@@ -192,8 +192,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Essay:
@@ -206,8 +206,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         default:

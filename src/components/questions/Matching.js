@@ -49,7 +49,7 @@ const Matching = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (questionNode) {
+        if (questionNode && props.selectedTest.questions.length > 0) {
             questionNode.qtiModel.Caption = formData.Caption;
             questionNode.qtiModel.Options = formData.Options;
             questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;
@@ -59,11 +59,33 @@ const Matching = (props) => {
             questionNode.data = jsonToXML;
             const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
 
-            props.setSavedQuestions([
-                ...props.savedQuestions,
-                    { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
-                ]);
-            console.log(props.savedQuestions);
+            let xmlToHtml = questionTemplates[0].textHTML;
+    
+            const testObj = { ...props.selectedTest }; // Create a copy of selectedTest
+    
+            // Find if any question in the array has the same itemId
+            const existingQuestionIndex = testObj.questions.findIndex(
+                (q) => q.itemId === questionNode.itemId
+            );
+    
+            if (existingQuestionIndex !== -1) {
+                // If the question already exists, update it
+                testObj.questions[existingQuestionIndex] = {
+                    ...testObj.questions[existingQuestionIndex],
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                };
+            } else {
+                // If the question doesn't exist, add it to the end of the array
+                testObj.questions.push({
+                    ...questionNode,
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                });
+            }
+    
+            // Update the selected test with the modified questions array
+            props.setSelectedTest(testObj);
         }
         props.onQuestionStateChange(false);
     };
