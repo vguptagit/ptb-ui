@@ -32,15 +32,12 @@ const TestCreate = () => {
     setTabTitle(selectedTest?.title || "");
     setInitialTabTitle(selectedTest?.title || "");
   }, [selectedTest]);
+
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
 
-    // Allow special characters, numbers, alphabets, and spaces
-    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, "");
-
-    if (newTitle.length > 255) {
-      newTitle = newTitle.slice(0, 255);
-    }
+    // Allow all special characters, numbers, alphabets, and spaces
+    newTitle = newTitle.slice(0, 255); // Limiting the length to 255 characters as per your code
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
 
     setTabTitle(newTitle);
@@ -48,15 +45,16 @@ const TestCreate = () => {
 
     // Update the title in the selectedTest object
     if (selectedTest && selectedTest.id) {
-      // Create a copy of the selectedTest object
-      const updatedSelectedTest = { ...selectedTest };
-      // Update the title property with the new title
-      updatedSelectedTest.title = newTitle;
-      // Dispatch an action to update the selectedTest object in the context
-      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
+        // Create a copy of the selectedTest object
+        const updatedSelectedTest = { ...selectedTest };
+        // Update the title property with the new title
+        updatedSelectedTest.title = newTitle;
+        // Dispatch an action to update the selectedTest object in the context
+        dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
-  };
-  console.log("updatedtitle", tabTitle);
+};
+console.log("updatedtitle", tabTitle);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -322,9 +320,7 @@ const TestCreate = () => {
                 placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className={`rounded ${
-                  !isTitleValid && tabTitle.trim() === "" ? "is-invalid" : ""
-                }`}
+                className="rounded"
                 required={true}
               />
             </Form>

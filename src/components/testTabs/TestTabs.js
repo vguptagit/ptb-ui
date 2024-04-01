@@ -68,19 +68,19 @@ const TestTabs = () => {
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
   }, [selectedTest]);
 
-  const handleTitleChange = (e, index) => {
-    const updatedTests = [...tests];
-    const newTitle = e.target.value.trim(); // Trim whitespace from the input
-    updatedTests[index].title = newTitle;
-    if (newTitle === '') {
-      // If the new title is empty, set background color to red
-      e.target.style.backgroundColor = 'red';
-    } else {
-      // If the new title is not empty, set background color to transparent
-      e.target.style.backgroundColor = 'transparent';
-    }
-    setTests(updatedTests);
-  };
+  // const handleTitleChange = (e, index) => {
+  //   const updatedTests = [...tests];
+  //   const newTitle = e.target.value.trim(); // Trim whitespace from the input
+  //   updatedTests[index].title = newTitle;
+  //   if (newTitle === '') {
+  //     // If the new title is empty, set background color to red
+  //     e.target.style.backgroundColor = 'red';
+  //   } else {
+  //     // If the new title is not empty, set background color to transparent
+  //     e.target.style.backgroundColor = 'transparent';
+  //   }
+  //   setTests(updatedTests);
+  // };
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
