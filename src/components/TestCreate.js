@@ -15,6 +15,7 @@ import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
 import "./_tables.css";
 import TreeViewTestCreate from "./TreeViewTestCreate";
+import jquery from 'jquery';
 
 const TestCreate = () => {
   const { selectedTest, dispatchEvent, setSelectedTest } = useAppContext();
@@ -82,8 +83,30 @@ console.log("updatedtitle", tabTitle);
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.question) {
         let question = copyItem.question;
-        question.data = question.qtixml;
-        question.masterData = JSON.parse(JSON.stringify(question.qtiModel));
+        var qtiModel = QtiService.getQtiModel(
+          question.qtixml,
+          question.metadata.quizType
+        );
+        qtiModel.EditOption = false;
+        question.qtiModel = qtiModel;
+        question.masterData = JSON.parse(JSON.stringify(qtiModel));//
+        question.itemId = copyItem.question.guid;
+        question.quizType = question.metadata.quizType;
+        question.data = question.qtixml;//
+        console.log(question);
+        const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+        if(question.quizType == "FillInBlanks"){
+          let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
+          console.log(xmlToHtml);
+          question.textHTML = xmlToHtml;
+        }
+        else
+        {
+          let xmlToHtml = questionTemplates[0].textHTML;
+          console.log(xmlToHtml);
+          question.textHTML = xmlToHtml;
+        }
+        question.spaceLine = 0
         selectedTest.questions.push(question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
@@ -110,6 +133,22 @@ console.log("updatedtitle", tabTitle);
     console.log(question);
     return question;
   };
+
+  const getPrintModeFbCaption = (Caption) => {
+    try {
+        var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
+        htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        var element = jquery('<p></p>');
+        jquery(element).append(htmlText);
+        element.find("button").each(function (i, obj) {
+            let blankSpace = "<span class='blank'> _____________________ </span>";
+            jquery(obj).replaceWith(blankSpace);
+        });
+        return element[0].innerHTML;
+    } catch (e) {
+
+    }
+}
 
   const handleQuestionState = (edit) => {
     setRefreshChildren(!refreshChildren);
