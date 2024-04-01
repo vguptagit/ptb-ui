@@ -39,7 +39,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -50,7 +50,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -61,7 +61,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -72,7 +72,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -83,7 +83,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -94,7 +94,7 @@ const DraggableQuestion = ({ question, index }) => {
             questionNode={question}
             questionNodeIndex={index}
             qtiModel={qtiModel}
-            isPrint={true}
+            printView={3}
           />
         </div>
       );
@@ -112,7 +112,7 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [savedQuestions, setSavedQuestions] = useState(null);
+  const [savedQuestions, setSavedQuestions] = useState([]);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
   const [loading, setLoading] = useState(true);
 

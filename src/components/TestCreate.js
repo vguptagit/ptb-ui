@@ -83,7 +83,10 @@ const TestCreate = () => {
       } else if (item.type === "TREE_NODE") {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.question) {
-        selectedTest.questions.push(item.question);
+        let question = copyItem.question;
+        question.data = question.qtixml;
+        question.masterData = JSON.parse(JSON.stringify(question.qtiModel));
+        selectedTest.questions.push(question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
@@ -129,6 +132,7 @@ const TestCreate = () => {
           return (
             <MultipleChoice
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -142,6 +146,7 @@ const TestCreate = () => {
           return (
             <MultipleResponse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -155,6 +160,7 @@ const TestCreate = () => {
           return (
             <TrueFalse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -168,6 +174,7 @@ const TestCreate = () => {
           return (
             <Matching
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -181,6 +188,7 @@ const TestCreate = () => {
           return (
             <FillInBlanks
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -194,6 +202,7 @@ const TestCreate = () => {
           return (
             <Essay
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
@@ -213,10 +222,13 @@ const TestCreate = () => {
             <MultipleChoice
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         case CustomQuestionBanksService.MultipleResponse:
@@ -224,10 +236,13 @@ const TestCreate = () => {
             <MultipleResponse
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         case CustomQuestionBanksService.TrueFalse:
@@ -235,10 +250,13 @@ const TestCreate = () => {
             <TrueFalse
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         case CustomQuestionBanksService.Matching:
@@ -246,10 +264,13 @@ const TestCreate = () => {
             <Matching
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         case CustomQuestionBanksService.FillInBlanks:
@@ -257,10 +278,13 @@ const TestCreate = () => {
             <FillInBlanks
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         case CustomQuestionBanksService.Essay:
@@ -268,10 +292,13 @@ const TestCreate = () => {
             <Essay
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              savedQuestions={savedQuestions}
+              setSavedQuestions={setSavedQuestions}
             />
           );
         default:
