@@ -21,7 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest } = useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -245,6 +245,7 @@ const TestTabs = () => {
           message: "Test has been saved successfully!",
           type: "success",
         });
+        fetchUserFolders();
         setShowModal(false);
       }
     } catch (error) {

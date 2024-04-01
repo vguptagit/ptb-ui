@@ -4,21 +4,14 @@ import { Button, Form } from "react-bootstrap";
 import { saveTestFolder } from "../services/testfolder.service";
 import Toastify from "./common/Toastify";
 import TreeView from "../pages/tree-view-test-folders/TreeView";
-import { 
-  updateTestFolder,
-  getUserTestFolders
- } from "../services/testfolder.service";
- import { 
-  getFolderTests,
-  getRootTests
-} from "../services/testcreate.service";
+import { updateTestFolder } from "../services/testfolder.service";
+import { useAppContext } from "../context/AppContext";
 
 const TestFolder = ({ userId }) => {
+  const { savedFolders, setSavedFolders, rootFolderGuid, setRootFolderGuid, fetchUserFolders, } = useAppContext();
   const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [editFolderName, setEditFolderName] = useState("");
-  const [savedFolders, setSavedFolders] = useState([]);
-  const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -54,27 +47,6 @@ const TestFolder = ({ userId }) => {
   useEffect(() => {
     fetchUserFolders();
   }, []);
-  
-  const fetchUserFolders = async () => {
-    const rootFolder = await getRootTests();
-      setRootFolderGuid(rootFolder.guid);
-      console.log(rootFolderGuid);
-      
-    Promise.all([getUserTestFolders(rootFolder.guid), getFolderTests(rootFolder.guid)])
-      .then(([rootFoldersResponse, folderTestsResponse]) => {
-        const combinedData = [...rootFoldersResponse, ...folderTestsResponse];
-        setSavedFolders(combinedData);
-        localStorage.setItem("savedFolders", JSON.stringify(combinedData));
-      })
-      .catch((error) => {
-        console.error('Error getting root folders or folder tests:', error);
-        if (error?.message?.response?.request?.status === 409) {
-            Toastify({ message: error.message.response.data.message, type: 'error' });
-        } else {
-            Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
-        }
-    });
-  }
 
   const handleAddFolderClick = () => {
     setShowTextBox(true);

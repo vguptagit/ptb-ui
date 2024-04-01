@@ -4,6 +4,8 @@ import Test from "../entities/Test.Entity";
 import {getTestQuestions} from '../services/testcreate.service';
 import QtiService from "../utils/qtiService";
 import Toastify from "../components/common/Toastify";
+import { getUserTestFolders } from "../services/testfolder.service";
+import { getFolderTests, getRootTests } from "../services/testcreate.service";
 
 const AppContext = createContext({
   tests: [],
@@ -18,6 +20,8 @@ const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
   const [editTest, setEditTest] = useState(null);
+  const [savedFolders, setSavedFolders] = useState([]);
+  const [rootFolderGuid, setRootFolderGuid] = useState("");
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -87,6 +91,27 @@ const AppProvider = ({ children }) => {
     setTests(updatedTabs);
   };
 
+  const fetchUserFolders = async () => {
+    const rootFolder = await getRootTests();
+      setRootFolderGuid(rootFolder.guid);
+      console.log(rootFolderGuid);
+      
+    Promise.all([getUserTestFolders(rootFolder.guid), getFolderTests(rootFolder.guid)])
+      .then(([rootFoldersResponse, folderTestsResponse]) => {
+        const combinedData = [...rootFoldersResponse, ...folderTestsResponse];
+        setSavedFolders(combinedData);
+        localStorage.setItem("savedFolders", JSON.stringify(combinedData));
+      })
+      .catch((error) => {
+        console.error('Error getting root folders or folder tests:', error);
+        if (error?.message?.response?.request?.status === 409) {
+            Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+            Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
+        }
+    });
+  }
+
   const dispatchEvent = (actionType, payload) => {
     switch (actionType) {
       case "SELECT_TEST":
@@ -126,6 +151,7 @@ const AppProvider = ({ children }) => {
       setSelectedTest(untitled1Test);
     }
   }, []);
+  
 
   return (
     <AppContext.Provider
@@ -139,6 +165,11 @@ const AppProvider = ({ children }) => {
         dispatchEvent,
         editTest,
         handleEditTest,
+        savedFolders,
+        setSavedFolders,
+        rootFolderGuid,
+        setRootFolderGuid,
+        fetchUserFolders,
       }}
     >
       {children}

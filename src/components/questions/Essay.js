@@ -182,7 +182,7 @@ const Essay = (props) => {
                 </div>
             </Collapse>
             <div className="mb-1 d-flex justify-content-end">
-              <Link className="savelink" className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
+              <Link className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
                   <FormattedMessage id="view" />
               </Link>
               <Link className="deletelink" onClick={handleDelete}>
