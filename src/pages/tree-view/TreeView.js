@@ -18,6 +18,7 @@ import FillInBlanks from "../../components/questions/FillInBlanks";
 import Essay from "../../components/questions/Essay";
 import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
 import Loader from "../../components/common/loader/Loader";
+import { FormattedMessage } from "react-intl";
 
 
 const DraggableNode = ({ node, onToggle, onDataUpdate, onLensClick, clickedNodeIds }) => {
@@ -299,15 +300,13 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
         setLoadingQuestions(false);
         if (error.response) {
           if (error.response.status === 404) {
-            Toastify({ message: "Questions not found.", type: "error" });
+            Toastify({ message: <FormattedMessage id="questionerrormsg404"/>, type: "error" });
           } else if (error.response.status === 500) {
-            Toastify({ message: "Internal server error. Please try again later.", type: "error" });
+            Toastify({ message: <FormattedMessage id="questionerrormsg500"/>, type: "error" });
           } else {
-            Toastify({ message: "An error occurred. Please try again.", type: "error" });
+            Toastify({ message: <FormattedMessage id="errormsg"/>, type: "error" });
           }
-        } else {
-          Toastify({ message: "An error occurred. Please try again.", type: "error" });
-        }
+        } 
         console.log(error);
       }
     );
