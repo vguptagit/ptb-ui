@@ -290,11 +290,24 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
           setFinalquestions(questionsWithQtiModels);
 
         } else {
-          setLoadingQuestions(false); 
+              setLoadingQuestions(false); 
           console.error("Expected an array of questions but received:", questions);
+          Toastify({ message: "An error occurred while fetching questions. Please try again.", type: "error" });
         }
       },
       (error) => {
+        setLoadingQuestions(false);
+        if (error.response) {
+          if (error.response.status === 404) {
+            Toastify({ message: "Questions not found.", type: "error" });
+          } else if (error.response.status === 500) {
+            Toastify({ message: "Internal server error. Please try again later.", type: "error" });
+          } else {
+            Toastify({ message: "An error occurred. Please try again.", type: "error" });
+          }
+        } else {
+          Toastify({ message: "An error occurred. Please try again.", type: "error" });
+        }
         console.log(error);
       }
     );
