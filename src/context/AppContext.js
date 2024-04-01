@@ -18,7 +18,6 @@ const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
   const [editTest, setEditTest] = useState(null);
-  const [savedQuestions, setSavedQuestions] = useState(selectedTest?.questions);
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -128,29 +127,18 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedTest) {
-      if (selectedTest.questions && selectedTest.questions.length > 0) {
-        setSavedQuestions(selectedTest.questions);
-      } else {
-        setSavedQuestions([]);
-      }
-    }
-  }, [selectedTest]);
-
   return (
     <AppContext.Provider
       value={{
         tests,
         selectedTest,
+        setSelectedTest,
         selectTest,
         addTest,
         deleteTest,
         dispatchEvent,
         editTest,
         handleEditTest,
-        savedQuestions,
-        setSavedQuestions,
       }}
     >
       {children}

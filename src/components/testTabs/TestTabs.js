@@ -21,8 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, savedQuestions, setSavedQuestions } =
-    useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -455,8 +454,6 @@ const TestTabs = () => {
               width="80%"
               show={showPrintModal}
               handleCloseModal={() => setShowPrintModal(false)}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
             />
 
             <Button
