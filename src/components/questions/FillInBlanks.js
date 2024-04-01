@@ -165,7 +165,7 @@ const FillInBlanks = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (questionNode && props.selectedTest.questions.length > 0) {
+        if (questionNode) {
             questionNode.qtiModel.Caption = '<div class="__marker__">' + text.current + "</div>";
             questionNode.qtiModel.EditableCorrectAnswers = formData.EditableCorrectAnswers;
             questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;

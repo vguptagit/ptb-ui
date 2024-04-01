@@ -225,6 +225,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.MultipleResponse:
@@ -237,6 +239,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.TrueFalse:
@@ -249,6 +253,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Matching:
@@ -261,6 +267,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.FillInBlanks:
@@ -273,6 +281,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Essay:
@@ -285,6 +295,8 @@ console.log("updatedtitle", tabTitle);
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         default:

@@ -22,7 +22,7 @@ function TreeView({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
-  const { handleEditTest } = useAppContext();
+  const { handleEditTest, editTestHighlight, setEditTestHighlight, } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -192,6 +192,7 @@ function TreeView({
     console.log("node", node);
     //handleAddNewTestTab(node.id, node.text, node.parent);
     handleEditTest(node);
+    setEditTestHighlight(node.data.guid);
   };
 
   const handleDeleteFolder = (folderTitle) => {
@@ -411,26 +412,18 @@ function TreeView({
                 <i className="bi bi-pencil-fill"></i>
               </button>
             )}
-            {selectedFolder === node.text && (
-              <button
-                className="editbutton selected"
-                onClick={() => handleAnotherFunction(node)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
-            {selectedFolder !== node.text && (
-              <button
-                className="editbutton"
-                onClick={() => handleAnotherFunction(node)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
             {selectedFolder !== node.text && node.droppable && (
               <button
                 className="editbutton"
                 onClick={() => handleEditFolder(node.text)}
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </button>
+            )}
+            {!node.droppable && (
+              <button
+                className={`editbutton ${editTestHighlight === node.data.guid ? 'highlight' : ''}`}
+                onClick={() => handleAnotherFunction(node)}
               >
                 <i className="bi bi-pencil-fill"></i>
               </button>

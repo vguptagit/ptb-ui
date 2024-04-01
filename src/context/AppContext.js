@@ -22,6 +22,7 @@ const AppProvider = ({ children }) => {
   const [editTest, setEditTest] = useState(null);
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
+  const [editTestHighlight, setEditTestHighlight] = useState();
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -170,6 +171,8 @@ const AppProvider = ({ children }) => {
         rootFolderGuid,
         setRootFolderGuid,
         fetchUserFolders,
+        editTestHighlight,
+        setEditTestHighlight,
       }}
     >
       {children}
