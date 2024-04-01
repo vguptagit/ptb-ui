@@ -345,7 +345,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
@@ -356,7 +356,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
@@ -367,7 +367,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
@@ -378,7 +378,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
@@ -389,7 +389,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
@@ -400,7 +400,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              printView={1}
+              printView={3}
             />
           </div>
         );
