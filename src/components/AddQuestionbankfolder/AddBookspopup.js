@@ -267,7 +267,7 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
             <input
               type="search"
               width="100%"
-              className=" form-control search-input"
+              className=" form-control rounded search-input"
               placeholder="Search Books"
               aria-label="Search"
               aria-describedby="search-addon"

@@ -106,7 +106,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
                         <input
                             type="search"
                             width="100%"
-                            className="disciplinePopup form-control  search-input"
+                            className="disciplinePopup form-control rounded search-input"
                             placeholder="Search Discipline"
                             aria-label="Search"
                             aria-describedby="search-addon"
