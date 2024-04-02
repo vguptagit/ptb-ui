@@ -41,7 +41,7 @@
     "print.popup.cancel":"Cancel",
     "view": "View",
     "delete": "Delete",
-    "addBooks": "Add Books",
+    "no_matching_books_message": "No matching books found",
     "noDisciplinesAvailable": "No disciplines available",
     "addDiscipline": "Add Discipline",
     "noMatchingDisciplines": "No matching disciplines found",
