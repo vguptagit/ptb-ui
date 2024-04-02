@@ -84,7 +84,7 @@
     "visibleInPrintViewTrueFalse":"(visible in Print View)",
     "viewTrueFalse" : "View",
     "removeTrueFalse" : "Remove",
-    "publishertests" : "Publisher Tests",
+    "migratedtests" : "Migrated Test",
     " questionerrormsg404" : "Questions not found.",
     "questionerrormsg500":"Internal server error. Please try again later",
     "errormsg":"An error occurred. Please try again",
