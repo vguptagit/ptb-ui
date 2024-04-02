@@ -195,7 +195,11 @@ const TestTabs = () => {
       // Proceed to save
       if (!test.title.trim()) {
         // If the test title is empty or only contains whitespace, set it to a default value
-        test.title = `Untitled ${tests.length}`;
+        Toastify({
+          message: "Test name is empty. Please give test name",
+          type: "warn",
+        });
+        return;
       }
 
       const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));

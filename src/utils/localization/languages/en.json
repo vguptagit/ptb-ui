@@ -87,5 +87,16 @@
     "publishertests" : "Publisher Tests",
     " questionerrormsg404" : "Questions not found.",
     "questionerrormsg500":"Internal server error. Please try again later",
-    "errormsg":"An error occurred. Please try again"
+    "errormsg":"An error occurred. Please try again",
+    "printoption":"Print Options",
+    "studentanswerarea":"Student answer area",
+    "radionone":"None",
+    "betweenquestions":"Between Questions",
+    "enterquestionno":"Enter Question no:",
+    "addline":"Add line",
+    "removeline":"Remove line",
+    "leftsidepage":"Left side of the page",
+    "blanklastpage":"Blank last page",
+    "studentnamelabel":"Add student name label and space",
+    "exportbuttoninfo":"For more test format options, cancel print, and select the export button."
 }
