@@ -5,9 +5,10 @@ import { getRootTests } from '../../services/testcreate.service';
 import { getUserTestFolders } from '../../services/testfolder.service';
 import Toastify from '../common/Toastify';
 import Modalpopuplist from './Modalpopuplist';
+import { useAppContext } from '../../context/AppContext';
 
 function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
-  console.log("shiw",show);
+  const { dispatchEvent } = useAppContext();
   console.log("selcted title ",selectedTest?.title)
   const [editFolderName, setEditFolderName] = useState("");
   const [rootFolders, setRootFolders] = useState([]);
@@ -15,6 +16,9 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   const [doReload, setDoReload] = useState(false);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [savedFolders, setSavedFolders] = useState([]);
+
+
+
   
   useEffect(() => {
     document.title = "Your Tests";
@@ -51,9 +55,29 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       setEditFolderName(selectedTest.title || "");
     }
   }, [selectedTest]);
-  const handleEditFolderNameChange = (e) => {
-  
-    setEditFolderName(e.target.value);
+  const handleTitleChange = (event) => {
+    let newTitle = event.target.value;
+
+    // Allow special characters, numbers, alphabets, and spaces
+    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, "");
+
+    if (newTitle.length > 255) {
+      newTitle = newTitle.slice(0, 255);
+    }
+    newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
+
+    setEditFolderName(newTitle);
+ 
+
+    // Update the title in the selectedTest object
+    if (selectedTest && selectedTest.id) {
+      // Create a copy of the selectedTest object
+      const updatedSelectedTest = { ...selectedTest };
+      // Update the title property with the new title
+      updatedSelectedTest.title = newTitle;
+      // Dispatch an action to update the selectedTest object in the context
+      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
+    }
   };
 
   console.log("edited ",editFolderName)
@@ -63,11 +87,15 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       setSelectedFolderId(JSON.parse(storedSelectedFolderId));
     }
     if (editFolderName.length > 0) {
-       selectedTest.title = editFolderName;
+      // Update the title of selectedTest with editFolderName
+      const updatedTest = { ...selectedTest, title: editFolderName };
+      handleSave(e, updatedTest, storedSelectedFolderId, editFolderName);
+    } else {
+      // If editFolderName is empty, simply pass the selectedTest
+      handleSave(e, selectedTest, storedSelectedFolderId, editFolderName);
     }
-    handleSave(e, selectedTest, storedSelectedFolderId);
   };
-
+  
  
 
   return (
@@ -82,7 +110,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
                 name="title"
                 placeholder="Enter"
                 value={editFolderName} 
-                onChange={handleEditFolderNameChange} 
+                onChange={handleTitleChange} 
                 required
               />
             </Form>
