@@ -92,11 +92,15 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const [clickedNodeIds, setClickedNodeIds] = useState([]);
   const [isSearchTermPresent, setIsSearchTermPresent] = useState(false);
   const [finalQuestions, setFinalquestions] = useState([]);
+
   const [loadingQuestions, setLoadingQuestions] = useState(false);
   const handleDrop = (newTree) => {
     setTreeData(newTree);
     onDataUpdate(newTree);
   };
+
+
+
 
   useEffect(() => {
     let convertedList = disciplines.map((discipline, i) => ({
@@ -176,7 +180,11 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     );
   };
 
-
+  useEffect(() => {
+    getBooksList();
+    const interval = setInterval(getBooksList, 60000);
+    return () => clearInterval(interval); 
+  }, []);
 
   const handleLensClick = (node) => {
     setClickedNodeIds(prevClickedNodeIds => {
