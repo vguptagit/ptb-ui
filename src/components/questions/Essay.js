@@ -30,7 +30,7 @@ const Essay = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (questionNode && props.selectedTest.questions.length > 0) {
+    if (questionNode) {
       questionNode.qtiModel.Caption = formData.question;
       questionNode.qtiModel.RecommendedAnswer = formData.answer;
       questionNode.qtiModel.EssayPageSize = formData.essayQuestionSize;

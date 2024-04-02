@@ -21,7 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders } = useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -127,17 +127,16 @@ const TestTabs = () => {
     dispatchEvent("SELECT_TEST", newTest);
   };
 
-  const handleEditTestTab = (testName) => {
-    // Check if the test already exists
-    const existingTest = tests.find((test) => test.title === testName);
+  const handleEditTestTab = (editTest) => {
+    const existingTest = tests.find((test) => test.id === editTest?.id);
     if (existingTest) {
       // If the test exists, select it
       dispatchEvent("SELECT_TEST", existingTest);
     } else {
       // If the test does not exist, create a new one
       const newTest = new Test();
-      newTest.title = testName;
-      // newTest.id = editTest?.id;
+      newTest.title = editTest?.text;
+      newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -163,6 +162,7 @@ const TestTabs = () => {
     }
 
     deleteTest(testSelected);
+    setEditTestHighlight(selectedTest.id);
   };
 
   const sampleButton = () => {

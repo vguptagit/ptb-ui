@@ -36,7 +36,7 @@ const TrueFalse = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (questionNode && props.selectedTest.questions.length > 0) {
+        if (questionNode) {
             questionNode.qtiModel.Caption = formData.Caption;
             questionNode.qtiModel.Options = formData.Options;
             questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;

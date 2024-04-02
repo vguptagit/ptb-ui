@@ -6,6 +6,8 @@ import QtiService from "../utils/qtiService";
 import Toastify from "../components/common/Toastify";
 import { getUserTestFolders } from "../services/testfolder.service";
 import { getFolderTests, getRootTests } from "../services/testcreate.service";
+import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
+import jquery from 'jquery';
 
 const AppContext = createContext({
   tests: [],
@@ -22,6 +24,7 @@ const AppProvider = ({ children }) => {
   const [editTest, setEditTest] = useState(null);
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
+  const [editTestHighlight, setEditTestHighlight] = useState();
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -36,8 +39,44 @@ const AppProvider = ({ children }) => {
     question.quizType = question.metadata.quizType;
     question.data = question.qtixml;
     console.log(question);
+    const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+
+    if(question.quizType == "FillInBlanks"){
+      let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
+      console.log(xmlToHtml);
+      question.textHTML = xmlToHtml;
+    }
+    else
+    {
+      let xmlToHtml = questionTemplates[0].textHTML;
+      console.log(xmlToHtml);
+      question.textHTML = xmlToHtml;
+    }
+    question.spaceLine = 0
+    const testObj = { ...selectedTest };
+      testObj.questions.push({
+      ...question,
+      });
+      setSelectedTest(testObj);
+      console.log(testObj)
     return question;
   };
+
+  const getPrintModeFbCaption = (Caption) => {
+    try {
+        var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
+        htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        var element = jquery('<p></p>');
+        jquery(element).append(htmlText);
+        element.find("button").each(function (i, obj) {
+            let blankSpace = "<span class='blank'> _____________________ </span>";
+            jquery(obj).replaceWith(blankSpace);
+        });
+        return element[0].innerHTML;
+    } catch (e) {
+
+    }
+}
 
   const handleEditTest = (node) => {
     console.log("adding test ");
@@ -170,6 +209,8 @@ const AppProvider = ({ children }) => {
         rootFolderGuid,
         setRootFolderGuid,
         fetchUserFolders,
+        editTestHighlight,
+        setEditTestHighlight,
       }}
     >
       {children}
