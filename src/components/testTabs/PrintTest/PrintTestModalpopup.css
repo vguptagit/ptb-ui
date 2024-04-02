@@ -24,10 +24,12 @@
 
 .button-footer {
   position: absolute;
-  top: 445px;
-  padding-left: 420px !important;
+  top: 448px;
+  padding-left: 426px !important;
   border-bottom: 0px;
   left: -1px;
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
 }
 
 .print-preview .btn-close {
@@ -45,7 +47,6 @@
 
 .test-containers {
   height: 420px; /* Adjust the height as needed */
-  overflow-x: auto;
 }
 
 .question-no {
@@ -124,11 +125,14 @@ i.bi.bi-info-circle-fill.me-1 {
 .printoptions-header {
   margin-left: -19px;
   margin-right: -58px;
+  padding: 10px 7px 7px 19px !important;
 }
 .printpreview-header{
   margin-left: -21px;
   margin-right: -33px;
+  padding: 10px 9px 7px 19px !important;
 }
+
 .question-numbers{ 
   text-align: end;
 }
@@ -142,4 +146,21 @@ i.bi.bi-info-circle-fill.me-1 {
 
 #print-test{
   overflow-x: hidden;
+}
+
+.print-options-body{
+  position: relative;
+  right: 13px;
+  width: 573px;
+}
+
+.questions-list{
+  position: relative;
+  right: 30px;
+  width: 577px;
+}
+
+#info-icon{
+  position: relative;
+  right: -15px;
 }

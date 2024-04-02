@@ -102,15 +102,15 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
             <div className="print-options">
               <Modal.Header className="printoptions-header">
                 <Modal.Title>
-                  <h3>Print Options</h3>
+                  <h3><FormattedMessage id="printoption" /></h3>
                 </Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body className="print-options-body">
                 <Row>
-                  <Col md={4}>
-                    <div>Student answer area</div>
+                  <Col md={6}>
+                    <div><FormattedMessage id="studentanswerarea" /></div>
                   </Col>
-                  <Col md={8}>
+                  <Col md={6}>
                     <div>
                     <input
                       checked={isChecked == "none" && true}
@@ -120,7 +120,7 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                       name="none"
                       type="radio"
                     />
-                      <span className="ms-1 mt-2">None</span>
+                      <span className="ms-1 mt-2"><FormattedMessage id="radionone" /></span>
                     </div>
                     <div>
                       <input
@@ -129,11 +129,11 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                         name="spaceBetween"
                         type="radio"
                       />
-                      <span className="ms-1 mt-2">Between Questions</span>
+                      <span className="ms-1 mt-2"><FormattedMessage id="betweenquestions" /></span>
                       {isChecked == "spaceBetween" && (
                         <div>
                           <div className="question-no d-flex flex-wrap mb-2">
-                            Enter Question no:
+                          <FormattedMessage id="enterquestionno" />
                             <Form.Control
                               style={{ width: "80px" }}
                               className="ms-2"
@@ -146,10 +146,10 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                           </div>
                           <div className="add-remove-buttons d-flex gap-1 flex-wrap">
                             <Button size="sm" onClick={handleAddLine}>
-                              Add line
+                              <FormattedMessage id="addline" />
                             </Button>
                             <Button size="sm" onClick={handleDecreaseLine}>
-                              Remove line
+                              <FormattedMessage id="removeline" />
                             </Button>
                           </div>
                         </div>
@@ -165,7 +165,7 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                       name="leftSide"
                       type="radio"
                     />
-                      <span className="ms-1 mt-2">Left side of the page</span>
+                      <span className="ms-1 mt-2"><FormattedMessage id="leftsidepage" /></span>
                     </div>
                     <div>
                     <input
@@ -177,28 +177,27 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                       name="blankPage"
                       type="radio"
                     />
-                      <span className="ms-1 mt-2">Blank last page</span>
+                      <span className="ms-1 mt-2"><FormattedMessage id="blanklastpage" /></span>
                     </div>
                   </Col>
                 </Row>
                 <Row className="mt-3">
-                  <Col md={4}>
+                  <Col md={6}>
                     <div>Labels</div>
                   </Col>
-                  <Col md={8}>
+                  <Col md={6}>
                     <input
                       type="checkbox"
                       onClick={(e) => setAddStudentName(e.target.checked)}
                     />
                     <span className="ms-1 mt-2">
-                      Add student name label and space
+                      <FormattedMessage id="studentnamelabel" />
                     </span>
                   </Col>
                   <div className="mt-4 d-flex align-items-center">
-                    <i className="bi bi-info-circle-fill large-icon me-1"></i>
+                    <i className="bi bi-info-circle-fill large-icon me-1" id="info-icon"></i>
                     <span className="TextFormat text-muted">
-                      For more test format options, cancel print, and select
-                      the export button.
+                      <FormattedMessage id="exportbuttoninfo" />
                     </span>
                   </div>
                 </Row>

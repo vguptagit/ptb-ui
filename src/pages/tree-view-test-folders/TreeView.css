@@ -123,8 +123,7 @@
   outline: 0;
 }
 
-.modal-header,
-.modal-footer {
+.modal-header {
   padding: 0.5rem;
   border-bottom: 1px solid #e9ecef;
 }
@@ -165,6 +164,8 @@
 }
 
 #delete-modal-footer {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
   padding: 10px;
 }
 
