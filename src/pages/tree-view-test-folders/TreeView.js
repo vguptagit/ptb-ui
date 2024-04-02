@@ -334,10 +334,17 @@ function TreeView({
           <FormattedMessage id="migratedtests" />
         </span>
       </button>
-      {isOpen && (
+      {isOpen && bookTitles.length > 0 && (
         <div className="book-dropdown">
           {bookTitles.map((book, index) => (
-            <div key={book.guid}>
+            <div
+              key={book.guid}
+              style={{
+                borderBottom:
+                  index !== bookTitles.length - 1 ? "1px solid white" : "none",
+                paddingBottom: "5px",
+              }}
+            >
               <button
                 className="testbtn"
                 onClick={() => handleBookClick(book.guid)}
@@ -349,13 +356,26 @@ function TreeView({
                 )}
                 <span style={{ marginLeft: "9px" }}>{book.title}</span>
               </button>
-              {bookOpenStates[book.guid] && (
-                <div className="test-dropdown">
-                  {bookTests[book.guid]?.map((test, index) => (
-                    <div key={index}>{test.title}</div>
-                  ))}
-                </div>
-              )}
+              {bookOpenStates[book.guid] &&
+                bookTests[book.guid] &&
+                bookTests[book.guid].length > 0 && (
+                  <div className="test-dropdown">
+                    {bookTests[book.guid].map((test, index) => (
+                      <div
+                        key={index}
+                        className="test-item"
+                        style={{
+                          borderBottom:
+                            index !== bookTests[book.guid].length - 1
+                              ? "1px solid white"
+                              : "none",
+                        }}
+                      >
+                        {test.title}
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
           ))}
         </div>

@@ -186,12 +186,11 @@
 }
 
 .book-dropdown {
-  margin-top: 6px;
-  margin-bottom: -6px;
+  margin-top: 7px;
+  margin-bottom: -5px;
   background-color: #f8f8f8;
   color: #4d4d4d;
   text-align: justify;
-  padding: 5px;
   font-size: 14px;
   position: relative;
   margin-left: 22px;
@@ -199,11 +198,10 @@
 
 .test-dropdown {
   margin-top: 6px;
-  margin-bottom: -6px;
+  margin-bottom: -5px;
   background-color: #f8f8f8;
   color: #4d4d4d;
   text-align: justify;
-  padding: 5px;
   font-size: 14px;
   position: relative;
   margin-left: 22px;
@@ -212,3 +210,10 @@
 .editbutton.highlight {
   background-color: #007fa9; /* Set your desired highlight color */
 }
+
+.test-item {
+  padding: 5px;
+}
+
+
+

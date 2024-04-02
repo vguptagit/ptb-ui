@@ -3,9 +3,9 @@
 }
 
 .saved-questions {
-  background-color: #f8f8f8;
+  border: 1px solid #D8D8D8;
 }
 
 .saved-questions > div {
-  border: 1px solid white;
+  border: 1px solid #F4F4F4;
 }
