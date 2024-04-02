@@ -24,9 +24,12 @@
 input.rounded.form-control {
   margin-left: 10px;
   margin-top: 0px;
-  width: 491px;
+  /* width: 491px; */
 }
 
+input.rounded.form-control.testNameInputBox{
+  width: 500px;
+}
 .editmode {
   overflow: auto;
   height: calc(74vh - 85px);

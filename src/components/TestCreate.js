@@ -359,7 +359,7 @@ console.log("updatedtitle", tabTitle);
                 placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className="rounded"
+                className="rounded testNameInputBox"
                 required={true}
               />
             </Form>
