@@ -12,7 +12,7 @@ import {
 } from "../../services/testcreate.service";
 import Toastify from "../../components/common/Toastify";
 import { useAppContext } from "../../context/AppContext";
-import { getUserBooks } from "../../services/book.service";
+import { getUserBooks, getUserBooksByID } from "../../services/book.service";
 import { FormattedMessage } from "react-intl";
 
 function TreeView({
@@ -22,7 +22,8 @@ function TreeView({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
-  const { handleEditTest, editTestHighlight, setEditTestHighlight, } = useAppContext();
+  const { handleEditTest, editTestHighlight, setEditTestHighlight } =
+    useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -31,9 +32,11 @@ function TreeView({
   const [selectedFolderToDelete, setSelectedFolderToDelete] = useState(null);
   const [selectedTestToDelete, setSelectedTestToDelete] = useState(null);
   const [showTestDeleteModal, setShowTestDeleteModal] = useState(false);
+  const [bookOpenStates, setBookOpenStates] = useState({});
+  const [selectedBookIds, setSelectedBookIds] = useState([]);
+  const [bookTitles, setBookTitles] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [publisherTests, setPublisherTests] = useState([]);
-  const [selectedBookId, setSelectedBookId] = useState(null);
+  const [bookTests, setBookTests] = useState({});
 
   useEffect(() => {
     if (folders && folders.length > 0) {
@@ -52,35 +55,26 @@ function TreeView({
   }, [folders]);
 
   useEffect(() => {
-    if (isOpen && selectedBookId) {
-      handleGetPublisherTests();
-    }
-  }, [isOpen, selectedBookId]);
-
-  useEffect(() => {
     if (isOpen) {
-      const fetchUserBooks = async () => {
-        try {
-          const bookIds = await getUserBooks();
-          console.log("Book IDs:", bookIds);
-          if (bookIds && bookIds.length > 0) {
-            const allBookIds = [];
-            bookIds.forEach((bookId) => {
-              console.log("Selected Book ID:", bookId);
-              allBookIds.push(bookId);
-            });
-            setSelectedBookId(allBookIds);
-          } else {
-            console.error("No valid book IDs found in the response.");
-          }
-        } catch (error) {
-          console.error("Error fetching user books:", error);
-        }
-      };
-
       fetchUserBooks();
     }
   }, [isOpen]);
+
+  const fetchUserBooks = async () => {
+    try {
+      const bookIds = await getUserBooks();
+      setSelectedBookIds(bookIds);
+      const bookDetails = await Promise.all(
+        bookIds.map(async (bookId) => {
+          const book = await getUserBooksByID(bookId);
+          return book;
+        })
+      );
+      setBookTitles(bookDetails);
+    } catch (error) {
+      console.error("Error fetching user books:", error);
+    }
+  };
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -293,43 +287,35 @@ function TreeView({
     setIsDragging(false);
   };
 
-  const handleGetPublisherTests = async () => {
+  const handleGetPublisherTests = async (bookId) => {
     try {
-      if (!selectedBookId) {
+      if (!selectedBookIds || selectedBookIds.length === 0) {
         console.error("No book IDs selected.");
         return;
       }
 
-      const validBookIds = Array.isArray(selectedBookId)
-        ? selectedBookId.filter(
-            (id) => typeof id === "string" && id.trim().length > 0
-          )
-        : typeof selectedBookId === "string" && selectedBookId.trim().length > 0
-        ? [selectedBookId]
-        : [];
-
-      if (validBookIds.length === 0) {
-        console.error("No valid book IDs selected.");
-        return;
-      }
-
-      const testsArrays = await Promise.all(
-        validBookIds.map(async (bookId) => {
-          try {
-            const tests = await getPublisherTestsByBookId(bookId);
-            return tests;
-          } catch (error) {
-            console.error(`Error fetching tests for book ID ${bookId}:`, error);
-            return [];
-          }
-        })
-      );
-
-      const allTests = testsArrays.flat();
-      setPublisherTests(allTests);
+      const tests = await getPublisherTestsByBookId(bookId);
+      setBookTests((prevTests) => ({
+        ...prevTests,
+        [bookId]: tests,
+      }));
     } catch (error) {
-      console.error("Error fetching publisher tests:", error);
+      console.error(`Error fetching tests for book ID ${bookId}:`, error);
     }
+  };
+
+  const toggleBookOpenState = (bookId) => {
+    setBookOpenStates((prevState) => ({
+      ...prevState,
+      [bookId]: !prevState[bookId],
+    }));
+  };
+
+  const handleBookClick = (bookId) => {
+    if (!bookOpenStates[bookId]) {
+      handleGetPublisherTests(bookId);
+    }
+    toggleBookOpenState(bookId);
   };
 
   return (
@@ -338,35 +324,38 @@ function TreeView({
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <button
-        className="testbtn"
-        onClick={() => {
-          setIsOpen(!isOpen);
-          handleGetPublisherTests();
-        }}
-      >
+      <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? (
           <i className="fa fa-caret-down"></i>
         ) : (
           <i className="fa fa-caret-right"></i>
         )}
         <span style={{ marginLeft: "9px" }}>
-          <FormattedMessage id="Publisher Tests" />
+          <FormattedMessage id="migratedtests" />
         </span>
       </button>
-      {isOpen && publisherTests.length > 0 && (
-        <div className="test-dropdown">
-          {publisherTests.map((test, index) => (
-            <div
-              key={test.guid}
-              style={{
-                borderBottom:
-                  index !== publisherTests.length - 1
-                    ? "1px solid white"
-                    : "none",
-              }}
-            >
-              {test.title}
+      {isOpen && (
+        <div className="book-dropdown">
+          {bookTitles.map((book, index) => (
+            <div key={book.guid}>
+              <button
+                className="testbtn"
+                onClick={() => handleBookClick(book.guid)}
+              >
+                {bookOpenStates[book.guid] ? (
+                  <i className="fa fa-caret-down"></i>
+                ) : (
+                  <i className="fa fa-caret-right"></i>
+                )}
+                <span style={{ marginLeft: "9px" }}>{book.title}</span>
+              </button>
+              {bookOpenStates[book.guid] && (
+                <div className="test-dropdown">
+                  {bookTests[book.guid]?.map((test, index) => (
+                    <div key={index}>{test.title}</div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -422,7 +411,9 @@ function TreeView({
             )}
             {!node.droppable && (
               <button
-                className={`editbutton ${editTestHighlight === node.data.guid ? 'highlight' : ''}`}
+                className={`editbutton ${
+                  editTestHighlight === node.data.guid ? "highlight" : ""
+                }`}
                 onClick={() => handleAnotherFunction(node)}
               >
                 <i className="bi bi-pencil-fill"></i>
