@@ -60,11 +60,33 @@ const MultipleResponse = (props) => {
             questionNode.data = jsonToXML;
             const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
 
-            props.setSavedQuestions([
-                ...props.savedQuestions,
-                    { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
-                ]);
-            console.log(props.savedQuestions);
+            let xmlToHtml = questionTemplates[0].textHTML;
+    
+            const testObj = { ...props.selectedTest }; // Create a copy of selectedTest
+    
+            // Find if any question in the array has the same itemId
+            const existingQuestionIndex = testObj.questions.findIndex(
+                (q) => q.itemId === questionNode.itemId
+            );
+    
+            if (existingQuestionIndex !== -1) {
+                // If the question already exists, update it
+                testObj.questions[existingQuestionIndex] = {
+                    ...testObj.questions[existingQuestionIndex],
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                };
+            } else {
+                // If the question doesn't exist, add it to the end of the array
+                testObj.questions.push({
+                    ...questionNode,
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                });
+            }
+    
+            // Update the selected test with the modified questions array
+            props.setSelectedTest(testObj);
         }
         props.onQuestionStateChange(false);
     };
@@ -92,46 +114,10 @@ const MultipleResponse = (props) => {
         __html: DOMPurify.sanitize(data)
     })
 
-    return (
-        <div id={questionNode.itemId}>
-            {!questionNode.qtiModel.EditOption ? (
-                <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
-                    <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
-                        <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}>
-                            <div className="mr-2" >{questionNodeIndex + 1}) <span className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>
-                        </div>
-
-                        <div className="w-100" style={{ paddingTop: "15px" }}>
-                            {formData.Options.map((value, index) => {
-                                return (
-                                    <div className="view-question"  >
-                                        <div className="icon-section">
-                                            {formData.CorrectAnswer.includes(index) && !props.isPrint ?
-                                                <i className="bi bi-check" style={{ color: "green", marginRight: "2px" }} ></i>
-                                                : <span className="icon-ml"></span>}
-                                        </div>
-                                        <div className={formData.CorrectAnswer.includes(index) && !props.isPrint ? "text-section checked" : "text-section"} >
-                                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
-                                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>
-                                        </div>
-                                    </div>)
-                            }
-                            )}
-                        </div>
-                    </div>
-                    {!props.isPrint ? (
-                        <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
-                            <button className="editbtn" onClick={handleEdit}>
-                                <i className="bi bi-pencil-fill"></i>
-                            </button>
-                            <button className="deletebtn" onClick={handleDelete}>
-                                <i className="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    ) : ('')}
-                </div>
-            ) : (
-                    <Form className="editmode border rounded p-3 bg-light">
+    const getEditView = () => {
+        return (
+            <div className="m-2">
+                 <Form className="editmode border rounded p-3 bg-light">
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
                             <Form.Control
@@ -225,9 +211,125 @@ const MultipleResponse = (props) => {
                             </Link>
                         </div>
                     </Form>
-                )}
+            </div>
+        );
+    }
+
+    const getPrintOnlyView = () => {
+        return (
+            <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+                    <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
+                        <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}>
+                            <div className="mr-2" >{questionNodeIndex + 1}) <span className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>
+                        </div>
+
+                        <div className="w-100" style={{ paddingTop: "15px" }}>
+                            {formData.Options.map((value, index) => {
+                                return (
+                                    <div className="view-question"  >
+                                        <div className="icon-section">
+                                            <span className="icon-ml"></span>
+                                        </div>
+                                        <div className="text-section" >
+                                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
+                                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>
+                                        </div>
+                                    </div>)
+                            }
+                            )}
+                        </div>
+                    </div>
+                </div>
+        );
+    }
+
+    const getPrintWithEditView = () => {
+        return (
+            <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+                    <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
+                        <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}>
+                            <div className="mr-2" >{questionNodeIndex + 1}) <span className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>
+                        </div>
+
+                        <div className="w-100" style={{ paddingTop: "15px" }}>
+                            {formData.Options.map((value, index) => {
+                                return (
+                                    <div className="view-question"  >
+                                        <div className="icon-section">
+                                            {formData.CorrectAnswer.includes(index) ?
+                                                <i className="bi bi-check" style={{ color: "green", marginRight: "2px" }} ></i>
+                                                : <span className="icon-ml"></span>}
+                                        </div>
+                                        <div className={formData.CorrectAnswer.includes(index) ? "text-section checked" : "text-section"} >
+                                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
+                                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>
+                                        </div>
+                                    </div>)
+                            }
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+                        <button className="editbtn" onClick={handleEdit}>
+                            <i className="bi bi-pencil-fill"></i>
+                        </button>
+                        <button className="deletebtn" onClick={handleDelete}>
+                            <i className="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+        );
+    }
+
+    const getPrintWithAnswerView = () => {
+        return (
+            <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+                    <div className="flex-grow-1 d-flex align-items-center ml-7 d-flex align-items-center flex-wrap">
+                        <div className={formData.CorrectAnswer !== -1 ? "w-100 ml-1" : "w-100"}>
+                            <div className="mr-2" >{questionNodeIndex + 1}) <span className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.Caption)}></span></div>
+                        </div>
+
+                        <div className="w-100" style={{ paddingTop: "15px" }}>
+                            {formData.Options.map((value, index) => {
+                                return (
+                                    <div className="view-question"  >
+                                        <div className="icon-section">
+                                            {formData.CorrectAnswer.includes(index) ?
+                                                <i className="bi bi-check" style={{ color: "green", marginRight: "2px" }} ></i>
+                                                : <span className="icon-ml"></span>}
+                                        </div>
+                                        <div className={formData.CorrectAnswer.includes(index) ? "text-section checked" : "text-section"} >
+                                            <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
+                                            <span className="ml-1 answer" dangerouslySetInnerHTML={sanitizedData(value)}></span>
+                                        </div>
+                                    </div>)
+                            }
+                            )}
+                        </div>
+                    </div>
+                </div>
+        );
+    }
+
+    const getPrintView = (viewId) => {
+        if(viewId == 3) {
+          return getPrintWithAnswerView();
+        } else if (viewId == 2) {
+          return getPrintWithEditView();
+        } else {
+          return getPrintOnlyView();
+        }
+    }
+
+    return (
+        <div id={questionNode.itemId}>
+          {!questionNode.qtiModel.EditOption ? (
+            getPrintView(props.printView)
+          ) : (
+            getEditView()
+          )}
         </div>
-    );
+      );
 }
 
 export default MultipleResponse;

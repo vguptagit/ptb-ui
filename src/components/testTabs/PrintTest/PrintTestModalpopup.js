@@ -15,76 +15,75 @@ import Toastify from "../../common/Toastify";
 import ReactToPrint from "react-to-print";
 import { FormattedMessage } from "react-intl";
 
-function PrintTestModalpopup({ show, handleCloseModal, savedQuestions, setSavedQuestions }) {
+function PrintTestModalpopup({ show, handleCloseModal }) {
   const printableContentRef = useRef();
   const [count, setCount] = useState(1);
   const [isChecked, setIsChecked] = useState("none");
-  const { selectedTest } = useAppContext();
+  const { selectedTest, setSelectedTest } = useAppContext();
   const [addStudentName, setAddStudentName] = useState(false);
 
   useEffect(() => {
     if (selectedTest?.questions) {
-      setSavedQuestions(selectedTest?.questions);
+      setSelectedTest({ ...selectedTest, questions: selectedTest?.questions });
     }
   }, [selectedTest?.questions]);
 
-  console.log(savedQuestions);
 
   const handleDecreaseLine = () => {
-    if (count >= 1 && count <= savedQuestions?.length) {
-      const updatedQuestions = [...savedQuestions];
+    if (count >= 1 && count <= selectedTest?.questions?.length) {
+      const updatedQuestions = [...selectedTest?.questions];
       updatedQuestions[count - 1] = {
         ...updatedQuestions[count - 1],
         spaceLine: Math.max(0, updatedQuestions[count - 1].spaceLine - 1),
       };
-      setSavedQuestions(updatedQuestions);
+      setSelectedTest({ ...selectedTest, questions: updatedQuestions });
     }
   };
 
   const handleAddLine = () => {
-    if (count >= 1 && count <= savedQuestions?.length) {
-      const updatedQuestions = [...savedQuestions];
+    if (count >= 1 && count <= selectedTest?.questions?.length) {
+      const updatedQuestions = [...selectedTest?.questions];
       updatedQuestions[count - 1] = {
         ...updatedQuestions[count - 1],
         spaceLine: updatedQuestions[count - 1].spaceLine + 1,
       };
-      setSavedQuestions(updatedQuestions);
+      setSelectedTest({ ...selectedTest, questions: updatedQuestions });
     }
   };
 
   const handleAddBlankPage = () => {
-    if (count >= 1 && count <= savedQuestions.length) {
-      const updatedQuestions = [...savedQuestions];
+    if (count >= 1 && count <= selectedTest?.questions.length) {
+      const updatedQuestions = [...selectedTest?.questions];
       updatedQuestions[count - 1] = {
         ...updatedQuestions[count - 1],
         spaceLine: 34,
       };
-      setSavedQuestions(updatedQuestions);
+      setSelectedTest({ ...selectedTest, questions: updatedQuestions });
     }
   };
 
   const handleRemoveBlankPage = () => {
-    const updatedQuestions = savedQuestions.map(question => ({
+    const updatedQuestions = selectedTest?.questions.map(question => ({
       ...question,
       spaceLine: 0
     }));
   
-    setSavedQuestions(updatedQuestions);
+    setSelectedTest({ ...selectedTest, questions: updatedQuestions });
   };
 
   const handleBlankLastPage = (e) => {
-    var updatedQuestions = savedQuestions.map(question => ({
+    var updatedQuestions = selectedTest?.questions.map(question => ({
       ...question,
       spaceLine: 0
     }));
-    savedQuestions = [...updatedQuestions];
+    selectedTest.questions = [...updatedQuestions];
     const isChecked = e.target.checked;
-    updatedQuestions = [...savedQuestions];
-    updatedQuestions[savedQuestions.length - 1] = {
-      ...updatedQuestions[savedQuestions.length - 1],
+    updatedQuestions = [...selectedTest?.questions];
+    updatedQuestions[selectedTest?.questions.length - 1] = {
+      ...updatedQuestions[selectedTest?.questions.length - 1],
       spaceLine: isChecked ? 34 : 0,
     };
-    setSavedQuestions(updatedQuestions);
+    setSelectedTest({ ...selectedTest, questions: updatedQuestions });
   };
 
 
@@ -225,10 +224,10 @@ function PrintTestModalpopup({ show, handleCloseModal, savedQuestions, setSavedQ
               </Modal.Header>
               <Modal.Body className="questions-list">
               <div className="test-containers" id="print-test">
-                  {savedQuestions && (
+                  {selectedTest?.questions && (
                     <div className="print-tree-view-container">
                       <PrintTestTreeView
-                        savedQuestions={savedQuestions}
+                        savedQuestions={selectedTest?.questions}
                         ref={printableContentRef}
                         addStudentName={addStudentName}
                         isChecked={isChecked}

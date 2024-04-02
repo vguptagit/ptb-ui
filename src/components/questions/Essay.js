@@ -16,15 +16,21 @@ const Essay = (props) => {
     essayQuestionSize: questionNode.qtiModel ? questionNode.qtiModel.EssayPageSize : "",
   };
   const [formData, setFormData] = useState(initFormData);
+  const [emptyQuestion, setEmptyQuestion] = useState(() => {
+    return (formData.question == "" || formData.answer == "");
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setEmptyQuestion(() => {
+      return (value == "");
+    })
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(questionNode) {
+    if (questionNode) {
       questionNode.qtiModel.Caption = formData.question;
       questionNode.qtiModel.RecommendedAnswer = formData.answer;
       questionNode.qtiModel.EssayPageSize = formData.essayQuestionSize;
@@ -33,11 +39,33 @@ const Essay = (props) => {
       questionNode.data = jsonToXML;
       const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
 
-      props.setSavedQuestions([
-          ...props.savedQuestions,
-              { ...questionTemplates[0], spaceLine: formData.spaceLine || 0 },
-          ]);
-      console.log(props.savedQuestions);
+      let xmlToHtml = questionTemplates[0].textHTML;
+    
+            const testObj = { ...props.selectedTest }; // Create a copy of selectedTest
+    
+            // Find if any question in the array has the same itemId
+            const existingQuestionIndex = testObj.questions.findIndex(
+                (q) => q.itemId === questionNode.itemId
+            );
+    
+            if (existingQuestionIndex !== -1) {
+                // If the question already exists, update it
+                testObj.questions[existingQuestionIndex] = {
+                    ...testObj.questions[existingQuestionIndex],
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                };
+            } else {
+                // If the question doesn't exist, add it to the end of the array
+                testObj.questions.push({
+                    ...questionNode,
+                    spaceLine: formData.spaceLine || 0,
+                    textHTML: xmlToHtml
+                });
+            }
+    
+            // Update the selected test with the modified questions array
+            props.setSelectedTest(testObj);
     }
     props.onQuestionStateChange(false);
   };
@@ -69,27 +97,9 @@ const Essay = (props) => {
     __html: DOMPurify.sanitize(data)
   })
 
-  return (
-    <div id={questionNode.itemId}>
-      {!questionNode.qtiModel.EditOption ? (
-        <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
-          <div className="flex-grow-1 d-flex ml-7 d-flex">
-            <div className="mr-2">{questionNodeIndex + 1})</div>
-            <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
-          </div>
-          {!props.isPrint ? (
-              <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
-              <button className="editbtn" onClick={handleEdit}>
-                  <i className="bi bi-pencil-fill"></i>
-              </button>
-              <button className="deletebtn" onClick={handleDelete}>
-                  <i className="bi bi-trash"></i>
-              </button>
-          </div>
-          ) : ('')}
-        </div>
-      ) : (
-        <div className="m-2">
+  const getEditView = () => {
+    return (
+      <div className="m-2">
           <Form onSubmit={handleSubmit} className="editmode border rounded p-3 bg-light">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className="mb-1"><b>{questionNode.qtiModel.QstnSectionTitle}</b></Form.Label>
@@ -172,15 +182,75 @@ const Essay = (props) => {
                 </div>
             </Collapse>
             <div className="mb-1 d-flex justify-content-end">
-              <Link className="savelink" onClick={handleSubmit}>
+              <Link className={`savelink ${emptyQuestion ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={emptyQuestion ? -1 : 0}>
                   <FormattedMessage id="view" />
               </Link>
               <Link className="deletelink" onClick={handleDelete}>
-                  <FormattedMessage id="delete" />
+                  <FormattedMessage id="Remove" />
               </Link>
           </div>
           </Form>
         </div>
+    );
+  }
+
+  const getPrintOnlyView = () => {
+   return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintWithEditView = () => {
+    return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+        <div className="flex-grow-1 mr-7 d-flex align-items-center d-flex justify-content-end align-self-end">
+            <button className="editbtn" onClick={handleEdit}>
+                <i className="bi bi-pencil-fill"></i>
+            </button>
+            <button className="deletebtn" onClick={handleDelete}>
+                <i className="bi bi-trash"></i>
+            </button>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintWithAnswerView = () => {
+    return (
+      <div className="mb-1 d-flex align-items-center m-2 addfolder-container">
+        <div className="flex-grow-1 d-flex ml-7 d-flex">
+          <div className="mr-2">{questionNodeIndex + 1})</div>
+          <div className="view-content" dangerouslySetInnerHTML={sanitizedData(formData.question)}></div>
+        </div>
+      </div>
+    );
+  }
+
+  const getPrintView = (viewId) => {
+    if(viewId == 3) {
+      return getPrintWithAnswerView();
+    } else if (viewId == 2) {
+      return getPrintWithEditView();
+    } else {
+      return getPrintOnlyView();
+    }
+  }
+  
+  return (
+    <div id={questionNode.itemId}>
+      {!questionNode.qtiModel.EditOption ? (
+        getPrintView(props.printView)
+      ) : (
+        getEditView()
       )}
     </div>
   );

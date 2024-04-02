@@ -4,6 +4,10 @@ import Test from "../entities/Test.Entity";
 import {getTestQuestions} from '../services/testcreate.service';
 import QtiService from "../utils/qtiService";
 import Toastify from "../components/common/Toastify";
+import { getUserTestFolders } from "../services/testfolder.service";
+import { getFolderTests, getRootTests } from "../services/testcreate.service";
+import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
+import jquery from 'jquery';
 
 const AppContext = createContext({
   tests: [],
@@ -18,7 +22,9 @@ const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
   const [editTest, setEditTest] = useState(null);
-  const [savedQuestions, setSavedQuestions] = useState(selectedTest?.questions);
+  const [savedFolders, setSavedFolders] = useState([]);
+  const [rootFolderGuid, setRootFolderGuid] = useState("");
+  const [editTestHighlight, setEditTestHighlight] = useState();
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -33,8 +39,44 @@ const AppProvider = ({ children }) => {
     question.quizType = question.metadata.quizType;
     question.data = question.qtixml;
     console.log(question);
+    const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+
+    if(question.quizType == "FillInBlanks"){
+      let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
+      console.log(xmlToHtml);
+      question.textHTML = xmlToHtml;
+    }
+    else
+    {
+      let xmlToHtml = questionTemplates[0].textHTML;
+      console.log(xmlToHtml);
+      question.textHTML = xmlToHtml;
+    }
+    question.spaceLine = 0
+    const testObj = { ...selectedTest };
+      testObj.questions.push({
+      ...question,
+      });
+      setSelectedTest(testObj);
+      console.log(testObj)
     return question;
   };
+
+  const getPrintModeFbCaption = (Caption) => {
+    try {
+        var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
+        htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        var element = jquery('<p></p>');
+        jquery(element).append(htmlText);
+        element.find("button").each(function (i, obj) {
+            let blankSpace = "<span class='blank'> _____________________ </span>";
+            jquery(obj).replaceWith(blankSpace);
+        });
+        return element[0].innerHTML;
+    } catch (e) {
+
+    }
+}
 
   const handleEditTest = (node) => {
     console.log("adding test ");
@@ -88,6 +130,27 @@ const AppProvider = ({ children }) => {
     setTests(updatedTabs);
   };
 
+  const fetchUserFolders = async () => {
+    const rootFolder = await getRootTests();
+      setRootFolderGuid(rootFolder.guid);
+      console.log(rootFolderGuid);
+      
+    Promise.all([getUserTestFolders(rootFolder.guid), getFolderTests(rootFolder.guid)])
+      .then(([rootFoldersResponse, folderTestsResponse]) => {
+        const combinedData = [...rootFoldersResponse, ...folderTestsResponse];
+        setSavedFolders(combinedData);
+        localStorage.setItem("savedFolders", JSON.stringify(combinedData));
+      })
+      .catch((error) => {
+        console.error('Error getting root folders or folder tests:', error);
+        if (error?.message?.response?.request?.status === 409) {
+            Toastify({ message: error.message.response.data.message, type: 'error' });
+        } else {
+            Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
+        }
+    });
+  }
+
   const dispatchEvent = (actionType, payload) => {
     switch (actionType) {
       case "SELECT_TEST":
@@ -127,30 +190,27 @@ const AppProvider = ({ children }) => {
       setSelectedTest(untitled1Test);
     }
   }, []);
-
-  useEffect(() => {
-    if (selectedTest) {
-      if (selectedTest.questions && selectedTest.questions.length > 0) {
-        setSavedQuestions(selectedTest.questions);
-      } else {
-        setSavedQuestions([]);
-      }
-    }
-  }, [selectedTest]);
+  
 
   return (
     <AppContext.Provider
       value={{
         tests,
         selectedTest,
+        setSelectedTest,
         selectTest,
         addTest,
         deleteTest,
         dispatchEvent,
         editTest,
         handleEditTest,
-        savedQuestions,
-        setSavedQuestions,
+        savedFolders,
+        setSavedFolders,
+        rootFolderGuid,
+        setRootFolderGuid,
+        fetchUserFolders,
+        editTestHighlight,
+        setEditTestHighlight,
       }}
     >
       {children}

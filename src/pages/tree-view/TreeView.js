@@ -134,7 +134,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
         node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
       );
       if (!hasNodeTypes) {
-        Toastify({ message: "User must select the Books", type: "warn" });
+        Toastify({ message: "No results found for the search item", type: "warn" });
       }
       else if (finalFinalFilteredData.length === 0) {
         Toastify({ message: "No Matching chapters found", type: "info" });
@@ -365,7 +365,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );
@@ -376,7 +376,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );
@@ -387,7 +387,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );
@@ -398,7 +398,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );
@@ -409,7 +409,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );
@@ -420,7 +420,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               questionNode={question}
               questionNodeIndex={index}
               qtiModel={qtiModel}
-              isPrint={true}
+              printView={3}
             />
           </div>
         );

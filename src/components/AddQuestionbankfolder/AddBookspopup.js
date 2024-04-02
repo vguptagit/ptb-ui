@@ -87,9 +87,9 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   return (
     <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-       <h2 className="choose-your-books-or-topics">
-          <FormattedMessage id="addBooks" />
-      </h2>
+          <div className="no-matching-books-message">
+          <FormattedMessage id="no_matching_books_message" defaultMessage="No matching books found" />
+         </div>
       ) : (
         filteredTreeData.map((node) => (
           <TreeNode

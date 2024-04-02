@@ -51,8 +51,8 @@
   
   #tab-label-dropdown #close-tab-dropdown {
     margin-top: -10px;
-    margin-left: 42px;
-    margin-right: -11px;
+    margin-left: 2px;
+    margin-right: -34px;
   }
   
   #test-tabs-navlink {
@@ -79,11 +79,11 @@
     text-overflow: ellipsis;
   }
   
-  .close-tab-wrapper {
-    position: absolute; /* Position the close button absolutely */
-    top: 0; /* Adjust as needed to position vertically */
-    right: -10px; /* Adjust as needed to position horizontally */
-  }
+  /* .close-tab-wrapper {
+    position: absolute; 
+    top: 0; 
+    right: -10px; 
+  } */
 
   .floatRight{
     float: right;

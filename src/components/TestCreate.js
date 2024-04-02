@@ -15,9 +15,10 @@ import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
 import "./_tables.css";
 import TreeViewTestCreate from "./TreeViewTestCreate";
+import jquery from 'jquery';
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, savedQuestions, setSavedQuestions } = useAppContext();
+  const { selectedTest, dispatchEvent, setSelectedTest } = useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(
     selectedTest?.title || ""
@@ -32,15 +33,12 @@ const TestCreate = () => {
     setTabTitle(selectedTest?.title || "");
     setInitialTabTitle(selectedTest?.title || "");
   }, [selectedTest]);
+
   const handleTitleChange = (event) => {
     let newTitle = event.target.value;
 
-    // Allow special characters, numbers, alphabets, and spaces
-    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, "");
-
-    if (newTitle.length > 255) {
-      newTitle = newTitle.slice(0, 255);
-    }
+    // Allow all special characters, numbers, alphabets, and spaces
+    newTitle = newTitle.slice(0, 255); // Limiting the length to 255 characters as per your code
     newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
 
     setTabTitle(newTitle);
@@ -48,15 +46,16 @@ const TestCreate = () => {
 
     // Update the title in the selectedTest object
     if (selectedTest && selectedTest.id) {
-      // Create a copy of the selectedTest object
-      const updatedSelectedTest = { ...selectedTest };
-      // Update the title property with the new title
-      updatedSelectedTest.title = newTitle;
-      // Dispatch an action to update the selectedTest object in the context
-      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
+        // Create a copy of the selectedTest object
+        const updatedSelectedTest = { ...selectedTest };
+        // Update the title property with the new title
+        updatedSelectedTest.title = newTitle;
+        // Dispatch an action to update the selectedTest object in the context
+        dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
-  };
-  console.log("updatedtitle", tabTitle);
+};
+console.log("updatedtitle", tabTitle);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -83,7 +82,32 @@ const TestCreate = () => {
       } else if (item.type === "TREE_NODE") {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.question) {
-        selectedTest.questions.push(item.question);
+        let question = copyItem.question;
+        var qtiModel = QtiService.getQtiModel(
+          question.qtixml,
+          question.metadata.quizType
+        );
+        qtiModel.EditOption = false;
+        question.qtiModel = qtiModel;
+        question.masterData = JSON.parse(JSON.stringify(qtiModel));//
+        question.itemId = copyItem.question.guid;
+        question.quizType = question.metadata.quizType;
+        question.data = question.qtixml;//
+        console.log(question);
+        const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+        if(question.quizType == "FillInBlanks"){
+          let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
+          console.log(xmlToHtml);
+          question.textHTML = xmlToHtml;
+        }
+        else
+        {
+          let xmlToHtml = questionTemplates[0].textHTML;
+          console.log(xmlToHtml);
+          question.textHTML = xmlToHtml;
+        }
+        question.spaceLine = 0
+        selectedTest.questions.push(question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
@@ -110,6 +134,22 @@ const TestCreate = () => {
     return question;
   };
 
+  const getPrintModeFbCaption = (Caption) => {
+    try {
+        var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
+        htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        var element = jquery('<p></p>');
+        jquery(element).append(htmlText);
+        element.find("button").each(function (i, obj) {
+            let blankSpace = "<span class='blank'> _____________________ </span>";
+            jquery(obj).replaceWith(blankSpace);
+        });
+        return element[0].innerHTML;
+    } catch (e) {
+
+    }
+}
+
   const handleQuestionState = (edit) => {
     setRefreshChildren(!refreshChildren);
   };
@@ -129,78 +169,84 @@ const TestCreate = () => {
           return (
             <MultipleChoice
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.MultipleResponse:
           return (
             <MultipleResponse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.TrueFalse:
           return (
             <TrueFalse
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Matching:
           return (
             <Matching
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.FillInBlanks:
           return (
             <FillInBlanks
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Essay:
           return (
             <Essay
               questionNode={questionNode}
+              printView={2}
               key={key}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         default:
@@ -213,10 +259,13 @@ const TestCreate = () => {
             <MultipleChoice
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.MultipleResponse:
@@ -224,10 +273,13 @@ const TestCreate = () => {
             <MultipleResponse
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.TrueFalse:
@@ -235,10 +287,13 @@ const TestCreate = () => {
             <TrueFalse
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Matching:
@@ -246,10 +301,13 @@ const TestCreate = () => {
             <Matching
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.FillInBlanks:
@@ -257,10 +315,13 @@ const TestCreate = () => {
             <FillInBlanks
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         case CustomQuestionBanksService.Essay:
@@ -268,10 +329,13 @@ const TestCreate = () => {
             <Essay
               questionNode={questionNode}
               key={key}
+              printView={2}
               questionNodeIndex={index}
               questionNodeIsEdit={questionNode.qtiModel.EditOption}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
+              selectedTest={selectedTest}
+              setSelectedTest={setSelectedTest}
             />
           );
         default:
@@ -295,9 +359,7 @@ const TestCreate = () => {
                 placeholder="Enter Test title"
                 value={tabTitle}
                 onChange={handleTitleChange}
-                className={`rounded ${
-                  !isTitleValid && tabTitle.trim() === "" ? "is-invalid" : ""
-                }`}
+                className="rounded"
                 required={true}
               />
             </Form>

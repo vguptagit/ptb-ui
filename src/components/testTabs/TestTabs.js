@@ -21,8 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, savedQuestions, setSavedQuestions } =
-    useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -68,19 +67,19 @@ const TestTabs = () => {
     setSelectedTestTitle(selectedTest ? selectedTest.title : "");
   }, [selectedTest]);
 
-  const handleTitleChange = (e, index) => {
-    const updatedTests = [...tests];
-    const newTitle = e.target.value.trim(); // Trim whitespace from the input
-    updatedTests[index].title = newTitle;
-    if (newTitle === '') {
-      // If the new title is empty, set background color to red
-      e.target.style.backgroundColor = 'red';
-    } else {
-      // If the new title is not empty, set background color to transparent
-      e.target.style.backgroundColor = 'transparent';
-    }
-    setTests(updatedTests);
-  };
+  // const handleTitleChange = (e, index) => {
+  //   const updatedTests = [...tests];
+  //   const newTitle = e.target.value.trim(); // Trim whitespace from the input
+  //   updatedTests[index].title = newTitle;
+  //   if (newTitle === '') {
+  //     // If the new title is empty, set background color to red
+  //     e.target.style.backgroundColor = 'red';
+  //   } else {
+  //     // If the new title is not empty, set background color to transparent
+  //     e.target.style.backgroundColor = 'transparent';
+  //   }
+  //   setTests(updatedTests);
+  // };
 
   const handleNodeSelect = (item) => {
     // Check if the selected tab is within the first four tabs
@@ -128,17 +127,16 @@ const TestTabs = () => {
     dispatchEvent("SELECT_TEST", newTest);
   };
 
-  const handleEditTestTab = (testName) => {
-    // Check if the test already exists
-    const existingTest = tests.find((test) => test.title === testName);
+  const handleEditTestTab = (editTest) => {
+    const existingTest = tests.find((test) => test.id === editTest?.id);
     if (existingTest) {
       // If the test exists, select it
       dispatchEvent("SELECT_TEST", existingTest);
     } else {
       // If the test does not exist, create a new one
       const newTest = new Test();
-      newTest.title = testName;
-      // newTest.id = editTest?.id;
+      newTest.title = editTest?.text;
+      newTest.id = editTest?.id;
       addTest(newTest);
     }
   };
@@ -164,6 +162,7 @@ const TestTabs = () => {
     }
 
     deleteTest(testSelected);
+    setEditTestHighlight(selectedTest.id);
   };
 
   const sampleButton = () => {
@@ -246,6 +245,7 @@ const TestTabs = () => {
           message: "Test has been saved successfully!",
           type: "success",
         });
+        fetchUserFolders();
         setShowModal(false);
       }
     } catch (error) {
@@ -455,8 +455,6 @@ const TestTabs = () => {
               width="80%"
               show={showPrintModal}
               handleCloseModal={() => setShowPrintModal(false)}
-              savedQuestions={savedQuestions}
-              setSavedQuestions={setSavedQuestions}
             />
 
             <Button
