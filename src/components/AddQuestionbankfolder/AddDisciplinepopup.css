@@ -102,3 +102,7 @@
   padding-inline-start: 10px;
   padding-top: 30px;
 }
+
+input.disciplinePopup.form-control.rounded.search-inputText {
+  margin-left: 2px;
+}
