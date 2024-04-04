@@ -151,3 +151,7 @@
     padding-inline-start: 10px;
     padding-top: 20px;
   }
+
+  input.form-control.rounded.search-inputbox {
+    margin-left: 1px;
+}
