@@ -26,9 +26,6 @@ function TreeView({
     handleEditTest,
     editTestHighlight,
     setEditTestHighlight,
-    setSelectedViewTest,
-    selectedViewTest,
-    handleViewTest,
   } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
@@ -38,11 +35,6 @@ function TreeView({
   const [selectedFolderToDelete, setSelectedFolderToDelete] = useState(null);
   const [selectedTestToDelete, setSelectedTestToDelete] = useState(null);
   const [showTestDeleteModal, setShowTestDeleteModal] = useState(false);
-  const [bookOpenStates, setBookOpenStates] = useState({});
-  const [selectedBookIds, setSelectedBookIds] = useState([]);
-  const [bookTitles, setBookTitles] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [bookTests, setBookTests] = useState({});
 
   useEffect(() => {
     if (folders && folders.length > 0) {
@@ -60,27 +52,6 @@ function TreeView({
     }
   }, [folders]);
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchUserBooks();
-    }
-  }, [isOpen]);
-
-  const fetchUserBooks = async () => {
-    try {
-      const bookIds = await getUserBooks();
-      setSelectedBookIds(bookIds);
-      const bookDetails = await Promise.all(
-        bookIds.map(async (bookId) => {
-          const book = await getUserBooksByID(bookId);
-          return book;
-        })
-      );
-      setBookTitles(bookDetails);
-    } catch (error) {
-      console.error("Error fetching user books:", error);
-    }
-  };
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -195,12 +166,6 @@ function TreeView({
     setEditTestHighlight(node.data.guid);
   };
 
-  const handleMigratedTestView = (node) => {
-    console.log("Viewing migrated tests for node:", node);
-    handleViewTest(node);
-    setSelectedViewTest(node.guid);
-  };
-
   const handleDeleteFolder = (folderTitle) => {
     setSelectedFolderToDelete(folderTitle);
     setShowModal(true);
@@ -299,111 +264,12 @@ function TreeView({
     setIsDragging(false);
   };
 
-  const handleGetPublisherTests = async (bookId) => {
-    try {
-      if (!selectedBookIds || selectedBookIds.length === 0) {
-        console.error("No book IDs selected.");
-        return;
-      }
-
-      const tests = await getPublisherTestsByBookId(bookId);
-      setBookTests((prevTests) => ({
-        ...prevTests,
-        [bookId]: tests,
-      }));
-    } catch (error) {
-      console.error(`Error fetching tests for book ID ${bookId}:`, error);
-    }
-  };
-
-  const toggleBookOpenState = (bookId) => {
-    setBookOpenStates((prevState) => ({
-      ...prevState,
-      [bookId]: !prevState[bookId],
-    }));
-  };
-
-  const handleBookClick = (bookId) => {
-    if (!bookOpenStates[bookId]) {
-      handleGetPublisherTests(bookId);
-    }
-    toggleBookOpenState(bookId);
-  };
-
   return (
     <div
       className={`treeview ${isDragging ? "grabbing" : ""}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <div className="maigratedtests">
-        <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? (
-            <i className="fa fa-caret-down"></i>
-          ) : (
-            <i className="fa fa-caret-right"></i>
-          )}
-          <span style={{ marginLeft: "9px" }}>
-            <FormattedMessage id="migratedtests" />
-          </span>
-        </button>
-        {isOpen && bookTitles.length > 0 && (
-          <div className="book-dropdown">
-            {bookTitles.map((book, index) => (
-              <div
-                key={book.guid}
-                style={{
-                  borderBottom:
-                    index !== bookTitles.length - 1
-                      ? "2px solid white"
-                      : "none",
-                  paddingBottom: "5px",
-                }}
-              >
-                <button
-                  className="testbtn"
-                  onClick={() => handleBookClick(book.guid)}
-                >
-                  {bookOpenStates[book.guid] ? (
-                    <i className="fa fa-caret-down"></i>
-                  ) : (
-                    <i className="fa fa-caret-right"></i>
-                  )}
-                  <span style={{ marginLeft: "9px" }}>{book.title}</span>
-                </button>
-                {bookOpenStates[book.guid] &&
-                  bookTests[book.guid] &&
-                  bookTests[book.guid].length > 0 && (
-                    <div className="test-dropdown">
-                      {bookTests[book.guid].map((test, index) => (
-                        <div
-                          key={index}
-                          className="test-item"
-                          style={{
-                            borderBottom:
-                              index !== bookTests[book.guid].length - 1
-                                ? "2px solid white"
-                                : "none",
-                          }}
-                        >
-                          {test.title}
-                          <button
-                            className={`info ${
-                              selectedViewTest === test.guid ? "selected" : ""
-                            }`}
-                            onClick={() => handleMigratedTestView(test)}
-                          >
-                            <i className="bi bi-eye"></i>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
       <Tree
         tree={treeData}
         rootId={0}
