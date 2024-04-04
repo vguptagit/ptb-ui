@@ -54,12 +54,6 @@ const AppProvider = ({ children }) => {
       question.textHTML = xmlToHtml;
     }
     question.spaceLine = 0
-    const testObj = { ...selectedTest };
-      testObj.questions.push({
-      ...question,
-      });
-      setSelectedTest(testObj);
-      console.log(testObj)
     return question;
   };
 
