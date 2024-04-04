@@ -24,6 +24,7 @@
   color: #4d4d4d;
   position: relative;
   line-height: 1em;
+  margin-top: 1px !important;
 }
 
 .tree-node span {
@@ -173,7 +174,7 @@
   border: none;
   text-align: justify;
   padding: 5px;
-  margin-top: 6px;
+  width: 100%;
   margin-bottom: -5px;
   background-color: #f8f8f8;
   color: #4d4d4d;
@@ -186,9 +187,8 @@
 }
 
 .book-dropdown {
-  margin-top: 7px;
-  margin-bottom: -5px;
-  background-color: #f8f8f8;
+  margin-top: 6px;
+  margin-bottom: -4px;
   color: #4d4d4d;
   text-align: justify;
   font-size: 14px;
@@ -197,7 +197,7 @@
 }
 
 .test-dropdown {
-  margin-top: 6px;
+  margin-top: 7px;
   margin-bottom: -5px;
   background-color: #f8f8f8;
   color: #4d4d4d;
@@ -215,5 +215,18 @@
   padding: 5px;
 }
 
+.info {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+}
 
+.info.selected {
+  background-color: #007fa9;
+  color: #fff;
+}
 
+.maigratedtests {
+  margin-top: 5px;
+}

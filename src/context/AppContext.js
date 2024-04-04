@@ -25,6 +25,7 @@ const AppProvider = ({ children }) => {
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [editTestHighlight, setEditTestHighlight] = useState();
+  const [selectedViewTest, setSelectedViewTest] = useState(null);
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -76,6 +77,41 @@ const AppProvider = ({ children }) => {
     } catch (e) {
 
     }
+}
+
+const handleViewTest = (node) => {
+  console.log("adding test ");
+  //setTestName(name.text);
+  makeViewTestQuestion(node);
+};
+
+const makeViewTestQuestion = async (node) => {
+  try {
+    console.log(node);
+    let questions = await getTestQuestions(node.guid);
+    if (questions) {
+      let test = new Test();
+      test.title = node.title;
+      test.tabTitle = node.title;
+      test.folderGuid = node.parent == 0 ? null : node.parent;
+      test.testId = node.guid;
+      test.metadata = {};
+      questions.forEach((question) => {
+        test.questions.push(getQuestionFromDto(question));
+      });
+      addTest(test);
+    }
+  } catch (error) {
+    console.error("Error getting test :", error);
+    if (error?.message?.response?.request?.status === 409) {
+      Toastify({
+        message: error.message.response.data.message,
+        type: "error",
+      });
+    } else {
+      Toastify({ message: "Error while fetching test", type: "error" });
+    }
+  }
 }
 
   const handleEditTest = (node) => {
@@ -204,6 +240,7 @@ const AppProvider = ({ children }) => {
         dispatchEvent,
         editTest,
         handleEditTest,
+        handleViewTest,
         savedFolders,
         setSavedFolders,
         rootFolderGuid,
@@ -211,6 +248,8 @@ const AppProvider = ({ children }) => {
         fetchUserFolders,
         editTestHighlight,
         setEditTestHighlight,
+        setSelectedViewTest,
+        selectedViewTest
       }}
     >
       {children}

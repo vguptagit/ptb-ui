@@ -22,8 +22,14 @@ function TreeView({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
-  const { handleEditTest, editTestHighlight, setEditTestHighlight } =
-    useAppContext();
+  const {
+    handleEditTest,
+    editTestHighlight,
+    setEditTestHighlight,
+    setSelectedViewTest,
+    selectedViewTest,
+    handleViewTest,
+  } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -189,6 +195,12 @@ function TreeView({
     setEditTestHighlight(node.data.guid);
   };
 
+  const handleMigratedTestView = (node) => {
+    console.log("Viewing migrated tests for node:", node);
+    handleViewTest(node);
+    setSelectedViewTest(node.guid);
+  };
+
   const handleDeleteFolder = (folderTitle) => {
     setSelectedFolderToDelete(folderTitle);
     setShowModal(true);
@@ -324,62 +336,74 @@ function TreeView({
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? (
-          <i className="fa fa-caret-down"></i>
-        ) : (
-          <i className="fa fa-caret-right"></i>
-        )}
-        <span style={{ marginLeft: "9px" }}>
-          <FormattedMessage id="migratedtests" />
-        </span>
-      </button>
-      {isOpen && bookTitles.length > 0 && (
-        <div className="book-dropdown">
-          {bookTitles.map((book, index) => (
-            <div
-              key={book.guid}
-              style={{
-                borderBottom:
-                  index !== bookTitles.length - 1 ? "1px solid white" : "none",
-                paddingBottom: "5px",
-              }}
-            >
-              <button
-                className="testbtn"
-                onClick={() => handleBookClick(book.guid)}
+      <div className="maigratedtests">
+        <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? (
+            <i className="fa fa-caret-down"></i>
+          ) : (
+            <i className="fa fa-caret-right"></i>
+          )}
+          <span style={{ marginLeft: "9px" }}>
+            <FormattedMessage id="migratedtests" />
+          </span>
+        </button>
+        {isOpen && bookTitles.length > 0 && (
+          <div className="book-dropdown">
+            {bookTitles.map((book, index) => (
+              <div
+                key={book.guid}
+                style={{
+                  borderBottom:
+                    index !== bookTitles.length - 1
+                      ? "2px solid white"
+                      : "none",
+                  paddingBottom: "5px",
+                }}
               >
-                {bookOpenStates[book.guid] ? (
-                  <i className="fa fa-caret-down"></i>
-                ) : (
-                  <i className="fa fa-caret-right"></i>
-                )}
-                <span style={{ marginLeft: "9px" }}>{book.title}</span>
-              </button>
-              {bookOpenStates[book.guid] &&
-                bookTests[book.guid] &&
-                bookTests[book.guid].length > 0 && (
-                  <div className="test-dropdown">
-                    {bookTests[book.guid].map((test, index) => (
-                      <div
-                        key={index}
-                        className="test-item"
-                        style={{
-                          borderBottom:
-                            index !== bookTests[book.guid].length - 1
-                              ? "1px solid white"
-                              : "none",
-                        }}
-                      >
-                        {test.title}
-                      </div>
-                    ))}
-                  </div>
-                )}
-            </div>
-          ))}
-        </div>
-      )}
+                <button
+                  className="testbtn"
+                  onClick={() => handleBookClick(book.guid)}
+                >
+                  {bookOpenStates[book.guid] ? (
+                    <i className="fa fa-caret-down"></i>
+                  ) : (
+                    <i className="fa fa-caret-right"></i>
+                  )}
+                  <span style={{ marginLeft: "9px" }}>{book.title}</span>
+                </button>
+                {bookOpenStates[book.guid] &&
+                  bookTests[book.guid] &&
+                  bookTests[book.guid].length > 0 && (
+                    <div className="test-dropdown">
+                      {bookTests[book.guid].map((test, index) => (
+                        <div
+                          key={index}
+                          className="test-item"
+                          style={{
+                            borderBottom:
+                              index !== bookTests[book.guid].length - 1
+                                ? "2px solid white"
+                                : "none",
+                          }}
+                        >
+                          {test.title}
+                          <button
+                            className={`info ${
+                              selectedViewTest === test.guid ? "selected" : ""
+                            }`}
+                            onClick={() => handleMigratedTestView(test)}
+                          >
+                            <i className="bi bi-eye"></i>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <Tree
         tree={treeData}
         rootId={0}
