@@ -21,7 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight } = useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight, setSelectedViewTest } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -163,6 +163,7 @@ const TestTabs = () => {
 
     deleteTest(testSelected);
     setEditTestHighlight(selectedTest.id);
+    setSelectedViewTest(null);
   };
 
   const sampleButton = () => {
