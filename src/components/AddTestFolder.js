@@ -103,6 +103,14 @@ const TestFolder = ({ userId }) => {
   const handleSaveFolder = async () => {
     if (folderName.trim() !== "") {
       try {
+        if (folderName.trim() === "Migrated Tests") {
+          Toastify({
+            message:
+              "Folder name 'Migrated Tests' is cannot be used.",
+            type: "error",
+          });
+          return;
+        }
         const maxSequence = savedFolders.reduce((max, folder) => {
           return folder.sequence > max ? folder.sequence : max;
         }, 1);
