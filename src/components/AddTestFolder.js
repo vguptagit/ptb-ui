@@ -18,6 +18,7 @@ const TestFolder = ({ userId }) => {
     setSelectedViewTest,
     selectedViewTest,
     handleViewTest,
+    setIsMigratedTests,
   } = useAppContext();
   const [showTextBox, setShowTextBox] = useState(false);
   const [folderName, setFolderName] = useState("");
@@ -197,8 +198,10 @@ const TestFolder = ({ userId }) => {
 
   const handleMigratedTestView = (node) => {
     console.log("Viewing migrated tests for node:", node);
+    node.ismigrated = true
     handleViewTest(node);
     setSelectedViewTest(node.guid);
+    setIsMigratedTests(node.ismigrated)
   };
 
   const handleGetPublisherTests = async (bookId) => {
