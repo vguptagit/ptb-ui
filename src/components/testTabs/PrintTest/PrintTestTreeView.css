@@ -55,3 +55,14 @@
     position: relative;
     left: 20px;
 }
+
+#print-preview-questions{
+    position: relative;
+    bottom: 40px;
+}
+
+.student-name{
+    position: relative;
+    left: 16px;
+    margin-bottom: 10px;
+}
