@@ -21,7 +21,7 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight, setSelectedViewTest } = useAppContext();
+  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight, setSelectedViewTest, isMigratedTests, setIsMigratedTests } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -432,6 +432,7 @@ const TestTabs = () => {
               <Dropdown.Item
                 href="#"
                 onClick={(e) => handleSave(e, selectedTest)}
+                disabled={isMigratedTests && selectedTest.title !== `Untitled ${tests.length}`}
               >
                 <FormattedMessage id="testtabs.save" />
               </Dropdown.Item>

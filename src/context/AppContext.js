@@ -26,6 +26,7 @@ const AppProvider = ({ children }) => {
   const [rootFolderGuid, setRootFolderGuid] = useState("");
   const [editTestHighlight, setEditTestHighlight] = useState();
   const [selectedViewTest, setSelectedViewTest] = useState(null);
+  const [isMigratedTests, setIsMigratedTests] = useState(false);
 
   const getQuestionFromDto = (questionDto) => {
     let question = questionDto;
@@ -243,7 +244,9 @@ const makeViewTestQuestion = async (node) => {
         editTestHighlight,
         setEditTestHighlight,
         setSelectedViewTest,
-        selectedViewTest
+        selectedViewTest,
+        setIsMigratedTests,
+        isMigratedTests
       }}
     >
       {children}

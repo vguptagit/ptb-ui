@@ -26,6 +26,7 @@ function TreeView({
     handleEditTest,
     editTestHighlight,
     setEditTestHighlight,
+    setIsMigratedTests,
   } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
@@ -164,6 +165,7 @@ function TreeView({
     //handleAddNewTestTab(node.id, node.text, node.parent);
     handleEditTest(node);
     setEditTestHighlight(node.data.guid);
+    setIsMigratedTests(false)
   };
 
   const handleDeleteFolder = (folderTitle) => {
