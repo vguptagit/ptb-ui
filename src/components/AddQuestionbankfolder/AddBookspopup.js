@@ -7,11 +7,11 @@ import { getDisciplineBooks, getUserBooks, saveUserBooks } from "../../services/
 import { saveUserDiscipline } from "../../services/discipline.service";
 import Toastify from "../common/Toastify";
 
-const TreeNode = ({ node, onSelectItem, selectedItems }) => {
+const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
   const hasChildNodes = node.nodes && node.nodes.length > 0;
-
+  
   useEffect(() => {
     setIsSelected(selectedItems.includes(node.id));
   }, [selectedItems, node.id]);
@@ -27,23 +27,37 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
     }
   };
 
+  // Function to check if the node is a header discipline node
+  const isHeaderDisciplineNode = () => {
+    return node.droppable && node.nodes && node.nodes.length > 0;
+  };
+
+  // Function to check if the node should be rendered based on search term
+  const shouldRenderNode = () => {
+    return !isHeaderDisciplineNode() || searchTerm === '';
+  };
+
   return (
     <div>
-      <div
-        className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""}`}
-        onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
-      >
-        {hasChildNodes && (
-          <div className="tree-node-header">
-            {isOpen ? (
-              <i className="fa fa-caret-down"></i>
-            ) : (
-              <i className="fa fa-caret-right"></i>
-            )}
-          </div>
-        )}
-        <span>{node.text}</span>
-      </div>
+      {/* Render the node only if it is not a header discipline node during search */}
+      {shouldRenderNode() && (
+        <div
+          className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""}`}
+          onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
+        >
+          {hasChildNodes && (
+            <div className="tree-node-header">
+              {isOpen ? (
+                <i className="fa fa-caret-down"></i>
+              ) : (
+                <i className="fa fa-caret-right"></i>
+              )}
+            </div>
+          )}
+          <span>{node.text}</span>
+        </div>
+      )}
+      
       <div>
         {isOpen && hasChildNodes && (
           <div className="nested-nodes">
@@ -53,6 +67,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
                   node={childNode}
                   onSelectItem={onSelectItem}
                   selectedItems={selectedItems}
+                  searchTerm={searchTerm}
                 />
               </div>
             ))}
@@ -62,6 +77,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems }) => {
     </div>
   );
 };
+
 
 const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   const filterNodes = (nodes, term) => {
@@ -97,6 +113,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
             node={node}
             onSelectItem={onSelectItem}
             selectedItems={selectedItems}
+            searchTerm={searchTerm}
           />
         ))
       )}
