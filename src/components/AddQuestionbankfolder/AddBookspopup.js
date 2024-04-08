@@ -80,13 +80,16 @@ const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
 
 
 const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
-  const filterNodes = (nodes, term) => {
+  const filterNodes = (nodes, term,isBookNode) => {
     return nodes.flatMap((node) => {
-      const filteredChildNodes = filterNodes(node.nodes || [], term);
+      // if (!isBookNode && node.droppable) {
+      //   return []; // Exclude discipline nodes when searching for books
+      // }
+      const filteredChildNodes = filterNodes(node.nodes || [], term , isBookNode || node.droppable);
       if (filteredChildNodes.length > 0) {
         return [{ ...node, nodes: filteredChildNodes }];
       }
-      if (node.text.toLowerCase().includes(term.toLowerCase())) {
+      if (isBookNode && node.text.toLowerCase().includes(term.toLowerCase())) {
         return [{ ...node, nodes: [] }];
       }
       return [];
@@ -97,7 +100,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     if (!searchTerm) {
       return treeData;
     }
-    return filterNodes(treeData, searchTerm);
+    return filterNodes(treeData, searchTerm, false);
   }, [searchTerm, treeData]);
 
   return (
