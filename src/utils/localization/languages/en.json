@@ -16,6 +16,8 @@
     "testtabs.save": "Save",
     "testtabs.saveas": "Save As",
     "testtabs.print": "Print",
+    "labelsPrintMessage": "Labels",
+    "studentNamePrintTestTreeView": "Student Name :",
     "testtabs.export": "Export",
     "questionbanks.tips":" Questions Banks Tips",
     "questionbanks.instructions.edit" :"To Create a new test, select questions in Question Banks or Custom Questions, then click on the pencil icon or drag or drop the questions here.",
@@ -98,5 +100,18 @@
     "leftsidepage":"Left side of the page",
     "blanklastpage":"Blank last page",
     "studentnamelabel":"Add student name label and space",
-    "exportbuttoninfo":"For more test format options, cancel print, and select the export button."
+    "exportbuttoninfo":"For more test format options, cancel print, and select the export button.",
+    "cancelButtonModalPopup" : "Cancel",
+    "saveButtonModalpopupText": "Save",
+    "exportTestsModalpopupTitle": "Export Tests",
+    "exportFormatLabel": "Export Format:",
+    "answerAreaLabel": "Answer Area:",
+    "marginsLabel": "Margins:",
+    "answerKeyLabel": "Answer Key:",
+    "pageNumberLabel": "Page Number:",
+    "labelsAndVersionsLabel": "Labels and Versions:",
+    "cancelButtonModalpopupExportText": "Cancel",
+    "exportButtonModalpopupExportTextText": "Export",
+    "cancelButtonSaveasmodalpopupText": "Cancel",
+    "saveButtonSaveasmodalpopupText": "Save"
 }

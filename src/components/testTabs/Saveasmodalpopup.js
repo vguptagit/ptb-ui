@@ -128,10 +128,12 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>
-          Cancel
-        </Button>
-        <Button variant='primary' onClick={handleSaveClick}> Save </Button>
+      <Button variant="secondary" onClick={handleCloseModal}>
+        <FormattedMessage id="cancelButtonSaveasmodalpopupText" />
+      </Button>
+      <Button variant='primary' onClick={handleSaveClick}>
+        <FormattedMessage id="saveButtonSaveasmodalpopupText" />
+      </Button>
       </Modal.Footer>
     </Modal>
   );

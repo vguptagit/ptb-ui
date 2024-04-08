@@ -183,7 +183,9 @@ function PrintTestModalpopup({ show, handleCloseModal }) {
                 </Row>
                 <Row className="mt-3">
                   <Col md={6}>
-                    <div>Labels</div>
+                  <div>
+                    <FormattedMessage id="labelsPrintMessage" />
+                  </div>
                   </Col>
                   <Col md={6}>
                     <input
