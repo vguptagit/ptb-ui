@@ -35,7 +35,7 @@ const SettingsModal = ({ show, handleClose }) => {
     };
 
     useEffect(() => {
-        setLoading(true); 
+        setLoading(true);
         getUserProfilesettings()
             .then((data) => {
                 if (data) {
@@ -54,10 +54,10 @@ const SettingsModal = ({ show, handleClose }) => {
                 console.error("Error fetching data:", error);
             })
             .finally(() => {
-                setLoading(false); 
+                setLoading(false);
             });
     }, []);
-    
+
     const handleCheckboxChange = (settingName, isChecked) => {
         setSelectedSettings(prevState => {
             if (isChecked) {
@@ -69,61 +69,61 @@ const SettingsModal = ({ show, handleClose }) => {
     };
 
     const handleCloseWithoutSave = () => {
-        setSelectedSettings(initialSettings); 
+        setSelectedSettings(initialSettings);
         handleClose();
     };
     return (
         <div style={{ position: 'relative' }}>
-          <Modal 
-            show={show} 
-            onHide={handleCloseWithoutSave}
-            backdrop="static"
-            keyboard={false}
-            centered
-            className="settings-modal"
-          >
-           <Modal.Header closeButton>
-                <Modal.Title>
-                    Metadata
-                </Modal.Title>
-            </Modal.Header>
+            <Modal
+                show={show}
+                onHide={handleCloseWithoutSave}
+                backdrop="static"
+                keyboard={false}
+                centered
+                className="settings-modal"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        <FormattedMessage id="metadataTitle" />
+                    </Modal.Title>
+                </Modal.Header>
 
-            <Modal.Body >
-                {loading ? ( 
-                    <Loader />
-                ) : (
-                    <>
-                        <Form.Label><FormattedMessage id="settings metadata" /></Form.Label>
-                        <Form>
-                            <Form.Group as={Row}>
-                                <Col>
-                                    {hardcodedSettings.map((setting, index) => (
-                                        <Form.Check
-                                            key={index}
-                                            type="checkbox"
-                                            label={setting}
-                                            id={`${index}`}
-                                            checked={selectedSettings.includes(setting)}
-                                            onChange={(e) => handleCheckboxChange(setting, e.target.checked)}
-                                        />
-                                    ))}
-                                </Col>
-                            </Form.Group>
-                        </Form>
-                    </>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseWithoutSave}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={handleSave}>
-                    Save
-                </Button>
-            </Modal.Footer>
-          </Modal>
+                <Modal.Body >
+                    {loading ? (
+                        <Loader />
+                    ) : (
+                            <>
+                                <Form.Label><FormattedMessage id="settings metadata" /></Form.Label>
+                                <Form>
+                                    <Form.Group as={Row}>
+                                        <Col>
+                                            {hardcodedSettings.map((setting, index) => (
+                                                <Form.Check
+                                                    key={index}
+                                                    type="checkbox"
+                                                    label={setting}
+                                                    id={`${index}`}
+                                                    checked={selectedSettings.includes(setting)}
+                                                    onChange={(e) => handleCheckboxChange(setting, e.target.checked)}
+                                                />
+                                            ))}
+                                        </Col>
+                                    </Form.Group>
+                                </Form>
+                            </>
+                        )}
+                </Modal.Body>
+                <Modal.Footer>
+                     <Button variant="secondary" onClick={handleCloseWithoutSave}>
+                         <FormattedMessage id="closeButtonSettingsModalText" />
+                    </Button>
+                       <Button variant="primary" onClick={handleSave}>
+                         <FormattedMessage id="saveButtonSettingsModalText" />
+                     </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
-      );
+    );
 };
 
 export default SettingsModal;

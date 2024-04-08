@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { FormattedMessage } from "react-intl";
 import { Nav } from "react-bootstrap";
 import { useLocation } from 'react-router-dom';
@@ -18,19 +18,30 @@ const ResourceTab = () => {
                 </h2>
             </div>
             <div className="resource-tab-links">
-            <Nav variant="tabs" activeKey={"#"+activePath}>
-                        <Nav.Item>
-                            <Nav.Link href="#/home/tests">Your Tests</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="#/home/questions">Your Questions</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="#/home/questionbanks">Question Banks</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="#/home/customquestions">Custom Questions</Nav.Link>
-                        </Nav.Item>
+                <Nav variant="tabs" activeKey={"#" + activePath}>
+                    <Nav.Item>
+                        <Nav.Link href="#/home/tests">
+                            <FormattedMessage id="yourTestsResourceTab" />
+                        </Nav.Link>
+                    </Nav.Item>
+
+                    <Nav.Item>
+                        <Nav.Link href="#/home/questions">
+                            <FormattedMessage id="yourQuestionsResourceTab" />
+                        </Nav.Link>
+                    </Nav.Item>
+
+                    <Nav.Item>
+                        <Nav.Link href="#/home/questionbanks">
+                            <FormattedMessage id="questionBanksResourceTab" />
+                        </Nav.Link>
+                    </Nav.Item>
+
+                    <Nav.Item>
+                        <Nav.Link href="#/home/customquestions">
+                            <FormattedMessage id="customQuestionsResourceTab" />
+                        </Nav.Link>
+                    </Nav.Item>
                 </Nav>
             </div>
         </div>

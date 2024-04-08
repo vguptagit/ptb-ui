@@ -385,8 +385,8 @@ console.log("updatedtitle", tabTitle);
           selectedTest.questions &&
           selectedTest.questions.length !== 0 ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
-              Drag Questions Here{" "}
-            </div>
+            <FormattedMessage id="dragQuestionsHereTestcreate" />
+          </div>
           ) : (
             <QuestionsBanksTips />
           )}

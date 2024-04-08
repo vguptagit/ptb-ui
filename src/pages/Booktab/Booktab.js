@@ -106,7 +106,9 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   return (
     <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-        <div className="no-matching-books-message">"No matching books found"</div>
+          <div className="no-matching-books-message">
+          <FormattedMessage id="noMatchingBooksMessage" />
+          </div>
       ) : (
           filteredTreeData.map((node) => (
             <TreeNode
@@ -246,11 +248,11 @@ const Booktab = () => {
             <div className="top-container">
               <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
               <button className="booktab btn btn-secondary" onClick={handleBack}>
-                Back
-            </button>
+                <FormattedMessage id="backButtonBooktabText" />
+              </button>
               <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-                Next
-            </button>
+                <FormattedMessage id="nextButtonBooktabText" />
+              </button>
             </div>
             <div className="booktab d-flex justify-content-between">
               <LeftContent />

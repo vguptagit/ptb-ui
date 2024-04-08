@@ -22,9 +22,10 @@ const Header = () => {
             </Nav>
             <Nav>
               <Profile />
-              <Nav.Link id="help-icon" aria-label='help button to activate press enter'>
-                Help <i className="bi bi-question-circle"></i>
-              </Nav.Link>
+                <Nav.Link id="help-icon" aria-label='help button to activate press enter'>
+                  <FormattedMessage id="helpText" /> 
+                   <i className="bi bi-question-circle"></i>
+                </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
