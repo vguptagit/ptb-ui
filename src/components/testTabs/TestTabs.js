@@ -170,10 +170,11 @@ const TestTabs = () => {
     alert("Button Clicked");
   };
 
-  const handleSave = async (e, activeTest) => {
+  const handleSave = async (e, activeTest,folderId,newTestName) => {
     let testItems = tests.filter((item) => item.id === activeTest.id);
     const test = testItems[0]; // This always exists
-    console.log("Saving Test : ", test);
+    let buttonName = e.target.name;
+    console.log(buttonName + " Saving Test : ", test);
     // 1. Check for duplicate test
     // 2. Save questions
     // 3. Save tests
@@ -186,14 +187,34 @@ const TestTabs = () => {
       return;
     }
 
-    let isDuplicate = await isDuplicateTest(test);
-    if (isDuplicate) {
+    // Folder Id will be passed from save As modal popup
+    if(folderId) {
+      test.folderGuid = folderId;
+    } else {
+      const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
+      test.folderGuid = folderGuid;
+    }
+
+    // Test Name will be passed from save As modal popup
+    if(newTestName) {
+      test.testId = null;
+    }
+
+    let isduplicateTest = await isDuplicateTest(buttonName,test);
+    // When duplicate method fails because of server error dont proceed with test save
+    if(isDuplicateTest === null) {
+      Toastify({
+        message: "Something went wrong",
+        type: "Error",
+      });
+      return;
+    }else if (isduplicateTest) {
       Toastify({
         message: "Test already exists with this name. Please save with another",
         type: "warn",
       });
     } else {
-      // Proceed to save
+      // Proceed to save when its update or new test
       if (!test.title.trim()) {
         // If the test title is empty or only contains whitespace, set it to a default value
         Toastify({
@@ -202,10 +223,10 @@ const TestTabs = () => {
         });
         return;
       }
-
-      const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
-      test.folderGuid = folderGuid;
-
+      // Reset Guid of test if its save As
+      if(buttonName === "saveAs") {
+        test.testId = null;
+      }
       let questionBindings = await saveQuestions(test);
       if(questionBindings && questionBindings.length != 0) {
         saveTest(test, questionBindings);
@@ -242,10 +263,13 @@ const TestTabs = () => {
     testcreationdata.body.assignmentContents.binding = questionBindings;
     try {
       let testResult = await saveMyTest(testcreationdata, test.folderGuid);
+      // update GUID & Questions of the saved test object
       if (testResult) {
         test.questions.forEach((qstn, index) => {
           qstn.masterData = JSON.parse(JSON.stringify(qstn.qtiModel));
         }); 
+        test.testId = testResult.guid;
+        test.metadata.guid = testResult.guid;
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -335,13 +359,46 @@ const TestTabs = () => {
     return qstnExtMetadata;
   };
 
-  const isDuplicateTest = async (test) => {
+
+  const isDuplicateTest = async (buttonName, test) => {
+    let testStatus = await duplicateTestStatus(test);
+    //status 0 = No duplicates
+    //status 1 = Duplicates
+    //status 2 = Update
+    if(testStatus === 0) {
+      return false;
+    } else if (testStatus === 1) {
+      console.log("Returning true ")
+      return true;
+    } else if (testStatus === 2) {
+      if(buttonName && buttonName === "saveAs") {
+        return true; 
+      } else {
+        return false;
+      }
+    } 
+    return null;
+  }
+
+
+  const duplicateTestStatus = async (test) => {
     try {
+      var isDuplicate = 0;
       const folderTests = await getFolderTests(test.folderGuid);
-      return folderTests.some(
-        (folderTest) =>
-          folderTest.title === test.title && folderTest.guid !== test.testId
-      );
+      // If test.title === folderTest.title && test.testId == folderTest.guid, this test is being updated 
+      // if only test.title match OR if only Guid match, then its duplicate
+      // if both does not match then its new test save
+      for (const folderTest of folderTests) { 
+          if(folderTest.title == test.title && folderTest.guid == test.testId) {
+            isDuplicate = 2;
+            break;
+          }  else if (folderTest.title == test.title || folderTest.guid == test.testId) {
+            isDuplicate = 1;
+            break;
+          } 
+      }
+      console.log("Duplicate test status : ", isDuplicate);
+      return isDuplicate;
     } catch (error) {
       console.error("Error fetching folder tests:", error);
     }
