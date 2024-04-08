@@ -140,7 +140,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       backdrop={backdrop}
       keyboard={keyboard}>
       <Modal.Header closeButton>
-        <Modal.Title>Export Tests</Modal.Title>
+      <Modal.Title>
+        <FormattedMessage id="exportTestsModalpopupTitle" />
+      </Modal.Title>
       </Modal.Header>
 
 
@@ -148,7 +150,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
         <Form>
           <Form.Group as={Row}>
             <Col sm="6">
-              <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>Export Format:</Form.Label>
+            <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+              <FormattedMessage id="exportFormatLabel" />
+            </Form.Label>
 
               {exportFileFormats.map((format, index) => (
                 <Form.Check
@@ -163,8 +167,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
             </Col>
             {showMSWordSetting && (
             <Col sm="6">
-              <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Answer Area:</Form.Label>
-
+             <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>
+                <FormattedMessage id="answerAreaLabel" />
+              </Form.Label>
               {answerAreas.map((area, index) => (
                 <Form.Check
                   type="radio"
@@ -187,7 +192,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               {/* Margins Section */}
               <Form.Group as={Row}>
                 <Col sm="6">
-                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Margins:</Form.Label>
+                <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>
+                  <FormattedMessage id="marginsLabel" />
+                </Form.Label>
 
                   {margins.map((margin, index) => (
                     <Form.Check
@@ -201,7 +208,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                   ))}
                 </Col>
                 <Col sm="6">
-                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Answer Key:</Form.Label>
+                <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>
+                  <FormattedMessage id="answerKeyLabel" />
+                </Form.Label>
 
                   {answerKeys.map((key, index) => (
                     <Form.Check
@@ -219,7 +228,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               {/*  Answer Area Section */}
               <Form.Group as={Row}>
                 <Col sm="6">
-                  <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>Page Number:</Form.Label>
+                <Form.Label column sm="6" style={{ fontWeight: 'bold' }}>
+                  <FormattedMessage id="pageNumberLabel" />
+                </Form.Label>
 
                   {pageNumbers.map((number, index) => (
                     <Form.Check
@@ -233,7 +244,9 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                   ))}
                 </Col>
                 <Col sm="6">
-                  <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>Labels and Versions:</Form.Label>
+                <Form.Label column sm="6" style={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <FormattedMessage id="labelsAndVersionsLabel" />
+                </Form.Label>
 
                   <Form.Check
                     type="checkbox"
@@ -267,12 +280,12 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
               />
             </Col>
             <Col xs={6} className="text-right"  style={{paddingLeft: '105px', paddingRight: '0px'}}>
-              <Button variant="secondary" onClick={handleCloseModal} style={{ marginLeft : '10px' }}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleExport} style={{ float : 'right' }}> 
-                Export
-              </Button>
+            <Button variant="secondary" onClick={handleCloseModal} style={{ marginLeft: '10px' }}>
+              <FormattedMessage id="cancelButtonModalpopupExportText" />
+            </Button>
+            <Button variant="primary" onClick={handleExport} style={{ float: 'right' }}>
+              <FormattedMessage id="exportButtonModalpopupExportTextText" />
+            </Button>
             </Col>
           </Row>
         </Container>
