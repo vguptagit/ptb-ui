@@ -82,9 +82,10 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
 
   console.log("edited ",editFolderName)
   const handleSaveClick = (e) => {
-    const storedSelectedFolderId = sessionStorage.getItem('selectedFolderId');
+    var storedSelectedFolderId = sessionStorage.getItem('selectedFolderId');
     if (storedSelectedFolderId) {
-      setSelectedFolderId(JSON.parse(storedSelectedFolderId));
+      storedSelectedFolderId = JSON.parse(storedSelectedFolderId);
+      setSelectedFolderId(storedSelectedFolderId);
     }
     if (editFolderName.length > 0) {
       // Update the title of selectedTest with editFolderName
@@ -131,7 +132,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       <Button variant="secondary" onClick={handleCloseModal}>
         <FormattedMessage id="cancelButtonSaveasmodalpopupText" />
       </Button>
-      <Button variant='primary' onClick={handleSaveClick}>
+      <Button variant='primary' name="saveAs" onClick={handleSaveClick}> 
         <FormattedMessage id="saveButtonSaveasmodalpopupText" />
       </Button>
       </Modal.Footer>
