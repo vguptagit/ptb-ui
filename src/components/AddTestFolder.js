@@ -100,14 +100,14 @@ const TestFolder = ({ userId }) => {
     setUpdateKey(updateKey + 1);
   };
 
-  // need to update this
   const handleSaveFolder = async () => {
+    const folderNameLower = folderName.trim().toLowerCase();
+    const migratedTestsLower = "migrated tests".toLowerCase();
     if (folderName.trim() !== "") {
       try {
-        if (folderName.trim() === "Migrated Tests") {
+        if (folderNameLower === migratedTestsLower) {
           Toastify({
-            message:
-              "Folder name 'Migrated Tests' is cannot be used.",
+            message: "Folder name 'Migrated Tests' cannot be used.",
             type: "error",
           });
           return;
@@ -198,10 +198,10 @@ const TestFolder = ({ userId }) => {
 
   const handleMigratedTestView = (node) => {
     console.log("Viewing migrated tests for node:", node);
-    node.ismigrated = true
+    node.ismigrated = true;
     handleViewTest(node);
     setSelectedViewTest(node.guid);
-    setIsMigratedTests(node.ismigrated)
+    setIsMigratedTests(node.ismigrated);
   };
 
   const handleGetPublisherTests = async (bookId) => {
