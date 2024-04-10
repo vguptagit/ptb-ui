@@ -18,6 +18,7 @@ import { FormattedMessage } from "react-intl";
 function TreeView({
   onFolderSelect,
   onNodeUpdate,
+  onNodeUpdateTest,
   folders,
   rootFolderGuid,
   selectedFolderGuid,
@@ -27,6 +28,7 @@ function TreeView({
     editTestHighlight,
     setEditTestHighlight,
     setIsMigratedTests,
+    fetchUserFolders,
   } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
@@ -66,7 +68,7 @@ function TreeView({
 
         const childNodes = [
           ...childFolders.map((childFolder, childIndex) => ({
-            id: `${parentNode.id}.folder.${childIndex + 1}`,
+            id: childFolder.guid,
             parent: parentNode.id,
             droppable: true,
             text: childFolder.title,
@@ -76,7 +78,7 @@ function TreeView({
             },
           })),
           ...childTests.map((childTest, childIndex) => ({
-            id: `${parentNode.id}.test.${childIndex + 1}`,
+            id: childTest.guid,
             parent: parentNode.id,
             droppable: false,
             text: childTest.title,
@@ -97,8 +99,8 @@ function TreeView({
 
         if (existingChildNodes.length === 0) {
           updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes);
-          setTreeData(updatedTreeData);
         }
+        setTreeData(updatedTreeData);
       }
     } catch (error) {
       console.error("Error fetching child question folders:", error);
@@ -106,43 +108,59 @@ function TreeView({
   };
 
   const handleDrop = async (newTree, { dragSource, dropTarget }) => {
-    let parentId;
+    if(dragSource.droppable === true && dragSource.data.sequence !== undefined)
+    {
+      let parentId;
 
-    if (dropTarget && dropTarget.data) {
-      parentId = dropTarget.data.guid;
-    } else {
-      parentId = rootFolderGuid;
+      if (dropTarget && dropTarget.data) {
+        parentId = dropTarget.data.guid;
+      } else {
+        parentId = rootFolderGuid;
+      }
+  
+      const nodeToBeUpdated = {
+        guid: dragSource.data.guid,
+        parentId: parentId,
+        sequence: dropTarget ? dropTarget.data.sequence : 0,
+        title: dragSource.text,
+      };
+  
+      try {
+        const childFolders = await getUserTestFolders(parentId);
+        const childNodes = childFolders.map((childFolder, index) => ({
+          id: `${parentId}.${index + 1}`,
+          parent: parentId,
+          droppable: true,
+          text: childFolder.title,
+          data: {
+            guid: childFolder.guid,
+            sequence: childFolder.sequence,
+          },
+        }));
+        const parentIndex = newTree.findIndex((node) => node.id === parentId);
+        const isChildNode = parentId.toString().includes(".");
+        const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
+        const updatedTreeData = [...newTree];
+        updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
+        setTreeData(updatedTreeData);
+      } catch (error) {
+        console.error("Error fetching child test folders:", error);
+      }
+      onNodeUpdate(nodeToBeUpdated);
     }
+    else
+    {
+      let targetId;
 
-    const nodeToBeUpdated = {
-      guid: dragSource.data.guid,
-      parentId: parentId,
-      sequence: dropTarget ? dropTarget.data.sequence : 0,
-      title: dragSource.text,
-    };
-
-    try {
-      const childFolders = await getUserTestFolders(parentId);
-      const childNodes = childFolders.map((childFolder, index) => ({
-        id: `${parentId}.${index + 1}`,
-        parent: parentId,
-        droppable: true,
-        text: childFolder.title,
-        data: {
-          guid: childFolder.guid,
-          sequence: childFolder.sequence,
-        },
-      }));
-      const parentIndex = newTree.findIndex((node) => node.id === parentId);
-      const isChildNode = parentId.toString().includes(".");
-      const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
+      if (dropTarget === undefined) {
+        targetId = rootFolderGuid;
+      } else {
+        targetId = dropTarget.id;
+      }
+      onNodeUpdateTest(dragSource.parent, targetId, dragSource.data.guid);
       const updatedTreeData = [...newTree];
-      updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
       setTreeData(updatedTreeData);
-    } catch (error) {
-      console.error("Error fetching child question folders:", error);
     }
-    onNodeUpdate(nodeToBeUpdated);
   };
 
   const handleEditFolder = (folderTitle) => {

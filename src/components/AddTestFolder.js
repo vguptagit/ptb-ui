@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { saveTestFolder } from "../services/testfolder.service";
 import Toastify from "./common/Toastify";
 import TreeView from "../pages/tree-view-test-folders/TreeView";
-import { updateTestFolder } from "../services/testfolder.service";
+import { updateTestFolder, updateTest } from "../services/testfolder.service";
 import { useAppContext } from "../context/AppContext";
 import { getUserBooks, getUserBooksByID } from "../services/book.service";
 import { getPublisherTestsByBookId } from "../services/testcreate.service";
@@ -196,6 +196,24 @@ const TestFolder = ({ userId }) => {
     }
   };
 
+  const onNodeUpdateTest = async (sourceId, destinationId, testId) => {
+    try {
+      await updateTest(sourceId = (sourceId === 0) ? rootFolderGuid : sourceId, destinationId, testId);
+      Toastify({ message: "Test rearranged successfully", type: "success" });
+    } catch (error) {
+      console.error("Error rearranging test:", error);
+      if (error?.message?.response?.request?.status === 409) {
+        Toastify({
+          message: error.message.response.data.message,
+          type: "error",
+        });
+        fetchUserFolders();
+      } else {
+        Toastify({ message: "Failed to rearrange test", type: "error" });
+      }
+    }
+  }
+
   const handleMigratedTestView = (node) => {
     console.log("Viewing migrated tests for node:", node);
     node.ismigrated = true;
@@ -357,6 +375,7 @@ const TestFolder = ({ userId }) => {
             folders={savedFolders}
             onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
+            onNodeUpdateTest={onNodeUpdateTest}
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
           />
