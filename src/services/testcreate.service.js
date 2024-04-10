@@ -1,5 +1,6 @@
 import httpInterceptor from "../httpHelper/httpHelper";
 import questions from "../mocks/questions.json";
+import { getErrorMessage } from "../utils/common";
 
 const url = process.env.REACT_APP_API_URL;
 
@@ -121,3 +122,26 @@ export const getPublisherTestsByBookId = (bookId) => {
       });
     });
 };
+
+export const exportTest = async (testId, format, options) => {
+  let data = '';
+  for (const key in options) {
+    data += `${key}=${options[key]}$`;
+  }
+  data = data.slice(0, -1);
+
+  const base64Data = btoa(data);
+  const downloadURL = `${url}/tests/${testId}/download/${format}?data=${base64Data}`;
+  try {
+    const response = await httpInterceptor.get(downloadURL, { responseType: 'blob' });
+
+    if (response.status !== 200) {
+      throw new Error(getErrorMessage(response));
+    }
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+

@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
 import { FormattedMessage } from "react-intl";
 import Toastify from '../common/Toastify';
-import { getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
+import { exportTest, getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
 import "./Modalpopupexport.css";
+import Loader from '../common/loader/Loader';
+import { downloadFile } from '../../utils/common';
+
 //exportFileFormat
 const exportFileFormats = [
-  { value: 'doc', text: 'MS Word' },
-  { value: 'pdf', text: 'PDF' },
-  { value: 'bbpm', text: 'Blackboard Pool manager' },
-  { value: 'bbtm', text: 'Blackboard Test manager' },
-  { value: 'qti21', text: 'QTI 2.1' }
+  { value: 'doc', text: 'MS Word', fileExtension: 'doc' },
+  { value: 'pdf', text: 'PDF', fileExtension: 'pdf' },
+  { value: 'bbpm', text: 'Blackboard Pool manager', fileExtension: 'zip' },
+  { value: 'bbtm', text: 'Blackboard Test manager', fileExtension: 'zip' },
+  { value: 'qti21', text: 'QTI 2.1', fileExtension: 'zip' }
 ];
 //"includeAreaForStudentResponse": "NONE", - Answer Area
 const answerAreas = [
@@ -55,6 +58,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
   const [showMSWordSetting, setShowMSWordSetting] = useState(true);
   const [isIncludeRandomizedTest, setIsIncludeRandomizedTest] = useState(false);
   const [isIncludeStudentName, setIsIncludeStudentName] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (show) {
@@ -94,13 +98,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
     setShowMSWordSetting(isMSWordOrPDFSelected(format.value));
   };
 
-  const handleExport = async () => {
-    if (!isSaveSettingsAsDefault) {
-      //Toastify({ message: 'Please check "Save settings as default" before exporting.', type: 'error' });
-      return;
-    }
-
-    // Implement export functionality here
+  const saveSettings = async () => {
     const payload = {
       multipleVersions: false, // isIncludeRandomizedTest
       numberOfVersions: 0, // assuming it's always 1
@@ -123,19 +121,58 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
       pageNumberDisplay: selectedPageNumber.value
     };
 
-    try {
-      const response = await savePrintsettings(payload);
-      Toastify({ message: 'Export successful', type: 'success' }); // Display success message
-      console.log("Export successful:", response);
-      handleCloseModal(); // Close the modal upon successful export
-    } catch (error) {
-      Toastify({ message: `Export failed! ${error.message}`, type: 'error' }); // Display error message
-      console.error("Export failed:", error);
+    return savePrintsettings(payload);
+  };
+
+  const handleExport = async () => {
+    setLoading(true);
+    if (isSaveSettingsAsDefault) {
+      try {
+        await saveSettings();
+        Toastify({
+          type: "success",
+          message: "Print settings saved successfully"
+        });
+      } catch (error) {
+        Toastify({
+          type: "error",
+          message: `Print settings save failed! ${error.message}`
+        });
+      }
     }
+
+    const options = {
+      answerKey: selectedAnswerKey.value,
+      answerArea: selectedAnswerArea.value,
+      includeRandomizedTests: isIncludeRandomizedTest,
+      includeStudentName: isIncludeStudentName,
+      saveSettings: false,
+      margin: selectedMargin.value,
+      pageNumberDisplay: selectedPageNumber.value
+    };
+    exportTest(selectedTest.testId, selectedFormat.value, options)
+      .then(blob => {
+        const fileName = `${selectedTest.title.replace(/ /g, "_")}.${selectedFormat.fileExtension}`;
+        downloadFile(blob, fileName);
+        Toastify({
+          type: "success",
+          message: "Document export successful..."
+        });
+        handleCloseModal();
+      })
+      .catch(error => {
+        Toastify({
+          type: "error",
+          message: error instanceof Error ? error.message : error
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
-    <Modal className="custom-modal-size" show={show} onHide={handleCloseModal}
+    <>
+      <Loader show={loading}/>
+      <Modal className="custom-modal-size" show={show} onHide={handleCloseModal}
       centered
       backdrop={backdrop}
       keyboard={keyboard}>
@@ -291,6 +328,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
         </Container>
       </Modal.Footer>
     </Modal >
+    </>
   );
 
 };
