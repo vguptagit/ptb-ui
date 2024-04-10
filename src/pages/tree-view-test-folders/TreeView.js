@@ -150,7 +150,14 @@ function TreeView({
     }
     else
     {
-      onNodeUpdateTest(dragSource.parent, dropTarget.id, dragSource.data.guid);
+      let targetId;
+
+      if (dropTarget === undefined) {
+        targetId = rootFolderGuid;
+      } else {
+        targetId = dropTarget.id;
+      }
+      onNodeUpdateTest(dragSource.parent, targetId, dragSource.data.guid);
       const updatedTreeData = [...newTree];
       setTreeData(updatedTreeData);
     }
