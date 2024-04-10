@@ -113,66 +113,84 @@ const Matching = (props) => {
     })
 
     const getEditView = () => {
+    
+        const isCaptionFilled = formData.Caption.trim() !== '';
+    
+  
+        const areOptionsFilled = formData.Options.every(opt => opt.option.trim() !== '' && opt.matchingOption.trim() !== '');
+    
+      
+        const isViewButtonEnabled = isCaptionFilled && areOptionsFilled;
+    
         return (
             <div className="m-2">
-                 <Form className="editmode border rounded p-3 bg-light">
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label className="mb-1" style={{ fontSize: '0.9em' }}>{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
-                            <Form.Control
-                                name="Caption"
-                                onChange={(e) => setFormData({ ...formData, Caption: e.target.value })}
-                                value={formData.Caption}
-                                className="mb-4"
-                                type="text"
-                                autoComplete="off"
-                                placeholder={props.questionNode.qtiModel.EditCaption}
-                            />
-                            <Form.Group className="mb-1">
-                                {formData ?.Options ?.length > 0 &&
-                                    formData ?.Options.map((optItem, index) => {
-                                        return (
-                                            <div key={index} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                                <Form.Group style={{ marginBottom: '5px', width: '50%' }}>
-                                                    <div>
-                                                        <Form.Control
-                                                            onChange={(e) => handleOptionsChange(e, index)}
-                                                            value={optItem.option}
-                                                            name="option"
-                                                            type="text"
-                                                            placeholder={props.questionNode.qtiModel.editOption_Column_A1 + (index + 1) + props.questionNode.qtiModel.editOption_Column_A2}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                                <Form.Group style={{ marginBottom: '5px', width: '50%' }}>
-                                                    <div>
-                                                        <Form.Control
-                                                            onChange={(e) => handleOptionsChange(e, index)}
-                                                            value={optItem.matchingOption}
-                                                            name="matchingOption"
-                                                            type="text"
-                                                            placeholder={props.questionNode.qtiModel.editOption_Column_B + (index + 1)}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                            </div>
-                                        );
-                                    })}
-                            </Form.Group>
-
+                <Form className="editmode border rounded p-3 bg-light">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label className="mb-1" style={{ fontSize: '0.9em' }}>{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+                        <Form.Control
+                            name="Caption"
+                            onChange={(e) => setFormData({ ...formData, Caption: e.target.value })}
+                            value={formData.Caption}
+                            className="mb-4"
+                            type="text"
+                            autoComplete="off"
+                            placeholder={props.questionNode.qtiModel.EditCaption}
+                            maxLength={255} 
+                        />
+                        <Form.Group className="mb-1">
+                            {formData?.Options?.length > 0 &&
+                                formData?.Options.map((optItem, index) => {
+                                    return (
+                                        <div key={index} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                            <Form.Group style={{ marginBottom: '5px', width: '50%' }}>
+                                                <div>
+                                                    <Form.Control
+                                                        onChange={(e) => handleOptionsChange(e, index)}
+                                                        value={optItem.option}
+                                                        name="option"
+                                                        type="text"
+                                                        placeholder={props.questionNode.qtiModel.editOption_Column_A1 + (index + 1) + props.questionNode.qtiModel.editOption_Column_A2}
+                                                        maxLength={255} 
+                                                    />
+                                                </div>
+                                            </Form.Group>
+                                            <Form.Group style={{ marginBottom: '5px', width: '50%' }}>
+                                                <div>
+                                                    <Form.Control
+                                                        onChange={(e) => handleOptionsChange(e, index)}
+                                                        value={optItem.matchingOption}
+                                                        name="matchingOption"
+                                                        type="text"
+                                                        placeholder={props.questionNode.qtiModel.editOption_Column_B + (index + 1)}
+                                                        maxLength={255} 
+                                                    />
+                                                </div>
+                                            </Form.Group>
+                                        </div>
+                                    );
+                                })}
                         </Form.Group>
-
-                        <div className="mb-1 d-flex justify-content-end">
-                            <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
-                                <FormattedMessage id="viewButtonMatching" defaultMessage="View" />
-                            </Link>
-                            <Link className="deletelink" onClick={handleDelete}>
-                                <FormattedMessage id="removeButtonMatching" defaultMessage="Remove" />
-                            </Link>
-                        </div>
-                    </Form>
+    
+                    </Form.Group>
+    
+                    <div className="mb-1 d-flex justify-content-end">
+                        <Link
+                            className={`savelink ${!isViewButtonEnabled ? 'disabled-link' : ''}`}
+                            onClick={handleSubmit}
+                            tabIndex={!isViewButtonEnabled ? -1 : 0}
+                            disabled={!isViewButtonEnabled} 
+                        >
+                            <FormattedMessage id="viewButtonMatching" defaultMessage="View" />
+                        </Link>
+                        <Link className="deletelink" onClick={handleDelete}>
+                            <FormattedMessage id="removeButtonMatching" defaultMessage="Remove" />
+                        </Link>
+                    </div>
+                </Form>
             </div>
         );
     }
+    
 
     const getPrintOnlyView = () => {
         return (
@@ -209,8 +227,8 @@ const Matching = (props) => {
                             {questionNode.qtiModel.Options.map((option, index) => (
                                 <div key={index} className="view-question">
                                     <div className="text-section d-flex flex-wrap">
-                                        <span className="ml-3 ml-md-0" style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 15 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
-                                        <span className="ml-3 ml-md-0" style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 15 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
+                                        <span className="ml-3 ml-md-0" style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 255 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
+                                        <span className="ml-3 ml-md-0" style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 255 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
                                     </div>
                                 </div>
                             ))}
