@@ -211,9 +211,9 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
   const handleNext = () => {
     let parentIds = [];
     if (bookDetails.length > 0) {
-      parentIds = bookDetails.map(book => book.id);
+      parentIds = bookDetails.map(book => book.id)  ;
     } else {
-      parentIds = userbooksData;
+      parentIds = selectedBooks;
     }
 
     saveUserBooks(parentIds, sessionStorage.getItem("userId"));
