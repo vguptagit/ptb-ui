@@ -19,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* adjust the z-index as needed to ensure it overlays other content */
+    z-index: 10000; /* adjust the z-index as needed to ensure it overlays other content */
   }
 
   .spinner:focus{

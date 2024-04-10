@@ -435,16 +435,14 @@ const TestTabs = () => {
   };
 
   const handleShowModalExport = () => {
-    // console.log("handleSaveAs 1", showModal);
-    // getPrintsettings().then( (data) => {
-
-    //   console.log("print settings are as follows", data);
-    // },
-    // (error) => {
-    //   console.log(error);
-    // });
-    setShowModalExport(true);
-    //console.log("handleSaveAs 2", showModal);
+    if (selectedTest.testId) {
+      setShowModalExport(true);
+    } else {
+      Toastify({
+        type: 'warn',
+        message: 'Please save the test before exporting!'
+      });
+    }
   };
 
   const handlePrint = () => {
@@ -529,6 +527,7 @@ const TestTabs = () => {
             <Modalpopupexport
               width="80%"
               show={showModalExport}
+              selectedTest={selectedTest}
               handleCloseModal={() => setShowModalExport(false)}
             />
           </div>
