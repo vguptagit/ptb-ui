@@ -30,6 +30,20 @@ export const updateTestFolder = (folder) => {
     });
 };
 
+export const updateTest = (sFolderId, dFolderId, testID) => {
+  return httpInterceptor
+    .put(`${url}/my/folders/${sFolderId}/folders/${dFolderId}/tests/${testID}`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
 export const getRootTestFolders = () => {
   return httpInterceptor
     .get(`${url}/my/testfolders`)
