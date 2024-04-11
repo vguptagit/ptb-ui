@@ -86,12 +86,29 @@ export const getUserQuestions = (folderId) => {
     });
 };
 
-
-
-
 export const getAllQuestions = (bookid, nodeId) => {
   return httpInterceptor
     .get(`${url}/books/${bookid}/nodes/${nodeId}/questions`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return Promise.reject({
+        type: "error",
+        message: error,
+      });
+    });
+};
+
+export const swapQuestionBetweenFolders = (
+  sourceFolderId,
+  destinationFolderId,
+  questionId
+) => {
+  const endpoint = `${url}/my/folders/${sourceFolderId}/folders/${destinationFolderId}/questions/${questionId}`;
+
+  return httpInterceptor
+    .put(endpoint)
     .then((response) => {
       return response?.data;
     })

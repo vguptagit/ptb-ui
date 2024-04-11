@@ -11,97 +11,7 @@ import {
 import Toastify from "../common/Toastify";
 import "./AddQuestionFolder.css";
 import TreeViewQuestionFolder from "./Treeview/TreeViewQuestionFolder";
-import CustomQuestionBanksService from "../../services/CustomQuestionBanksService";
-import MultipleChoice from "../questions/MultipleChoice";
-import MultipleResponse from "../questions/MultipleResponse";
-import TrueFalse from "../questions/TrueFalse";
-import Matching from "../questions/Matching";
-import FillInBlanks from "../questions/FillInBlanks";
-import Essay from "../questions/Essay";
 import QtiService from "../../utils/qtiService";
-import { useDrag } from "react-dnd";
-import Loader from "../common/loader/Loader";
-
-const DraggableQuestion = ({ question, index }) => {
-  const [, drag] = useDrag({
-    type: "SAVED_QUESTION",
-    item: { question },
-  });
-
-  const key = question.guid;
-  const { qtiModel } = question;
-
-  switch (question.metadata.quizType) {
-    case CustomQuestionBanksService.MultipleChoice:
-      return (
-        <div key={key} ref={drag}>
-          <MultipleChoice
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    case CustomQuestionBanksService.MultipleResponse:
-      return (
-        <div key={key} ref={drag}>
-          <MultipleResponse
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    case CustomQuestionBanksService.TrueFalse:
-      return (
-        <div key={key} ref={drag}>
-          <TrueFalse
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    case CustomQuestionBanksService.Matching:
-      return (
-        <div key={key} ref={drag}>
-          <Matching
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    case CustomQuestionBanksService.FillInBlanks:
-      return (
-        <div key={key} ref={drag}>
-          <FillInBlanks
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    case CustomQuestionBanksService.Essay:
-      return (
-        <div key={key} ref={drag}>
-          <Essay
-            questionNode={question}
-            questionNodeIndex={index}
-            qtiModel={qtiModel}
-            printView={3}
-          />
-        </div>
-      );
-    default:
-      return null;
-  }
-};
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
@@ -114,7 +24,6 @@ const QuestionFolder = ({ userId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [savedQuestions, setSavedQuestions] = useState([]);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   async function fetchRootFolderGuid() {
     try {
@@ -174,11 +83,9 @@ const QuestionFolder = ({ userId }) => {
             };
           });
           setSavedQuestions(questionsWithQtiModels);
-          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching questions:", error);
-        setLoading(false);
       }
     };
 
@@ -288,19 +195,6 @@ const QuestionFolder = ({ userId }) => {
     }
   };
 
-  const renderQuestions = () => {
-    if (!savedQuestions) {
-      return null;
-    }
-    return savedQuestions.map((question, index) => (
-      <DraggableQuestion
-        key={question.guid}
-        question={question}
-        index={index}
-      />
-    ));
-  };
-
   return (
     <div className="p-2">
       <div className="button-container">
@@ -357,11 +251,11 @@ const QuestionFolder = ({ userId }) => {
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
-            renderQuestions={renderQuestions}
+            savedQuestions={savedQuestions}
           />
         )}
       </div>
-      {loading ? (
+      {/* {loading ? (
         <Loader show={true} />
       ) : savedQuestions.length === 0 ? (
         <div className="no-data-message">No questions available</div>
@@ -369,7 +263,7 @@ const QuestionFolder = ({ userId }) => {
         <>
           <div className="saved-questions">{renderQuestions()}</div>
         </>
-      )}
+      )} */}
     </div>
   );
 };
