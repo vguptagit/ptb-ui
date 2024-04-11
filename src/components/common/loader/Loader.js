@@ -53,7 +53,7 @@ function Loader(props) {
         >
           <div className="fallback-spinner">
             <div className="loading"  aria-label="loading screen">
-              <Spinner className="spinner" animation="border" role="status" tabindex="0">
+              <Spinner className="spinner" animation="border" role="status" tabIndex="0">
               <span className="visually-hidden">
                   <FormattedMessage id="loading" defaultMessage="Loading..." />
               </span>
