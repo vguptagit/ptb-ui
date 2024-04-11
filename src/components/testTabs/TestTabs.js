@@ -195,11 +195,6 @@ const TestTabs = () => {
       test.folderGuid = folderGuid;
     }
 
-    // Test Name will be passed from save As modal popup
-    if(newTestName) {
-      test.testId = null;
-    }
-
     let isduplicateTest = await isDuplicateTest(buttonName,test);
     // When duplicate method fails because of server error dont proceed with test save
     if(isDuplicateTest === null) {
@@ -263,11 +258,8 @@ const TestTabs = () => {
     testcreationdata.body.assignmentContents.binding = questionBindings;
     try {
       let testResult = await saveMyTest(testcreationdata, test.folderGuid);
-      // update GUID & Questions of the saved test object
+      // update GUID the saved test object
       if (testResult) {
-        test.questions.forEach((qstn, index) => {
-          qstn.masterData = JSON.parse(JSON.stringify(qstn.qtiModel));
-        }); 
         test.testId = testResult.guid;
         test.metadata.guid = testResult.guid;
         Toastify({
@@ -311,6 +303,9 @@ const TestTabs = () => {
           activityFormat: "application/vnd.pearson.qti.v2p1.asi+xml",
           bindingIndex: index,
         });
+        // update question data if question save is success
+        test.questions[index].guid = qstnResult.guid;
+        test.questions[index].masterData = JSON.parse(JSON.stringify(test.questions[index].qtiModel));
       });
     } catch (error) {
       console.error("Error saving Questions:", error);
@@ -347,7 +342,7 @@ const TestTabs = () => {
         version: qstn.version,
         extendedMetadata: qstnExtMetadata,
       },
-      body: qstn.IsEdited ? qstn.data : null,
+      body: qstn.data,
     };
 
     return QuestionEnvelop;
@@ -362,19 +357,22 @@ const TestTabs = () => {
 
   const isDuplicateTest = async (buttonName, test) => {
     let testStatus = await duplicateTestStatus(test);
-    //status 0 = No duplicates
-    //status 1 = Duplicates
-    //status 2 = Update
+    //status 0 = No duplicates.
+    //status 1 = Duplicate Title but guid is different. Prevent save 
+    //status 2 = Duplicate Guid but title is different. So set testId to empty to save new test
+    //status 3 = both guid & title are same (Update).
     if(testStatus === 0) {
       return false;
     } else if (testStatus === 1) {
-      console.log("Returning true ")
       return true;
     } else if (testStatus === 2) {
+      test.testId = null;
+      return false;
+    } else if (testStatus === 3) {
       if(buttonName && buttonName === "saveAs") {
-        return true; 
+        return true; // prevent update during save As
       } else {
-        return false;
+        return false; 
       }
     } 
     return null;
@@ -390,12 +388,15 @@ const TestTabs = () => {
       // if both does not match then its new test save
       for (const folderTest of folderTests) { 
           if(folderTest.title == test.title && folderTest.guid == test.testId) {
-            isDuplicate = 2;
+            isDuplicate = 3; // Both GUID & Title match
             break;
-          }  else if (folderTest.title == test.title || folderTest.guid == test.testId) {
-            isDuplicate = 1;
+          }  else if (folderTest.guid == test.testId) {
+            isDuplicate = 2; // Same GUID with different title
             break;
-          } 
+          } else if (folderTest.title == test.title) {
+            isDuplicate = 1; // Same title with different GUID
+            break;
+          }
       }
       console.log("Duplicate test status : ", isDuplicate);
       return isDuplicate;
