@@ -14,9 +14,9 @@ import SessionJS from './components/common/SessionJS'
 function App() {
 
   return (
-    <>
-    <SessionJS/>  
+    <> 
       <AuthProvider>
+        <SessionJS/>
         <AppProvider>
           <IntlProvider locale={initLocale} messages={localeMessages}>
           <DndProvider backend={MultiBackend} options={getBackendOptions()}>

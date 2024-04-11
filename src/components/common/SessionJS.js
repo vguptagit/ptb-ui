@@ -1,11 +1,13 @@
-import axios from 'axios';
 import { useEffect } from 'react';
 import callLoginEndpoint from '../../services/authentication';
+import { useAuth } from '../../context/AuthContext';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
-  const apiurl = process.env.REACT_APP_API_URL;
   const loginurl =process.env.REACT_APP_AUTH_Login_URL ;
+
+  const { setUserDetails } = useAuth();
+
   useEffect(() => {
     console.log("sessionjs onmount");
     createScriptElement();
@@ -70,6 +72,8 @@ function SessionJS() {
               console.log('Login successful:', response);
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
+
+              setUserDetails({name: response.familyName, email: response.emailAddress})
             })
             .catch(error => {
               console.error('Error logging in:', error);
