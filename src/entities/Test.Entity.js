@@ -8,7 +8,7 @@ class Test {
     this.course = course;
     this.questions = questions || [];
     this.criterias = criterias;
-    this.metadata = metadata;
+    this.metadata = metadata || {};
     this.IsAnyQstnEditMode = IsAnyQstnEditMode;
   }
 }
