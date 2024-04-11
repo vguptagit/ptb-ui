@@ -115,6 +115,13 @@ const MultipleResponse = (props) => {
     })
 
     const getEditView = () => {
+        const isCaptionFilled = formData.Caption.trim() !== '';
+    
+  
+        const areOptionsFilled = formData.Options.every(opt => opt.option.trim() !== '' && opt.matchingOption.trim() !== '');
+    
+      
+        const isViewButtonEnabled = isCaptionFilled && areOptionsFilled;
         return (
             <div className="m-2">
                  <Form className="editmode border rounded p-3 bg-light">
@@ -203,7 +210,7 @@ const MultipleResponse = (props) => {
                             </div>
                         </Collapse>
                         <div className="mb-1 d-flex justify-content-end">
-                            <Link className={`savelink ${!formData.Caption.trim() ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() ? -1 : 0}>
+                            <Link className={`savelink ${!formData.Caption.trim() && !isViewButtonEnabled  ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() && !isViewButtonEnabled ? -1 : 0}      disabled={!isViewButtonEnabled} >
                                 <FormattedMessage id="viewMultipleResponse" />
                             </Link>
                             <Link className="deletelink" onClick={handleDelete}>
