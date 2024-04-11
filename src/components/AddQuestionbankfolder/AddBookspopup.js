@@ -234,8 +234,6 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-    const inputWidth = Math.max(200, e.target.scrollWidth);
-    document.querySelector(".search-input").style.minWidth = inputWidth + "px";
   };
   const handleSelectItem = (node) => {
     if (!node.droppable) {
