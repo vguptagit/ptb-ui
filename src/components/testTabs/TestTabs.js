@@ -197,7 +197,7 @@ const TestTabs = () => {
 
     let isduplicateTest = await isDuplicateTest(buttonName,test);
     // When duplicate method fails because of server error dont proceed with test save
-    if(isDuplicateTest === null) {
+    if(isduplicateTest === null) {
       Toastify({
         message: "Something went wrong",
         type: "Error",
@@ -228,6 +228,7 @@ const TestTabs = () => {
       }    
     }
   };
+
   const saveTest = async (test, questionBindings) => {
     // Building the json to create the test.
     var testcreationdata = {
@@ -262,6 +263,10 @@ const TestTabs = () => {
       if (testResult) {
         test.testId = testResult.guid;
         test.metadata.guid = testResult.guid;
+
+        // Updating selected test with testID
+        dispatchEvent("UPDATE_SELECTED_TEST", { test });
+        
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -374,7 +379,8 @@ const TestTabs = () => {
       } else {
         return false; 
       }
-    } 
+    }
+
     return null;
   }
 
@@ -412,8 +418,8 @@ const TestTabs = () => {
   const handleCloseModal = (e) => {
     setShowModal(!showModal);
 
-    e.preventDefault();
-    e.stopPropagation();
+    e?.preventDefault();
+    e?.stopPropagation();
   };
 
   // const handleClosePrintModal = (event) => {
