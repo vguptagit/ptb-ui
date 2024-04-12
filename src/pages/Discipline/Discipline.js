@@ -81,7 +81,9 @@ const Discipline = () => {
       {loading ? (
         <Loader show={true} />
       ) : allData.length === 0 ? (
-        <div className="no-data-message">No disciplines available</div>
+        <div className="no-data-message">
+        <FormattedMessage id="noDisciplinesMessage" />
+        </div>
       ) : (
         <>
           <div className="top-container">
@@ -109,7 +111,9 @@ const Discipline = () => {
                 </div>
               </div>
               {searchResults.length === 0 && (
-                <div className="no-matching-discipline-message">"No matching disciplines found"</div>
+                  <div className="no-matching-discipline-message">
+                  <FormattedMessage id="noMatchingDisciplinesMessage" />
+                 </div>
               )}
               <ul className="discipline result-list mt-3">
                 {searchResults.map((item, index) => (

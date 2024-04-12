@@ -113,5 +113,20 @@
     "cancelButtonModalpopupExportText": "Cancel",
     "exportButtonModalpopupExportTextText": "Export",
     "cancelButtonSaveasmodalpopupText": "Cancel",
-    "saveButtonSaveasmodalpopupText": "Save"
+    "saveButtonSaveasmodalpopupText": "Save",
+    "yourTestsResourceTab": "Your Tests",
+    "yourQuestionsResourceTab": "Your Questions",
+    "questionBanksResourceTab": "Question Banks",
+    "customQuestionsResourceTab": "Custom Questions",
+    "dragQuestionsHereTestcreate": "Drag Questions Here",
+    "noMatchingBooksMessage": "No matching books found",
+    "backButtonBooktabText": "Back",
+    "nextButtonBooktabText": "Next",
+    "noDisciplinesMessage": "No disciplines available",
+    "noMatchingDisciplinesMessage": "No matching disciplines found",
+    "helpText": "Help",
+    "metadataTitle": "Metadata",
+    "closeButtonSettingsModalText": "Close",
+    "saveButtonSettingsModalText": "Save",
+    "startText": "Start"
 }
