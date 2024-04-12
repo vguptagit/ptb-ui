@@ -15,6 +15,7 @@ import Matching from "../../questions/Matching";
 import FillInBlanks from "../../questions/FillInBlanks";
 import Essay from "../../questions/Essay";
 import QtiService from "../../../utils/qtiService";
+import Loader from "../../common/loader/Loader";
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -27,6 +28,7 @@ function TreeViewQuestionFolder({
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -61,7 +63,7 @@ function TreeViewQuestionFolder({
         });
 
         const questionNodes = questionsWithQtiModels.map((question, index) => ({
-          id: `${parentNode.bookGuid}-${parentNode.nodeGuid}-question-${index}`,
+          id: question.guid,
           parent: parentNode.id,
           droppable: false,
           questionGuid: question.guid,
@@ -73,11 +75,11 @@ function TreeViewQuestionFolder({
             />
           ),
           data: {
-            guid: question.guid,
-            sequence: question.sequence,
+            guid: parentNode.data.guid,
             isQuestion: true,
           },
         }));
+        setLoading(false);
 
         const updatedTreeData = [...treeData];
         const nodeIndex = updatedTreeData.findIndex(
@@ -209,6 +211,7 @@ function TreeViewQuestionFolder({
           },
         })),
       ];
+      setLoading(false);
       setTreeData(updatedTreeData);
     }
   }, [folders, savedQuestions]);
@@ -218,9 +221,26 @@ function TreeViewQuestionFolder({
     console.log(dropTarget);
 
     if (dragSource.data.isQuestion) {
-      const sourceFolderId = rootFolderGuid;
-      const destinationFolderId = dropTarget.data.guid;
-      const questionId = dragSource.data.guid;
+      let sourceFolderId;
+      let targetFolderId;
+      let questionId;
+      if (dragSource.parent) {
+        if (dropTarget && dropTarget.parent) {
+          sourceFolderId = dragSource.data.guid;
+          targetFolderId = dropTarget.data.guid;
+          questionId = dragSource.questionGuid;
+        } else {
+          sourceFolderId = dragSource.data.guid;
+          targetFolderId = rootFolderGuid;
+          questionId = dragSource.questionGuid;
+        }
+      } else {
+        sourceFolderId = rootFolderGuid;
+        targetFolderId = dropTarget.data.guid;
+        questionId = dragSource.data.guid;
+      }
+
+      const destinationFolderId = targetFolderId;
 
       try {
         await swapQuestionBetweenFolders(
@@ -329,7 +349,12 @@ function TreeViewQuestionFolder({
       onMouseUp={handleMouseUp}
       style={{ marginBottom: "-47px" }}
     >
-      <Tree
+      {loading ? (
+        <Loader show={true} />
+      ) : savedQuestions.length === 0 ? (
+        <Loader show={true} />
+      ) : (
+        <Tree
         tree={treeData}
         rootId={0}
         render={(node, { isOpen, onToggle }) => (
@@ -389,6 +414,7 @@ function TreeViewQuestionFolder({
         canDrag={() => true}
         canDrop={() => true}
       />
+      )}
     </div>
   );
 }
