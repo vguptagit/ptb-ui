@@ -300,86 +300,88 @@ const TestFolder = ({ userId }) => {
           </div>
         </div>
       )}
-      <div className="maigratedtests">
-        <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? (
-            <i className="fa fa-caret-down"></i>
-          ) : (
-            <i className="fa fa-caret-right"></i>
-          )}
-          <span style={{ marginLeft: "9px" }}>
-            <FormattedMessage id="migratedtests" />
-          </span>
-        </button>
-        {isOpen && bookTitles.length > 0 && (
-          <div className="book-dropdown">
-            {bookTitles.map((book, index) => (
-              <div
-                key={book.guid}
-                style={{
-                  borderBottom:
-                    index !== bookTitles.length - 1
-                      ? "2px solid white"
-                      : "none",
-                  paddingBottom: "5px",
-                }}
-              >
-                <button
-                  className="testbtn"
-                  onClick={() => handleBookClick(book.guid)}
+      <div className="your-test-list">
+        <div className="maigratedtests">
+          <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? (
+              <i className="fa fa-caret-down"></i>
+            ) : (
+              <i className="fa fa-caret-right"></i>
+            )}
+            <span style={{ marginLeft: "9px" }}>
+              <FormattedMessage id="migratedtests" />
+            </span>
+          </button>
+          {isOpen && bookTitles.length > 0 && (
+            <div className="book-dropdown">
+              {bookTitles.map((book, index) => (
+                <div
+                  key={book.guid}
+                  style={{
+                    borderBottom:
+                      index !== bookTitles.length - 1
+                        ? "2px solid white"
+                        : "none",
+                    paddingBottom: "5px",
+                  }}
                 >
-                  {bookOpenStates[book.guid] ? (
-                    <i className="fa fa-caret-down"></i>
-                  ) : (
-                    <i className="fa fa-caret-right"></i>
-                  )}
-                  <span style={{ marginLeft: "9px" }}>{book.title}</span>
-                </button>
-                {bookOpenStates[book.guid] &&
-                  bookTests[book.guid] &&
-                  bookTests[book.guid].length > 0 && (
-                    <div className="test-dropdown">
-                      {bookTests[book.guid].map((test, index) => (
-                        <div
-                          key={index}
-                          className="test-item"
-                          style={{
-                            borderBottom:
-                              index !== bookTests[book.guid].length - 1
-                                ? "2px solid white"
-                                : "none",
-                          }}
-                        >
-                          {test.title}
-                          <button
-                            className={`info ${
-                              selectedViewTest === test.guid ? "selected" : ""
-                            }`}
-                            onClick={() => handleMigratedTestView(test)}
+                  <button
+                    className="testbtn"
+                    onClick={() => handleBookClick(book.guid)}
+                  >
+                    {bookOpenStates[book.guid] ? (
+                      <i className="fa fa-caret-down"></i>
+                    ) : (
+                      <i className="fa fa-caret-right"></i>
+                    )}
+                    <span style={{ marginLeft: "9px" }}>{book.title}</span>
+                  </button>
+                  {bookOpenStates[book.guid] &&
+                    bookTests[book.guid] &&
+                    bookTests[book.guid].length > 0 && (
+                      <div className="test-dropdown">
+                        {bookTests[book.guid].map((test, index) => (
+                          <div
+                            key={index}
+                            className="test-item"
+                            style={{
+                              borderBottom:
+                                index !== bookTests[book.guid].length - 1
+                                  ? "2px solid white"
+                                  : "none",
+                            }}
                           >
-                            <i className="bi bi-eye"></i>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="root-folders-tests" id="folders-tests">
-        {savedFolders && savedFolders.length > 0 && (
-          <TreeView
-            key={updateKey}
-            folders={savedFolders}
-            onFolderSelect={handleFolderSelect}
-            onNodeUpdate={onNodeUpdate}
-            onNodeUpdateTest={onNodeUpdateTest}
-            rootFolderGuid={rootFolderGuid}
-            selectedFolderGuid={selectedFolderGuid}
-          />
-        )}
+                            {test.title}
+                            <button
+                              className={`info ${
+                                selectedViewTest === test.guid ? "selected" : ""
+                              }`}
+                              onClick={() => handleMigratedTestView(test)}
+                            >
+                              <i className="bi bi-eye"></i>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="root-folders-tests" id="folders-tests">
+          {savedFolders && savedFolders.length > 0 && (
+            <TreeView
+              key={updateKey}
+              folders={savedFolders}
+              onFolderSelect={handleFolderSelect}
+              onNodeUpdate={onNodeUpdate}
+              onNodeUpdateTest={onNodeUpdateTest}
+              rootFolderGuid={rootFolderGuid}
+              selectedFolderGuid={selectedFolderGuid}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

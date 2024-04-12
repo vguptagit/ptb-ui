@@ -121,7 +121,7 @@ function TreeView({
       const nodeToBeUpdated = {
         guid: dragSource.data.guid,
         parentId: parentId,
-        sequence: dropTarget ? dropTarget.data.sequence : 0,
+        sequence: dropTarget ? dropTarget.data.sequence : newTree.length + 1,
         title: dragSource.text,
       };
   
@@ -299,22 +299,23 @@ function TreeView({
               clickedNodes.includes(node.id) ? "clicked" : ""
             }`}
             id="tree-node-clicked"
-            onClick={() => {
-              if (!isOpen && (!node.children || node.children.length === 0)) {
-                fetchChildFolders(node);
-              }
-              onToggle();
-              setClickedNodes((prevClickedNodes) => {
-                if (prevClickedNodes.includes(node.id)) {
-                  return prevClickedNodes.filter((item) => item !== node.id);
-                } else {
-                  return [...prevClickedNodes, node.id];
-                }
-              });
-            }}
           >
             {node.droppable && (
-              <span className="custom-caret">
+              <span className="custom-caret"
+                onClick={() => {
+                  if (!isOpen && (!node.children || node.children.length === 0)) {
+                    fetchChildFolders(node);
+                  }
+                  onToggle();
+                  setClickedNodes((prevClickedNodes) => {
+                    if (prevClickedNodes.includes(node.id)) {
+                      return prevClickedNodes.filter((item) => item !== node.id);
+                    } else {
+                      return [...prevClickedNodes, node.id];
+                    }
+                  });
+                }}
+              >
                 {isOpen ? (
                   <i className="fa fa-caret-down"></i>
                 ) : (
