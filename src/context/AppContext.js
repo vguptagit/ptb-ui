@@ -184,28 +184,26 @@ const makeViewTestQuestion = async (node) => {
 
   const dispatchEvent = (actionType, payload) => {
     switch (actionType) {
-      case "SELECT_TEST":
+      case 'SELECT_TEST':
         selectTest(payload);
         return;
-      case "ADD_TEST":
+      case 'ADD_TEST':
         addTest(payload.test);
         return;
-      case "REMOVE_TEST":
-        setTests(tests.filter((test) => test.id !== payload.test.id));
+      case 'REMOVE_TEST':
+        setTests(tests.filter(test => test.id !== payload.test.id));
         return;
-        case "UPDATE_TEST_TITLE":
-          console.log("Updating test title:", payload.title);
-          setTests(
-            tests.map((test) =>
-              test.id === payload.id ? { ...test, title: payload.title } : test
-            )
-          );
-        
-          if (selectedTest && selectedTest.id === payload.id) {
-            setSelectedTest({ ...selectedTest, title: payload.title });
-          }
-          return;
-        
+      case 'UPDATE_TEST_TITLE':
+        console.log('Updating test title:', payload.title);
+        setTests(tests.map(test => (test.id === payload.id ? { ...test, title: payload.title } : test)));
+
+        if (selectedTest && selectedTest.id === payload.id) {
+          setSelectedTest({ ...selectedTest, title: payload.title });
+        }
+        return;
+      case 'UPDATE_SELECTED_TEST': 
+        setSelectedTest(payload.test);
+        return;
     }
   };
 
