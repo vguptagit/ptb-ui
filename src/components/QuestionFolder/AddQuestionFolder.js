@@ -22,7 +22,6 @@ const QuestionFolder = ({ userId }) => {
   const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [savedQuestions, setSavedQuestions] = useState([]);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
 
   async function fetchRootFolderGuid() {
@@ -64,33 +63,6 @@ const QuestionFolder = ({ userId }) => {
       console.error("Error fetching user folders:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (rootFolderGuid) {
-          const fetchedQuestions = await getUserQuestions(rootFolderGuid);
-          const questionsWithQtiModels = fetchedQuestions.map((question) => {
-            const {
-              qtixml,
-              metadata: { quizType },
-            } = question;
-            const qtiModel = QtiService.getQtiModel(qtixml, quizType);
-            qtiModel.EditOption = false;
-            return {
-              ...question,
-              qtiModel,
-            };
-          });
-          setSavedQuestions(questionsWithQtiModels);
-        }
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
-
-    fetchData();
-  }, [rootFolderGuid]);
 
   const handleAddQuestionFolderClick = () => {
     setShowTextBox(true);
@@ -182,7 +154,6 @@ const QuestionFolder = ({ userId }) => {
     setShowTextBox(true);
     setIsEditing(true);
     setSelectedFolderGuid(folderGuid);
-    console.log(savedQuestions);
   };
 
   const onNodeUpdate = async (changedNode) => {
@@ -251,19 +222,9 @@ const QuestionFolder = ({ userId }) => {
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
-            savedQuestions={savedQuestions}
           />
         )}
       </div>
-      {/* {loading ? (
-        <Loader show={true} />
-      ) : savedQuestions.length === 0 ? (
-        <div className="no-data-message">No questions available</div>
-      ) : (
-        <>
-          <div className="saved-questions">{renderQuestions()}</div>
-        </>
-      )} */}
     </div>
   );
 };
