@@ -99,28 +99,19 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     onDataUpdate(newTree);
   };
 
-
-
-
   useEffect(() => {
-    let convertedList = disciplines.map((discipline, i) => ({
-      id: i + 1,
-      parent: 0,
-      droppable: true,
-      text: discipline,
-      type: "discipline",
-    }));
-    for (let i = 0; i < convertedList.length; i++) {
-      getBooksList(convertedList[i].text, convertedList[i].id, convertedList);
-    }
-    console.log("use effect called main")
-    setSearchableTreeData(convertedList);
-    setTreeData(convertedList);
-
+    loadInitialTreeNodes();
   }, []);
+
   useEffect(() => {
     if (searchTerm != '') {
       const hasNodeTypes = searchableTreeData.some(node => node.type === "node");
+      
+      if (!hasNodeTypes) {
+        Toastify({ message: "User must select the books", type: "warn" });
+        return;
+      }
+
       setIsSearchTermPresent(true);
       const filteredData = searchableTreeData.filter(node =>
         node.type !== "node" || node.text.toLowerCase().includes(searchTerm.toLowerCase())
@@ -130,22 +121,40 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
         node.type !== "book" || (node.type === "book" && parentIDsOfMatchedNodes.has(node.id))
       );
       const parentIDsOfMatchedBooks = new Set(finalFilteredData.filter(node => node.type === "book").map(node => node.parent));
-      const finalFinalFilteredData = finalFilteredData.filter(node =>
+      let finalFinalFilteredData = finalFilteredData.filter(node =>
         node.type !== "discipline" || (node.type === "discipline" && parentIDsOfMatchedBooks.has(node.id))
       );
-      if (!hasNodeTypes) {
-        Toastify({ message: "No results found for the search item", type: "warn" });
+
+      if (finalFinalFilteredData.length === 0) {
+        Toastify({ message: "No results found for the search item", type: "info" });
       }
-      else if (finalFinalFilteredData.length === 0) {
-        Toastify({ message: "No Matching chapters found", type: "info" });
-      }
+
+      finalFinalFilteredData = finalFinalFilteredData.map(node => ({...node, isOpen: true}));
       setSearchableTreeDataFilter(finalFinalFilteredData);
     }
     else {
+      setTreeData((data) => data.map(node => ({...node, isOpen: false})))
       setIsSearchTermPresent(false);
     }
-    console.log("new searchable tree data is as  follows", searchableTreeData);
   }, [searchTerm]);
+
+  const loadInitialTreeNodes = async () => {
+    let booksNodes = [];
+    let disciplinesNodes = disciplines.map((discipline, i) => ({
+      id: i + 1,
+      parent: 0,
+      droppable: true,
+      text: discipline,
+      type: "discipline",
+    }));
+    for (let i = 0; i < disciplinesNodes.length; i++) {
+      const books = await getBooksList(disciplinesNodes[i].text, disciplinesNodes[i].id, disciplinesNodes);
+      booksNodes = booksNodes.concat(books);
+    }
+    const finalNodes = [...disciplinesNodes, ...booksNodes];
+    setSearchableTreeData(finalNodes);
+    setTreeData(finalNodes);
+  }
 
   const handleNodeClick = (clickedNode) => {
     if (clickedNode.droppable) {
@@ -159,32 +168,30 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     }
   };
 
-  const getBooksList = (discipline, disciplineId, booksList) => {
-    getAllBooks(discipline, true).then(
-      (books) => {
-        for (let i = 0; i < books.length; i++) {
-          const newItem = {
-            id: booksList.length + 1,
-            parent: disciplineId,
-            droppable: true,
-            bookGuid: books[i].guid,
-            text: `${books[i].title}_${discipline}`,
-            type: "book",
-          };
-          booksList.push(newItem);
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  const getBooksList = async (discipline, disciplineId, booksList) => {
+    try {
+      const books = await getAllBooks(discipline, true);
+
+      return books.map((book, index) => ({
+        id: booksList.length + index + 1,
+        parent: disciplineId,
+        droppable: true,
+        bookGuid: book.guid,
+        text: `${book.title}_${discipline}`,
+        type: 'book'
+      }));
+    } catch (error) {
+      Toastify(error);
+    }
+
+    return [];
   };
 
-  useEffect(() => {
-    getBooksList();
-    const interval = setInterval(getBooksList, 60000);
-    return () => clearInterval(interval); 
-  }, []);
+  // useEffect(() => {
+  //   getBooksList();
+  //   const interval = setInterval(getBooksList, 60000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleLensClick = (node) => {
     setClickedNodeIds(prevClickedNodeIds => {
@@ -429,6 +436,8 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     }
   };
 
+  console.log("treeData::", treeData)
+
   return (
     <>
       {!isSearchTermPresent && (
@@ -450,6 +459,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
               <div>{monitorProps.item.node.text}</div>
             )}
             onDrop={handleDrop}
+            initialOpen={false}
           />
         </div>
       )}
@@ -468,6 +478,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
                     node={node}
                   />
                 )}
+                initialOpen={true}
               />
             </div>
           </>
