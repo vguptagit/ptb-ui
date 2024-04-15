@@ -27,8 +27,8 @@ function TreeViewQuestionFolder({
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [savedQuestions, setSavedQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +48,7 @@ function TreeViewQuestionFolder({
             };
           });
           setSavedQuestions(questionsWithQtiModels);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -106,8 +107,6 @@ function TreeViewQuestionFolder({
             isQuestion: true,
           },
         }));
-        setLoading(false);
-
         const updatedTreeData = [...treeData];
         const nodeIndex = updatedTreeData.findIndex(
           (n) => n.id === parentNode.id
@@ -239,7 +238,6 @@ function TreeViewQuestionFolder({
             },
           })),
         ];
-        setLoading(false);
         setTreeData(updatedTreeData);
       } catch (error) {
         console.error("Error fetching saved questions:", error);
@@ -386,9 +384,7 @@ function TreeViewQuestionFolder({
       onMouseUp={handleMouseUp}
       style={{ marginBottom: "-47px" }}
     >
-      {loading ? (
-        <Loader show={true} />
-      ) : savedQuestions.length === 0 ? (
+      { loading ?  (
         <Loader show={true} />
       ) : (
         <Tree
@@ -399,10 +395,7 @@ function TreeViewQuestionFolder({
               {node.droppable && (
                 <span
                   onClick={() => {
-                    if (
-                      !isOpen &&
-                      (!node.children || node.children.length === 0)
-                    ) {
+                    if (!isOpen && (!node.children || node.children.length === 0) && savedQuestions.length === 0) {
                       fetchChildFolders(node);
                     }
                     onToggle();
@@ -417,7 +410,7 @@ function TreeViewQuestionFolder({
                 </span>
               )}
               {node.text}
-              {!node.data.isQuestion && ( // Only render the buttons if the node represents a folder
+              {!node.data.isQuestion && (
                 <>
                   {selectedFolder === node.text && (
                     <button
@@ -458,6 +451,7 @@ function TreeViewQuestionFolder({
       )}
     </div>
   );
+  
 }
 
 export default TreeViewQuestionFolder;
