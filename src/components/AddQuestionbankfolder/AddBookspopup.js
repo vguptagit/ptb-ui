@@ -1,17 +1,18 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
-import "./AddBookspopup.css";
-import Loader from "../../components/common/loader/Loader";
-import { getDisciplineBooks, getUserBooks, saveUserBooks } from "../../services/book.service";
-import { saveUserDiscipline } from "../../services/discipline.service";
-import Toastify from "../common/Toastify";
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import './AddBookspopup.css';
+import Loader from '../../components/common/loader/Loader';
+import { getDisciplineBooks, getUserBooks, saveUserBooks } from '../../services/book.service';
+import { saveUserDiscipline } from '../../services/discipline.service';
+import Toastify from '../common/Toastify';
+import SearchBox from '../SearchBox/SearchBox';
 
 const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isSelected, setIsSelected] = useState(selectedItems.includes(node.id));
   const hasChildNodes = node.nodes && node.nodes.length > 0;
-  
+
   useEffect(() => {
     setIsSelected(selectedItems.includes(node.id));
   }, [selectedItems, node.id]);
@@ -42,26 +43,22 @@ const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
       {/* Render the node only if it is not a header discipline node during search */}
       {shouldRenderNode() && (
         <div
-          className={`tree-node ${hasChildNodes ? "" : isSelected ? "selected" : ""}`}
+          className={`tree-node ${hasChildNodes ? '' : isSelected ? 'selected' : ''}`}
           onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
         >
           {hasChildNodes && (
-            <div className="tree-node-header">
-              {isOpen ? (
-                <i className="fa fa-caret-down"></i>
-              ) : (
-                <i className="fa fa-caret-right"></i>
-              )}
+            <div className='tree-node-header'>
+              {isOpen ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-right'></i>}
             </div>
           )}
           <span>{node.text}</span>
         </div>
       )}
-      
+
       <div>
         {isOpen && hasChildNodes && (
-          <div className="nested-nodes">
-            {node.nodes.map((childNode) => (
+          <div className='nested-nodes'>
+            {node.nodes.map(childNode => (
               <div key={childNode.id}>
                 <TreeNode
                   node={childNode}
@@ -78,14 +75,13 @@ const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
   );
 };
 
-
 const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
-  const filterNodes = (nodes, term,isBookNode) => {
-    return nodes.flatMap((node) => {
+  const filterNodes = (nodes, term, isBookNode) => {
+    return nodes.flatMap(node => {
       // if (!isBookNode && node.droppable) {
       //   return []; // Exclude discipline nodes when searching for books
       // }
-      const filteredChildNodes = filterNodes(node.nodes || [], term , isBookNode || node.droppable);
+      const filteredChildNodes = filterNodes(node.nodes || [], term, isBookNode || node.droppable);
       if (filteredChildNodes.length > 0) {
         return [{ ...node, nodes: filteredChildNodes }];
       }
@@ -104,13 +100,13 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   }, [searchTerm, treeData]);
 
   return (
-    <div className="treeview">
+    <div className='treeview'>
       {searchTerm && filteredTreeData.length === 0 ? (
-          <div className="no-matching-books-message">
-          <FormattedMessage id="no_matching_books_message" defaultMessage="No matching books found" />
-         </div>
+        <div className='no-matching-books-message'>
+          <FormattedMessage id='no_matching_books_message' defaultMessage='No matching books found' />
+        </div>
       ) : (
-        filteredTreeData.map((node) => (
+        filteredTreeData.map(node => (
           <TreeNode
             key={node.id}
             node={node}
@@ -124,22 +120,22 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   );
 };
 
-const AddBookspopup = ({ handleBack,handleSave }) => {
-  const navigate = useNavigate();
+const AddBookspopup = ({ handleBack, handleSave }) => {
   const location = useLocation();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [bookDetails, setBookDetails] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevDisciplines = useRef([]);
   const [userbooksData, setUserbooksData] = useState([]);
-  const disciplines = sessionStorage.getItem("selectedDisciplinesAddpopup");
+  const disciplines = sessionStorage.getItem('selectedDisciplinesAddpopup');
   const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
 
   useEffect(() => {
-    document.title = "Choose Your Books or Topics";
+    document.title = 'Choose Your Books or Topics';
+    loadUserBooks();
   }, []);
 
   useEffect(() => {
@@ -166,8 +162,8 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
                         id: `${title?.guid}`,
                         text: `${title.title}`,
                         droppable: false,
-                        parentId: item.guid,
-                      })),
+                        parentId: item.guid
+                      }))
                   });
                 }
                 return acc;
@@ -182,7 +178,7 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
           }
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
         setLoading(false);
       }
     };
@@ -190,52 +186,46 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
     fetchData();
   }, [location.search, getDisciplineBooks, selectedDisciplines]);
 
-  useEffect(() => {
-    getUserBooks()
-      .then((data) => {
-        if (data) {
-          setUserbooksData(data);
+  const loadUserBooks = async () => {
+    setLoading(true);
+    try {
+      const data = await getUserBooks();
+      setUserbooksData(data);
+      const userBookIds = data.map(book => book);
+      setSelectedBooks(userBookIds);
+    } catch (error) {
+      Toastify(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          const userBookIds = data.map(book => book);
-          setSelectedBooks(userBookIds);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
-  console.log("api dayta of user ", userbooksData)
-  console.log("selctedboos in api pass", selectedBooks)
-
-  const handleNext = () => {
+  const handleNext = async () => {
     let parentIds = [];
     if (bookDetails.length > 0) {
-      parentIds = bookDetails.map(book => book.id)  ;
+      parentIds = bookDetails.map(book => book.id);
     } else {
       parentIds = selectedBooks;
     }
+    try {
+      await saveUserBooks(parentIds, sessionStorage.getItem('userId'));
 
-    saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-  
-    const uniqueDisciplines = new Set(selectedDisciplines);
-    const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
-    saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem("userId"));
+      const uniqueDisciplines = new Set(selectedDisciplines);
+      const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
 
-    handleSave(); 
-
-    
-    Toastify({ message: "Books and Discipline  have been saved successfully!", type: "success" });
-    
+      await saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem('userId'));
+      handleSave();
+      Toastify({ message: 'Books and Discipline  have been saved successfully!', type: 'success' });
+    } catch (error) {
+      Toastify(error);
+    }
   };
 
-
-
-  const handleSearch = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
+  const handleSearch = value => {
+    setSearchTerm(value);
   };
-  const handleSelectItem = (node) => {
+
+  const handleSelectItem = node => {
     if (!node.droppable) {
       const bookId = `${node.id}`;
       // Check if the book is already selected
@@ -259,49 +249,25 @@ const AddBookspopup = ({ handleBack,handleSave }) => {
     }
   };
 
-
-  console.log("book details ", bookDetails)
-
-
-
   return (
-    <div className="booktab-container">
+    <div className='booktab-container'>
       {loading ? (
-        <Loader show="true" />
+        <Loader show='true' />
       ) : (
         <>
-          <div className="top-containerbooks">
-          <h2 className="choose-your-books-or-topics">
-              <FormattedMessage id="addBooks" defaultMessage="Add Books" />
-         </h2>
-          <button className="booktab btn btn-secondary" onClick={handleBack}>
-              <FormattedMessage id="backButton" defaultMessage="Back" />
-          </button>
-          <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-              <FormattedMessage id="saveButton" defaultMessage="Save" />
-          </button>
+          <div className='top-containerbooks'>
+            <h2 className='choose-your-books-or-topics'>
+              <FormattedMessage id='addBooks' defaultMessage='Add Books' />
+            </h2>
+            <button className='booktab btn btn-secondary' onClick={handleBack}>
+              <FormattedMessage id='backButton' defaultMessage='Back' />
+            </button>
+            <button className='booktab btn btn-primary' disabled={selectedBooks.length === 0} onClick={handleNext}>
+              <FormattedMessage id='saveButton' defaultMessage='Save' />
+            </button>
           </div>
-          <div className="discipline input-group rounded">
-            <input
-              type="search"
-              width="100%"
-              className=" form-control rounded search-inputbox"
-              placeholder="Search Books"
-              aria-label="Search"
-              aria-describedby="search-addon"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <div className="discipline input-group-append">
-              <span
-                className="discipline input-group-text border-0"
-                id="search-addon"
-              >
-                <i className="fas fa-search"></i>
-              </span>
-            </div>
-          </div>
-          <ul className="booktabaddpopup result-list mt-3">
+          <SearchBox placeholder='Search Books' onSearch={handleSearch} />
+          <ul className='booktabaddpopup result-list mt-3'>
             <TreeView
               selectedItems={selectedBooks}
               onSelectItem={handleSelectItem}

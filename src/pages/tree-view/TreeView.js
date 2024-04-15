@@ -101,7 +101,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
 
   useEffect(() => {
     loadInitialTreeNodes();
-  }, []);
+  }, [disciplines]);
 
   useEffect(() => {
     if (searchTerm != '') {
