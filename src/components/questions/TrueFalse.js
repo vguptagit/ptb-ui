@@ -112,6 +112,7 @@ const TrueFalse = (props) => {
                                 className="mb-2"
                                 type="text"
                                 autoComplete="off"
+                                style={{ fontWeight: 'bold' }}
                             />
                             <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
                                 {formData ?.Options ?.length > 0 &&
@@ -127,16 +128,9 @@ const TrueFalse = (props) => {
                                                         name="CorrectAnswer"
                                                         onChange={handleChange}
                                                     />
-                                                    {/* <Form.Control
-                    onChange={handleOptionsChange}
-                    value={optItem}
-                    name={index}
-                    className="mb-2"
-                    type="text"
-                    placeholder="Enter Answer"
-                /> */}
+                
                                                     <Form.Text style={{ fontSize: '1.1rem' }} className="mb-1 ">{optItem}</Form.Text>
-                                                    {/* <Form.Label className="mb-1 mt-0">{optItem}</Form.Label> */}
+                                                
 
                                                 </div>
                                             </Form.Group>

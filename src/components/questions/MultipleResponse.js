@@ -116,112 +116,108 @@ const MultipleResponse = (props) => {
 
     const getEditView = () => {
         const isCaptionFilled = formData.Caption.trim() !== '';
-    
-  
-        const areOptionsFilled = formData.Options.every(opt => opt.option.trim() !== '' && opt.matchingOption.trim() !== '');
-    
-      
+        const areOptionsFilled = formData.Options.every(opt => opt && opt.trim() !== '');
         const isViewButtonEnabled = isCaptionFilled && areOptionsFilled;
+    
         return (
             <div className="m-2">
-                 <Form className="editmode border rounded p-3 bg-light">
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
-                            <Form.Control
-                                name="Caption"
-                                onChange={handleChange}
-                                value={formData.Caption}
-                                className="mb-4"
-                                type="text"
-                                autoComplete="off"
-                                placeholder={props.questionNode.qtiModel.EditCaption}
-                            />
-                            <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
-                                {formData ?.Options ?.length > 0 &&
-                                    formData ?.Options.map((optItem, index) => {
-                                        return (
-                                            <Form.Group key={index} className="mc-flex-row mb-2">
-                                                <div className="mc-col mc-col-1">
-                                                    <Form.Check
-                                                        type="checkbox"
-                                                        checked={formData.CorrectAnswer.includes(index)}
-                                                        value={index}
-                                                        className="item-1"
-                                                        name="CorrectAnswer"
-                                                        onChange={handleChange}
-                                                    />
-                                                </div>
-                                                <div className="mc-col mc-col-2">
-                                                    <Form.Control
-                                                        onChange={handleOptionsChange}
-                                                        value={optItem}
-                                                        name={index}
-                                                        className="item-2"
-                                                        type="text"
-                                                        placeholder="Enter Answer"
-                                                    />
-                                                </div>
-                                            </Form.Group>
-                                        );
-                                    })}
-                            </Form.Group>
+                <Form className="editmode border rounded p-3 bg-light">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+                        <Form.Control
+                            name="Caption"
+                            onChange={handleChange}
+                            value={formData.Caption}
+                            className="mb-4"
+                            type="text"
+                            autoComplete="off"
+                            placeholder={props.questionNode.qtiModel.EditCaption}
+                        />
+                        <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
+                            {formData.Options.map((optItem, index) => {
+                                return (
+                                    <Form.Group key={index} className="mc-flex-row mb-2">
+                                        <div className="mc-col mc-col-1">
+                                            <Form.Check
+                                                type="checkbox"
+                                                checked={formData.CorrectAnswer.includes(index)}
+                                                value={index}
+                                                className="item-1"
+                                                name="CorrectAnswer"
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className="mc-col mc-col-2">
+                                            <Form.Control
+                                                onChange={handleOptionsChange}
+                                                value={optItem}
+                                                name={index}
+                                                className="item-2"
+                                                type="text"
+                                                placeholder="Enter Answer"
+                                            />
+                                        </div>
+                                    </Form.Group>
+                                );
+                            })}
                         </Form.Group>
-                        <div onClick={() => setOpen(!open)} className="d-flex align-items-center mb-3" style={{ cursor: "pointer" }}>
-                            {open ? (
-                                <i className="bi bi-caret-down-fill"></i>
-                            ) : (
-                                    <i className="bi bi-caret-right-fill"></i>
-                                )}
-                            <span className="ms-2">
-                                <FormattedMessage id="formatMetadataMultipleResponse" />
-                            </span>
-                        </div>
-                        <Collapse key={open ? "open" : "closed"} in={open}>
-                            <div className="metadata-container">
-                                <div className="mb-2">
-                                    <span className="caption-metadata">
-                                        <FormattedMessage id="formatMultipleResponse" />
-                                    </span>
-                                    <span className="normal-text">
-                                        <FormattedMessage id="visibleInPrintViewMultipleResponse" />
-                                    </span>
-                                </div>
-                                <div className="d-flex mc--orientation">
-                                    <Form.Check
-                                        type="radio"
-                                        onChange={handleChange}
-                                        checked={"false" === formData.Orientation}
-                                        className="mr-5"
-                                        name="Orientation"
-                                        value="false"
-                                        label="Horizontal Displays"
-                                    />
-
-                                    <Form.Check
-                                        type="radio"
-                                        onChange={handleChange}
-                                        checked={"true" === formData.Orientation}
-                                        className=""
-                                        name="Orientation"
-                                        value="true"
-                                        label="Vertical Display"
-                                    />
-                                </div>
+                    </Form.Group>
+                    <div onClick={() => setOpen(!open)} className="d-flex align-items-center mb-3" style={{ cursor: "pointer" }}>
+                        {open ? (
+                            <i className="bi bi-caret-down-fill"></i>
+                        ) : (
+                            <i className="bi bi-caret-right-fill"></i>
+                        )}
+                        <span className="ms-2">
+                            <FormattedMessage id="formatMetadataMultipleResponse" />
+                        </span>
+                    </div>
+                    <Collapse key={open ? "open" : "closed"} in={open}>
+                        <div className="metadata-container">
+                            <div className="mb-2">
+                                <span className="caption-metadata">
+                                    <FormattedMessage id="formatMultipleResponse" />
+                                </span>
+                                <span className="normal-text">
+                                    <FormattedMessage id="visibleInPrintViewMultipleResponse" />
+                                </span>
                             </div>
-                        </Collapse>
-                        <div className="mb-1 d-flex justify-content-end">
-                            <Link className={`savelink ${!formData.Caption.trim() && !isViewButtonEnabled  ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!formData.Caption.trim() && !isViewButtonEnabled ? -1 : 0}      disabled={!isViewButtonEnabled} >
-                                <FormattedMessage id="viewMultipleResponse" />
-                            </Link>
-                            <Link className="deletelink" onClick={handleDelete}>
-                                <FormattedMessage id="removeMultipleResponse" />
-                            </Link>
+                            <div className="d-flex mc--orientation">
+                                <Form.Check
+                                    type="radio"
+                                    onChange={handleChange}
+                                    checked={"false" === formData.Orientation}
+                                    className="mr-5"
+                                    name="Orientation"
+                                    value="false"
+                                    label="Horizontal Displays"
+                                />
+    
+                                <Form.Check
+                                    type="radio"
+                                    onChange={handleChange}
+                                    checked={"true" === formData.Orientation}
+                                    className=""
+                                    name="Orientation"
+                                    value="true"
+                                    label="Vertical Display"
+                                />
+                            </div>
                         </div>
-                    </Form>
+                    </Collapse>
+                    <div className="mb-1 d-flex justify-content-end">
+                        <Link className={`savelink ${!isViewButtonEnabled ? 'disabled-link' : ''}`} onClick={handleSubmit} tabIndex={!isViewButtonEnabled ? -1 : 0} disabled={!isViewButtonEnabled} >
+                            <FormattedMessage id="viewMultipleResponse" />
+                        </Link>
+                        <Link className="deletelink" onClick={handleDelete}>
+                            <FormattedMessage id="removeMultipleResponse" />
+                        </Link>
+                    </div>
+                </Form>
             </div>
         );
     }
-
+    
     const getPrintOnlyView = () => {
         return (
             <div className="mb-1 d-flex align-items-center m-2 addfolder-container">

@@ -9,7 +9,7 @@ import { useState } from "react";
 const Profile = () => {
   const { user, logout } = useAuth();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-
+  const [settingsModalLoaded, setSettingsModalLoaded] = useState(false); // Flag to indicate if modal content has been loaded
 
   const handleSettingsModalOpen = () => {
     setShowSettingsModal(true);
@@ -19,40 +19,41 @@ const Profile = () => {
     setShowSettingsModal(false);
   };
 
+  // Function to load modal content and set flag
+  const loadSettingsModalContent = () => {
+    setSettingsModalLoaded(true);
+  };
+
   return (
-<>
-    <NavDropdown
-      title={
-        <span>
-          <i className="bi bi-person-fill"></i> {user.name}
-        </span>
-      }
-      id="nav-dropdown"
-      className="profile-dropdown"
-    >
-
-      <NavDropdown.Item className="profile-name">{user.name}</NavDropdown.Item>
-      <NavDropdown.Item className="profile-email">{user.email}</NavDropdown.Item>
-      <NavDropdown.Divider />
-      <div className="settings-and-sign-out">
-        <div className="d-flex justify-content-center align-items-center">
-          <Button variant="primary" className="button-setting" onClick={handleSettingsModalOpen}>
-            <FormattedMessage id="profile.setting" />
-          </Button>
-
+    <>
+      <NavDropdown
+        title={
+          <span>
+            <i className="bi bi-person-fill"></i> {user.name}
+          </span>
+        }
+        id="nav-dropdown"
+        className="profile-dropdown"
+      >
+        <NavDropdown.Item className="profile-name">{user.name}</NavDropdown.Item>
+        <NavDropdown.Item className="profile-email">{user.email}</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <div className="settings-and-sign-out">
+          <div className="d-flex justify-content-center align-items-center">
+            <Button variant="primary" className="button-setting" onClick={() => {handleSettingsModalOpen(); loadSettingsModalContent();}}>
+              <FormattedMessage id="profile.setting" />
+            </Button>
+          </div>
+          <div className="d-flex justify-content-center align-items-center">
+            <Button variant="primary" className="button-signout" onClick={logout}>
+              <FormattedMessage id="profile.signout" />
+            </Button>
+          </div>
         </div>
-        <div className="d-flex justify-content-center align-items-center">
-          <Button
-            variant="primary"
-            className="button-signout"
-            onClick={logout}
-          >
-            <FormattedMessage id="profile.signout" />
-          </Button>
-        </div>
-      </div>
-    </NavDropdown>
-    <SettingsModal show={showSettingsModal} handleClose={handleSettingsModalClose} />
+      </NavDropdown>
+      {showSettingsModal && settingsModalLoaded && (
+        <SettingsModal show={showSettingsModal} handleClose={handleSettingsModalClose} />
+      )}
     </>
   );
 };
