@@ -131,12 +131,12 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
         await saveSettings();
         Toastify({
           type: "success",
-          message: "Print settings saved successfully"
+          message: "Export settings have been saved successfully"
         });
       } catch (error) {
         Toastify({
           type: "error",
-          message: `Print settings save failed! ${error.message}`
+          message: `Export settings save failed! ${error.message}`
         });
       }
     }
