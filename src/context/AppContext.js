@@ -114,6 +114,10 @@ const makeViewTestQuestion = async (node) => {
     //setTestName(name.text);
     makeTestQuestion(node);
   };
+
+  const handleQuestionAdd = (node) => {
+    console.log("adding question", node);
+  }
   
   const makeTestQuestion = async (node) => {
     try {
@@ -244,7 +248,8 @@ const makeViewTestQuestion = async (node) => {
         setSelectedViewTest,
         selectedViewTest,
         setIsMigratedTests,
-        isMigratedTests
+        isMigratedTests,
+        handleQuestionAdd
       }}
     >
       {children}
