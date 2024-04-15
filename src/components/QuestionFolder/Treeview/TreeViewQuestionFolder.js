@@ -23,12 +23,39 @@ function TreeViewQuestionFolder({
   folders,
   rootFolderGuid,
   selectedFolderGuid,
-  savedQuestions,
 }) {
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [savedQuestions, setSavedQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (rootFolderGuid) {
+          const fetchedQuestions = await getUserQuestions(rootFolderGuid);
+          const questionsWithQtiModels = fetchedQuestions.map((question) => {
+            const {
+              qtixml,
+              metadata: { quizType },
+            } = question;
+            const qtiModel = QtiService.getQtiModel(qtixml, quizType);
+            qtiModel.EditOption = false;
+            return {
+              ...question,
+              qtiModel,
+            };
+          });
+          setSavedQuestions(questionsWithQtiModels);
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    fetchData();
+  }, [rootFolderGuid]);
 
   const fetchChildFolders = async (parentNode) => {
     try {
@@ -181,39 +208,45 @@ function TreeViewQuestionFolder({
   };
 
   useEffect(() => {
-    if (folders && folders.length > 0) {
-      const updatedTreeData = [
-        ...folders.map((folder) => ({
-          id: folder.guid,
-          parent: 0,
-          droppable: true,
-          text: folder.title,
-          data: {
-            guid: folder.guid,
-            sequence: folder.sequence,
-          },
-        })),
-        ...savedQuestions.map((question, index) => ({
-          id: question.guid,
-          parent: 0,
-          droppable: false,
-          text: (
-            <DraggableQuestion
-              key={question.guid}
-              question={question}
-              index={index}
-            />
-          ),
-          data: {
-            guid: question.guid,
-            sequence: question.sequence,
-            isQuestion: true,
-          },
-        })),
-      ];
-      setLoading(false);
-      setTreeData(updatedTreeData);
-    }
+    const fetchData = async () => {
+      try {
+        const updatedTreeData = [
+          ...folders.map((folder) => ({
+            id: folder.guid,
+            parent: 0,
+            droppable: true,
+            text: folder.title,
+            data: {
+              guid: folder.guid,
+              sequence: folder.sequence,
+            },
+          })),
+          ...savedQuestions.map((question, index) => ({
+            id: question.guid,
+            parent: 0,
+            droppable: false,
+            text: (
+              <DraggableQuestion
+                key={question.guid}
+                question={question}
+                index={index}
+              />
+            ),
+            data: {
+              guid: question.guid,
+              sequence: question.sequence,
+              isQuestion: true,
+            },
+          })),
+        ];
+        setLoading(false);
+        setTreeData(updatedTreeData);
+      } catch (error) {
+        console.error("Error fetching saved questions:", error);
+      }
+    };
+
+    fetchData();
   }, [folders, savedQuestions]);
 
   const handleDrop = async (newTree, { dragSource, dropTarget }) => {
@@ -249,6 +282,10 @@ function TreeViewQuestionFolder({
           questionId
         );
         Toastify({ message: "Question moved successfully", type: "success" });
+        const updatedQuestions = savedQuestions.filter(
+          (question) => question.guid !== questionId
+        );
+        setSavedQuestions(updatedQuestions);
       } catch (error) {
         Toastify({ message: "Failed to move question", type: "error" });
         console.error("Error swapping question between folders:", error);
@@ -355,65 +392,69 @@ function TreeViewQuestionFolder({
         <Loader show={true} />
       ) : (
         <Tree
-        tree={treeData}
-        rootId={0}
-        render={(node, { isOpen, onToggle }) => (
-          <div className="tree-node">
-            {node.droppable && (
-              <span
-                onClick={() => {
-                  if (
-                    !isOpen &&
-                    (!node.children || node.children.length === 0)
-                  ) {
-                    fetchChildFolders(node);
-                  }
-                  onToggle();
-                }}
-                className="custom-caret"
-              >
-                {isOpen ? (
-                  <i className="fa fa-caret-down"></i>
-                ) : (
-                  <i className="fa fa-caret-right"></i>
-                )}
-              </span>
-            )}
-            {node.text}
-            {selectedFolder === node.text && (
-              <button
-                className="editbutton selected"
-                onClick={() => handleEditFolder(node.text)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
-            {selectedFolder !== node.text && (
-              <button
-                className="editbutton"
-                onClick={() => handleEditFolder(node.text)}
-              >
-                <i className="bi bi-pencil-fill"></i>
-              </button>
-            )}
-            <button
-              className="deletebutton"
-              onClick={() => handleDeleteFolder(node.text)}
-            >
-              <i className="bi bi-trash"></i>
-            </button>
-          </div>
-        )}
-        dragPreviewRender={(monitorProps) => (
-          <div className="custom-drag-preview">{monitorProps.item.text}</div>
-        )}
-        onDrop={handleDrop}
-        dragPreviewClassName="custom-drag-preview"
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        canDrag={() => true}
-        canDrop={() => true}
-      />
+          tree={treeData}
+          rootId={0}
+          render={(node, { isOpen, onToggle }) => (
+            <div className="tree-node">
+              {node.droppable && (
+                <span
+                  onClick={() => {
+                    if (
+                      !isOpen &&
+                      (!node.children || node.children.length === 0)
+                    ) {
+                      fetchChildFolders(node);
+                    }
+                    onToggle();
+                  }}
+                  className="custom-caret"
+                >
+                  {isOpen ? (
+                    <i className="fa fa-caret-down"></i>
+                  ) : (
+                    <i className="fa fa-caret-right"></i>
+                  )}
+                </span>
+              )}
+              {node.text}
+              {!node.data.isQuestion && ( // Only render the buttons if the node represents a folder
+                <>
+                  {selectedFolder === node.text && (
+                    <button
+                      className="editbutton selected"
+                      onClick={() => handleEditFolder(node.text)}
+                    >
+                      <i className="bi bi-pencil-fill"></i>
+                    </button>
+                  )}
+                  {selectedFolder !== node.text && (
+                    <button
+                      className="editbutton"
+                      onClick={() => handleEditFolder(node.text)}
+                    >
+                      <i className="bi bi-pencil-fill"></i>
+                    </button>
+                  )}
+                  <button
+                    className="deletebutton"
+                    onClick={() => handleDeleteFolder(node.text)}
+                  >
+                    <i className="bi bi-trash"></i>
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+          dragPreviewRender={(monitorProps) => (
+            <div className="custom-drag-preview">{monitorProps.item.text}</div>
+          )}
+          onDrop={handleDrop}
+          dragPreviewClassName="custom-drag-preview"
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          canDrag={() => true}
+          canDrop={() => true}
+        />
       )}
     </div>
   );
