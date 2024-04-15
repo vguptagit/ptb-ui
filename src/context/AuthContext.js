@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     // sessionStorage.removeItem('isAuthenticated');
     sessionStorage.clear();
+    sessionStorage.removeItem("selectedDiscipline");
+    sessionStorage.removeItem("userId");
     window.piSession.logout();
     // navigate('/welcomescreen');
     console.log('setIsAuthenticated', isAuthenticated);
@@ -43,5 +45,6 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
+
   return useContext(AuthContext);
 };
