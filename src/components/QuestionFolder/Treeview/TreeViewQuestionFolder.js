@@ -395,7 +395,7 @@ function TreeViewQuestionFolder({
               {node.droppable && (
                 <span
                   onClick={() => {
-                    if (!isOpen && (!node.children || node.children.length === 0) && savedQuestions.length === 0) {
+                    if (!isOpen && (!node.children || node.children.length === 0) ) {
                       fetchChildFolders(node);
                     }
                     onToggle();
