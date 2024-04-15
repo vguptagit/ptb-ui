@@ -107,7 +107,7 @@
   }
   
   .booktabaddpopup.result-list {
-    width: 99%;
+    width: 100%;
     list-style: none;
     padding: 0;
     /* height: calc(60vh - 85px)!important; */
