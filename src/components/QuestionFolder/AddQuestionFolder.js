@@ -214,7 +214,6 @@ const QuestionFolder = ({ userId }) => {
       )}
       {/* Render saved folders */}
       <div className="saved-folders">
-        {savedFolders && savedFolders.length > 0 && (
           <TreeViewQuestionFolder
             key={updateKey}
             folders={savedFolders}
@@ -223,7 +222,6 @@ const QuestionFolder = ({ userId }) => {
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
           />
-        )}
       </div>
     </div>
   );
