@@ -96,6 +96,8 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
     });
   };
 
+  
+
   const filteredTreeData = useMemo(() => {
     if (!searchTerm) {
       return treeData;
@@ -106,9 +108,7 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   return (
     <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-          <div className="no-matching-books-message">
-          <FormattedMessage id="noMatchingBooksMessage" />
-          </div>
+        <div className="no-matching-books-message">"No matching books found"</div>
       ) : (
           filteredTreeData.map((node) => (
             <TreeNode
@@ -189,11 +189,11 @@ const Booktab = () => {
   }, [location.search, getDisciplineBooks, selectedDisciplines]);
 
   const handleNext = () => {
-    const parentIds = bookDetails.map(book => book.id);
-    // const disciplines = bookDetails.map(discipline => discipline.discipline)
+    const selectedbookIds = bookDetails.map(book => book.id);
+
     saveUserDiscipline(selectedDisciplines, sessionStorage.getItem("userId"));
-    saveUserBooks(parentIds, sessionStorage.getItem("userId"));
-    // sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
+    saveUserBooks(selectedbookIds, sessionStorage.getItem("userId"));
+  
     if (selectedBooks.length > 0) {
       navigate(`/home?books=${bookDetails.join(',')}`);
     }
@@ -248,11 +248,11 @@ const Booktab = () => {
             <div className="top-container">
               <h2 className="choose-your-books-or-topics"><FormattedMessage id="booktab.steps.1" /></h2>
               <button className="booktab btn btn-secondary" onClick={handleBack}>
-                <FormattedMessage id="backButtonBooktabText" />
-              </button>
+                Back
+            </button>
               <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-                <FormattedMessage id="nextButtonBooktabText" />
-              </button>
+                Next
+            </button>
             </div>
             <div className="booktab d-flex justify-content-between">
               <LeftContent />

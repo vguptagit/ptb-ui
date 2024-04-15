@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     // sessionStorage.removeItem('isAuthenticated');
     sessionStorage.clear();
     sessionStorage.removeItem("selectedDiscipline");
-    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("selectedbookIds");
     window.piSession.logout();
     // navigate('/welcomescreen');
     console.log('setIsAuthenticated', isAuthenticated);

@@ -104,7 +104,7 @@ const TrueFalse = (props) => {
             <div className="m-2">
                 <Form className="editmode border rounded p-3 bg-light">
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label>
+                          <b><Form.Label className="mb-1">{props.questionNode.qtiModel.QstnSectionTitle}</Form.Label></b>  
                             <Form.Control
                                 name="Caption"
                                 onChange={handleChange}
@@ -112,7 +112,7 @@ const TrueFalse = (props) => {
                                 className="mb-2"
                                 type="text"
                                 autoComplete="off"
-                                style={{ fontWeight: 'bold' }}
+                           
                             />
                             <Form.Group className="mb-1 mt-3 d-flex flex-wrap">
                                 {formData ?.Options ?.length > 0 &&
