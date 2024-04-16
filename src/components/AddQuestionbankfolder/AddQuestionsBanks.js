@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalFooter } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
-import { FormattedMessage } from 'react-intl';
+import { useAppContext } from '../../context/AppContext';
 
 const QuestBanks = ({ reloadDisciplines }) => {
+  const { dispatchEvent } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -23,7 +25,10 @@ const QuestBanks = ({ reloadDisciplines }) => {
     setShowModal(false);
     reloadDisciplines();
   };
+
   useEffect(() => {
+    dispatchEvent('UPDATE_SELECTED_DISCIPLINES', { disciplines: [] });
+
     if (showModal) {
       setStep(1);
     }

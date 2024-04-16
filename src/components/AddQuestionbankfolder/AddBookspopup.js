@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './AddBookspopup.css';
 import Loader from '../../components/common/loader/Loader';
@@ -7,6 +6,7 @@ import { getDisciplineBooks, getUserBooks, saveUserBooks } from '../../services/
 import { saveUserDiscipline } from '../../services/discipline.service';
 import Toastify from '../common/Toastify';
 import SearchBox from '../SearchBox/SearchBox';
+import { useAppContext } from '../../context/AppContext';
 
 const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -121,17 +121,14 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
 };
 
 const AddBookspopup = ({ handleBack, handleSave }) => {
-  const location = useLocation();
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBooks, setSelectedBooks] = useState([]);
-  const [bookDetails, setBookDetails] = useState([]);
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const prevDisciplines = useRef([]);
-  const [userbooksData, setUserbooksData] = useState([]);
-  const disciplines = sessionStorage.getItem('selectedDisciplinesAddpopup');
-  const selectedDisciplines = disciplines ? JSON.parse(disciplines) : [];
+
+  const {
+    disciplinesData: { selectedDisciplines }
+  } = useAppContext();
 
   useEffect(() => {
     document.title = 'Choose Your Books or Topics';
@@ -143,39 +140,29 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       setLoading(true);
       try {
         if (selectedDisciplines) {
-          if (JSON.stringify(selectedDisciplines) !== JSON.stringify(prevDisciplines.current)) {
-            prevDisciplines.current = selectedDisciplines;
-            let newData = [];
-            let uniqueDisciplines = new Set();
-            for (const setofItem of selectedDisciplines) {
-              const data = await getDisciplineBooks(setofItem);
-              const formattedData = data.reduce((acc, item) => {
-                if (!uniqueDisciplines.has(item.discipline)) {
-                  uniqueDisciplines.add(item.discipline);
-                  acc.push({
-                    id: item.guid,
-                    text: `${item.discipline}`,
-                    droppable: true,
-                    nodes: data
-                      .filter(title => title.discipline === item.discipline)
-                      .map((title, index) => ({
-                        id: `${title?.guid}`,
-                        text: `${title.title}`,
-                        droppable: false,
-                        parentId: item.guid
-                      }))
-                  });
-                }
-                return acc;
-              }, []);
+          let result = [];
 
-              newData = [...newData, ...formattedData];
-            }
-            setTreeData(newData);
-            setLoading(false);
-          } else {
-            setLoading(false);
+          for (const [index, discipline] of selectedDisciplines.entries()) {
+            const data = await getDisciplineBooks(discipline);
+
+            result.push({
+              id: index,
+              text: discipline,
+              droppable: true,
+              nodes: data
+                .filter(node => discipline === node.discipline)
+                .map(node => ({
+                  id: node.guid,
+                  text: node.title,
+                  droppable: false,
+                  parentId: index,
+                  discipline
+                }))
+            });
           }
+
+          setTreeData(result);
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -184,15 +171,13 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
     };
 
     fetchData();
-  }, [location.search, getDisciplineBooks, selectedDisciplines]);
+  }, [selectedDisciplines]);
 
   const loadUserBooks = async () => {
     setLoading(true);
     try {
-      const data = await getUserBooks();
-      setUserbooksData(data);
-      const userBookIds = data.map(book => book);
-      setSelectedBooks(userBookIds);
+      const books = await getUserBooks();
+      setSelectedBooks(books);
     } catch (error) {
       Toastify(error);
     } finally {
@@ -201,19 +186,10 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
   };
 
   const handleNext = async () => {
-    let parentIds = [];
-    if (bookDetails.length > 0) {
-      parentIds = bookDetails.map(book => book.id);
-    } else {
-      parentIds = selectedBooks;
-    }
     try {
-      await saveUserBooks(parentIds, sessionStorage.getItem('userId'));
+      await saveUserBooks(selectedBooks, sessionStorage.getItem('userId'));
 
-      const uniqueDisciplines = new Set(selectedDisciplines);
-      const uniqueDisciplinesArray = Array.from(uniqueDisciplines);
-
-      await saveUserDiscipline(uniqueDisciplinesArray, sessionStorage.getItem('userId'));
+      await saveUserDiscipline(selectedDisciplines, sessionStorage.getItem('userId'));
       handleSave();
       Toastify({ message: 'Books and Discipline  have been saved successfully!', type: 'success' });
     } catch (error) {
@@ -227,23 +203,12 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
 
   const handleSelectItem = node => {
     if (!node.droppable) {
-      const bookId = `${node.id}`;
-      // Check if the book is already selected
-      if (!selectedBooks.includes(bookId)) {
-        const bookDetail = {
-          id: bookId,
-          title: node.text,
-          discipline: treeData.find(item => item.id === node.parentId)?.text
-        };
-        setBookDetails(prevBookDetails => [...prevBookDetails, bookDetail]);
-      }
-
       // Update selectedBooks state to include both the newly selected book ID and previously selected user book IDs
       setSelectedBooks(prevSelectedBooks => {
-        if (prevSelectedBooks.includes(bookId)) {
-          return prevSelectedBooks.filter(id => id !== bookId);
+        if (prevSelectedBooks.includes(node.id)) {
+          return prevSelectedBooks.filter(id => id !== node.id);
         } else {
-          return [...prevSelectedBooks, bookId];
+          return [...prevSelectedBooks, node.id];
         }
       });
     }

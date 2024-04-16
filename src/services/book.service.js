@@ -47,7 +47,6 @@ export const getAllBooks = async (discipline, userBooks) => {
       return response?.data;
     })
     .catch((error) => {
-      //return [];
       return Promise.reject({
         type: "error",
         message: error,
@@ -76,7 +75,6 @@ export const getDisciplineBooks = async (discipline) => {
 
   try {
     const response = await httpInterceptor.get(`${url}/books?${queryParams}`);
-    console.log("discipline books", response);
     return response?.data;
   } catch (error) {
     console.log("Something went wrong", error);

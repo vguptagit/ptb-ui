@@ -1,83 +1,75 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import SearchBox from '../SearchBox/SearchBox';
 import Loader from '../common/loader/Loader';
-import { getAllDisciplines, getUserDisciplines } from '../../services/discipline.service';
+import Toastify from '../common/Toastify';
+import { getAllDisciplines } from '../../services/discipline.service';
+import { useAppContext } from '../../context/AppContext';
 import './AddDisciplinepopup.css';
 
 const AddDisciplinepopup = ({ handleNext }) => {
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [allData, setAllData] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userDisciplineData, setUserDisciplineData] = useState([]);
+  const [allDisciplines, setAllDisciplines] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+
+  const {
+    disciplinesData: { userDisciplines, selectedDisciplines },
+    dispatchEvent
+  } = useAppContext();
 
   useEffect(() => {
     document.title = 'Choose Your Discipline';
+
+    loadDisciplinesData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiData = await getAllDisciplines();
-        setAllData(apiData);
-        setSearchResults(apiData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
+  const loadDisciplinesData = async () => {
+    setLoading(true);
+    try {
+      const disciplines = await getAllDisciplines();
+      setAllDisciplines(disciplines);
+      setSearchResults(disciplines);
+
+      if (selectedDisciplines?.length) {
+        return;
       }
-    };
 
-    fetchData();
-  }, []);
+      if (userDisciplines?.length > 0) {
+        const filteredDisciplines = disciplines.filter(item => userDisciplines.includes(item));
 
-  useEffect(() => {
-    getUserDisciplines()
-      .then(data => {
-        if (data) {
-          setUserDisciplineData(data);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (userDisciplineData.length > 0) {
-      setSelectedItems(prevSelectedItems => {
-        const selectedItems = allData.filter(item => userDisciplineData.includes(item));
-        return [...prevSelectedItems, ...selectedItems];
-      });
+        dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
+          disciplines: filteredDisciplines
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      Toastify(error);
+    } finally {
+      setLoading(false);
     }
-  }, [userDisciplineData, allData]);
+  };
 
   const handleSearch = value => {
-    setSearchTerm(value);
-    const filteredResults = allData.filter(item => item.toLowerCase().includes(value.toLowerCase()));
+    const filteredResults = allDisciplines.filter(item => item.toLowerCase().includes(value.toLowerCase()));
 
     setSearchResults(filteredResults);
   };
 
   const handleSelectItem = item => {
-    setSelectedItems(prevSelectedItems => {
-      if (prevSelectedItems.includes(item)) {
-        return prevSelectedItems.filter(selectedItem => selectedItem !== item);
-      } else {
-        return [...prevSelectedItems, item];
-      }
+    let updatedSelection = [];
+    if (selectedDisciplines.includes(item)) {
+      updatedSelection = selectedDisciplines.filter(selectedItem => selectedItem !== item);
+    } else {
+      updatedSelection = [...selectedDisciplines, item];
+    }
+
+    dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
+      disciplines: updatedSelection
     });
   };
 
   const handleNextStep = () => {
-    if (selectedItems.length > 0) {
-      // Store selected disciplines in sessionStorage
-      sessionStorage.setItem('selectedDisciplinesAddpopup', JSON.stringify(selectedItems));
+    if (selectedDisciplines.length > 0) {
       handleNext();
     }
   };
@@ -86,7 +78,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
     <div className='disciplineaddpopup-container'>
       {loading ? (
         <Loader show={true} />
-      ) : allData.length === 0 ? (
+      ) : allDisciplines.length === 0 ? (
         <div className='no-data-message'>
           <FormattedMessage id='noDisciplinesAvailable' defaultMessage='No disciplines available' />
         </div>
@@ -99,7 +91,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
             <button
               className='disciplinePopup btn btn-primary'
               onClick={handleNextStep}
-              disabled={selectedItems.length === 0}
+              disabled={selectedDisciplines.length === 0}
             >
               Next
             </button>
@@ -118,7 +110,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
               <li
                 tabIndex='0'
                 key={index}
-                className={`result-item ${selectedItems.includes(item) ? 'selected' : ''}`}
+                className={`result-item ${selectedDisciplines.includes(item) ? 'selected' : ''}`}
                 onClick={() => handleSelectItem(item)}
                 onKeyDown={e => {
                   if (e.key === 'Enter') handleSelectItem(item);
