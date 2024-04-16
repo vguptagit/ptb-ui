@@ -203,8 +203,8 @@ const Matching = (props) => {
                             {questionNode.qtiModel.Options.map((option, index) => (
                                 <div key={index} className="view-question">
                                     <div className="text-section d-flex flex-wrap">
-                                        <span className="ml-3 ml-md-0"   dangerouslySetInnerHTML={sanitizedData(option.option)} style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 15 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
-                                        <span className="ml-3 ml-md-0"  dangerouslySetInnerHTML={sanitizedData(option.matchingOption)} style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 15 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
+                                        <span className="ml-3 ml-md-0"  style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`A${index + 1}) ${option.option}`) }}></span>
+                                        <span className="ml-3 ml-md-0" style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`B${index + 1}) ${option.matchingOption}`) }}></span>
                                     </div>
                                 </div>
                             ))}
@@ -227,8 +227,8 @@ const Matching = (props) => {
                             {questionNode.qtiModel.Options.map((option, index) => (
                                 <div key={index} className="view-question">
                                     <div className="text-section d-flex flex-wrap">
-                                        <span className="ml-3 ml-md-0"   dangerouslySetInnerHTML={sanitizedData(option.option)}  style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 255 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
-                                        <span className="ml-3 ml-md-0"   dangerouslySetInnerHTML={sanitizedData(option.matchingOption)}  style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 255 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
+                                        <span className="ml-3 ml-md-0"   style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`A${index + 1}) ${option.option}`) }}></span>
+                                        <span className="ml-3 ml-md-0"   style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`B${index + 1}) ${option.matchingOption}`) }}></span>
                                     </div>
                                 </div>
                             ))}
@@ -259,8 +259,8 @@ const Matching = (props) => {
                             {questionNode.qtiModel.Options.map((option, index) => (
                                 <div key={index} className="view-question">
                                     <div className="text-section d-flex flex-wrap">
-                                        <span className="ml-3 ml-md-0"    dangerouslySetInnerHTML={sanitizedData(option.option)} style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}>{`A${index + 1}) ${option.option.length > 15 ? option.option.substring(0, 15) + '...' : option.option}`}</span>
-                                        <span className="ml-3 ml-md-0"    dangerouslySetInnerHTML={sanitizedData(option.matchingOption)} style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption}>{`B${index + 1}) ${option.matchingOption.length > 15 ? option.matchingOption.substring(0, 15) + '...' : option.matchingOption}`}</span>
+                                        <span className="ml-3 ml-md-0"   style={{ minWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.option}  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`A${index + 1}) ${option.option}`) }}></span>
+                                        <span className="ml-3 ml-md-0"   style={{ minWidth: "100px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={option.matchingOption} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`B${index + 1}) ${option.matchingOption}`) }}></span>
                                     </div>
                                 </div>
                             ))}
