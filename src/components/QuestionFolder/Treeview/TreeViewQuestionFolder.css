@@ -70,3 +70,24 @@
   background-color: #f8f8f8;
   width: 50%;
 }
+
+.questionadd {
+  position: absolute;
+  top: 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: #f8f8f8;
+  border: none;
+  padding: 8px;
+  right: 2px;
+}
+
+.questionadd:hover {
+  border-color: #007fa9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.questionadd.selected {
+  border-color: #007fa9;
+  background-color: #007fa9;
+}
