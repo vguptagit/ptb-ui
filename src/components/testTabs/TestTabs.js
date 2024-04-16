@@ -502,12 +502,6 @@ const TestTabs = () => {
                 href="#"
                 onClick={(e) => handleSaveAs(e, selectedTest)}
               >
-                <Modalpopup
-                  show={showModal}
-                  handleCloseModal={handleCloseModal}
-                  selectedTest={selectedTest}
-                  handleSave={handleSave}
-                />
                 <FormattedMessage id="testtabs.saveas" />
               </Dropdown.Item>
             </DropdownButton>
@@ -536,6 +530,12 @@ const TestTabs = () => {
               show={showModalExport}
               selectedTest={selectedTest}
               handleCloseModal={() => setShowModalExport(false)}
+            />
+            <Modalpopup
+              show={showModal}
+              handleCloseModal={handleCloseModal}
+              selectedTest={selectedTest}
+              handleSave={handleSave}
             />
           </div>
         </div>
