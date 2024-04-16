@@ -32,6 +32,7 @@ const TestFolder = ({ userId }) => {
   const [selectedBookIds, setSelectedBookIds] = useState([]);
   const [bookTitles, setBookTitles] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [height, setHeight] = useState();
   // async function fetchRootFolderGuid(){
   //   try{
   //     const rootFolder = await getRootTests();
@@ -92,12 +93,16 @@ const TestFolder = ({ userId }) => {
     if (!isEditing) {
       setFolderName("");
     }
+    const newHeight = `calc(80vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleTextBoxClose = () => {
     setShowTextBox(false);
     setFolderName("");
     setUpdateKey(updateKey + 1);
+    const newHeight = `calc(89vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleSaveFolder = async () => {
@@ -136,6 +141,8 @@ const TestFolder = ({ userId }) => {
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder updated successfully", type: "success" });
+          const newHeight = `calc(89vh - 85px)`;
+          setHeight(newHeight);
         } else {
           const newFolderData = {
             parentId: rootFolderGuid,
@@ -149,6 +156,8 @@ const TestFolder = ({ userId }) => {
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder saved successfully", type: "success" });
+          const newHeight = `calc(89vh - 85px)`;
+          setHeight(newHeight);
         }
 
         setFolderName("");
@@ -300,7 +309,7 @@ const TestFolder = ({ userId }) => {
           </div>
         </div>
       )}
-      <div className="your-test-list">
+      <div className="your-test-list" style={{height}}>
         <div className="maigratedtests">
           <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? (
@@ -369,7 +378,7 @@ const TestFolder = ({ userId }) => {
             </div>
           )}
         </div>
-        <div className="root-folders-tests" id="folders-tests">
+        <div className="root-folders-and-tests" id="folders-tests">
           {savedFolders && savedFolders.length > 0 && (
             <TreeView
               key={updateKey}
@@ -379,6 +388,7 @@ const TestFolder = ({ userId }) => {
               onNodeUpdateTest={onNodeUpdateTest}
               rootFolderGuid={rootFolderGuid}
               selectedFolderGuid={selectedFolderGuid}
+              setHeight={setHeight}
             />
           )}
         </div>

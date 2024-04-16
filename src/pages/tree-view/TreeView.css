@@ -1,7 +1,4 @@
 .treeviewqb {
-  height: 100%;
-  margin-left: 13px;
-  margin-right: 8px;
 
   ul {
     list-style: none;
@@ -10,7 +7,6 @@
 
 .treeviewqb > ul {
   box-sizing: border-box;
-  height: 100%;
   padding: 5px 0px;
 }
 

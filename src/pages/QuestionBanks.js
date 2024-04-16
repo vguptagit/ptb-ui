@@ -28,7 +28,7 @@ const QuestionBanks = () => {
   };
 
   return (
-    <div className='pt-2'>
+    <div className="p-2">
       <div className='col-lg-7 ml-8'>
         <SearchBox placeholder='Search selected banks' onSearch={handleSearch} />
       </div>
@@ -36,7 +36,7 @@ const QuestionBanks = () => {
         <QuestBanks reloadDisciplines={loadDisiplines}/>
       </div>
       {disciplineData.length > 0 && (
-        <div>
+        <div className="discipline-books">
           <TreeView disciplines={disciplineData} searchTerm={searchTerm} />{' '}
         </div>
       )}
