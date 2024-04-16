@@ -25,7 +25,7 @@ function TreeViewQuestionFolder({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
-  const {handleQuestionAdd} = useAppContext();
+  const { handleQuestionAdd } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -283,10 +283,17 @@ function TreeViewQuestionFolder({
           questionId
         );
         Toastify({ message: "Question moved successfully", type: "success" });
-        const updatedQuestions = savedQuestions.filter(
-          (question) => question.guid !== questionId
+        const updatedTreeData = [...newTree];
+        const draggedNodeIndex = updatedTreeData.findIndex(
+          (node) => node.id === questionId
         );
-        setSavedQuestions(updatedQuestions);
+        const draggedNode = updatedTreeData[draggedNodeIndex];
+        const parentIndex = updatedTreeData.findIndex(
+          (node) => node.id === targetFolderId
+        );
+        updatedTreeData.splice(draggedNodeIndex, 1);
+        updatedTreeData.splice(parentIndex + 1, 0, draggedNode);
+        setTreeData(updatedTreeData);
       } catch (error) {
         Toastify({ message: "Failed to move question", type: "error" });
         console.error("Error swapping question between folders:", error);
@@ -299,6 +306,13 @@ function TreeViewQuestionFolder({
         parentId = dropTarget.data.guid;
       } else {
         parentId = rootFolderGuid;
+      }
+      if (dragSource.data.guid === parentId) {
+        Toastify({
+          message: "Cannot drop folder onto itself or its parent.",
+          type: "error",
+        });
+        return;
       }
       const folderName = dragSource.text;
       const nodeToBeUpdated = {
@@ -383,7 +397,7 @@ function TreeViewQuestionFolder({
   const handleAdd = (node) => {
     handleQuestionAdd(node);
     console.log(node);
-  }
+  };
 
   return (
     <div
