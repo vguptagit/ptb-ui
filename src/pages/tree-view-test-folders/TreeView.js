@@ -108,8 +108,7 @@ function TreeView({
   };
 
   const handleDrop = async (newTree, { dragSource, dropTarget }) => {
-    if(dragSource.droppable === true && dragSource.data.sequence !== undefined)
-    {
+    if (dragSource.droppable === true && dragSource.data.sequence !== undefined) {
       let parentId;
 
       if (dropTarget && dropTarget.data) {
@@ -117,14 +116,14 @@ function TreeView({
       } else {
         parentId = rootFolderGuid;
       }
-  
+
       const nodeToBeUpdated = {
         guid: dragSource.data.guid,
         parentId: parentId,
         sequence: dropTarget ? dropTarget.data.sequence : newTree.length + 1,
         title: dragSource.text,
       };
-  
+
       try {
         const childFolders = await getUserTestFolders(parentId);
         const childNodes = childFolders.map((childFolder, index) => ({
@@ -148,8 +147,7 @@ function TreeView({
       }
       onNodeUpdate(nodeToBeUpdated);
     }
-    else
-    {
+    else {
       let targetId;
 
       if (dropTarget === undefined) {
@@ -297,7 +295,7 @@ function TreeView({
           <div
             className={`tree-node ${
               clickedNodes.includes(node.id) ? "clicked" : ""
-            }`}
+              }`}
             id="tree-node-clicked"
           >
             {node.droppable && (
@@ -319,8 +317,8 @@ function TreeView({
                 {isOpen ? (
                   <i className="fa fa-caret-down"></i>
                 ) : (
-                  <i className="fa fa-caret-right"></i>
-                )}
+                    <i className="fa fa-caret-right"></i>
+                  )}
               </span>
             )}
             {node.text}
@@ -344,7 +342,7 @@ function TreeView({
               <button
                 className={`editbutton ${
                   editTestHighlight === node.data.guid ? "highlight" : ""
-                }`}
+                  }`}
                 onClick={() => handleAnotherFunction(node)}
               >
                 <i className="bi bi-pencil-fill"></i>
@@ -384,13 +382,13 @@ function TreeView({
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header" id="delete-modal-header">
-                <h5 className="modal-title">Delete Folder</h5>
+                <h5 className="modal-title">
+                  <FormattedMessage id="deleteFolderTreeView" />
+                </h5>
               </div>
               <div className="modal-body">
-                <i class="fa-solid fa-circle-question"></i>
-                &nbsp;Deleting folder will delete the child folders and tests.
-                Are you sure you want to delete the folder? This action cannot
-                be undone.
+                <i className="fa-solid fa-circle-question"></i>
+                &nbsp;<FormattedMessage id="deleteFolderQuestionTreeView" />
               </div>
               <div className="modal-footer" id="delete-modal-footer">
                 <button
@@ -398,14 +396,14 @@ function TreeView({
                   className="btn btn-secondary"
                   onClick={handleModalCancel}
                 >
-                  Cancel
+                  <FormattedMessage id="cancelButtonTreeViewText" />
                 </button>
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={handleModalConfirmDelete}
                 >
-                  Delete
+                  <FormattedMessage id="deleteButtonTreeViewText" />
                 </button>
               </div>
             </div>
@@ -422,12 +420,13 @@ function TreeView({
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header" id="delete-modal-header">
-                <h5 className="modal-title">Delete Test</h5>
+                <h5 className="modal-title">
+                  <FormattedMessage id="deleteTestTreeViewTitle" />
+                </h5>
               </div>
               <div className="modal-body">
-                <i class="fa-solid fa-circle-question"></i>
-                &nbsp; Are you sure you want to delete the test? This action
-                cannot be undone.
+                <i className="fa-solid fa-circle-question"></i>
+                &nbsp; <FormattedMessage id="deleteTestQuestionTreeView" />
               </div>
               <div className="modal-footer" id="delete-modal-footer">
                 <button
@@ -435,14 +434,14 @@ function TreeView({
                   className="btn btn-secondary"
                   onClick={() => setShowTestDeleteModal(false)}
                 >
-                  Cancel
+                  <FormattedMessage id="cancelButtonTreeViewTextButton" />
                 </button>
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={handleConfirmDeleteTest}
                 >
-                  Delete
+                  <FormattedMessage id="deleteButtonTreeViewTextButton" />
                 </button>
               </div>
             </div>

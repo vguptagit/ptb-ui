@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import User from '../entities/User.Entity';
+import { FormattedMessage } from 'react-intl';
 
 // Login and session logic goes here.
 const LoginPage = () => {
@@ -32,17 +33,25 @@ const LoginPage = () => {
 
     return (
         <>
-            {isAuthenticated ? (
-                <>
-                    <button onClick={logout}>Logout</button>
-                    <div>user name : {user.name}</div>
-                    <div>email : {user.email}</div>
-                </>
-            ) : (
-                <button onClick={handleLogin}>Login</button>
-            )}
+          {isAuthenticated ? (
+            <>
+              <button onClick={logout}>
+                <FormattedMessage id="logoutButtonText" />
+              </button>
+              <div>
+                <FormattedMessage id="userNameLabel" />: {user.name}
+              </div>
+              <div>
+                <FormattedMessage id="emailLabel" />: {user.email}
+              </div>
+            </>
+          ) : (
+            <button onClick={handleLogin}>
+              <FormattedMessage id="loginButtonText" />
+            </button>
+          )}
         </>
-    );
+      );
 }
 
 export default LoginPage;
