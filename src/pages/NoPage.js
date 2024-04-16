@@ -1,8 +1,12 @@
+import { FormattedMessage } from 'react-intl';
+
 const NoPage = () => {
     return (
-        <>
-            404 Page not fount
-        </>
+      <>
+        <FormattedMessage id="notFoundErrorMessage" />
+      </>
     );
-}
+  }
+
+  
 export default NoPage;

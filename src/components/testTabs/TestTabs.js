@@ -41,6 +41,15 @@ const TestTabs = () => {
   }, [editTest]);
 
   useEffect(() => {
+    if (selectedTest && selectedTest.title) {
+      setIsMigratedTests(
+        selectedTest.title.startsWith("Untitled ") ||
+        !isMigratedTests
+      );
+    }
+  }, [selectedTest])
+
+  useEffect(() => {
     const ellipsisItems = tests ?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
@@ -494,7 +503,10 @@ const TestTabs = () => {
               <Dropdown.Item
                 href="#"
                 onClick={(e) => handleSave(e, selectedTest)}
-                disabled={isMigratedTests && selectedTest.title !== `Untitled ${tests.length}`}
+                disabled={
+                  isMigratedTests &&
+                  !selectedTest.title.startsWith("Untitled ")
+                }
               >
                 <FormattedMessage id="testtabs.save" />
               </Dropdown.Item>
@@ -502,12 +514,6 @@ const TestTabs = () => {
                 href="#"
                 onClick={(e) => handleSaveAs(e, selectedTest)}
               >
-                <Modalpopup
-                  show={showModal}
-                  handleCloseModal={handleCloseModal}
-                  selectedTest={selectedTest}
-                  handleSave={handleSave}
-                />
                 <FormattedMessage id="testtabs.saveas" />
               </Dropdown.Item>
             </DropdownButton>
@@ -536,6 +542,12 @@ const TestTabs = () => {
               show={showModalExport}
               selectedTest={selectedTest}
               handleCloseModal={() => setShowModalExport(false)}
+            />
+            <Modalpopup
+              show={showModal}
+              handleCloseModal={handleCloseModal}
+              selectedTest={selectedTest}
+              handleSave={handleSave}
             />
           </div>
         </div>

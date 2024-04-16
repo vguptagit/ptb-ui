@@ -101,7 +101,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
 
   useEffect(() => {
     loadInitialTreeNodes();
-  }, []);
+  }, [disciplines]);
 
   useEffect(() => {
     if (searchTerm != '') {
@@ -148,7 +148,8 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
       type: "discipline",
     }));
     for (let i = 0; i < disciplinesNodes.length; i++) {
-      const books = await getBooksList(disciplinesNodes[i].text, disciplinesNodes[i].id, disciplinesNodes);
+      const totalNodesLength = disciplinesNodes.length + booksNodes.length;
+      const books = await getBooksList(disciplinesNodes[i].text, disciplinesNodes[i].id, totalNodesLength);
       booksNodes = booksNodes.concat(books);
     }
     const finalNodes = [...disciplinesNodes, ...booksNodes];
@@ -168,12 +169,12 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     }
   };
 
-  const getBooksList = async (discipline, disciplineId, booksList) => {
+  const getBooksList = async (discipline, disciplineId, totalNodesLength) => {
     try {
       const books = await getAllBooks(discipline, true);
 
       return books.map((book, index) => ({
-        id: booksList.length + index + 1,
+        id: totalNodesLength + index + 1,
         parent: disciplineId,
         droppable: true,
         bookGuid: book.guid,
@@ -186,12 +187,6 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
 
     return [];
   };
-
-  // useEffect(() => {
-  //   getBooksList();
-  //   const interval = setInterval(getBooksList, 60000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const handleLensClick = (node) => {
     setClickedNodeIds(prevClickedNodeIds => {

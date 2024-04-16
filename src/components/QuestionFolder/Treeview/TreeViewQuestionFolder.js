@@ -16,6 +16,7 @@ import FillInBlanks from "../../questions/FillInBlanks";
 import Essay from "../../questions/Essay";
 import QtiService from "../../../utils/qtiService";
 import Loader from "../../common/loader/Loader";
+import { useAppContext } from "../../../context/AppContext";
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -24,6 +25,7 @@ function TreeViewQuestionFolder({
   rootFolderGuid,
   selectedFolderGuid,
 }) {
+  const { handleQuestionAdd } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -233,6 +235,7 @@ function TreeViewQuestionFolder({
             ),
             data: {
               guid: question.guid,
+              qtiModel: question.qtiModel,
               sequence: question.sequence,
               isQuestion: true,
             },
@@ -262,7 +265,7 @@ function TreeViewQuestionFolder({
           questionId = dragSource.questionGuid;
         } else {
           sourceFolderId = dragSource.data.guid;
-          targetFolderId = rootFolderGuid;
+          targetFolderId = dropTarget ? dropTarget.data.guid : rootFolderGuid;
           questionId = dragSource.questionGuid;
         }
       } else {
@@ -280,10 +283,17 @@ function TreeViewQuestionFolder({
           questionId
         );
         Toastify({ message: "Question moved successfully", type: "success" });
-        const updatedQuestions = savedQuestions.filter(
-          (question) => question.guid !== questionId
+        const updatedTreeData = [...newTree];
+        const draggedNodeIndex = updatedTreeData.findIndex(
+          (node) => node.id === questionId
         );
-        setSavedQuestions(updatedQuestions);
+        const draggedNode = updatedTreeData[draggedNodeIndex];
+        const parentIndex = updatedTreeData.findIndex(
+          (node) => node.id === targetFolderId
+        );
+        updatedTreeData.splice(draggedNodeIndex, 1);
+        updatedTreeData.splice(parentIndex + 1, 0, draggedNode);
+        setTreeData(updatedTreeData);
       } catch (error) {
         Toastify({ message: "Failed to move question", type: "error" });
         console.error("Error swapping question between folders:", error);
@@ -296,6 +306,13 @@ function TreeViewQuestionFolder({
         parentId = dropTarget.data.guid;
       } else {
         parentId = rootFolderGuid;
+      }
+      if (dragSource.data.guid === parentId) {
+        Toastify({
+          message: "Cannot drop folder onto itself or its parent.",
+          type: "error",
+        });
+        return;
       }
       const folderName = dragSource.text;
       const nodeToBeUpdated = {
@@ -377,6 +394,11 @@ function TreeViewQuestionFolder({
     console.log("Delete folder:", folderTitle);
   };
 
+  const handleAdd = (node) => {
+    handleQuestionAdd(node);
+    console.log(node);
+  };
+
   return (
     <div
       className={`treeview ${isDragging ? "grabbing" : ""}`}
@@ -384,7 +406,7 @@ function TreeViewQuestionFolder({
       onMouseUp={handleMouseUp}
       style={{ marginBottom: "-47px" }}
     >
-      { loading ?  (
+      {loading ? (
         <Loader show={true} />
       ) : (
         <Tree
@@ -395,7 +417,10 @@ function TreeViewQuestionFolder({
               {node.droppable && (
                 <span
                   onClick={() => {
-                    if (!isOpen && (!node.children || node.children.length === 0) && savedQuestions.length === 0) {
+                    if (
+                      !isOpen &&
+                      (!node.children || node.children.length === 0)
+                    ) {
                       fetchChildFolders(node);
                     }
                     onToggle();
@@ -436,6 +461,11 @@ function TreeViewQuestionFolder({
                   </button>
                 </>
               )}
+              {node.data.isQuestion && (
+                <button className="questionadd" onClick={() => handleAdd(node)}>
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              )}
             </div>
           )}
           dragPreviewRender={(monitorProps) => (
@@ -451,7 +481,6 @@ function TreeViewQuestionFolder({
       )}
     </div>
   );
-  
 }
 
 export default TreeViewQuestionFolder;
