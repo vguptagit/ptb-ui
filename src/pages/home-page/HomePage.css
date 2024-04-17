@@ -23,7 +23,7 @@
 }
 .container-resource{
     height: calc(89vh - 85px);
-    overflow:auto;
+    overflow:hidden;
 }
 
 .container-test{

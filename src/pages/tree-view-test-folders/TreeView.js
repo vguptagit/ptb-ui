@@ -22,6 +22,7 @@ function TreeView({
   folders,
   rootFolderGuid,
   selectedFolderGuid,
+  setHeight,
 }) {
   const {
     handleEditTest,
@@ -174,6 +175,8 @@ function TreeView({
       }
       setSelectedFolder(folderTitle);
     }
+    const newHeight = `calc(80vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleAnotherFunction = (node) => {

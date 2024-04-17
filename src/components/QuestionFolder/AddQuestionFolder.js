@@ -23,6 +23,7 @@ const QuestionFolder = ({ userId }) => {
   const [updateKey, setUpdateKey] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
+  const [height, setHeight] = useState();
 
   async function fetchRootFolderGuid() {
     try {
@@ -71,11 +72,15 @@ const QuestionFolder = ({ userId }) => {
     if (!isEditing) {
       setFolderName("");
     }
+    const newHeight = `calc(72vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleTextBoxClose = () => {
     setShowTextBox(false);
     setFolderName("");
+    const newHeight = `calc(81vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleSaveFolder = async () => {
@@ -109,6 +114,8 @@ const QuestionFolder = ({ userId }) => {
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder updated successfully", type: "success" });
+          const newHeight = `calc(81vh - 85px)`;
+          setHeight(newHeight);
         } else {
           // If not editing, save the new folder
           const newFolderData = {
@@ -125,6 +132,8 @@ const QuestionFolder = ({ userId }) => {
           localStorage.setItem("savedFolders", JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: "Folder saved successfully", type: "success" });
+          const newHeight = `calc(81vh - 85px)`;
+          setHeight(newHeight);
         }
 
         setFolderName("");
@@ -213,7 +222,7 @@ const QuestionFolder = ({ userId }) => {
         </div>
       )}
       {/* Render saved folders */}
-      <div className="saved-folders">
+      <div className="saved-folders" style={{height}}>
           <TreeViewQuestionFolder
             key={updateKey}
             folders={savedFolders}
@@ -221,6 +230,7 @@ const QuestionFolder = ({ userId }) => {
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
             selectedFolderGuid={selectedFolderGuid}
+            setHeight={setHeight}
           />
       </div>
     </div>

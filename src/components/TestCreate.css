@@ -21,10 +21,10 @@
   margin-top: 8px;
 }
 
-/* input.rounded.form-control {
-  margin-left: 10px;
+input.rounded.form-control {
+  margin-left: 0px;
   margin-top: 0px;
-} */
+}
 
 input.rounded.form-control.testNameInputBox{
   width: 500px;

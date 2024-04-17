@@ -24,6 +24,7 @@ function TreeViewQuestionFolder({
   folders,
   rootFolderGuid,
   selectedFolderGuid,
+  setHeight,
 }) {
   const { handleQuestionAdd } = useAppContext();
   const [treeData, setTreeData] = useState([]);
@@ -372,6 +373,8 @@ function TreeViewQuestionFolder({
       }
       setSelectedFolder(folderTitle);
     }
+    const newHeight = `calc(72vh - 85px)`;
+    setHeight(newHeight);
   };
 
   const handleDragStart = () => {
