@@ -8,7 +8,7 @@ const FullLayout = () => {
                 <Header />
             </header>
             <main>
-                <div className="container-xxl">
+                <div className="container-fluid">
                     <Outlet />
                 </div>
             </main>
