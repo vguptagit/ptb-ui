@@ -15,10 +15,11 @@ import QtiService from "../utils/qtiService";
 import "./TestCreate.css";
 import "./_tables.css";
 import TreeViewTestCreate from "./TreeViewTestCreate";
-import jquery from 'jquery';
+import jquery from "jquery";
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, setSelectedTest } = useAppContext();
+  const { selectedTest, dispatchEvent, setSelectedTest, selectedQuestion } =
+    useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
   const [initialTabTitle, setInitialTabTitle] = useState(
     selectedTest?.title || ""
@@ -46,16 +47,15 @@ const TestCreate = () => {
 
     // Update the title in the selectedTest object
     if (selectedTest && selectedTest.id) {
-        // Create a copy of the selectedTest object
-        const updatedSelectedTest = { ...selectedTest };
-        // Update the title property with the new title
-        updatedSelectedTest.title = newTitle;
-        // Dispatch an action to update the selectedTest object in the context
-        dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
+      // Create a copy of the selectedTest object
+      const updatedSelectedTest = { ...selectedTest };
+      // Update the title property with the new title
+      updatedSelectedTest.title = newTitle;
+      // Dispatch an action to update the selectedTest object in the context
+      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
     }
-};
-console.log("updatedtitle", tabTitle);
-
+  };
+  console.log("updatedtitle", tabTitle);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -89,24 +89,23 @@ console.log("updatedtitle", tabTitle);
         );
         qtiModel.EditOption = false;
         question.qtiModel = qtiModel;
-        question.masterData = JSON.parse(JSON.stringify(qtiModel));//
+        question.masterData = JSON.parse(JSON.stringify(qtiModel)); //
         question.itemId = copyItem.question.guid;
         question.quizType = question.metadata.quizType;
-        question.data = question.qtixml;//
+        question.data = question.qtixml; //
         console.log(question);
-        const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
-        if(question.quizType == "FillInBlanks"){
+        const questionTemplates =
+          CustomQuestionBanksService.questionTemplates(question);
+        if (question.quizType == "FillInBlanks") {
           let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
           console.log(xmlToHtml);
           question.textHTML = xmlToHtml;
-        }
-        else
-        {
+        } else {
           let xmlToHtml = questionTemplates[0].textHTML;
           console.log(xmlToHtml);
           question.textHTML = xmlToHtml;
         }
-        question.spaceLine = 0
+        question.spaceLine = 0;
         selectedTest.questions.push(question);
       } else {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
@@ -136,19 +135,17 @@ console.log("updatedtitle", tabTitle);
 
   const getPrintModeFbCaption = (Caption) => {
     try {
-        var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
-        htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-        var element = jquery('<p></p>');
-        jquery(element).append(htmlText);
-        element.find("button").each(function (i, obj) {
-            let blankSpace = "<span class='blank'> _____________________ </span>";
-            jquery(obj).replaceWith(blankSpace);
-        });
-        return element[0].innerHTML;
-    } catch (e) {
-
-    }
-}
+      var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
+      htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+      var element = jquery("<p></p>");
+      jquery(element).append(htmlText);
+      element.find("button").each(function (i, obj) {
+        let blankSpace = "<span class='blank'> _____________________ </span>";
+        jquery(obj).replaceWith(blankSpace);
+      });
+      return element[0].innerHTML;
+    } catch (e) {}
+  };
 
   const handleQuestionState = (edit) => {
     setRefreshChildren(!refreshChildren);
@@ -344,6 +341,81 @@ console.log("updatedtitle", tabTitle);
     }
   };
 
+  const DraggableQuestion = () => {
+    const key = selectedQuestion.data.guid;
+
+    switch (selectedQuestion.data.quizType) {
+      case CustomQuestionBanksService.MultipleChoice:
+        return (
+          <div key={key}>
+            <MultipleChoice
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.MultipleResponse:
+        return (
+          <div key={key}>
+            <MultipleResponse
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.TrueFalse:
+        return (
+          <div key={key}>
+            <TrueFalse
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.Matching:
+        return (
+          <div key={key}>
+            <Matching
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.FillInBlanks:
+        return (
+          <div key={key}>
+            <FillInBlanks
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      case CustomQuestionBanksService.Essay:
+        return (
+          <div key={key}>
+            <Essay
+              questionNode={selectedQuestion.data}
+              questionNodeIndex={selectedQuestion.data.index}
+              qtiModel={selectedQuestion.data.qtiModel}
+              printView={3}
+            />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div>
       <div className="test-container">
@@ -374,6 +446,7 @@ console.log("updatedtitle", tabTitle);
           />
         )}
       </div>
+      <div>{selectedQuestion && DraggableQuestion()}</div>
       <div
         ref={drop}
         className={`test-container ${
@@ -381,12 +454,13 @@ console.log("updatedtitle", tabTitle);
         }`}
       >
         <div>
-          {selectedTest &&
-          selectedTest.questions &&
-          selectedTest.questions.length !== 0 ? (
+          {(selectedTest &&
+            selectedTest.questions &&
+            selectedTest.questions.length !== 0) ||
+            selectedQuestion ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
-            <FormattedMessage id="dragQuestionsHereTestcreate" />
-          </div>
+              <FormattedMessage id="dragQuestionsHereTestcreate" />
+            </div>
           ) : (
             <QuestionsBanksTips />
           )}

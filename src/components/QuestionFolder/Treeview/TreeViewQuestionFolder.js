@@ -237,7 +237,8 @@ function TreeViewQuestionFolder({
             data: {
               guid: question.guid,
               qtiModel: question.qtiModel,
-              sequence: question.sequence,
+              quizType: question.metadata.quizType,
+              index: index,
               isQuestion: true,
             },
           })),
@@ -308,11 +309,7 @@ function TreeViewQuestionFolder({
       } else {
         parentId = rootFolderGuid;
       }
-      if (dragSource.data.guid === parentId) {
-        Toastify({
-          message: "Cannot drop folder onto itself or its parent.",
-          type: "error",
-        });
+      if (dragSource.data.guid === parentId || dropTarget.parent === dragSource.id) {
         return;
       }
       const folderName = dragSource.text;

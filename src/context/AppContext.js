@@ -22,6 +22,7 @@ const AppContext = createContext({
 const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
+  const [selectedQuestion, setSelectedQuestion] = useState();
   const [editTest, setEditTest] = useState(null);
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState('');
@@ -106,6 +107,7 @@ const AppProvider = ({ children }) => {
 
   const handleQuestionAdd = node => {
     console.log('adding question', node);
+    setSelectedQuestion(node);
   };
 
   const makeTestQuestion = async node => {
@@ -246,7 +248,8 @@ const AppProvider = ({ children }) => {
         setIsMigratedTests,
         isMigratedTests,
         handleQuestionAdd,
-        disciplinesData
+        disciplinesData,
+        selectedQuestion
       }}
     >
       {children}
