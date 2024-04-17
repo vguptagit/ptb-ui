@@ -62,7 +62,6 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
 
   useEffect(() => {
     if (show) {
-      console.log("use effect called")
       setShowMSWordSetting(true);
       const fetchPrintSettings = async () => {
         try {
@@ -197,6 +196,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                   label={format.text}
                   name="exportFormat"
                   id={`exportFormat-${index}`}
+                  key={`exportFormat-${index}`}
                   checked={selectedFormat.value === format.value}
                   onChange={() => handleFormatChange(format)}
                 />
@@ -213,6 +213,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                   label={area.text}
                   name="answerArea"
                   id={`answerArea-${index}`}
+                  key={`answerArea-${index}`}
                   checked={selectedAnswerArea.value === area.value}
                   onChange={() => setSelectedAnswerArea(area)}
                   disabled={area.isDisabled}
@@ -239,6 +240,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                       label={margin.text}
                       name="margins"
                       id={`margin-${index}`}
+                      key={`margin-${index}`}
                       checked={selectedMargin.value === margin.value}
                       onChange={() => setSelectedMargin(margin)}
                     />
@@ -255,6 +257,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                       label={key.text}
                       name="answerKey"
                       id={`answerKey-${index}`}
+                      key={`answerKey-${index}`}
                       checked={selectedAnswerKey.value === key.value}
                       onChange={() => setSelectedAnswerKey(key)}
                     />
@@ -275,6 +278,7 @@ function Modalpopupexport({ show, handleCloseModal, handleSave, selectedTest, sh
                       label={number.text}
                       name="pageNumber"
                       id={`pageNumber-${index}`}
+                      key={`pageNumber-${index}`}
                       checked={selectedPageNumber.value === number.value}
                       onChange={() => setSelectedPageNumber(number)}
                     />

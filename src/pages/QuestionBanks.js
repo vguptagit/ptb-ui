@@ -1,12 +1,15 @@
+import React, { useState, useEffect } from 'react';
 import TreeView from './tree-view/TreeView';
 import QuestBanks from '../components/AddQuestionbankfolder/AddQuestionsBanks';
 import { getUserDisciplines } from '../services/discipline.service';
-import React, { useState, useEffect } from 'react';
 import SearchBox from '../components/SearchBox/SearchBox';
 import Toastify from '../components/common/Toastify';
+import { useAppContext } from '../context/AppContext';
 import './QuestionBanks.css';
 
 const QuestionBanks = () => {
+  const { dispatchEvent } = useAppContext();
+
   const [disciplineData, setDisciplineData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -18,6 +21,9 @@ const QuestionBanks = () => {
     try {
       const data = await getUserDisciplines();
       setDisciplineData(data);
+      dispatchEvent('UPDATE_USER_DISCIPLINES', {
+        disciplines: data
+      });
     } catch (error) {
       Toastify(error);
     }
@@ -33,7 +39,7 @@ const QuestionBanks = () => {
         <SearchBox placeholder='Search selected banks' onSearch={handleSearch} />
       </div>
       <div className='questionBank'>
-        <QuestBanks reloadDisciplines={loadDisiplines}/>
+        <QuestBanks reloadDisciplines={loadDisiplines} />
       </div>
       {disciplineData.length > 0 && (
         <div>
