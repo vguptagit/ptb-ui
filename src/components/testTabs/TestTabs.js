@@ -204,7 +204,11 @@ const TestTabs = () => {
       test.folderGuid = folderGuid;
     }
 
-    let isduplicateTest = await isDuplicateTest(buttonName,test);
+    if(buttonName === "saveAs") {
+      test.title = activeTest.title;
+    }
+
+    let isduplicateTest = await isDuplicateTest(buttonName, test);
     // When duplicate method fails because of server error dont proceed with test save
     if(isduplicateTest === null) {
       Toastify({

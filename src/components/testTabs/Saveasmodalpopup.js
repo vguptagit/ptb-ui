@@ -43,10 +43,10 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   };
 
   useEffect(() => {
-    if (selectedTest) {
+    if (selectedTest && show) {
       setTestTitle(selectedTest.title || '');
     }
-  }, [selectedTest]);
+  }, [selectedTest, show]);
 
   const handleTitleChange = event => {
     let newTitle = event.target.value;
@@ -60,16 +60,6 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
 
     setTestTitle(newTitle);
   };
-
-  const titleOnBlurHandler = () => {
-    if (selectedTest && selectedTest.id) {
-      const updatedSelectedTest = { ...selectedTest };
-
-      updatedSelectedTest.title = testTitle;
-
-      dispatchEvent('UPDATE_TEST_TITLE', updatedSelectedTest);
-    }
-  }
 
   const handleSaveClick = async e => {
     if (saving) return;
@@ -116,7 +106,6 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
                 placeholder='Enter'
                 value={testTitle}
                 onChange={handleTitleChange}
-                onBlur={titleOnBlurHandler}
                 required
               />
             </Form>
