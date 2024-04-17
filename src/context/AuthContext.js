@@ -19,7 +19,14 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.clear();
     localStorage.clear();
     sessionStorage.removeItem("selectedDiscipline");
-    sessionStorage.removeItem("selectedbookIds");
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("tokenExpiry");
+    sessionStorage.removeItem("familyName");
+    sessionStorage.removeItem("emailAddress");
+    sessionStorage.removeItem("selectedFolderId");
+
+
     window.piSession.logout();
     // navigate('/welcomescreen');
     console.log('setIsAuthenticated', isAuthenticated);
