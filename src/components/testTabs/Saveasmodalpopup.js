@@ -101,9 +101,9 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
             </div>
             <Form style={{ marginInlineStart: '6px' }}>
               <Form.Control
-                type='text'
-                name='title'
-                placeholder='Enter'
+                type="text"
+                name="title"
+                placeholder="Enter"
                 value={testTitle}
                 onChange={handleTitleChange}
                 required
@@ -124,11 +124,11 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={handleCloseModal} disabled={saving}>
-          <FormattedMessage id='cancelButtonSaveasmodalpopupText' />
+        <Button variant="secondary" onClick={handleCloseModal} disabled={saving}>
+          <FormattedMessage id="cancelButtonSaveasmodalpopupText" />
         </Button>
-        <Button variant='primary' name='saveAs' onClick={handleSaveClick} disabled={saving}>
-          {saving ? <Loader animation='border' size='sm' /> : <FormattedMessage id='saveButtonSaveasmodalpopupText' />}
+        <Button variant="primary" name="saveAs" onClick={handleSaveClick} disabled={saving}>
+          {saving ? <Loader animation="border" size="sm" /> : <FormattedMessage id="saveButtonSaveasmodalpopupText" />}
         </Button>
       </Modal.Footer>
     </Modal>

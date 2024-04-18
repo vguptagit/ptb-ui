@@ -1,10 +1,10 @@
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { Button } from "react-bootstrap";
-import { FormattedMessage } from "react-intl";
-import "./profile.css";
-import { useAuth } from "../../context/AuthContext";
-import SettingsModal from "./SettingsModal";
-import { useState } from "react";
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Button } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import './profile.css';
+import { useAuth } from '../../context/AuthContext';
+import SettingsModal from './SettingsModal';
+import { useState } from 'react';
 
 const Profile = () => {
   const { user, logout } = useAuth();
@@ -40,7 +40,14 @@ const Profile = () => {
         <NavDropdown.Divider />
         <div className="settings-and-sign-out">
           <div className="d-flex justify-content-center align-items-center">
-            <Button variant="primary" className="button-setting" onClick={() => {handleSettingsModalOpen(); loadSettingsModalContent();}}>
+            <Button
+              variant="primary"
+              className="button-setting"
+              onClick={() => {
+                handleSettingsModalOpen();
+                loadSettingsModalContent();
+              }}
+            >
               <FormattedMessage id="profile.setting" />
             </Button>
           </div>

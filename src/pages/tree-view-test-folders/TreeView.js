@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Tree } from "@minoru/react-dnd-treeview";
-import "./TreeView.css";
-import {
-  deleteTestFolder,
-  getUserTestFolders,
-  deleteTest,
-} from "../../services/testfolder.service";
-import {
-  getFolderTests,
-  getPublisherTestsByBookId,
-} from "../../services/testcreate.service";
-import Toastify from "../../components/common/Toastify";
-import { useAppContext } from "../../context/AppContext";
-import { getUserBooks, getUserBooksByID } from "../../services/book.service";
-import { FormattedMessage } from "react-intl";
+import React, { useState, useEffect } from 'react';
+import { Tree } from '@minoru/react-dnd-treeview';
+import './TreeView.css';
+import { deleteTestFolder, getUserTestFolders, deleteTest } from '../../services/testfolder.service';
+import { getFolderTests, getPublisherTestsByBookId } from '../../services/testcreate.service';
+import Toastify from '../../components/common/Toastify';
+import { useAppContext } from '../../context/AppContext';
+import { getUserBooks, getUserBooksByID } from '../../services/book.service';
+import { FormattedMessage } from 'react-intl';
 
 function TreeView({
   onFolderSelect,
@@ -24,13 +17,8 @@ function TreeView({
   selectedFolderGuid,
   setHeight,
 }) {
-  const {
-    handleEditTest,
-    editTestHighlight,
-    setEditTestHighlight,
-    setIsMigratedTests,
-    fetchUserFolders,
-  } = useAppContext();
+  const { handleEditTest, editTestHighlight, setEditTestHighlight, setIsMigratedTests, fetchUserFolders } =
+    useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -56,14 +44,9 @@ function TreeView({
     }
   }, [folders]);
 
-
-  const fetchChildFolders = async (parentNode) => {
+  const fetchChildFolders = async parentNode => {
     try {
-      if (
-        !parentNode.children &&
-        parentNode.data.guid !== selectedFolderGuid &&
-        parentNode.droppable === true
-      ) {
+      if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid && parentNode.droppable === true) {
         const childFolders = await getUserTestFolders(parentNode.data.guid);
         const childTests = await getFolderTests(parentNode.data.guid);
 
@@ -90,13 +73,9 @@ function TreeView({
         ];
 
         const updatedTreeData = [...treeData];
-        const nodeIndex = updatedTreeData.findIndex(
-          (n) => n.id === parentNode.id
-        );
+        const nodeIndex = updatedTreeData.findIndex(n => n.id === parentNode.id);
 
-        const existingChildNodes = updatedTreeData
-          .slice(nodeIndex + 1)
-          .filter((node) => node.parent === parentNode.id);
+        const existingChildNodes = updatedTreeData.slice(nodeIndex + 1).filter(node => node.parent === parentNode.id);
 
         if (existingChildNodes.length === 0) {
           updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes);
@@ -104,7 +83,7 @@ function TreeView({
         setTreeData(updatedTreeData);
       }
     } catch (error) {
-      console.error("Error fetching child question folders:", error);
+      console.error('Error fetching child question folders:', error);
     }
   };
 
@@ -137,18 +116,17 @@ function TreeView({
             sequence: childFolder.sequence,
           },
         }));
-        const parentIndex = newTree.findIndex((node) => node.id === parentId);
-        const isChildNode = parentId.toString().includes(".");
+        const parentIndex = newTree.findIndex(node => node.id === parentId);
+        const isChildNode = parentId.toString().includes('.');
         const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
         const updatedTreeData = [...newTree];
         updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
         setTreeData(updatedTreeData);
       } catch (error) {
-        console.error("Error fetching child test folders:", error);
+        console.error('Error fetching child test folders:', error);
       }
       onNodeUpdate(nodeToBeUpdated);
-    }
-    else {
+    } else {
       let targetId;
 
       if (dropTarget === undefined) {
@@ -162,12 +140,12 @@ function TreeView({
     }
   };
 
-  const handleEditFolder = (folderTitle) => {
-    console.log("Edit folder:", folderTitle);
+  const handleEditFolder = folderTitle => {
+    console.log('Edit folder:', folderTitle);
     if (selectedFolder === folderTitle) {
       setSelectedFolder(null);
       if (onFolderSelect) {
-        onFolderSelect("");
+        onFolderSelect('');
       }
     } else {
       if (onFolderSelect) {
@@ -179,15 +157,15 @@ function TreeView({
     setHeight(newHeight);
   };
 
-  const handleAnotherFunction = (node) => {
-    console.log("node", node);
+  const handleAnotherFunction = node => {
+    console.log('node', node);
     //handleAddNewTestTab(node.id, node.text, node.parent);
     handleEditTest(node);
     setEditTestHighlight(node.data.guid);
-    setIsMigratedTests(false)
+    setIsMigratedTests(false);
   };
 
-  const handleDeleteFolder = (folderTitle) => {
+  const handleDeleteFolder = folderTitle => {
     setSelectedFolderToDelete(folderTitle);
     setShowModal(true);
   };
@@ -199,24 +177,20 @@ function TreeView({
 
   const handleModalConfirmDelete = async () => {
     try {
-      const folderToDelete = folders.find(
-        (folder) => folder.title === selectedFolderToDelete
-      );
+      const folderToDelete = folders.find(folder => folder.title === selectedFolderToDelete);
       if (!folderToDelete) {
-        console.error("Folder not found:", selectedFolderToDelete);
+        console.error('Folder not found:', selectedFolderToDelete);
         return;
       }
       const folderIdToDelete = folderToDelete.guid;
       await deleteTestFolder(folderIdToDelete);
-      console.log("Folder deleted:", selectedFolderToDelete);
-      const updatedTreeData = treeData.filter(
-        (node) => node.data.guid !== folderIdToDelete
-      );
+      console.log('Folder deleted:', selectedFolderToDelete);
+      const updatedTreeData = treeData.filter(node => node.data.guid !== folderIdToDelete);
       setTreeData(updatedTreeData);
-      Toastify({ message: "Folder deleted successfully", type: "success" });
+      Toastify({ message: 'Folder deleted successfully', type: 'success' });
     } catch (error) {
-      console.error("Error deleting folder:", error);
-      Toastify({ message: "Failed to delete Folder", type: "error" });
+      console.error('Error deleting folder:', error);
+      Toastify({ message: 'Failed to delete Folder', type: 'error' });
     }
     setShowModal(false);
     setSelectedFolderToDelete(null);
@@ -225,11 +199,11 @@ function TreeView({
   const deleteTestInsideFolder = async (folderId, testId) => {
     try {
       await deleteTest(folderId, testId);
-      console.log("Test deleted:", testId);
-      Toastify({ message: "Test deleted successfully", type: "success" });
+      console.log('Test deleted:', testId);
+      Toastify({ message: 'Test deleted successfully', type: 'success' });
     } catch (error) {
-      console.error("Error deleting test:", error);
-      Toastify({ message: "Failed to delete Test", type: "error" });
+      console.error('Error deleting test:', error);
+      Toastify({ message: 'Failed to delete Test', type: 'error' });
     }
   };
 
@@ -248,13 +222,10 @@ function TreeView({
       const { folderId, testId } = selectedTestToDelete;
       await deleteTestInsideFolder(folderId, testId);
       const updatedTreeData = treeData
-        .map((node) => {
+        .map(node => {
           if (
-            (node.id.startsWith(`${folderId}.test`) &&
-              node.data.guid === testId) ||
-            (folderId === rootFolderGuid &&
-              node.data &&
-              node.data.guid === testId)
+            (node.id.startsWith(`${folderId}.test`) && node.data.guid === testId) ||
+            (folderId === rootFolderGuid && node.data && node.data.guid === testId)
           ) {
             return null;
           }
@@ -263,7 +234,7 @@ function TreeView({
         .filter(Boolean);
       setTreeData(updatedTreeData);
     } catch (error) {
-      console.error("Error deleting test:", error);
+      console.error('Error deleting test:', error);
     }
     setShowTestDeleteModal(false);
     setSelectedTestToDelete(null);
@@ -286,102 +257,69 @@ function TreeView({
   };
 
   return (
-    <div
-      className={`treeview ${isDragging ? "grabbing" : ""}`}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-    >
+    <div className={`treeview ${isDragging ? 'grabbing' : ''}`} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
       <Tree
         tree={treeData}
         rootId={0}
         render={(node, { isOpen, onToggle }) => (
-          <div
-            className={`tree-node ${
-              clickedNodes.includes(node.id) ? "clicked" : ""
-              }`}
-            id="tree-node-clicked"
-          >
+          <div className={`tree-node ${clickedNodes.includes(node.id) ? 'clicked' : ''}`} id="tree-node-clicked">
             {node.droppable && (
-              <span className="custom-caret"
+              <span
+                className="custom-caret"
                 onClick={() => {
                   if (!isOpen && (!node.children || node.children.length === 0)) {
                     fetchChildFolders(node);
                   }
                   onToggle();
-                  setClickedNodes((prevClickedNodes) => {
+                  setClickedNodes(prevClickedNodes => {
                     if (prevClickedNodes.includes(node.id)) {
-                      return prevClickedNodes.filter((item) => item !== node.id);
+                      return prevClickedNodes.filter(item => item !== node.id);
                     } else {
                       return [...prevClickedNodes, node.id];
                     }
                   });
                 }}
               >
-                {isOpen ? (
-                  <i className="fa fa-caret-down"></i>
-                ) : (
-                    <i className="fa fa-caret-right"></i>
-                  )}
+                {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
               </span>
             )}
             {node.text}
             {selectedFolder === node.text && node.droppable && (
-              <button
-                className="editbutton selected"
-                onClick={() => handleEditFolder(node.text)}
-              >
+              <button className="editbutton selected" onClick={() => handleEditFolder(node.text)}>
                 <i className="bi bi-pencil-fill"></i>
               </button>
             )}
             {selectedFolder !== node.text && node.droppable && (
-              <button
-                className="editbutton"
-                onClick={() => handleEditFolder(node.text)}
-              >
+              <button className="editbutton" onClick={() => handleEditFolder(node.text)}>
                 <i className="bi bi-pencil-fill"></i>
               </button>
             )}
             {!node.droppable && (
               <button
-                className={`editbutton ${
-                  editTestHighlight === node.data.guid ? "highlight" : ""
-                  }`}
+                className={`editbutton ${editTestHighlight === node.data.guid ? 'highlight' : ''}`}
                 onClick={() => handleAnotherFunction(node)}
               >
                 <i className="bi bi-pencil-fill"></i>
               </button>
             )}
-            <button
-              className="deletebutton"
-              onClick={() => handleDeleteFolder(node.text)}
-            >
+            <button className="deletebutton" onClick={() => handleDeleteFolder(node.text)}>
               <i className="bi bi-trash"></i>
             </button>
             {!node.droppable && (
-              <button
-                className="deletebutton"
-                onClick={() => handleDeleteTest(node.parent, node.data.guid)}
-              >
+              <button className="deletebutton" onClick={() => handleDeleteTest(node.parent, node.data.guid)}>
                 <i className="bi bi-trash"></i>
               </button>
             )}
           </div>
         )}
-        dragPreviewRender={(monitorProps) => (
-          <div className="custom-drag-preview">{monitorProps.item.text}</div>
-        )}
+        dragPreviewRender={monitorProps => <div className="custom-drag-preview">{monitorProps.item.text}</div>}
         onDrop={handleDrop}
         dragPreviewClassName="custom-drag-preview"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       />
       {showModal && (
-        <div
-          className="modal fade show"
-          tabIndex="-1"
-          role="dialog"
-          style={{ display: "block" }}
-        >
+        <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header" id="delete-modal-header">
@@ -391,21 +329,14 @@ function TreeView({
               </div>
               <div className="modal-body">
                 <i className="fa-solid fa-circle-question"></i>
-                &nbsp;<FormattedMessage id="deleteFolderQuestionTreeView" />
+                &nbsp;
+                <FormattedMessage id="deleteFolderQuestionTreeView" />
               </div>
               <div className="modal-footer" id="delete-modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleModalCancel}
-                >
+                <button type="button" className="btn btn-secondary" onClick={handleModalCancel}>
                   <FormattedMessage id="cancelButtonTreeViewText" />
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleModalConfirmDelete}
-                >
+                <button type="button" className="btn btn-primary" onClick={handleModalConfirmDelete}>
                   <FormattedMessage id="deleteButtonTreeViewText" />
                 </button>
               </div>
@@ -414,12 +345,7 @@ function TreeView({
         </div>
       )}
       {showTestDeleteModal && (
-        <div
-          className="modal fade show"
-          tabIndex="-1"
-          role="dialog"
-          style={{ display: "block" }}
-        >
+        <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header" id="delete-modal-header">
@@ -432,18 +358,10 @@ function TreeView({
                 &nbsp; <FormattedMessage id="deleteTestQuestionTreeView" />
               </div>
               <div className="modal-footer" id="delete-modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowTestDeleteModal(false)}
-                >
+                <button type="button" className="btn btn-secondary" onClick={() => setShowTestDeleteModal(false)}>
                   <FormattedMessage id="cancelButtonTreeViewTextButton" />
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleConfirmDeleteTest}
-                >
+                <button type="button" className="btn btn-primary" onClick={handleConfirmDeleteTest}>
                   <FormattedMessage id="deleteButtonTreeViewTextButton" />
                 </button>
               </div>

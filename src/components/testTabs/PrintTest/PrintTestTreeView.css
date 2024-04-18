@@ -1,68 +1,68 @@
-#print-popup-container .tick{
-    display: none !important;
+#print-popup-container .tick {
+  display: none !important;
 }
-#print-popup-container .specFont{
-    margin-right: 10px;
+#print-popup-container .specFont {
+  margin-right: 10px;
 }
 #print-popup-container .qti-p {
-    display: inline-block;
-    padding: 0px 0px 0px 16px;
-    max-width: 100% !important;
-    vertical-align: inherit;
-    cursor: pointer;
-    width: 100%;
+  display: inline-block;
+  padding: 0px 0px 0px 16px;
+  max-width: 100% !important;
+  vertical-align: inherit;
+  cursor: pointer;
+  width: 100%;
 }
 
-#print-popup-container .radio{
-    margin-left: 20px;
+#print-popup-container .radio {
+  margin-left: 20px;
 }
 
-#print-popup-container .matchOptionContainer{
-    display: flex !important;
-    justify-content: space-between !important;
+#print-popup-container .matchOptionContainer {
+  display: flex !important;
+  justify-content: space-between !important;
 }
 
 .left-side-margin {
-    margin-left: 60px;
+  margin-left: 60px;
 }
 
-#print-popup-container{
-    font-size: 16px !important;
+#print-popup-container {
+  font-size: 16px !important;
 }
 
-#print-popup-container .rightMatchingOption{
-    position: relative;
-    top: 9px;
-    right: 52px;
+#print-popup-container .rightMatchingOption {
+  position: relative;
+  top: 9px;
+  right: 52px;
 }
 
-#print-popup-container .qti-blockquote{
-    margin-bottom: -20px;
+#print-popup-container .qti-blockquote {
+  margin-bottom: -20px;
 }
 
-#print-popup-container .qti-blockquote.matching{
-    bottom: 20px;
-    left: 20px;
-    margin-bottom: -35px;
+#print-popup-container .qti-blockquote.matching {
+  bottom: 20px;
+  left: 20px;
+  margin-bottom: -35px;
 }
 
-#print-popup-container .__marker__{
-    position: relative;
-    left: 11px;
+#print-popup-container .__marker__ {
+  position: relative;
+  left: 11px;
 }
 
-#print-popup-container .checkbox{
-    position: relative;
-    left: 20px;
+#print-popup-container .checkbox {
+  position: relative;
+  left: 20px;
 }
 
-#print-preview-questions{
-    position: relative;
-    bottom: 40px;
+#print-preview-questions {
+  position: relative;
+  bottom: 40px;
 }
 
-.student-name{
-    position: relative;
-    left: 16px;
-    margin-bottom: 10px;
+.student-name {
+  position: relative;
+  left: 16px;
+  margin-bottom: 10px;
 }

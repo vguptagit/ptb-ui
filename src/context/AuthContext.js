@@ -18,23 +18,22 @@ export const AuthProvider = ({ children }) => {
     // sessionStorage.removeItem('isAuthenticated');
     sessionStorage.clear();
     localStorage.clear();
-    sessionStorage.removeItem("selectedDiscipline");
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("tokenExpiry");
-    sessionStorage.removeItem("familyName");
-    sessionStorage.removeItem("emailAddress");
-    sessionStorage.removeItem("selectedFolderId");
-
+    sessionStorage.removeItem('selectedDiscipline');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('tokenExpiry');
+    sessionStorage.removeItem('familyName');
+    sessionStorage.removeItem('emailAddress');
+    sessionStorage.removeItem('selectedFolderId');
 
     window.piSession.logout();
     // navigate('/welcomescreen');
     console.log('setIsAuthenticated', isAuthenticated);
   };
 
-  const setUserDetails = (user) => {
+  const setUserDetails = user => {
     setUser(user);
-  }
+  };
 
   useEffect(() => {
     const familyName = sessionStorage.getItem('familyName');
@@ -49,10 +48,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  return <AuthContext.Provider value={{ isAuthenticated, login, logout, user, setUserDetails }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, setUserDetails }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
-
   return useContext(AuthContext);
 };

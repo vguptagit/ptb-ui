@@ -84,7 +84,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
       parent: 0,
       droppable: true,
       text: discipline,
-      type: 'discipline'
+      type: 'discipline',
     }));
     for (let i = 0; i < disciplinesNodes.length; i++) {
       const totalNodesLength = disciplinesNodes.length + booksNodes.length;
@@ -116,7 +116,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
         droppable: true,
         bookGuid: book.guid,
         text: `${book.title}_${discipline}`,
-        type: 'book'
+        type: 'book',
       }));
     } catch (error) {
       Toastify(error);
@@ -154,7 +154,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             bookGuid: node.bookGuid,
             nodeGuid: nodes[i].guid,
             text: `${nodes[i].title}_${node.text}`,
-            type: 'node'
+            type: 'node',
           };
           nodeList.push(newItemNode);
         }
@@ -178,7 +178,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             bookGuid: node.bookGuid,
             nodeGuid: nodes[i].guid,
             text: `${nodes[i].title}_${node.text}`,
-            type: 'node'
+            type: 'node',
           };
           nodeList.push(newItemNode);
         }
@@ -197,19 +197,18 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     setLoadingQuestions(true);
     getAllQuestions(node.bookGuid, node.nodeGuid).then(
       questions => {
-
         if (Array.isArray(questions)) {
           setLoadingQuestions(false);
           const questionsWithQtiModels = questions.map(question => {
             const {
               qtixml,
-              metadata: { quizType }
+              metadata: { quizType },
             } = question;
             const qtiModel = QtiService.getQtiModel(qtixml, quizType);
             qtiModel.EditOption = false;
             return {
               ...question,
-              qtiModel
+              qtiModel,
             };
           });
 
@@ -219,7 +218,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             droppable: false,
             questionGuid: question.guid,
             text: <DraggableQuestion key={question.guid} question={question} index={index} />,
-            type: 'question'
+            type: 'question',
           }));
 
           nodeList.push(...questionNodes);
@@ -237,11 +236,11 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
         setLoadingQuestions(false);
         if (error.response) {
           if (error.response.status === 404) {
-            Toastify({ message: <FormattedMessage id='questionerrormsg404' />, type: 'error' });
+            Toastify({ message: <FormattedMessage id="questionerrormsg404" />, type: 'error' });
           } else if (error.response.status === 500) {
-            Toastify({ message: <FormattedMessage id='questionerrormsg500' />, type: 'error' });
+            Toastify({ message: <FormattedMessage id="questionerrormsg500" />, type: 'error' });
           } else {
-            Toastify({ message: <FormattedMessage id='errormsg' />, type: 'error' });
+            Toastify({ message: <FormattedMessage id="errormsg" />, type: 'error' });
           }
         }
         console.log(error);
@@ -258,7 +257,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             bookGuid: node.bookGuid,
             nodeGuid: nodes[i].guid,
             text: `${nodes[i].title}_${node.text}`,
-            type: 'node'
+            type: 'node',
           };
           nodeList.push(newItemNode);
         }
@@ -278,7 +277,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const DraggableQuestion = ({ question, index }) => {
     const [, drag] = useDrag({
       type: 'SAVED_QUESTION',
-      item: { question }
+      item: { question },
     });
 
     const key = question.guid;
@@ -329,7 +328,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   return (
     <>
       {!isSearchTermPresent && (
-        <div className='treeviewqb'>
+        <div className="treeviewqb">
           <Tree
             ref={treeRef}
             tree={treeData}
@@ -356,7 +355,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
       ) : (
         isSearchTermPresent && (
           <>
-            <div className='treeviewqb'>
+            <div className="treeviewqb">
               <Tree
                 tree={searchableTreeDataFilter}
                 rootId={0}

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import Spinner from "react-bootstrap/Spinner";
-import "./Loader.css";
+import React, { useState, useEffect, useRef } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import './Loader.css';
 import { FormattedMessage } from 'react-intl';
 
 function Loader(props) {
@@ -22,9 +22,9 @@ function Loader(props) {
           className="loader-overlay"
           tabIndex="0"
           ref={loaderRef}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             // Handle focus navigation within the loader
-            if (e.key === "Tab") {
+            if (e.key === 'Tab') {
               e.preventDefault();
               if (loaderRef.current) {
                 const focusableElements = loaderRef.current.querySelectorAll(
@@ -52,11 +52,11 @@ function Loader(props) {
           }}
         >
           <div className="fallback-spinner">
-            <div className="loading"  aria-label="loading screen">
+            <div className="loading" aria-label="loading screen">
               <Spinner className="spinner" animation="border" role="status" tabIndex="0">
-              <span className="visually-hidden">
+                <span className="visually-hidden">
                   <FormattedMessage id="loading" defaultMessage="Loading..." />
-              </span>
+                </span>
               </Spinner>
             </div>
           </div>

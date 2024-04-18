@@ -4,12 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
-  const loginurl =process.env.REACT_APP_AUTH_Login_URL ;
+  const loginurl = process.env.REACT_APP_AUTH_Login_URL;
 
   const { setUserDetails } = useAuth();
 
   useEffect(() => {
-    console.log("sessionjs onmount");
+    console.log('sessionjs onmount');
     createScriptElement();
   }, []);
 
@@ -29,7 +29,7 @@ function SessionJS() {
       try {
         iesMxSessioninitialize();
         console.log('LOGIN Session');
-      } catch(error) {
+      } catch (error) {
         console.error('Error initializing session:', error);
       }
     };
@@ -37,10 +37,10 @@ function SessionJS() {
 
   const iesMxSessioninitialize = () => {
     if (window.piSession) {
-      window.piSession.initialize("37r9t4VtxolfmvZhi9g25tQ6PxxwNPLT", {
-        "sessionIdleTimeoutSeconds": 3600,
-        "requireLogin": true,
-        "loginSuccessUrl": url
+      window.piSession.initialize('37r9t4VtxolfmvZhi9g25tQ6PxxwNPLT', {
+        sessionIdleTimeoutSeconds: 3600,
+        requireLogin: true,
+        loginSuccessUrl: url,
       });
       window.piSession.monitorUserActivity(true);
       // Call getToken once after initialization
@@ -56,13 +56,13 @@ function SessionJS() {
       window.piSession.getToken((status, token) => {
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('userId', window.piSession.userId());
-        sessionStorage.setItem("tokenExpiry", window.piSession.currentTokenExpiry());
+        sessionStorage.setItem('tokenExpiry', window.piSession.currentTokenExpiry());
         console.log('getToken:', status, token);
         if (status === 'success' && token) {
           // Set interval to check token expiry every minute
           const interval = setInterval(() => {
             if (window.piSession) {
-              sessionStorage.setItem("tokenExpiry", window.piSession.currentTokenExpiry());
+              sessionStorage.setItem('tokenExpiry', window.piSession.currentTokenExpiry());
             }
           }, 60000); // 1 minute in milliseconds
 
@@ -73,7 +73,7 @@ function SessionJS() {
               sessionStorage.setItem('familyName', response.familyName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
 
-              setUserDetails({name: response.familyName, email: response.emailAddress})
+              setUserDetails({ name: response.familyName, email: response.emailAddress });
             })
             .catch(error => {
               console.error('Error logging in:', error);

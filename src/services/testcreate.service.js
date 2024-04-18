@@ -1,33 +1,33 @@
-import httpInterceptor from "../httpHelper/httpHelper";
-import questions from "../mocks/questions.json";
-import { getErrorMessage } from "../utils/common";
+import httpInterceptor from '../httpHelper/httpHelper';
+import questions from '../mocks/questions.json';
+import { getErrorMessage } from '../utils/common';
 
 const url = process.env.REACT_APP_API_URL;
 
-export const saveMyQuestions = (questionEnvelops) => {
+export const saveMyQuestions = questionEnvelops => {
   return httpInterceptor
     .post(`${url}/my/questions`, questionEnvelops)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
 export const saveMyTest = (test, folderId) => {
-  if (!folderId) folderId = "null";
+  if (!folderId) folderId = 'null';
   return httpInterceptor
     .post(`${url}/my/folders/${folderId}/tests`, test)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -36,40 +36,40 @@ export const saveMyTest = (test, folderId) => {
 export const getPrintsettings = async () => {
   try {
     const response = await httpInterceptor.get(`${url}/settings/printsettings`);
-    console.log("API Response:", response.data);
+    console.log('API Response:', response.data);
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
+    console.error('API Error:', error);
     throw {
-      type: "error",
+      type: 'error',
       message: error,
     };
   }
 };
 
-export const savePrintsettings = (data) => {
+export const savePrintsettings = data => {
   return httpInterceptor
     .post(`${url}/settings/printsettings`, data)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getFolderTests = (folderId) => {
+export const getFolderTests = folderId => {
   return httpInterceptor
     .get(`${url}/my/folders/${folderId}/tests`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -78,18 +78,18 @@ export const getFolderTests = (folderId) => {
 export const getRootTests = () => {
   return httpInterceptor
     .get(`${url}/my/testroot`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getTestQuestions = (testId) => {
+export const getTestQuestions = testId => {
   console.log(testId);
   console.log(window.mock);
   if (window.mock) {
@@ -98,26 +98,26 @@ export const getTestQuestions = (testId) => {
   }
   return httpInterceptor
     .get(`${url}/test/${testId}/questions`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getPublisherTestsByBookId = (bookId) => {
+export const getPublisherTestsByBookId = bookId => {
   return httpInterceptor
     .get(`${url}/books/${bookId}/tests`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -144,4 +144,3 @@ export const exportTest = async (testId, format, options) => {
     throw new Error(error);
   }
 };
-
