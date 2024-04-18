@@ -55,6 +55,7 @@ function TreeViewQuestionFolder({
         }
       } catch (error) {
         console.error('Error fetching questions:', error);
+        setLoading(false);
       }
     };
 

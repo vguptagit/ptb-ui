@@ -307,8 +307,23 @@ const TestTabs = () => {
     let userSettings = {};
 
     if (test.questions && test.questions.length > 0) {
-      test.questions.forEach((qstn, index) => {
-        questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
+      const uniqueQuestions = [];
+      test.questions.forEach((qstn) => {
+        const isDuplicate = uniqueQuestions.some(
+          (uniqueQstn) =>
+            JSON.stringify(uniqueQstn.qtiModel) ===
+            JSON.stringify(qstn.qtiModel)
+        );
+
+        if (!isDuplicate) {
+          uniqueQuestions.push(qstn);
+          questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
+        } else {
+          // If duplicate, show an alert to the user
+          alert("Are you sure you want to save the same question again?");
+          uniqueQuestions.push(qstn);
+          questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
+        }
       });
     }
     try {
