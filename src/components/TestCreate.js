@@ -341,18 +341,20 @@ const TestCreate = () => {
     }
   };
 
-  const DraggableQuestion = () => {
-    const key = selectedQuestion.data.guid;
+  const DraggableQuestion = (question) => {
+    const key = question.data.guid;
 
-    switch (selectedQuestion.data.quizType) {
+    switch (question.data.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
         return (
           <div key={key}>
             <MultipleChoice
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -360,10 +362,12 @@ const TestCreate = () => {
         return (
           <div key={key}>
             <MultipleResponse
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -371,10 +375,12 @@ const TestCreate = () => {
         return (
           <div key={key}>
             <TrueFalse
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -382,10 +388,12 @@ const TestCreate = () => {
         return (
           <div key={key}>
             <Matching
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -393,10 +401,12 @@ const TestCreate = () => {
         return (
           <div key={key}>
             <FillInBlanks
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -404,10 +414,12 @@ const TestCreate = () => {
         return (
           <div key={key}>
             <Essay
-              questionNode={selectedQuestion.data}
-              questionNodeIndex={selectedQuestion.data.index}
-              qtiModel={selectedQuestion.data.qtiModel}
-              printView={3}
+              questionNode={question.data}
+              questionNodeIndex={question.data.index}
+              qtiModel={question.data.qtiModel}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
             />
           </div>
         );
@@ -445,8 +457,12 @@ const TestCreate = () => {
             renderQuestions={renderQuestions}
           />
         )}
+        {selectedTest && selectedTest.questions && (
+          selectedTest.questions.map((question) => (
+            <div key={question.guid}>{DraggableQuestion(question)}</div>
+          ))
+        )}
       </div>
-      <div>{selectedQuestion && DraggableQuestion()}</div>
       <div
         ref={drop}
         className={`test-container ${
@@ -456,8 +472,7 @@ const TestCreate = () => {
         <div>
           {(selectedTest &&
             selectedTest.questions &&
-            selectedTest.questions.length !== 0) ||
-            selectedQuestion ? (
+            selectedTest.questions.length !== 0)  ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
               <FormattedMessage id="dragQuestionsHereTestcreate" />
             </div>

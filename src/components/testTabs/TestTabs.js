@@ -21,7 +21,20 @@ import Modalpopupexport from "./Modalpopupexport";
 import deepEqual from "deep-equal";
 
 const TestTabs = () => {
-  const { tests, addTest, deleteTest, selectedTest, dispatchEvent, editTest, setSelectedTest, fetchUserFolders, setEditTestHighlight, setSelectedViewTest, isMigratedTests, setIsMigratedTests } = useAppContext();
+  const {
+    tests,
+    addTest,
+    deleteTest,
+    selectedTest,
+    dispatchEvent,
+    editTest,
+    setSelectedTest,
+    fetchUserFolders,
+    setEditTestHighlight,
+    setSelectedViewTest,
+    isMigratedTests,
+    setIsMigratedTests,
+  } = useAppContext();
 
   console.log("selectedtest", selectedTest);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -30,9 +43,7 @@ const TestTabs = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showModalExport, setShowModalExport] = useState(false);
-  const [setTests] = useState([{ title: '' }]);
-
-
+  const [setTests] = useState([{ title: "" }]);
 
   useEffect(() => {
     if (editTest !== null) {
@@ -43,14 +54,13 @@ const TestTabs = () => {
   useEffect(() => {
     if (selectedTest && selectedTest.title) {
       setIsMigratedTests(
-        selectedTest.title.startsWith("Untitled ") ||
-        !isMigratedTests
+        selectedTest.title.startsWith("Untitled ") || !isMigratedTests
       );
     }
-  }, [selectedTest])
+  }, [selectedTest]);
 
   useEffect(() => {
-    const ellipsisItems = tests ?.slice(4);
+    const ellipsisItems = tests?.slice(4);
     setShowAdditionalButtons(true);
     setEllipsisDropdownItems(ellipsisItems);
 
@@ -179,7 +189,7 @@ const TestTabs = () => {
     alert("Button Clicked");
   };
 
-  const handleSave = async (e, activeTest,folderId,newTestName) => {
+  const handleSave = async (e, activeTest, folderId, newTestName) => {
     let testItems = tests.filter((item) => item.id === activeTest.id);
     const test = testItems[0]; // This always exists
     let buttonName = e.target.name;
@@ -197,26 +207,26 @@ const TestTabs = () => {
     }
 
     // Folder Id will be passed from save As modal popup
-    if(folderId) {
+    if (folderId) {
       test.folderGuid = folderId;
     } else {
       const folderGuid = JSON.parse(sessionStorage.getItem("selectedFolderId"));
       test.folderGuid = folderGuid;
     }
 
-    if(buttonName === "saveAs") {
+    if (buttonName === "saveAs") {
       test.title = activeTest.title;
     }
 
     let isduplicateTest = await isDuplicateTest(buttonName, test);
     // When duplicate method fails because of server error dont proceed with test save
-    if(isduplicateTest === null) {
+    if (isduplicateTest === null) {
       Toastify({
         message: "Something went wrong",
         type: "Error",
       });
       return;
-    }else if (isduplicateTest) {
+    } else if (isduplicateTest) {
       Toastify({
         message: "Test already exists with this name. Please save with another",
         type: "warn",
@@ -232,13 +242,13 @@ const TestTabs = () => {
         return;
       }
       // Reset Guid of test if its save As
-      if(buttonName === "saveAs") {
+      if (buttonName === "saveAs") {
         test.testId = null;
       }
       let questionBindings = await saveQuestions(test);
-      if(questionBindings && questionBindings.length != 0) {
+      if (questionBindings && questionBindings.length != 0) {
         saveTest(test, questionBindings);
-      }    
+      }
     }
   };
 
@@ -279,7 +289,7 @@ const TestTabs = () => {
 
         // Updating selected test with testID
         dispatchEvent("UPDATE_SELECTED_TEST", { test });
-        
+
         Toastify({
           message: "Test has been saved successfully!",
           type: "success",
@@ -289,7 +299,7 @@ const TestTabs = () => {
       }
     } catch (error) {
       console.error("Error saving Test:", error);
-      if (error ?.message ?.response ?.request ?.status === 409) {
+      if (error?.message?.response?.request?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -323,11 +333,13 @@ const TestTabs = () => {
         });
         // update question data if question save is success
         test.questions[index].guid = qstnResult.guid;
-        test.questions[index].masterData = JSON.parse(JSON.stringify(test.questions[index].qtiModel));
+        test.questions[index].masterData = JSON.parse(
+          JSON.stringify(test.questions[index].qtiModel)
+        );
       });
     } catch (error) {
       console.error("Error saving Questions:", error);
-      if (error ?.message ?.response ?.request ?.status === 409) {
+      if (error?.message?.response?.request?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: "error",
@@ -341,8 +353,8 @@ const TestTabs = () => {
 
   const buildQuestionEnvelop = (qstn, userSettings) => {
     qstn.data = QtiService.getQtiXML(qstn);
-    qstn.IsEdited = false; 
-    if(!deepEqual(qstn.masterData,qstn.qtiModel)) {
+    qstn.IsEdited = false;
+    if (!deepEqual(qstn.masterData, qstn.qtiModel)) {
       qstn.IsEdited = true;
     }
     var qstnExtMetadata = buildQuestionMetadata(qstn, userSettings);
@@ -372,14 +384,13 @@ const TestTabs = () => {
     return qstnExtMetadata;
   };
 
-
   const isDuplicateTest = async (buttonName, test) => {
     let testStatus = await duplicateTestStatus(test);
     //status 0 = No duplicates.
-    //status 1 = Duplicate Title but guid is different. Prevent save 
+    //status 1 = Duplicate Title but guid is different. Prevent save
     //status 2 = Duplicate Guid but title is different. So set testId to empty to save new test
     //status 3 = both guid & title are same (Update).
-    if(testStatus === 0) {
+    if (testStatus === 0) {
       return false;
     } else if (testStatus === 1) {
       return true;
@@ -387,35 +398,34 @@ const TestTabs = () => {
       test.testId = null;
       return false;
     } else if (testStatus === 3) {
-      if(buttonName && buttonName === "saveAs") {
+      if (buttonName && buttonName === "saveAs") {
         return true; // prevent update during save As
       } else {
-        return false; 
+        return false;
       }
     }
 
     return null;
-  }
-
+  };
 
   const duplicateTestStatus = async (test) => {
     try {
       var isDuplicate = 0;
       const folderTests = await getFolderTests(test.folderGuid);
-      // If test.title === folderTest.title && test.testId == folderTest.guid, this test is being updated 
+      // If test.title === folderTest.title && test.testId == folderTest.guid, this test is being updated
       // if only test.title match OR if only Guid match, then its duplicate
       // if both does not match then its new test save
-      for (const folderTest of folderTests) { 
-          if(folderTest.title == test.title && folderTest.guid == test.testId) {
-            isDuplicate = 3; // Both GUID & Title match
-            break;
-          }  else if (folderTest.guid == test.testId) {
-            isDuplicate = 2; // Same GUID with different title
-            break;
-          } else if (folderTest.title == test.title) {
-            isDuplicate = 1; // Same title with different GUID
-            break;
-          }
+      for (const folderTest of folderTests) {
+        if (folderTest.title == test.title && folderTest.guid == test.testId) {
+          isDuplicate = 3; // Both GUID & Title match
+          break;
+        } else if (folderTest.guid == test.testId) {
+          isDuplicate = 2; // Same GUID with different title
+          break;
+        } else if (folderTest.title == test.title) {
+          isDuplicate = 1; // Same title with different GUID
+          break;
+        }
       }
       console.log("Duplicate test status : ", isDuplicate);
       return isDuplicate;
@@ -459,8 +469,8 @@ const TestTabs = () => {
       setShowModalExport(true);
     } else {
       Toastify({
-        type: 'warn',
-        message: 'Please save the test before exporting!'
+        type: "warn",
+        message: "Please save the test before exporting!",
       });
     }
   };
@@ -482,7 +492,9 @@ const TestTabs = () => {
     return (
       test &&
       test.questions.length > 0 &&
-      !test.questions.find((item) => item.qtiModel.EditOption === true)
+      !test.questions.find(
+        (item) => item.qtiModel && item.qtiModel.EditOption === true
+      )
     );
   };
 
@@ -507,10 +519,9 @@ const TestTabs = () => {
               <Dropdown.Item
                 href="#"
                 onClick={(e) => handleSave(e, selectedTest)}
-                disabled={
-                  isMigratedTests &&
-                  !selectedTest.title.startsWith("Untitled ")
-                }
+                // disabled={
+                //   isMigratedTests && !selectedTest.title.startsWith("Untitled ")
+                // }
               >
                 <FormattedMessage id="testtabs.save" />
               </Dropdown.Item>
