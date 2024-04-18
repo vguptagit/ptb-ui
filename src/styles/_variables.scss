@@ -10,25 +10,24 @@ $light: #eaf2fb;
 $secondary: #35363b;
 
 $theme-colors: (
-  "primary": $primary,
-  "secondary": $secondary,
-  "success": $success,
-  "info": $info,
-  "warning": $warning,
-  "danger": $danger,
-  "light": $light,
-  "dark": $dark,
-  "light-primary": #d6e4f3,
-  "light-success": #d5f3f2,
-  "light-info": #d3edfa,
-  "light-warning": #f8ecdc,
-  "light-danger": #f8dddd,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
+  'light-primary': #d6e4f3,
+  'light-success': #d5f3f2,
+  'light-info': #d3edfa,
+  'light-warning': #f8ecdc,
+  'light-danger': #f8dddd,
 );
 // scss-docs-start gray-color-variables
 $white: #fff !default;
 $bg-gray: #f8f9fa !default;
-$border-gray: #E8E8E8 !default;
-
+$border-gray: #e8e8e8 !default;
 
 $gray-100: #f8f9fa !default;
 $gray-200: #f2f7f8 !default;
@@ -68,9 +67,9 @@ $grid-gutter-width: 1.85rem !default;
 $input-bg: $white !default;
 
 $card-bg: $white;
-$list-group-bg:$white !default;
-$table-bg:$white !default;
-$dropdown-bg:$white !default;
+$list-group-bg: $white !default;
+$table-bg: $white !default;
+$dropdown-bg: $white !default;
 
 /*******************/
 // Theme btn
