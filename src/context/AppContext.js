@@ -107,6 +107,7 @@ const AppProvider = ({ children }) => {
 
   const handleQuestionAdd = node => {
     console.log('adding question', node);
+    selectedTest.questions.push(node);
     setSelectedQuestion(node);
   };
 
