@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const FullLayout = () => {
     return (
@@ -8,7 +10,7 @@ const FullLayout = () => {
                 <Header />
             </header>
             <main>
-                <div className="container-xxl">
+                <div className="container-fluid container-xxl">
                     <Outlet />
                 </div>
             </main>
