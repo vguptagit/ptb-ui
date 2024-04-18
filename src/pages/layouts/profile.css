@@ -1,100 +1,100 @@
-    .profile-dropdown .dropdown-menu.show {
-        min-width: 220px;
-        margin-left: -99px;
-        line-height: 1em;
-        border-radius: 5px;
-        padding-bottom: 0px;
-    }
+.profile-dropdown .dropdown-menu.show {
+  min-width: 220px;
+  margin-left: -99px;
+  line-height: 1em;
+  border-radius: 5px;
+  padding-bottom: 0px;
+}
 
-    .profile-dropdown .profile-name {
-        text-align: center;
-        font-weight: bold;
-        margin-right: 10px;
-    }
+.profile-dropdown .profile-name {
+  text-align: center;
+  font-weight: bold;
+  margin-right: 10px;
+}
 
-    .profile-dropdown .profile-email {
-        text-align: center;
-        margin-right: 10px;
-    }
+.profile-dropdown .profile-email {
+  text-align: center;
+  margin-right: 10px;
+}
 
-    .profile-dropdown .button-setting {
-        margin-left: -91px;
-        margin-bottom: -38px;
-    }
+.profile-dropdown .button-setting {
+  margin-left: -91px;
+  margin-bottom: -38px;
+}
 
-    .profile-dropdown .button-signout {
-        margin-left: 96px;
-    }
+.profile-dropdown .button-signout {
+  margin-left: 96px;
+}
 
-    .profile-dropdown .navlink {
-        text-decoration: none;
-        margin-left: 6px;
-    }
+.profile-dropdown .navlink {
+  text-decoration: none;
+  margin-left: 6px;
+}
 
-    .profile-dropdown .profile-name,
-    .profile-dropdown .profile-email {
-        pointer-events: none;
-        cursor: default;
-    }
+.profile-dropdown .profile-name,
+.profile-dropdown .profile-email {
+  pointer-events: none;
+  cursor: default;
+}
 
-    .profile-dropdown .profile-name:hover,
-    .profile-dropdown .profile-email:hover {
-        background-color: transparent;
-    }
+.profile-dropdown .profile-name:hover,
+.profile-dropdown .profile-email:hover {
+  background-color: transparent;
+}
 
-    .profile-dropdown .dropdown-menu.show::after {
-        content: '';
-        display: inline-block;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0;
-        border-color: transparent transparent #fff;
-        margin-left: 162px;
-        transition: transform 0.3s ease;
-        transform-origin: center bottom;
-    }
+.profile-dropdown .dropdown-menu.show::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0;
+  border-color: transparent transparent #fff;
+  margin-left: 162px;
+  transition: transform 0.3s ease;
+  transform-origin: center bottom;
+}
 
-    .profile-dropdown .dropdown-menu.show.show::after {
-        transform: rotate(0deg) translateY(-131px);
-    }
+.profile-dropdown .dropdown-menu.show.show::after {
+  transform: rotate(0deg) translateY(-131px);
+}
 
-    #nav-dropdown:focus{
-        outline: 1px solid white !important;
-        border-radius: 2px;
-    }
+#nav-dropdown:focus {
+  outline: 1px solid white !important;
+  border-radius: 2px;
+}
 
-    #help-icon:focus{
-        outline: 1px solid white !important;
-        border-radius: 2px;
-    }
+#help-icon:focus {
+  outline: 1px solid white !important;
+  border-radius: 2px;
+}
 
-    .brand{
-        cursor: default;
-    }
+.brand {
+  cursor: default;
+}
 
-    #profile-tooltip{
-        margin-top: 7px;
-    }
+#profile-tooltip {
+  margin-top: 7px;
+}
 
-    #help-tooltip{
-        margin-top: 7px;
-    }
+#help-tooltip {
+  margin-top: 7px;
+}
 
-    .settings-modal {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-      }
-      
-      /* Ensure backdrop covers entire screen */
-      .modal-backdrop {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-      }
+.settings-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Ensure backdrop covers entire screen */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+}

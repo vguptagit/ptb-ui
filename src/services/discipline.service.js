@@ -11,7 +11,7 @@ export const getAllDisciplines = async () => {
     console.error('API Error:', error);
     throw {
       type: 'error',
-      message: error
+      message: error,
     };
   }
 };
@@ -25,7 +25,7 @@ export const getUserDisciplines = () => {
     .catch(error => {
       return Promise.reject({
         type: 'error',
-        message: error
+        message: error,
       });
     });
 };
@@ -39,7 +39,7 @@ export const saveUserDiscipline = (disciplines, userid) => {
     .catch(error => {
       return Promise.reject({
         type: 'error',
-        message: error
+        message: error,
       });
     });
 };

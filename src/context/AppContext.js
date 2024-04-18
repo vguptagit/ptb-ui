@@ -16,7 +16,7 @@ const AppContext = createContext({
   addTest: () => {},
   deleteTest: () => {},
   dispatchEvent: () => {},
-  selectedTest: {}
+  selectedTest: {},
 });
 
 const AppProvider = ({ children }) => {
@@ -92,7 +92,7 @@ const AppProvider = ({ children }) => {
       if (error?.message?.response?.request?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
-          type: 'error'
+          type: 'error',
         });
       } else {
         Toastify({ message: 'Error while fetching test', type: 'error' });
@@ -131,7 +131,7 @@ const AppProvider = ({ children }) => {
       if (error?.message?.response?.request?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
-          type: 'error'
+          type: 'error',
         });
       } else {
         Toastify({ message: 'Error while fetching test', type: 'error' });
@@ -250,7 +250,7 @@ const AppProvider = ({ children }) => {
         isMigratedTests,
         handleQuestionAdd,
         disciplinesData,
-        selectedQuestion
+        selectedQuestion,
       }}
     >
       {children}

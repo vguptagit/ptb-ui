@@ -1,45 +1,48 @@
 .scree-height {
-    min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
 }
 
 .App-header .bg-body-tertiary {
-    background-color: #000 !important;
+  background-color: #000 !important;
 }
 
 .App-header .navbar-brand,
 .App-header .nav-link,
 .App-header .nav-link.show {
-    color: #fff !important;
+  color: #fff !important;
 }
 
 .divider {
-    background-color: #E8E8E8;
-    border-left: 1px solid #D0d0d0;
-    border-right: 1px solid #D0d0d0;
-    position: absolute;
-    z-index: 9;
-    height: 100%;
-    width: 10px;
+  background-color: #e8e8e8;
+  border-left: 1px solid #d0d0d0;
+  border-right: 1px solid #d0d0d0;
+  position: absolute;
+  z-index: 9;
+  height: 100%;
+  width: 10px;
 }
-.container-resource{
-    height: calc(89vh - 85px);
-    overflow:hidden;
+.container-resource {
+  height: calc(89vh - 85px);
+  overflow: hidden;
 }
 
-.container-test{
-    height: calc(89vh - 85px);
-    overflow:auto;
+.container-test {
+  height: calc(89vh - 85px);
+  overflow: auto;
 }
 
 .button-container {
-    display: flex;
-    gap: 3px; /* Adjusted gap between buttons */
-    align-items: center;
-    justify-content: flex-start; /* Changed to align buttons closer */
-    padding: 3px;
-    background-color: #ddd; /* Light grey background color */
+  display: flex;
+  gap: 3px; /* Adjusted gap between buttons */
+  align-items: center;
+  justify-content: flex-start; /* Changed to align buttons closer */
+  padding: 3px;
+  background-color: #ddd; /* Light grey background color */
 }
 
-.resource-tab, .create-or-edit-test, .saved-folders, .test-list{
-    font-size: 24px;
+.resource-tab,
+.create-or-edit-test,
+.saved-folders,
+.test-list {
+  font-size: 24px;
 }

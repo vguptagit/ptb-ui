@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
-import { FormattedMessage } from "react-intl";
-import { Form } from "react-bootstrap";
-import { useDrop } from "react-dnd";
-import QuestionsBanksTips from "./testTabs/QuestionsBanksTips/QuestionsBanksTips";
-import Essay from "./questions/Essay";
-import FillInBlanks from "./questions/FillInBlanks";
-import Matching from "./questions/Matching";
-import MultipleChoice from "./questions/MultipleChoice";
-import MultipleResponse from "./questions/MultipleResponse";
-import TrueFalse from "./questions/TrueFalse";
-import CustomQuestionBanksService from "../services/CustomQuestionBanksService";
-import QtiService from "../utils/qtiService";
-import "./TestCreate.css";
-import "./_tables.css";
-import TreeViewTestCreate from "./TreeViewTestCreate";
-import jquery from "jquery";
+import React, { useEffect, useState } from 'react';
+import { useAppContext } from '../context/AppContext';
+import { FormattedMessage } from 'react-intl';
+import { Form } from 'react-bootstrap';
+import { useDrop } from 'react-dnd';
+import QuestionsBanksTips from './testTabs/QuestionsBanksTips/QuestionsBanksTips';
+import Essay from './questions/Essay';
+import FillInBlanks from './questions/FillInBlanks';
+import Matching from './questions/Matching';
+import MultipleChoice from './questions/MultipleChoice';
+import MultipleResponse from './questions/MultipleResponse';
+import TrueFalse from './questions/TrueFalse';
+import CustomQuestionBanksService from '../services/CustomQuestionBanksService';
+import QtiService from '../utils/qtiService';
+import './TestCreate.css';
+import './_tables.css';
+import TreeViewTestCreate from './TreeViewTestCreate';
+import jquery from 'jquery';
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, setSelectedTest, selectedQuestion } =
-    useAppContext();
-  const [tabTitle, setTabTitle] = useState(selectedTest?.title || "");
-  const [initialTabTitle, setInitialTabTitle] = useState(
-    selectedTest?.title || ""
-  );
+  const { selectedTest, dispatchEvent, setSelectedTest, selectedQuestion } = useAppContext();
+  const [tabTitle, setTabTitle] = useState(selectedTest?.title || '');
+  const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || '');
   const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
@@ -31,11 +28,11 @@ const TestCreate = () => {
   const [isTitleValid, setIsTitleValid] = useState(false);
 
   useEffect(() => {
-    setTabTitle(selectedTest?.title || "");
-    setInitialTabTitle(selectedTest?.title || "");
+    setTabTitle(selectedTest?.title || '');
+    setInitialTabTitle(selectedTest?.title || '');
   }, [selectedTest]);
 
-  const handleTitleChange = (event) => {
+  const handleTitleChange = event => {
     let newTitle = event.target.value;
 
     // Allow all special characters, numbers, alphabets, and spaces
@@ -52,17 +49,17 @@ const TestCreate = () => {
       // Update the title property with the new title
       updatedSelectedTest.title = newTitle;
       // Dispatch an action to update the selectedTest object in the context
-      dispatchEvent("UPDATE_TEST_TITLE", updatedSelectedTest);
+      dispatchEvent('UPDATE_TEST_TITLE', updatedSelectedTest);
     }
   };
-  console.log("updatedtitle", tabTitle);
+  console.log('updatedtitle', tabTitle);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     if (tabTitle.trim().length === 0) {
       return;
     } else {
-      dispatchEvent("UPDATE_TEST_TITLE", {
+      dispatchEvent('UPDATE_TEST_TITLE', {
         id: selectedTest.id,
         title: tabTitle,
       });
@@ -73,20 +70,17 @@ const TestCreate = () => {
   };
 
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: ["QUESTION_TEMPLATE", "TREE_NODE", "SAVED_QUESTION"],
-    drop: (item) => {
-      console.log("Dropped node:", item);
+    accept: ['QUESTION_TEMPLATE', 'TREE_NODE', 'SAVED_QUESTION'],
+    drop: item => {
+      console.log('Dropped node:', item);
       let copyItem = JSON.parse(JSON.stringify(item));
-      if (item.type === "QUESTION_TEMPLATE") {
+      if (item.type === 'QUESTION_TEMPLATE') {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
-      } else if (item.type === "TREE_NODE") {
+      } else if (item.type === 'TREE_NODE') {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       } else if (item.question) {
         let question = copyItem.question;
-        var qtiModel = QtiService.getQtiModel(
-          question.qtixml,
-          question.metadata.quizType
-        );
+        var qtiModel = QtiService.getQtiModel(question.qtixml, question.metadata.quizType);
         qtiModel.EditOption = false;
         question.qtiModel = qtiModel;
         question.masterData = JSON.parse(JSON.stringify(qtiModel)); //
@@ -94,9 +88,8 @@ const TestCreate = () => {
         question.quizType = question.metadata.quizType;
         question.data = question.qtixml; //
         console.log(question);
-        const questionTemplates =
-          CustomQuestionBanksService.questionTemplates(question);
-        if (question.quizType == "FillInBlanks") {
+        const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+        if (question.quizType == 'FillInBlanks') {
           let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
           console.log(xmlToHtml);
           question.textHTML = xmlToHtml;
@@ -111,21 +104,18 @@ const TestCreate = () => {
         selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
       }
 
-      dispatchEvent("SAVE_TEST_TAB", { id: selectedTest.id });
+      dispatchEvent('SAVE_TEST_TAB', { id: selectedTest.id });
       setIsEditing(true);
     },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
     }),
   });
 
-  const getQuestion = (questionNode) => {
+  const getQuestion = questionNode => {
     let question = questionNode;
-    var qtiModel = QtiService.getQtiModel(
-      questionNode.data,
-      questionNode.quizType
-    );
+    var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
     qtiModel.EditOption = true;
     question.qtiModel = qtiModel;
     questionNode.itemId = Math.random().toString(36).slice(2);
@@ -133,13 +123,13 @@ const TestCreate = () => {
     return question;
   };
 
-  const getPrintModeFbCaption = (Caption) => {
+  const getPrintModeFbCaption = Caption => {
     try {
-      var htmlText = Caption.trim().replaceAll("&amp;nbsp;", " ");
-      htmlText = htmlText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-      var element = jquery("<p></p>");
+      var htmlText = Caption.trim().replaceAll('&amp;nbsp;', ' ');
+      htmlText = htmlText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+      var element = jquery('<p></p>');
       jquery(element).append(htmlText);
-      element.find("button").each(function (i, obj) {
+      element.find('button').each(function (i, obj) {
         let blankSpace = "<span class='blank'> _____________________ </span>";
         jquery(obj).replaceWith(blankSpace);
       });
@@ -147,11 +137,11 @@ const TestCreate = () => {
     } catch (e) {}
   };
 
-  const handleQuestionState = (edit) => {
+  const handleQuestionState = edit => {
     setRefreshChildren(!refreshChildren);
   };
 
-  const handleQuestionDelete = (deleteIndex) => {
+  const handleQuestionDelete = deleteIndex => {
     if (deleteIndex > -1) {
       selectedTest.questions.splice(deleteIndex, 1);
       setQuestionListSize(selectedTest.questions.length + 1);
@@ -341,7 +331,7 @@ const TestCreate = () => {
     }
   };
 
-  const DraggableQuestion = (question) => {
+  const DraggableQuestion = question => {
     const key = question.data.guid;
 
     switch (question.data.quizType) {
@@ -452,27 +442,15 @@ const TestCreate = () => {
       </div>
       <div className="test-container">
         {selectedTest && selectedTest.questions && (
-          <TreeViewTestCreate
-            data={selectedTest.questions}
-            renderQuestions={renderQuestions}
-          />
+          <TreeViewTestCreate data={selectedTest.questions} renderQuestions={renderQuestions} />
         )}
-        {selectedTest && selectedTest.questions && (
-          selectedTest.questions.map((question) => (
-            <div key={question.guid}>{DraggableQuestion(question)}</div>
-          ))
-        )}
+        {selectedTest &&
+          selectedTest.questions &&
+          selectedTest.questions.map(question => <div key={question.guid}>{DraggableQuestion(question)}</div>)}
       </div>
-      <div
-        ref={drop}
-        className={`test-container ${
-          canDrop && isOver && !isEditing ? "drop-active" : ""
-        }`}
-      >
+      <div ref={drop} className={`test-container ${canDrop && isOver && !isEditing ? 'drop-active' : ''}`}>
         <div>
-          {(selectedTest &&
-            selectedTest.questions &&
-            selectedTest.questions.length !== 0)  ? (
+          {selectedTest && selectedTest.questions && selectedTest.questions.length !== 0 ? (
             <div className="drag-container align-items-center d-flex justify-content-center">
               <FormattedMessage id="dragQuestionsHereTestcreate" />
             </div>

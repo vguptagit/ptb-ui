@@ -1,21 +1,19 @@
-import httpInterceptor from "../httpHelper/httpHelper";
+import httpInterceptor from '../httpHelper/httpHelper';
 
 const url = process.env.REACT_APP_API_URL;
 
 export const getAllBookNodes = async (bookId, queryParams = {}) => {
   const queryString = new URLSearchParams(queryParams).toString();
-  const requestUrl = `${url}/books/${bookId}/nodes${
-    queryString ? `?${queryString}` : ""
-  }`;
+  const requestUrl = `${url}/books/${bookId}/nodes${queryString ? `?${queryString}` : ''}`;
 
   return httpInterceptor
     .get(requestUrl)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -24,12 +22,12 @@ export const getAllBookNodes = async (bookId, queryParams = {}) => {
 export const getAllBookNodeSubNodes = async (bookId, nodeId) => {
   return httpInterceptor
     .get(`${url}/books/${bookId}/nodes/${nodeId}/nodes`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -43,32 +41,32 @@ export const getAllBooks = async (discipline, userBooks) => {
 
   return httpInterceptor
     .get(`${url}/books?${queryParams}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const importAllBooks = (books) => {
+export const importAllBooks = books => {
   return httpInterceptor
     .post(`${url}/ptb/books/import`, books)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getDisciplineBooks = async (discipline) => {
+export const getDisciplineBooks = async discipline => {
   const queryParams = new URLSearchParams({
     discipline: discipline,
   });
@@ -77,9 +75,9 @@ export const getDisciplineBooks = async (discipline) => {
     const response = await httpInterceptor.get(`${url}/books?${queryParams}`);
     return response?.data;
   } catch (error) {
-    console.log("Something went wrong", error);
+    console.log('Something went wrong', error);
     return Promise.reject({
-      type: "error",
+      type: 'error',
       message: error,
     });
   }
@@ -88,13 +86,13 @@ export const getDisciplineBooks = async (discipline) => {
 export const saveUserBooks = (books, userid) => {
   return httpInterceptor
     .post(`${url}/settings/books?extUserId=` + userid, books)
-    .then((response) => {
-      console.log("selected books", response);
+    .then(response => {
+      console.log('selected books', response);
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -103,26 +101,26 @@ export const saveUserBooks = (books, userid) => {
 export const getUserBooks = () => {
   return httpInterceptor
     .get(`${url}/settings/books`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getUserBooksByID = (bookId) => {
+export const getUserBooksByID = bookId => {
   return httpInterceptor
     .get(`${url}/books/${bookId}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });

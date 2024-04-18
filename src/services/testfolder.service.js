@@ -1,30 +1,30 @@
-import httpInterceptor from "../httpHelper/httpHelper";
+import httpInterceptor from '../httpHelper/httpHelper';
 
 const url = process.env.REACT_APP_API_URL;
 
-export const saveTestFolder = (folder) => {
+export const saveTestFolder = folder => {
   return httpInterceptor
     .post(`${url}/my/testfolders`, folder)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const updateTestFolder = (folder) => {
+export const updateTestFolder = folder => {
   return httpInterceptor
     .put(`${url}/my/testfolders`, folder)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -33,12 +33,12 @@ export const updateTestFolder = (folder) => {
 export const updateTest = (sFolderId, dFolderId, testID) => {
   return httpInterceptor
     .put(`${url}/my/folders/${sFolderId}/folders/${dFolderId}/tests/${testID}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -47,40 +47,40 @@ export const updateTest = (sFolderId, dFolderId, testID) => {
 export const getRootTestFolders = () => {
   return httpInterceptor
     .get(`${url}/my/testfolders`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getUserTestFolders = (folderId) => {
+export const getUserTestFolders = folderId => {
   return httpInterceptor
     .get(`${url}/my/folders/${folderId}/folders`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const deleteTestFolder = (folderId) => {
+export const deleteTestFolder = folderId => {
   return httpInterceptor
     .delete(`${url}/folders/${folderId}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -89,12 +89,12 @@ export const deleteTestFolder = (folderId) => {
 export const deleteTest = (folderId, testId) => {
   return httpInterceptor
     .delete(`${url}/folders/${folderId}/tests/${testId}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });

@@ -14,7 +14,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
 
   const {
     disciplinesData: { userDisciplines, selectedDisciplines },
-    dispatchEvent
+    dispatchEvent,
   } = useAppContext();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
         const filteredDisciplines = disciplines.filter(item => userDisciplines.includes(item));
 
         dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
-          disciplines: filteredDisciplines
+          disciplines: filteredDisciplines,
         });
       }
     } catch (error) {
@@ -64,7 +64,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
     }
 
     dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
-      disciplines: updatedSelection
+      disciplines: updatedSelection,
     });
   };
 
@@ -75,21 +75,21 @@ const AddDisciplinepopup = ({ handleNext }) => {
   };
 
   return (
-    <div className='disciplineaddpopup-container'>
+    <div className="disciplineaddpopup-container">
       {loading ? (
         <Loader show={true} />
       ) : allDisciplines.length === 0 ? (
-        <div className='no-data-message'>
-          <FormattedMessage id='noDisciplinesAvailable' defaultMessage='No disciplines available' />
+        <div className="no-data-message">
+          <FormattedMessage id="noDisciplinesAvailable" defaultMessage="No disciplines available" />
         </div>
       ) : (
         <>
-          <div className='disciplineaddpopup-top-container'>
-            <h4 className='choose-your-books-or-topics'>
-              <FormattedMessage id='addDiscipline' defaultMessage='Add Discipline' />
+          <div className="disciplineaddpopup-top-container">
+            <h4 className="choose-your-books-or-topics">
+              <FormattedMessage id="addDiscipline" defaultMessage="Add Discipline" />
             </h4>
             <button
-              className='disciplinePopup btn btn-primary'
+              className="disciplinePopup btn btn-primary"
               onClick={handleNextStep}
               disabled={selectedDisciplines.length === 0}
             >
@@ -97,18 +97,18 @@ const AddDisciplinepopup = ({ handleNext }) => {
             </button>
           </div>
 
-          <SearchBox placeholder='Search Discipline' onSearch={handleSearch} />
+          <SearchBox placeholder="Search Discipline" onSearch={handleSearch} />
 
           {searchResults.length === 0 && (
-            <div className='no-matching-discipline-message'>
-              <FormattedMessage id='noMatchingDisciplines' defaultMessage='No matching disciplines found' />
+            <div className="no-matching-discipline-message">
+              <FormattedMessage id="noMatchingDisciplines" defaultMessage="No matching disciplines found" />
             </div>
           )}
 
-          <ul className='disciplinePopup result-list mt-3'>
+          <ul className="disciplinePopup result-list mt-3">
             {searchResults.map((item, index) => (
               <li
-                tabIndex='0'
+                tabIndex="0"
                 key={index}
                 className={`result-item ${selectedDisciplines.includes(item) ? 'selected' : ''}`}
                 onClick={() => handleSelectItem(item)}

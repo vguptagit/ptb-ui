@@ -6,16 +6,15 @@ import './WelcomeScreen.css';
 import Header from '../layouts/Header';
 import { FormattedMessage } from 'react-intl';
 
-
 const WelcomeScreen = () => {
   const navigate = useNavigate();
 
   const handleStart = () => {
-    navigate("/discipline");
+    navigate('/discipline');
   };
 
   useEffect(() => {
-    document.title = "Welcome Screen";
+    document.title = 'Welcome Screen';
   }, []);
 
   return (
@@ -60,8 +59,9 @@ const WelcomeScreen = () => {
             <Button
               variant="primary"
               className="custom-button"
-              aria-label='start button to activate press enter'
-              onClick={handleStart}>
+              aria-label="start button to activate press enter"
+              onClick={handleStart}
+            >
               <FormattedMessage id="startButtonText" />
             </Button>
           </Card.Body>
@@ -69,6 +69,6 @@ const WelcomeScreen = () => {
       </div>
     </>
   );
-}
+};
 
 export default WelcomeScreen;
