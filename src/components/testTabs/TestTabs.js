@@ -395,7 +395,9 @@ const TestTabs = () => {
     } else if (testStatus === 1) {
       return true;
     } else if (testStatus === 2) {
-      test.testId = null;
+      if(buttonName && buttonName === "saveAs") {
+        test.testId = null;
+      } 
       return false;
     } else if (testStatus === 3) {
       if (buttonName && buttonName === "saveAs") {
