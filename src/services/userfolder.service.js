@@ -1,16 +1,16 @@
-import httpInterceptor from "../httpHelper/httpHelper";
+import httpInterceptor from '../httpHelper/httpHelper';
 
 const url = process.env.REACT_APP_API_URL;
 
 export const getUserQuestionFolders = () => {
   return httpInterceptor
     .get(`${url}/my/questionfolders`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -19,68 +19,68 @@ export const getUserQuestionFolders = () => {
 export const getUserQuestionFoldersRoot = () => {
   return httpInterceptor
     .get(`${url}/my/questionfoldersroot`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const saveUserQuestionFolder = (folder) => {
+export const saveUserQuestionFolder = folder => {
   return httpInterceptor
     .post(`${url}/my/questionfolders`, folder)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const updateUserQuestionFolders = (folders) => {
+export const updateUserQuestionFolders = folders => {
   return httpInterceptor
     .put(`${url}/my/questionfolders`, folders)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getChildQuestionFolders = (folderId) => {
+export const getChildQuestionFolders = folderId => {
   return httpInterceptor
     .get(`${url}/my/questionfolders/${folderId}/folders`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const getUserQuestions = (folderId) => {
+export const getUserQuestions = folderId => {
   return httpInterceptor
     .get(`${url}/my/questions?folderId=${folderId}`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
@@ -89,32 +89,28 @@ export const getUserQuestions = (folderId) => {
 export const getAllQuestions = (bookid, nodeId) => {
   return httpInterceptor
     .get(`${url}/books/${bookid}/nodes/${nodeId}/questions`)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });
 };
 
-export const swapQuestionBetweenFolders = (
-  sourceFolderId,
-  destinationFolderId,
-  questionId
-) => {
+export const swapQuestionBetweenFolders = (sourceFolderId, destinationFolderId, questionId) => {
   const endpoint = `${url}/my/folders/${sourceFolderId}/folders/${destinationFolderId}/questions/${questionId}`;
 
   return httpInterceptor
     .put(endpoint)
-    .then((response) => {
+    .then(response => {
       return response?.data;
     })
-    .catch((error) => {
+    .catch(error => {
       return Promise.reject({
-        type: "error",
+        type: 'error',
         message: error,
       });
     });

@@ -47,8 +47,8 @@ const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
           onClick={hasChildNodes ? handleNodeClick : handleSelectNode}
         >
           {hasChildNodes && (
-            <div className='tree-node-header'>
-              {isOpen ? <i className='fa fa-caret-down'></i> : <i className='fa fa-caret-right'></i>}
+            <div className="tree-node-header">
+              {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
             </div>
           )}
           <span>{node.text}</span>
@@ -57,7 +57,7 @@ const TreeNode = ({ node, onSelectItem, selectedItems, searchTerm }) => {
 
       <div>
         {isOpen && hasChildNodes && (
-          <div className='nested-nodes'>
+          <div className="nested-nodes">
             {node.nodes.map(childNode => (
               <div key={childNode.id}>
                 <TreeNode
@@ -100,10 +100,10 @@ const TreeView = ({ selectedItems, onSelectItem, searchTerm, treeData }) => {
   }, [searchTerm, treeData]);
 
   return (
-    <div className='treeview'>
+    <div className="treeview">
       {searchTerm && filteredTreeData.length === 0 ? (
-        <div className='no-matching-books-message'>
-          <FormattedMessage id='no_matching_books_message' defaultMessage='No matching books found' />
+        <div className="no-matching-books-message">
+          <FormattedMessage id="no_matching_books_message" defaultMessage="No matching books found" />
         </div>
       ) : (
         filteredTreeData.map(node => (
@@ -127,7 +127,7 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
   const [loading, setLoading] = useState(true);
 
   const {
-    disciplinesData: { selectedDisciplines }
+    disciplinesData: { selectedDisciplines },
   } = useAppContext();
 
   useEffect(() => {
@@ -156,8 +156,8 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
                   text: node.title,
                   droppable: false,
                   parentId: index,
-                  discipline
-                }))
+                  discipline,
+                })),
             });
           }
 
@@ -215,24 +215,24 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
   };
 
   return (
-    <div className='booktab-container'>
+    <div className="booktab-container">
       {loading ? (
-        <Loader show='true' />
+        <Loader show="true" />
       ) : (
         <>
-          <div className='top-containerbooks'>
-            <h2 className='choose-your-books-or-topics'>
-              <FormattedMessage id='addBooks' defaultMessage='Add Books' />
+          <div className="top-containerbooks">
+            <h2 className="choose-your-books-or-topics">
+              <FormattedMessage id="addBooks" defaultMessage="Add Books" />
             </h2>
-            <button className='booktab btn btn-secondary' onClick={handleBack}>
-              <FormattedMessage id='backButton' defaultMessage='Back' />
+            <button className="booktab btn btn-secondary" onClick={handleBack}>
+              <FormattedMessage id="backButton" defaultMessage="Back" />
             </button>
-            <button className='booktab btn btn-primary' disabled={selectedBooks.length === 0} onClick={handleNext}>
-              <FormattedMessage id='saveButton' defaultMessage='Save' />
+            <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
+              <FormattedMessage id="saveButton" defaultMessage="Save" />
             </button>
           </div>
-          <SearchBox placeholder='Search Books' onSearch={handleSearch} />
-          <ul className='booktabaddpopup result-list mt-3'>
+          <SearchBox placeholder="Search Books" onSearch={handleSearch} />
+          <ul className="booktabaddpopup result-list mt-3">
             <TreeView
               selectedItems={selectedBooks}
               onSelectItem={handleSelectItem}

@@ -11,23 +11,23 @@ function SearchBox({ placeholder, searchText, onSearch }) {
   }, [debouncedSearch]);
 
   return (
-    <div className='input-group rounded'>
+    <div className="input-group rounded">
       <input
-        type='text'
-        width='100%'
-        className='form-control rounded'
+        type="text"
+        width="100%"
+        className="form-control rounded"
         placeholder={placeholder || 'Search...'}
-        aria-label='Search'
-        aria-describedby='search-addon-noborder'
+        aria-label="Search"
+        aria-describedby="search-addon-noborder"
         value={searchTerm}
         onChange={event => setSearchTerm(event.target.value)}
       />
-      <div className='input-group-append'>
-        <span className='input-group-icon border-0'>
+      <div className="input-group-append">
+        <span className="input-group-icon border-0">
           {searchTerm ? (
-            <i className='fas fa-times pointer' onClick={() => setSearchTerm('')}></i>
+            <i className="fas fa-times pointer" onClick={() => setSearchTerm('')}></i>
           ) : (
-            <i className='fas fa-search'></i>
+            <i className="fas fa-search"></i>
           )}
         </span>
       </div>

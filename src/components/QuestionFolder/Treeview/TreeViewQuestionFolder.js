@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Tree } from "@minoru/react-dnd-treeview";
-import "./TreeViewQuestionFolder.css";
+import React, { useState, useEffect } from 'react';
+import { Tree } from '@minoru/react-dnd-treeview';
+import './TreeViewQuestionFolder.css';
 import {
   getChildQuestionFolders,
   getUserQuestions,
   swapQuestionBetweenFolders,
-} from "../../../services/userfolder.service";
-import Toastify from "../../common/Toastify";
-import CustomQuestionBanksService from "../../../services/CustomQuestionBanksService";
-import MultipleChoice from "../../questions/MultipleChoice";
-import MultipleResponse from "../../questions/MultipleResponse";
-import TrueFalse from "../../questions/TrueFalse";
-import Matching from "../../questions/Matching";
-import FillInBlanks from "../../questions/FillInBlanks";
-import Essay from "../../questions/Essay";
-import QtiService from "../../../utils/qtiService";
-import Loader from "../../common/loader/Loader";
-import { useAppContext } from "../../../context/AppContext";
+} from '../../../services/userfolder.service';
+import Toastify from '../../common/Toastify';
+import CustomQuestionBanksService from '../../../services/CustomQuestionBanksService';
+import MultipleChoice from '../../questions/MultipleChoice';
+import MultipleResponse from '../../questions/MultipleResponse';
+import TrueFalse from '../../questions/TrueFalse';
+import Matching from '../../questions/Matching';
+import FillInBlanks from '../../questions/FillInBlanks';
+import Essay from '../../questions/Essay';
+import QtiService from '../../../utils/qtiService';
+import Loader from '../../common/loader/Loader';
+import { useAppContext } from '../../../context/AppContext';
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -38,7 +38,7 @@ function TreeViewQuestionFolder({
       try {
         if (rootFolderGuid) {
           const fetchedQuestions = await getUserQuestions(rootFolderGuid);
-          const questionsWithQtiModels = fetchedQuestions.map((question) => {
+          const questionsWithQtiModels = fetchedQuestions.map(question => {
             const {
               qtixml,
               metadata: { quizType },
@@ -54,19 +54,18 @@ function TreeViewQuestionFolder({
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching questions:", error);
+        console.error('Error fetching questions:', error);
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [rootFolderGuid]);
 
-  const fetchChildFolders = async (parentNode) => {
+  const fetchChildFolders = async parentNode => {
     try {
       if (!parentNode.children && parentNode.data.guid !== selectedFolderGuid) {
-        const childFolders = await getChildQuestionFolders(
-          parentNode.data.guid
-        );
+        const childFolders = await getChildQuestionFolders(parentNode.data.guid);
         const childNodes = childFolders.map((childFolder, childIndex) => ({
           id: `${parentNode.id}.${childIndex + 1}`,
           parent: parentNode.id,
@@ -98,38 +97,23 @@ function TreeViewQuestionFolder({
           parent: parentNode.id,
           droppable: false,
           questionGuid: question.guid,
-          text: (
-            <DraggableQuestion
-              key={question.guid}
-              question={question}
-              index={index}
-            />
-          ),
+          text: <DraggableQuestion key={question.guid} question={question} index={index} />,
           data: {
             guid: parentNode.data.guid,
             isQuestion: true,
           },
         }));
         const updatedTreeData = [...treeData];
-        const nodeIndex = updatedTreeData.findIndex(
-          (n) => n.id === parentNode.id
-        );
+        const nodeIndex = updatedTreeData.findIndex(n => n.id === parentNode.id);
 
-        const existingChildNodes = updatedTreeData
-          .slice(nodeIndex + 1)
-          .filter((node) => node.parent === parentNode.id);
+        const existingChildNodes = updatedTreeData.slice(nodeIndex + 1).filter(node => node.parent === parentNode.id);
         if (existingChildNodes.length === 0) {
-          updatedTreeData.splice(
-            nodeIndex + 1,
-            0,
-            ...childNodes,
-            ...questionNodes
-          );
+          updatedTreeData.splice(nodeIndex + 1, 0, ...childNodes, ...questionNodes);
           setTreeData(updatedTreeData);
         }
       }
     } catch (error) {
-      console.error("Error fetching child question folders:", error);
+      console.error('Error fetching child question folders:', error);
     }
   };
 
@@ -141,67 +125,37 @@ function TreeViewQuestionFolder({
       case CustomQuestionBanksService.MultipleChoice:
         return (
           <div key={key}>
-            <MultipleChoice
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <MultipleChoice questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionBanksService.MultipleResponse:
         return (
           <div key={key}>
-            <MultipleResponse
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <MultipleResponse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionBanksService.TrueFalse:
         return (
           <div key={key}>
-            <TrueFalse
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <TrueFalse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionBanksService.Matching:
         return (
           <div key={key}>
-            <Matching
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <Matching questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionBanksService.FillInBlanks:
         return (
           <div key={key}>
-            <FillInBlanks
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <FillInBlanks questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionBanksService.Essay:
         return (
           <div key={key}>
-            <Essay
-              questionNode={question}
-              questionNodeIndex={index}
-              qtiModel={qtiModel}
-              printView={3}
-            />
+            <Essay questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       default:
@@ -213,7 +167,7 @@ function TreeViewQuestionFolder({
     const fetchData = async () => {
       try {
         const updatedTreeData = [
-          ...folders.map((folder) => ({
+          ...folders.map(folder => ({
             id: folder.guid,
             parent: 0,
             droppable: true,
@@ -227,13 +181,7 @@ function TreeViewQuestionFolder({
             id: question.guid,
             parent: 0,
             droppable: false,
-            text: (
-              <DraggableQuestion
-                key={question.guid}
-                question={question}
-                index={index}
-              />
-            ),
+            text: <DraggableQuestion key={question.guid} question={question} index={index} />,
             data: {
               guid: question.guid,
               qtiModel: question.qtiModel,
@@ -245,7 +193,7 @@ function TreeViewQuestionFolder({
         ];
         setTreeData(updatedTreeData);
       } catch (error) {
-        console.error("Error fetching saved questions:", error);
+        console.error('Error fetching saved questions:', error);
       }
     };
 
@@ -279,26 +227,18 @@ function TreeViewQuestionFolder({
       const destinationFolderId = targetFolderId;
 
       try {
-        await swapQuestionBetweenFolders(
-          sourceFolderId,
-          destinationFolderId,
-          questionId
-        );
-        Toastify({ message: "Question moved successfully", type: "success" });
+        await swapQuestionBetweenFolders(sourceFolderId, destinationFolderId, questionId);
+        Toastify({ message: 'Question moved successfully', type: 'success' });
         const updatedTreeData = [...newTree];
-        const draggedNodeIndex = updatedTreeData.findIndex(
-          (node) => node.id === questionId
-        );
+        const draggedNodeIndex = updatedTreeData.findIndex(node => node.id === questionId);
         const draggedNode = updatedTreeData[draggedNodeIndex];
-        const parentIndex = updatedTreeData.findIndex(
-          (node) => node.id === targetFolderId
-        );
+        const parentIndex = updatedTreeData.findIndex(node => node.id === targetFolderId);
         updatedTreeData.splice(draggedNodeIndex, 1);
         updatedTreeData.splice(parentIndex + 1, 0, draggedNode);
         setTreeData(updatedTreeData);
       } catch (error) {
-        Toastify({ message: "Failed to move question", type: "error" });
-        console.error("Error swapping question between folders:", error);
+        Toastify({ message: 'Failed to move question', type: 'error' });
+        console.error('Error swapping question between folders:', error);
       }
     } else {
       // Handle drag of a folder
@@ -322,14 +262,12 @@ function TreeViewQuestionFolder({
 
       try {
         const isDuplicate = newTree.some(
-          (node) =>
-            node.text === nodeToBeUpdated.title &&
-            node.data.guid !== nodeToBeUpdated.guid
+          node => node.text === nodeToBeUpdated.title && node.data.guid !== nodeToBeUpdated.guid
         );
         if (isDuplicate) {
           Toastify({
-            message: "Duplicate folder. Please choose a different name.",
-            type: "error",
+            message: 'Duplicate folder. Please choose a different name.',
+            type: 'error',
           });
           return;
         }
@@ -344,25 +282,25 @@ function TreeViewQuestionFolder({
             sequence: childFolder.sequence,
           },
         }));
-        const parentIndex = newTree.findIndex((node) => node.id === parentId);
-        const isChildNode = parentId.toString().includes(".");
+        const parentIndex = newTree.findIndex(node => node.id === parentId);
+        const isChildNode = parentId.toString().includes('.');
         const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
         const updatedTreeData = [...newTree];
         updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
         setTreeData(updatedTreeData);
       } catch (error) {
-        console.error("Error fetching child question folders:", error);
+        console.error('Error fetching child question folders:', error);
       }
       onNodeUpdate(nodeToBeUpdated);
     }
   };
 
-  const handleEditFolder = (folderTitle) => {
-    console.log("Edit folder:", folderTitle);
+  const handleEditFolder = folderTitle => {
+    console.log('Edit folder:', folderTitle);
     if (selectedFolder === folderTitle) {
       setSelectedFolder(null);
       if (onFolderSelect) {
-        onFolderSelect("");
+        onFolderSelect('');
       }
     } else {
       if (onFolderSelect) {
@@ -390,21 +328,21 @@ function TreeViewQuestionFolder({
     setIsDragging(false);
   };
 
-  const handleDeleteFolder = (folderTitle) => {
-    console.log("Delete folder:", folderTitle);
+  const handleDeleteFolder = folderTitle => {
+    console.log('Delete folder:', folderTitle);
   };
 
-  const handleAdd = (node) => {
+  const handleAdd = node => {
     handleQuestionAdd(node);
     console.log(node);
   };
 
   return (
     <div
-      className={`treeview ${isDragging ? "grabbing" : ""}`}
+      className={`treeview ${isDragging ? 'grabbing' : ''}`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      style={{ marginBottom: "-47px" }}
+      style={{ marginBottom: '-47px' }}
     >
       {loading ? (
         <Loader show={true} />
@@ -417,46 +355,30 @@ function TreeViewQuestionFolder({
               {node.droppable && (
                 <span
                   onClick={() => {
-                    if (
-                      !isOpen &&
-                      (!node.children || node.children.length === 0)
-                    ) {
+                    if (!isOpen && (!node.children || node.children.length === 0)) {
                       fetchChildFolders(node);
                     }
                     onToggle();
                   }}
                   className="custom-caret"
                 >
-                  {isOpen ? (
-                    <i className="fa fa-caret-down"></i>
-                  ) : (
-                    <i className="fa fa-caret-right"></i>
-                  )}
+                  {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
                 </span>
               )}
               {node.text}
               {!node.data.isQuestion && (
                 <>
                   {selectedFolder === node.text && (
-                    <button
-                      className="editbutton selected"
-                      onClick={() => handleEditFolder(node.text)}
-                    >
+                    <button className="editbutton selected" onClick={() => handleEditFolder(node.text)}>
                       <i className="bi bi-pencil-fill"></i>
                     </button>
                   )}
                   {selectedFolder !== node.text && (
-                    <button
-                      className="editbutton"
-                      onClick={() => handleEditFolder(node.text)}
-                    >
+                    <button className="editbutton" onClick={() => handleEditFolder(node.text)}>
                       <i className="bi bi-pencil-fill"></i>
                     </button>
                   )}
-                  <button
-                    className="deletebutton"
-                    onClick={() => handleDeleteFolder(node.text)}
-                  >
+                  <button className="deletebutton" onClick={() => handleDeleteFolder(node.text)}>
                     <i className="bi bi-trash"></i>
                   </button>
                 </>
@@ -468,9 +390,7 @@ function TreeViewQuestionFolder({
               )}
             </div>
           )}
-          dragPreviewRender={(monitorProps) => (
-            <div className="custom-drag-preview">{monitorProps.item.text}</div>
-          )}
+          dragPreviewRender={monitorProps => <div className="custom-drag-preview">{monitorProps.item.text}</div>}
           onDrop={handleDrop}
           dragPreviewClassName="custom-drag-preview"
           onDragStart={handleDragStart}

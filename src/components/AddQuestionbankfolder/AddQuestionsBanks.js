@@ -36,9 +36,9 @@ const QuestBanks = ({ reloadDisciplines }) => {
 
   return (
     <>
-      <div className='button-container'>
-        <Button className='color-black' variant='outline-light' onClick={() => setShowModal(true)}>
-          <i className='fa-solid fa-plus'></i>&ensp;
+      <div className="button-container">
+        <Button className="color-black" variant="outline-light" onClick={() => setShowModal(true)}>
+          <i className="fa-solid fa-plus"></i>&ensp;
           {'Add Questions Banks'}
         </Button>
       </div>
@@ -46,13 +46,13 @@ const QuestBanks = ({ reloadDisciplines }) => {
         <Modal
           show={showModal}
           onHide={handleClose}
-          size='lg'
-          dialogClassName='modal-dialog-centered'
-          backdrop='static'
+          size="lg"
+          dialogClassName="modal-dialog-centered"
+          backdrop="static"
           keyboard={false}
         >
           <Modal.Body>
-            <div className='modal-content-wrapper'>
+            <div className="modal-content-wrapper">
               {step === 1 ? (
                 <AddDisciplinepopup handleNext={handleNext} />
               ) : (
@@ -61,8 +61,8 @@ const QuestBanks = ({ reloadDisciplines }) => {
             </div>
           </Modal.Body>
           <ModalFooter>
-            <Button variant='secondary' onClick={handleClose}>
-              <FormattedMessage id='cancelButton' defaultMessage='Cancel' />
+            <Button variant="secondary" onClick={handleClose}>
+              <FormattedMessage id="cancelButton" defaultMessage="Cancel" />
             </Button>
           </ModalFooter>
         </Modal>

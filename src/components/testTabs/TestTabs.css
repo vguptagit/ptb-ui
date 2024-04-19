@@ -1,104 +1,104 @@
 /* TestTbas.css  */
 
 .test-container {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .test-container h3 {
-    margin-top: -11px;
-  }
-  
-  .test-container label {
-    display: block;
-    margin-bottom: -20px;
-  }
-  
-  .test-container input .test-container .addfolder-container {
-    width: 85%; 
-    margin-top: 8px;
-  }
-  
-  .ml-2 {
-    margin-top: 2px;
-  }
-  
-  /* input.rounded.form-control {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-container h3 {
+  margin-top: -11px;
+}
+
+.test-container label {
+  display: block;
+  margin-bottom: -20px;
+}
+
+.test-container input .test-container .addfolder-container {
+  width: 85%;
+  margin-top: 8px;
+}
+
+.ml-2 {
+  margin-top: 2px;
+}
+
+/* input.rounded.form-control {
     margin-left: -14px;
     margin-top: -5px;
   } */
-  
-  button.close-tab.btn.btn-link {
-    margin-top: -13px;
-    color: black;
-    padding: 0px 9px 0px 9px;
-    margin-right: -14px;
-  }
-  
-  #dropdown-ellipsis.dropdown-toggle::after {
-    display: none;
-  }
-  
-  #btn-test-wizard {
-    visibility: hidden;
-  }
-  
-  .custom-tabs {
-    display: flex;
-    overflow-x: auto; 
-  }
-  
-  #tab-label-dropdown #close-tab-dropdown {
-    margin-top: -10px;
-    margin-left: 2px;
-    margin-right: -34px;
-  }
-  
-  #test-tabs-navlink {
-    padding-right: 17px;
-  }
-  
-  .tab-label {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    width: 83px;
-  }
-  
-  #close-tab-dropdown {
-    padding-right: px;
-  }
-  
-  .test-title {
-    text-align: center;
-    white-space: nowrap; 
-    max-width: 80px; 
-    min-width: 50px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* .close-tab-wrapper {
+
+button.close-tab.btn.btn-link {
+  margin-top: -13px;
+  color: black;
+  padding: 0px 9px 0px 9px;
+  margin-right: -14px;
+}
+
+#dropdown-ellipsis.dropdown-toggle::after {
+  display: none;
+}
+
+#btn-test-wizard {
+  visibility: hidden;
+}
+
+.custom-tabs {
+  display: flex;
+  overflow-x: auto;
+}
+
+#tab-label-dropdown #close-tab-dropdown {
+  margin-top: -10px;
+  margin-left: 2px;
+  margin-right: -34px;
+}
+
+#test-tabs-navlink {
+  padding-right: 17px;
+}
+
+.tab-label {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 83px;
+}
+
+#close-tab-dropdown {
+  padding-right: px;
+}
+
+.test-title {
+  text-align: center;
+  white-space: nowrap;
+  max-width: 80px;
+  min-width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* .close-tab-wrapper {
     position: absolute; 
     top: 0; 
     right: -10px; 
   } */
 
-  .floatRight{
-    float: right;
-    margin-right: -6px;
-  }
-  .floatLeft{
-    float: left;
-    height: 102%;
-  }
-
-  span.tab-separator {
-    margin-right: 5px;
+.floatRight {
+  float: right;
+  margin-right: -6px;
+}
+.floatLeft {
+  float: left;
+  height: 102%;
 }
 
-a.active.custom-add-new-test.nav-link  {
+span.tab-separator {
+  margin-right: 5px;
+}
+
+a.active.custom-add-new-test.nav-link {
   background-color: rgb(159, 155, 155);
   color: white;
   padding: 8px 13px;

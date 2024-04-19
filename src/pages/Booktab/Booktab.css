@@ -17,7 +17,7 @@
   align-items: center;
   margin-bottom: 2px;
   padding: 10px;
-  font-size: 14px;          
+  font-size: 14px;
   line-height: 1em;
   margin-top: 2px;
 }
@@ -137,27 +137,27 @@
   margin-top: 10px;
 }
 
-.choose-your-books-or-topics{
+.choose-your-books-or-topics {
   font-size: 24px;
   margin-bottom: 0px;
 }
-.no-matching-books-message{
+.no-matching-books-message {
   align-self: center;
   padding-inline-start: 10px;
-  padding-top:20px;
+  padding-top: 20px;
 }
 
 #custom-ques {
   height: calc(89vh - 85px);
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
-.your-test-list{
+.your-test-list {
   height: calc(89vh - 85px);
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
-.saved-folders{
+.saved-folders {
   height: calc(81vh - 85px);
-  overflow-x: auto; 
+  overflow-x: auto;
 }

@@ -22,7 +22,7 @@ const QuestionBanks = () => {
       const data = await getUserDisciplines();
       setDisciplineData(data);
       dispatchEvent('UPDATE_USER_DISCIPLINES', {
-        disciplines: data
+        disciplines: data,
       });
     } catch (error) {
       Toastify(error);
@@ -35,10 +35,10 @@ const QuestionBanks = () => {
 
   return (
     <div className="p-2">
-      <div className='col-lg-7 ml-8'>
-        <SearchBox placeholder='Search selected banks' onSearch={handleSearch} />
+      <div className="col-lg-7 ml-8">
+        <SearchBox placeholder="Search selected banks" onSearch={handleSearch} />
       </div>
-      <div className='questionBank'>
+      <div className="questionBank">
         <QuestBanks reloadDisciplines={loadDisiplines} />
       </div>
       {disciplineData.length > 0 && (

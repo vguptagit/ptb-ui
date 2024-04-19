@@ -1,8 +1,8 @@
 class Test {
   constructor(folderGuid, testId, title, tabTitle, course, questions, criterias, metadata, IsAnyQstnEditMode) {
-    this.id = "tab" + (new Date()).getTime();
+    this.id = 'tab' + new Date().getTime();
     this.testId = testId;
-    this.folderGuid = folderGuid || "null";
+    this.folderGuid = folderGuid || 'null';
     this.title = title;
     this.tabTitle = tabTitle;
     this.course = course;

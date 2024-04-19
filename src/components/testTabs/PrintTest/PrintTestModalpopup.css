@@ -127,40 +127,40 @@ i.bi.bi-info-circle-fill.me-1 {
   margin-right: -58px;
   padding: 10px 7px 7px 19px !important;
 }
-.printpreview-header{
+.printpreview-header {
   margin-left: -21px;
   margin-right: -33px;
   padding: 10px 9px 7px 19px !important;
 }
 
-.question-numbers{ 
+.question-numbers {
   text-align: end;
 }
-.printPreviewArea{
+.printPreviewArea {
   text-align: 20px;
 }
 
-.question-number{
+.question-number {
   position: relative;
 }
 
-#print-test{
+#print-test {
   overflow-x: hidden;
 }
 
-.print-options-body{
+.print-options-body {
   position: relative;
   right: 13px;
   width: 573px;
 }
 
-.questions-list{
+.questions-list {
   position: relative;
   right: 30px;
   width: 577px;
 }
 
-#info-icon{
+#info-icon {
   position: relative;
   right: -15px;
 }

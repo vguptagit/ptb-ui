@@ -1,171 +1,168 @@
-
-.qstn-header{
-	font-weight: normal !important;
-    font-size: 12px;
-    margin: 0 0px 5px 0px;
-	background-color: #f8f8f8;
+.qstn-header {
+  font-weight: normal !important;
+  font-size: 12px;
+  margin: 0 0px 5px 0px;
+  background-color: #f8f8f8;
 }
 
 .printViewContainer {
-	font-size: 14px;
-	padding-left: 4px;
+  font-size: 14px;
+  padding-left: 4px;
 }
 
 .printViewContainer .printView {
-	display: inline-block;
+  display: inline-block;
 }
 
-.printViewContainer .editView, .printViewContainer #crtAnsSpace {
-	/* float: left; */
-	display: none;
+.printViewContainer .editView,
+.printViewContainer #crtAnsSpace {
+  /* float: left; */
+  display: none;
 }
 
-li[qstnTemplate='true'] .radio span.tick, li[qstnTemplate='true'] .checkbox span.tick
-	{
-	visibility: hidden !important;
+li[qstnTemplate='true'] .radio span.tick,
+li[qstnTemplate='true'] .checkbox span.tick {
+  visibility: hidden !important;
 }
 
-li[qstntemplate='true'] .qti-simpleChoice .radio, li[printmode='true'] .qti-simpleChoice .checkbox {
-    margin-bottom: 4px;
+li[qstntemplate='true'] .qti-simpleChoice .radio,
+li[printmode='true'] .qti-simpleChoice .checkbox {
+  margin-bottom: 4px;
 }
 
 li[qstntemplate='true'] .printViewContainer .optionLabelView {
-    display: inline-block;
-    padding-left: 10px;
-    max-width: 100% !important;
-    vertical-align: inherit;
-    cursor: move;
+  display: inline-block;
+  padding-left: 10px;
+  max-width: 100% !important;
+  vertical-align: inherit;
+  cursor: move;
 }
 
 li[qstntemplate='true'] .matchOptionContainer {
-	width: 95%;
-	margin-left: 10px;
-	float: left;
-    margin-bottom: 12px;
+  width: 95%;
+  margin-left: 10px;
+  float: left;
+  margin-bottom: 12px;
 }
 
 li[qstntemplate='true'] .matchingOption {
-    min-width: 30%;
-	float: left;
-	white-space: nowrap;
-	margin-top: -12px;
+  min-width: 30%;
+  float: left;
+  white-space: nowrap;
+  margin-top: -12px;
 }
 
 li[qstntemplate='true'] .matchRight {
-	min-width: 70%;
+  min-width: 70%;
 }
-li[qstntemplate=true] .printViewContainer  .qti-blockquote .matchIndex {
-	font-weight: normal;
-	font-size: 14px;
-	
+li[qstntemplate='true'] .printViewContainer .qti-blockquote .matchIndex {
+  font-weight: normal;
+  font-size: 14px;
 }
 .printViewContainer .mOptionLabel {
-	padding-left: 6px;
-	margin-top: 3px;
+  padding-left: 6px;
+  margin-top: 3px;
 }
 
 li[printmode='true'] .matchingOption {
-	width: 48%;
-	padding-right: 6px;
-	display: block;
-	float: left;
-	
+  width: 48%;
+  padding-right: 6px;
+  display: block;
+  float: left;
 }
 
 .rightMatchingOption {
-	width: 50%;
-	display: block;
-	float: right;
-	white-space: nowrap;
-	margin-top: -8px;
+  width: 50%;
+  display: block;
+  float: right;
+  white-space: nowrap;
+  margin-top: -8px;
 }
 
 .divider {
-    background-color: #E8E8E8;
-    border-left: 1px solid #D0d0d0;
-    border-right: 1px solid #D0d0d0;
-    position: absolute;
-    z-index: 9;
-    height: 100%;
-    width: 10px;
+  background-color: #e8e8e8;
+  border-left: 1px solid #d0d0d0;
+  border-right: 1px solid #d0d0d0;
+  position: absolute;
+  z-index: 9;
+  height: 100%;
+  width: 10px;
 }
 
-li[qstntemplate='true'] .qti-itemBody>div.optionLabelView {
-	display: inline-block;
-	width: 100%;
-	vertical-align: middle;
-	background-color: #E0E0E0 !important;
-	border-bottom: 1px solid #D0D0D0 !important;
-	height: 41px;
-	line-height: 41px;
-	font-size: 14px;
+li[qstntemplate='true'] .qti-itemBody > div.optionLabelView {
+  display: inline-block;
+  width: 100%;
+  vertical-align: middle;
+  background-color: #e0e0e0 !important;
+  border-bottom: 1px solid #d0d0d0 !important;
+  height: 41px;
+  line-height: 41px;
+  font-size: 14px;
 }
 
-li[qstntemplate='true'] .qti-itemBody:first-child blockquote>div.optionLabelView,
-	li[qstntemplate='true'][quiztype='FillInTheBlanks'] .qti-itemBody>blockquote>div.optionLabelView
-	{
-	display: inline-block;
-	width: 100%;
-	vertical-align: middle;
-	background-color: #E0E0E0;
-	border-bottom: 1px solid #D0D0D0;
-	height: 41px;
-	line-height: 41px;
-	font-size: 14px;
+li[qstntemplate='true'] .qti-itemBody:first-child blockquote > div.optionLabelView,
+li[qstntemplate='true'][quiztype='FillInTheBlanks'] .qti-itemBody > blockquote > div.optionLabelView {
+  display: inline-block;
+  width: 100%;
+  vertical-align: middle;
+  background-color: #e0e0e0;
+  border-bottom: 1px solid #d0d0d0;
+  height: 41px;
+  line-height: 41px;
+  font-size: 14px;
 }
 
-li[qstntemplate='true'] .qti-itemBody>blockquote:first-child>div.optionLabelView
-	{
-	display: inline-block;
-	width: 100%;
-	vertical-align: middle;
-	background-color: #E0E0E0 !important;
-	border-bottom: 1px solid #D0D0D0 !important;
-	height: 41px;
-	line-height: 41px;
-	font-size: 14px;
+li[qstntemplate='true'] .qti-itemBody > blockquote:first-child > div.optionLabelView {
+  display: inline-block;
+  width: 100%;
+  vertical-align: middle;
+  background-color: #e0e0e0 !important;
+  border-bottom: 1px solid #d0d0d0 !important;
+  height: 41px;
+  line-height: 41px;
+  font-size: 14px;
 }
 
 .plusIconQT {
-	line-height: 28px;
-	margin-right: 5px;
-	font-size: 14px;
-	border: 0;
-	background: transparent;
+  line-height: 28px;
+  margin-right: 5px;
+  font-size: 14px;
+  border: 0;
+  background: transparent;
 }
 
 .newTest-close {
-	position: absolute;
-	z-index: 1;
-	top: 5px;
-	right: 7px;
-	cursor: pointer;
-	font-size: 8px;
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  right: 7px;
+  cursor: pointer;
+  font-size: 8px;
 }
 
 .newTest-close:hover {
-	color: #4d4d4d;
+  color: #4d4d4d;
 }
 
-.custom-questions-tab{
-	overflow-x: hidden;
+.custom-questions-tab {
+  overflow-x: hidden;
 }
 
-.TemplateLayout{
-	margin-left: -20px;
-	margin-right: 10px;
+.TemplateLayout {
+  margin-left: -20px;
+  margin-right: 10px;
 }
-.qti-assessmentItem{
-	margin-left: -5px;
-	margin-right: -18px;
-	margin-bottom: 3px;
+.qti-assessmentItem {
+  margin-left: -5px;
+  margin-right: -18px;
+  margin-bottom: 3px;
 }
 
-.printViewContainer{
-	margin: -7px;
+.printViewContainer {
+  margin: -7px;
 }
 
 .custom-tab {
-    height: calc(89vh - 85px);
-    overflow:auto;
-  }
+  height: calc(89vh - 85px);
+  overflow: auto;
+}

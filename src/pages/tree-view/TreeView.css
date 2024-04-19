@@ -1,5 +1,4 @@
 .treeviewqb {
-
   ul {
     list-style: none;
   }
@@ -40,7 +39,7 @@
 }
 
 .clicked {
-  background-color: #007FA9;
+  background-color: #007fa9;
   color: white;
 }
 
