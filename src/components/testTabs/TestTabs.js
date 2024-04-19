@@ -308,11 +308,9 @@ const TestTabs = () => {
 
     if (test.questions && test.questions.length > 0) {
       const uniqueQuestions = [];
-      test.questions.forEach((qstn) => {
+      test.questions.forEach(qstn => {
         const isDuplicate = uniqueQuestions.some(
-          (uniqueQstn) =>
-            JSON.stringify(uniqueQstn.qtiModel) ===
-            JSON.stringify(qstn.qtiModel)
+          uniqueQstn => JSON.stringify(uniqueQstn.qtiModel) === JSON.stringify(qstn.qtiModel)
         );
 
         if (!isDuplicate) {
@@ -320,7 +318,7 @@ const TestTabs = () => {
           questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
         } else {
           // If duplicate, show an alert to the user
-          alert("Are you sure you want to save the same question again?");
+          alert('Are you sure you want to save the same question again?');
           uniqueQuestions.push(qstn);
           questionEnvelops.push(buildQuestionEnvelop(qstn, userSettings));
         }
