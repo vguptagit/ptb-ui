@@ -6,14 +6,14 @@ import DraggableNode from './DraggableNode';
 import SimpleNode from './SimpleNode';
 import Toastify from '../../components/common/Toastify';
 import { getAllQuestions } from '../../services/userfolder.service';
-import QtiService from '../../utils/qtiService';
+import QtiService from '../../utils/qti-converter';
 import MultipleChoice from '../../components/questions/MultipleChoice';
 import MultipleResponse from '../../components/questions/MultipleResponse';
 import TrueFalse from '../../components/questions/TrueFalse';
 import Matching from '../../components/questions/Matching';
 import FillInBlanks from '../../components/questions/FillInBlanks';
 import Essay from '../../components/questions/Essay';
-import CustomQuestionBanksService from '../../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../../services/CustomQuestionsService';
 import { getAllBooks, getAllBookNodes, getAllBookNodeSubNodes } from '../../services/book.service';
 import Loader from '../../components/common/loader/Loader';
 import './TreeView.css';
@@ -284,37 +284,37 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     const { qtiModel } = question;
 
     switch (question.metadata.quizType) {
-      case CustomQuestionBanksService.MultipleChoice:
+      case CustomQuestionsService.MultipleChoice:
         return (
           <div key={key} ref={drag}>
             <MultipleChoice questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.MultipleResponse:
+      case CustomQuestionsService.MultipleResponse:
         return (
           <div key={key} ref={drag}>
             <MultipleResponse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.TrueFalse:
+      case CustomQuestionsService.TrueFalse:
         return (
           <div key={key} ref={drag}>
             <TrueFalse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.Matching:
+      case CustomQuestionsService.Matching:
         return (
           <div key={key} ref={drag}>
             <Matching questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.FillInBlanks:
+      case CustomQuestionsService.FillInBlanks:
         return (
           <div key={key} ref={drag}>
             <FillInBlanks questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.Essay:
+      case CustomQuestionsService.Essay:
         return (
           <div key={key} ref={drag}>
             <Essay questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />

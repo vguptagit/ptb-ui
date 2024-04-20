@@ -2,11 +2,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import Test from '../entities/Test.Entity';
 import { getTestQuestions } from '../services/testcreate.service';
-import QtiService from '../utils/qtiService';
+import QtiService from '../utils/qti-converter';
 import Toastify from '../components/common/Toastify';
 import { getUserTestFolders } from '../services/testfolder.service';
 import { getFolderTests, getRootTests } from '../services/testcreate.service';
-import CustomQuestionBanksService from '../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../services/CustomQuestionsService';
 import jquery from 'jquery';
 
 const AppContext = createContext({
@@ -41,7 +41,7 @@ const AppProvider = ({ children }) => {
     question.itemId = questionDto.guid;
     question.quizType = question.metadata.quizType;
     question.data = question.qtixml;
-    const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+    const questionTemplates = CustomQuestionsService.questionTemplates(question);
 
     if (question.quizType == 'FillInBlanks') {
       let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);

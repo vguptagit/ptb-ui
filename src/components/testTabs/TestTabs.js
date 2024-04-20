@@ -8,7 +8,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Nav from 'react-bootstrap/Nav';
 import './TestTabs.css';
-import QtiService from '../../utils/qtiService';
+import QtiService from '../../utils/qti-converter';
 import { getFolderTests, saveMyQuestions, saveMyTest } from '../../services/testcreate.service';
 import Toastify from '../common/Toastify';
 import Modalpopup from './Saveasmodalpopup';

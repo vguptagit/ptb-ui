@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import QTI from '../utils/qti-player';
-import CustomQuestionBanksService from '../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../services/CustomQuestionsService';
 import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemplatesPage.js';
 
 const CustomQuestionsPage = () => {

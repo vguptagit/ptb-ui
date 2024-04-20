@@ -3,8 +3,8 @@ import { Collapse, Form } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { FormattedMessage } from 'react-intl';
-import CustomQuestionBanksService from '../../services/CustomQuestionBanksService';
-import QtiService from '../../utils/qtiService';
+import CustomQuestionsService from '../../services/CustomQuestionsService';
+import QtiService from '../../utils/qti-converter';
 
 const MultipleResponse = props => {
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ const MultipleResponse = props => {
       questionNode.qtiModel.EditOption = false;
       let jsonToXML = QtiService.getQtiXML(questionNode);
       questionNode.data = jsonToXML;
-      const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
+      const questionTemplates = CustomQuestionsService.questionTemplates(questionNode);
 
       let xmlToHtml = questionTemplates[0].textHTML;
 

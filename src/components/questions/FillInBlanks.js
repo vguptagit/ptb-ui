@@ -7,8 +7,8 @@ import DOMPurify from 'dompurify';
 import jquery from 'jquery';
 import ContentEditable from 'react-contenteditable';
 import { FormattedMessage } from 'react-intl';
-import CustomQuestionBanksService from '../../services/CustomQuestionBanksService';
-import QtiService from '../../utils/qtiService';
+import CustomQuestionsService from '../../services/CustomQuestionsService';
+import QtiService from '../../utils/qti-converter';
 
 const FillInBlanks = props => {
   const [open, setOpen] = useState(false);
@@ -191,7 +191,7 @@ const FillInBlanks = props => {
       questionNode.qtiModel.BlankSize = formData.FIBBlankSpace;
       let jsonToXML = QtiService.getQtiXML(questionNode);
       questionNode.data = jsonToXML;
-      const questionTemplates = CustomQuestionBanksService.questionTemplates(questionNode);
+      const questionTemplates = CustomQuestionsService.questionTemplates(questionNode);
 
       let xmlToHtml = getPrintModeFbCaption(questionNode.qtiModel.Caption);
 

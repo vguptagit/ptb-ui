@@ -11,7 +11,7 @@ import {
 import Toastify from '../common/Toastify';
 import './AddQuestionFolder.css';
 import TreeViewQuestionFolder from './Treeview/TreeViewQuestionFolder';
-import QtiService from '../../utils/qtiService';
+import QtiService from '../../utils/qti-converter';
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);

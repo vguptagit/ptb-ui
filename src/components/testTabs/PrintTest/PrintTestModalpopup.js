@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import './PrintTestModalpopup.css'; // Import CSS file for styling
 import PrintTestTreeView from './PrintTestTreeView';
-import QtiService from '../../../utils/qtiService';
+import QtiService from '../../../utils/qti-converter';
 import { useAppContext } from '../../../context/AppContext';
-import CustomQuestionBanksService from '../../../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../../../services/CustomQuestionsService';
 import MultipleChoice from '../../questions/MultipleChoice';
 import MultipleResponse from '../../questions/MultipleResponse';
 import TrueFalse from '../../questions/TrueFalse';

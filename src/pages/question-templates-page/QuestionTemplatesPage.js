@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './QuestionTemplatesPage.css';
-import CustomQuestionBanksService from '../../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../../services/CustomQuestionsService';
 import { useDrag } from 'react-dnd';
 
 const DraggableQuestionTemplate = ({ questionTemplate }) => {
@@ -28,7 +28,7 @@ const DraggableQuestionTemplate = ({ questionTemplate }) => {
 };
 
 const QuestionTemplatesPage = () => {
-  const questionTemplates = CustomQuestionBanksService.questionTemplates();
+  const questionTemplates = CustomQuestionsService.questionTemplates();
 
   useEffect(() => {
     console.log('questionTemplates', questionTemplates);

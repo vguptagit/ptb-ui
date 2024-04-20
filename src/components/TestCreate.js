@@ -10,8 +10,8 @@ import Matching from './questions/Matching';
 import MultipleChoice from './questions/MultipleChoice';
 import MultipleResponse from './questions/MultipleResponse';
 import TrueFalse from './questions/TrueFalse';
-import CustomQuestionBanksService from '../services/CustomQuestionBanksService';
-import QtiService from '../utils/qtiService';
+import CustomQuestionsService from '../services/CustomQuestionsService';
+import QtiService from '../utils/qti-converter';
 import './TestCreate.css';
 import './_tables.css';
 import TreeViewTestCreate from './TreeViewTestCreate';
@@ -89,7 +89,7 @@ const TestCreate = () => {
         question.quizType = question.metadata.quizType;
         question.data = question.qtixml; //
         console.log(question);
-        const questionTemplates = CustomQuestionBanksService.questionTemplates(question);
+        const questionTemplates = CustomQuestionsService.questionTemplates(question);
         if (question.quizType == 'FillInBlanks') {
           let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
           console.log(xmlToHtml);
@@ -153,7 +153,7 @@ const TestCreate = () => {
     const key = questionNode.itemId || questionNode.guid;
     if (questionNode.quizType) {
       switch (questionNode.quizType) {
-        case CustomQuestionBanksService.MultipleChoice:
+        case CustomQuestionsService.MultipleChoice:
           return (
             <MultipleChoice
               questionNode={questionNode}
@@ -167,7 +167,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.MultipleResponse:
+        case CustomQuestionsService.MultipleResponse:
           return (
             <MultipleResponse
               questionNode={questionNode}
@@ -181,7 +181,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.TrueFalse:
+        case CustomQuestionsService.TrueFalse:
           return (
             <TrueFalse
               questionNode={questionNode}
@@ -195,7 +195,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.Matching:
+        case CustomQuestionsService.Matching:
           return (
             <Matching
               questionNode={questionNode}
@@ -209,7 +209,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.FillInBlanks:
+        case CustomQuestionsService.FillInBlanks:
           return (
             <FillInBlanks
               questionNode={questionNode}
@@ -223,7 +223,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.Essay:
+        case CustomQuestionsService.Essay:
           return (
             <Essay
               questionNode={questionNode}
@@ -242,7 +242,7 @@ const TestCreate = () => {
       }
     } else if (questionNode.metadata && questionNode.metadata.quizType) {
       switch (questionNode.metadata.quizType) {
-        case CustomQuestionBanksService.MultipleChoice:
+        case CustomQuestionsService.MultipleChoice:
           return (
             <MultipleChoice
               questionNode={questionNode}
@@ -256,7 +256,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.MultipleResponse:
+        case CustomQuestionsService.MultipleResponse:
           return (
             <MultipleResponse
               questionNode={questionNode}
@@ -270,7 +270,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.TrueFalse:
+        case CustomQuestionsService.TrueFalse:
           return (
             <TrueFalse
               questionNode={questionNode}
@@ -284,7 +284,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.Matching:
+        case CustomQuestionsService.Matching:
           return (
             <Matching
               questionNode={questionNode}
@@ -298,7 +298,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.FillInBlanks:
+        case CustomQuestionsService.FillInBlanks:
           return (
             <FillInBlanks
               questionNode={questionNode}
@@ -312,7 +312,7 @@ const TestCreate = () => {
               setSelectedTest={setSelectedTest}
             />
           );
-        case CustomQuestionBanksService.Essay:
+        case CustomQuestionsService.Essay:
           return (
             <Essay
               questionNode={questionNode}
@@ -337,7 +337,7 @@ const TestCreate = () => {
     const questionIndex = index;
 
     switch (question.data.quizType) {
-      case CustomQuestionBanksService.MultipleChoice:
+      case CustomQuestionsService.MultipleChoice:
         return (
           <div key={key}>
             <MultipleChoice
@@ -351,7 +351,7 @@ const TestCreate = () => {
             />
           </div>
         );
-      case CustomQuestionBanksService.MultipleResponse:
+      case CustomQuestionsService.MultipleResponse:
         return (
           <div key={key}>
             <MultipleResponse
@@ -365,7 +365,7 @@ const TestCreate = () => {
             />
           </div>
         );
-      case CustomQuestionBanksService.TrueFalse:
+      case CustomQuestionsService.TrueFalse:
         return (
           <div key={key}>
             <TrueFalse
@@ -379,7 +379,7 @@ const TestCreate = () => {
             />
           </div>
         );
-      case CustomQuestionBanksService.Matching:
+      case CustomQuestionsService.Matching:
         return (
           <div key={key}>
             <Matching
@@ -393,7 +393,7 @@ const TestCreate = () => {
             />
           </div>
         );
-      case CustomQuestionBanksService.FillInBlanks:
+      case CustomQuestionsService.FillInBlanks:
         return (
           <div key={key}>
             <FillInBlanks
@@ -407,7 +407,7 @@ const TestCreate = () => {
             />
           </div>
         );
-      case CustomQuestionBanksService.Essay:
+      case CustomQuestionsService.Essay:
         return (
           <div key={key}>
             <Essay

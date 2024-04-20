@@ -7,14 +7,14 @@ import {
   swapQuestionBetweenFolders,
 } from '../../../services/userfolder.service';
 import Toastify from '../../common/Toastify';
-import CustomQuestionBanksService from '../../../services/CustomQuestionBanksService';
+import CustomQuestionsService from '../../../services/CustomQuestionsService';
 import MultipleChoice from '../../questions/MultipleChoice';
 import MultipleResponse from '../../questions/MultipleResponse';
 import TrueFalse from '../../questions/TrueFalse';
 import Matching from '../../questions/Matching';
 import FillInBlanks from '../../questions/FillInBlanks';
 import Essay from '../../questions/Essay';
-import QtiService from '../../../utils/qtiService';
+import QtiService from '../../../utils/qti-converter';
 import Loader from '../../common/loader/Loader';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -122,37 +122,37 @@ function TreeViewQuestionFolder({
     const { qtiModel } = question;
 
     switch (question.metadata.quizType) {
-      case CustomQuestionBanksService.MultipleChoice:
+      case CustomQuestionsService.MultipleChoice:
         return (
           <div key={key}>
             <MultipleChoice questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.MultipleResponse:
+      case CustomQuestionsService.MultipleResponse:
         return (
           <div key={key}>
             <MultipleResponse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.TrueFalse:
+      case CustomQuestionsService.TrueFalse:
         return (
           <div key={key}>
             <TrueFalse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.Matching:
+      case CustomQuestionsService.Matching:
         return (
           <div key={key}>
             <Matching questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.FillInBlanks:
+      case CustomQuestionsService.FillInBlanks:
         return (
           <div key={key}>
             <FillInBlanks questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
-      case CustomQuestionBanksService.Essay:
+      case CustomQuestionsService.Essay:
         return (
           <div key={key}>
             <Essay questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />

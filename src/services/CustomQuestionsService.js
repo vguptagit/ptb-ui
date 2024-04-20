@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import QTI from '../utils/qti-player';
 
-var CustomQuestionBanksService = {};
+var CustomQuestionsService = {};
 
 var MultipleChoice_Template =
   '<?xml version="1.0" encoding="utf-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" title="Pre 1.1.2" identifier="QUESTION-1000001217597854" label="Pre 1.1.2" toolName="pegasus" toolVersion="5.152.49.2" adaptive="false" timeDependent="false"><responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier"/><outcomeDeclaration identifier="FEEDBACK" cardinality="single" baseType="identifier"/><outcomeDeclaration identifier="ITEMSCORE" cardinality="single" baseType="float"/><outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" normalMaximum="1.00"><defaultValue><value>0</value></defaultValue></outcomeDeclaration><outcomeDeclaration identifier="MAXSCORE" cardinality="single" baseType="float"><defaultValue><value>1.00</value></defaultValue></outcomeDeclaration><itemBody><p></p><choiceInteraction shuffle="true" orientation="Vertical" responseIdentifier="RESPONSE" maxChoices="1" minChoices="1"><simpleChoice identifier="RESPONSE_1" fixed="false"></simpleChoice><simpleChoice identifier="RESPONSE_2" fixed="false"></simpleChoice><simpleChoice identifier="RESPONSE_3" fixed="false"></simpleChoice><simpleChoice identifier="RESPONSE_4" fixed="false"></simpleChoice></choiceInteraction></itemBody><responseProcessing><responseCondition><responseIf><match><variable identifier="RESPONSE"/><baseValue baseType="identifier">RESPONSE_1</baseValue></match><setOutcomeValue identifier="SCORE"><baseValue baseType="float">1</baseValue></setOutcomeValue><setOutcomeValue identifier="FEEDBACK"><baseValue baseType="identifier">FEEDBACK_1</baseValue></setOutcomeValue></responseIf><responseElseIf><match><variable identifier="RESPONSE"/><baseValue baseType="identifier">RESPONSE_2</baseValue></match><setOutcomeValue identifier="SCORE"><baseValue baseType="float">0</baseValue></setOutcomeValue><setOutcomeValue identifier="FEEDBACK"><baseValue baseType="identifier">FEEDBACK_2</baseValue></setOutcomeValue></responseElseIf><responseElseIf><match><variable identifier="RESPONSE"/><baseValue baseType="identifier">RESPONSE_3</baseValue></match><setOutcomeValue identifier="SCORE"><baseValue baseType="float">0</baseValue></setOutcomeValue><setOutcomeValue identifier="FEEDBACK"><baseValue baseType="identifier">FEEDBACK_3</baseValue></setOutcomeValue></responseElseIf><responseElseIf><match><variable identifier="RESPONSE"/><baseValue baseType="identifier">RESPONSE_4</baseValue></match><setOutcomeValue identifier="SCORE"><baseValue baseType="float">0</baseValue></setOutcomeValue><setOutcomeValue identifier="FEEDBACK"><baseValue baseType="identifier">FEEDBACK_4</baseValue></setOutcomeValue></responseElseIf></responseCondition></responseProcessing><modalFeedback identifier="FEEDBACK_1" outcomeIdentifier="FEEDBACK" showHide="show"><div>Psychology: The Scientific Methodology, p. 27</div></modalFeedback><modalFeedback identifier="FEEDBACK_2" outcomeIdentifier="FEEDBACK" showHide="show"><div>Psychology: The Scientific Methodology, p. 27</div></modalFeedback><modalFeedback identifier="FEEDBACK_3" outcomeIdentifier="FEEDBACK" showHide="show"><div>Psychology: The Scientific Methodology, p. 27</div></modalFeedback><modalFeedback identifier="FEEDBACK_4" outcomeIdentifier="FEEDBACK" showHide="show"><div>Psychology: The Scientific Methodology, p. 27</div></modalFeedback></assessmentItem>';
@@ -16,20 +16,21 @@ var Essay_Template =
 var FillInTheBlanks_Template =
   '<?xml version="1.0" encoding="UTF-8"?><assessmentItem title="FIB1" timeDependent="false" adaptive="false" toolVersion="5.152.49.2" toolName="pegasus" label="FIB1" identifier="QUESTION-1333938801" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"><responseDeclaration identifier="RESPONSE_1" baseType="string" cardinality="single"></responseDeclaration><outcomeDeclaration identifier="FEEDBACK-1" baseType="identifier" cardinality="single"/><outcomeDeclaration identifier="ITEMSCORE" baseType="float" cardinality="single"/><outcomeDeclaration identifier="SCORE" baseType="float" cardinality="single" normalMaximum="1"><defaultValue><value>0</value></defaultValue></outcomeDeclaration><outcomeDeclaration identifier="MAXSCORE" baseType="float" cardinality="single"><defaultValue><value>1</value></defaultValue></outcomeDeclaration><itemBody><blockquote><p></p></blockquote></itemBody><responseProcessing><responseCondition><responseIf><isNull><variable identifier="RESPONSE_1"/></isNull><setOutcomeValue identifier="SCORE"><mapResponse identifier="RESPONSE_1"/></setOutcomeValue></responseIf><responseElse><setOutcomeValue identifier="ITEMSCORE"><mapResponse identifier="RESPONSE_1"/></setOutcomeValue><setOutcomeValue identifier="SCORE"><mapResponse identifier="RESPONSE_1"/></setOutcomeValue><responseCondition><responseIf><gt><variable identifier="ITEMSCORE"/><baseValue baseType="float">0</baseValue></gt><setOutcomeValue identifier="FEEDBACK-1"><baseValue baseType="identifier">FEEDBACK-1C</baseValue></setOutcomeValue></responseIf><responseElse><setOutcomeValue identifier="FEEDBACK-1"><baseValue baseType="identifier">FEEDBACK-1W</baseValue></setOutcomeValue></responseElse></responseCondition></responseElse></responseCondition><responseCondition><responseIf><and><isNull><variable identifier="RESPONSE_1"/></isNull></and><setOutcomeValue identifier="SCORE"><baseValue baseType="float">0.0</baseValue></setOutcomeValue></responseIf></responseCondition></responseProcessing></assessmentItem>';
 
-CustomQuestionBanksService.MultipleChoice_Template = MultipleChoice_Template;
-CustomQuestionBanksService.MultipleResponse_Template = MultipleResponse_Template;
-CustomQuestionBanksService.TrueFalse_Template = TrueFalse_Template;
-CustomQuestionBanksService.MatchFollowing_Template = MatchFollowing_Template;
-CustomQuestionBanksService.Essay_Template = Essay_Template;
-CustomQuestionBanksService.FillInTheBlanks_Template = FillInTheBlanks_Template;
-CustomQuestionBanksService.Essay = 'Essay';
-CustomQuestionBanksService.MultipleChoice = 'MultipleChoice';
-CustomQuestionBanksService.FillInBlanks = 'FillInBlanks';
-CustomQuestionBanksService.Matching = 'Matching';
-CustomQuestionBanksService.MultipleResponse = 'MultipleResponse';
-CustomQuestionBanksService.TrueFalse = 'TrueFalse';
+CustomQuestionsService.MultipleChoice_Template = MultipleChoice_Template;
+CustomQuestionsService.MultipleResponse_Template = MultipleResponse_Template;
+CustomQuestionsService.TrueFalse_Template = TrueFalse_Template;
+CustomQuestionsService.MatchFollowing_Template = MatchFollowing_Template;
+CustomQuestionsService.Essay_Template = Essay_Template;
+CustomQuestionsService.FillInTheBlanks_Template = FillInTheBlanks_Template;
 
-CustomQuestionBanksService.questionTemplates = function (qtiFormat) {
+CustomQuestionsService.Essay = 'Essay';
+CustomQuestionsService.MultipleChoice = 'MultipleChoice';
+CustomQuestionsService.FillInBlanks = 'FillInBlanks';
+CustomQuestionsService.Matching = 'Matching';
+CustomQuestionsService.MultipleResponse = 'MultipleResponse';
+CustomQuestionsService.TrueFalse = 'TrueFalse';
+
+CustomQuestionsService.questionTemplates = function (qtiFormat) {
   var qtiXmlNode = [];
   var nodes = [
     { qstnTemplate: MultipleChoice_Template, quizType: 'MultipleChoice' },
@@ -76,4 +77,4 @@ CustomQuestionBanksService.questionTemplates = function (qtiFormat) {
   return qtiXmlNode;
 };
 
-export default CustomQuestionBanksService;
+export default CustomQuestionsService;
