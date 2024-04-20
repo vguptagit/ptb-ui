@@ -22,7 +22,6 @@ const AppContext = createContext({
 const AppProvider = ({ children }) => {
   const [tests, setTests] = useState([]);
   const [selectedTest, setSelectedTest] = useState();
-  const [selectedQuestion, setSelectedQuestion] = useState();
   const [editTest, setEditTest] = useState(null);
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState('');
@@ -30,6 +29,8 @@ const AppProvider = ({ children }) => {
   const [selectedViewTest, setSelectedViewTest] = useState(null);
   const [isMigratedTests, setIsMigratedTests] = useState(false);
   const [disciplinesData, setDisciplinesData] = useState({});
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [duplicateQuestion, setDuplicateQuestion] = useState(null);
 
   const getQuestionFromDto = questionDto => {
     let question = questionDto;
@@ -105,10 +106,39 @@ const AppProvider = ({ children }) => {
     makeTestQuestion(node);
   };
 
+  const handleShowDuplicateModal = () => {
+    setShowDuplicateModal(true);
+  };
+
+  const handleHideDuplicateModal = () => {
+    setShowDuplicateModal(false);
+  };
+
+  const handleQuestion = (addDuplicate = false) => {
+    if (addDuplicate && duplicateQuestion) {
+      const updatedTest = { ...selectedTest };
+      updatedTest.questions.push(duplicateQuestion);
+      setSelectedTest(updatedTest);
+      setShowDuplicateModal(false);
+    } else {
+      setDuplicateQuestion(null);
+    }
+  };
+
   const handleQuestionAdd = node => {
     console.log('adding question', node);
-    selectedTest.questions.push(node);
-    setSelectedQuestion(node);
+
+    const isDuplicate = selectedTest.questions.some(existingNode => existingNode.id === node.id);
+
+    if (isDuplicate) {
+      setDuplicateQuestion(node);
+      handleShowDuplicateModal();
+      return;
+    }
+
+    const updatedTest = { ...selectedTest };
+    updatedTest.questions.push(node);
+    setSelectedTest(updatedTest);
   };
 
   const makeTestQuestion = async node => {
@@ -250,7 +280,10 @@ const AppProvider = ({ children }) => {
         isMigratedTests,
         handleQuestionAdd,
         disciplinesData,
-        selectedQuestion,
+        handleHideDuplicateModal,
+        handleShowDuplicateModal,
+        showDuplicateModal,
+        handleQuestion,
       }}
     >
       {children}
