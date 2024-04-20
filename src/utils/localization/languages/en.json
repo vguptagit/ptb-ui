@@ -148,5 +148,8 @@
   "userNameLabel": "User Name",
   "emailLabel": "Email",
   "loginButtonText": "Login",
-  "notFoundErrorMessage": "404 Page not found"
+  "notFoundErrorMessage": "404 Page not found",
+  "duplicateQuestionModal": "You are about to add or copy a question that is already included in your test. Do you want to create a duplicate test question?",
+  "duplicateQuestionModalOk": "Ok",
+  "duplicateQuestionModalCancel": "Cancel"
 }

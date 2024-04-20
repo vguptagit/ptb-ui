@@ -186,7 +186,7 @@ function TreeViewQuestionFolder({
               guid: question.guid,
               qtiModel: question.qtiModel,
               quizType: question.metadata.quizType,
-              index: index,
+              qtixml: question.xml,
               isQuestion: true,
             },
           })),
@@ -264,7 +264,10 @@ function TreeViewQuestionFolder({
         const isDuplicate = newTree.some(
           node => node.text === nodeToBeUpdated.title && node.data.guid !== nodeToBeUpdated.guid
         );
-        if (isDuplicate) {
+        const hasDuplicateInChildren = newTree.some(
+          node => node.parent === parentId && node.text === nodeToBeUpdated.title
+        );
+        if (isDuplicate || hasDuplicateInChildren) {
           Toastify({
             message: 'Duplicate folder. Please choose a different name.',
             type: 'error',
@@ -385,7 +388,7 @@ function TreeViewQuestionFolder({
               )}
               {node.data.isQuestion && (
                 <button className="questionadd" onClick={() => handleAdd(node)}>
-                  <i class="bi bi-plus-lg"></i>
+                  <i className="bi bi-plus-lg darker-icon"></i>
                 </button>
               )}
             </div>

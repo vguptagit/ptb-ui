@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { FormattedMessage } from 'react-intl';
-import { Form } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
 import QuestionsBanksTips from './testTabs/QuestionsBanksTips/QuestionsBanksTips';
 import Essay from './questions/Essay';
@@ -18,7 +18,8 @@ import TreeViewTestCreate from './TreeViewTestCreate';
 import jquery from 'jquery';
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, setSelectedTest, selectedQuestion } = useAppContext();
+  const { selectedTest, dispatchEvent, setSelectedTest, handleHideDuplicateModal, showDuplicateModal, handleQuestion } =
+    useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || '');
   const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || '');
   const [isEditing, setIsEditing] = useState(true);
@@ -331,8 +332,9 @@ const TestCreate = () => {
     }
   };
 
-  const DraggableQuestion = question => {
+  const DraggableQuestion = (question, index) => {
     const key = question.data.guid;
+    const questionIndex = index;
 
     switch (question.data.quizType) {
       case CustomQuestionBanksService.MultipleChoice:
@@ -340,8 +342,9 @@ const TestCreate = () => {
           <div key={key}>
             <MultipleChoice
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -353,8 +356,9 @@ const TestCreate = () => {
           <div key={key}>
             <MultipleResponse
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -366,8 +370,9 @@ const TestCreate = () => {
           <div key={key}>
             <TrueFalse
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -379,8 +384,9 @@ const TestCreate = () => {
           <div key={key}>
             <Matching
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -392,8 +398,9 @@ const TestCreate = () => {
           <div key={key}>
             <FillInBlanks
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -405,8 +412,9 @@ const TestCreate = () => {
           <div key={key}>
             <Essay
               questionNode={question.data}
-              questionNodeIndex={question.data.index}
+              questionNodeIndex={questionIndex}
               qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
               printView={2}
               onQuestionStateChange={handleQuestionState}
               onQuestionDelete={handleQuestionDelete}
@@ -446,7 +454,9 @@ const TestCreate = () => {
         )}
         {selectedTest &&
           selectedTest.questions &&
-          selectedTest.questions.map(question => <div key={question.guid}>{DraggableQuestion(question)}</div>)}
+          selectedTest.questions.map((question, index) => (
+            <div key={question.guid}>{DraggableQuestion(question, index)}</div>
+          ))}
       </div>
       <div ref={drop} className={`test-container ${canDrop && isOver && !isEditing ? 'drop-active' : ''}`}>
         <div>
@@ -459,6 +469,21 @@ const TestCreate = () => {
           )}
         </div>
       </div>
+      {showDuplicateModal && (
+        <Modal show={showDuplicateModal} onHide={handleHideDuplicateModal}>
+          <Modal.Body>
+            <FormattedMessage id="duplicateQuestionModal" />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleQuestion}>
+              <FormattedMessage id="Ok" />
+            </Button>
+            <Button variant="secondary" onClick={handleHideDuplicateModal}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };
