@@ -181,7 +181,7 @@ function Modalpopupexport({
     <>
       <Loader show={loading} />
       <Modal
-        className="custom-modal-size"
+        className="custom-modal-size export-modal-popup"
         show={show}
         onHide={handleCloseModal}
         centered
@@ -331,11 +331,11 @@ function Modalpopupexport({
                   onChange={e => setIsSaveSettingsAsDefault(e.target.checked)}
                 />
               </Col>
-              <Col xs={6} className="text-right" style={{ paddingLeft: '105px', paddingRight: '0px' }}>
+              <Col xs={6} className="action-buttons-container" style={{ paddingRight: '0px' }}>
                 <Button variant="secondary" onClick={handleCloseModal} style={{ marginLeft: '10px' }}>
                   <FormattedMessage id="cancelButtonModalpopupExportText" />
                 </Button>
-                <Button variant="primary" onClick={handleExport} style={{ float: 'right' }}>
+                <Button variant="primary" onClick={handleExport}>
                   <FormattedMessage id="exportButtonModalpopupExportTextText" />
                 </Button>
               </Col>

@@ -254,8 +254,6 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
-  console.log('Disciplines Data:::', disciplinesData);
-
   return (
     <AppContext.Provider
       value={{
