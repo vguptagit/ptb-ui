@@ -7,7 +7,7 @@ import NoPage from '../pages/NoPage.js';
 import FullLayout from '../pages/layouts/FullLayout.js';
 import CustomQuestionsPage from '../pages/CustomQuestionsPage.js';
 import QuestionTemplatesPage from '../pages/question-templates-page/QuestionTemplatesPage.js';
-import QuestionBanks from '../pages/QuestionBanks.js';
+import QuestionBanks from '../pages/QuestionBanks/QuestionBanks.js';
 import LoginPage from '../pages/LoginPage.js';
 import Discipline from '../pages/Discipline/Discipline.js';
 import WelcomeScreen from '../pages/welcome-screen/WelcomeScreen.js';

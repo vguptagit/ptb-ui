@@ -5,34 +5,56 @@ import AddDisciplinepopup from './AddDisciplinepopup';
 import AddBookspopup from './AddBookspopup';
 import { useAppContext } from '../../context/AppContext';
 
-const QuestBanks = ({ reloadDisciplines }) => {
-  const { dispatchEvent } = useAppContext();
+const AddQuestionBanks = ({ reloadDisciplines }) => {
   const [showModal, setShowModal] = useState(false);
   const [step, setStep] = useState(1);
 
-  const handleNext = () => {
-    setStep(step + 1);
-  };
+  const {
+    disciplinesData: { userBooks },
+    dispatchEvent,
+  } = useAppContext();
 
-  const handleClose = () => {
-    setShowModal(false);
-    setStep(1);
-  };
-  const handleBack = () => {
-    setStep(step - 1);
-  };
-  const handleSave = () => {
-    setShowModal(false);
-    reloadDisciplines();
-  };
-
+  /**
+   * useEffectHook - A React useEffect hook that sets the step state variable to 1 when the showModal prop is true.
+   *
+   * @param {boolean} showModal - A boolean prop that indicates whether the modal is shown or not.
+   */
   useEffect(() => {
-    dispatchEvent('UPDATE_SELECTED_DISCIPLINES', { disciplines: [] });
-
     if (showModal) {
       setStep(1);
     }
   }, [showModal]);
+
+  /**
+   * This function increments the current step by 1.
+   */
+  const handleNext = () => {
+    setStep(step + 1);
+  };
+
+  /**
+   * This function closes the modal and resets the selected disciplines data.
+   */
+  const handleClose = () => {
+    setShowModal(false);
+    setStep(1);
+    dispatchEvent('UPDATE_DISCIPLINES_DATA', { selectedDisciplines: [], selectedBooks: userBooks });
+  };
+
+  /**
+   * This function decrements the current step by 1.
+   */
+  const handleBack = () => {
+    setStep(step - 1);
+  };
+
+  /**
+   * Handles the save action by hiding the modal and reloading the disciplines.
+   */
+  const handleSave = () => {
+    setShowModal(false);
+    reloadDisciplines();
+  };
 
   return (
     <>
@@ -71,4 +93,4 @@ const QuestBanks = ({ reloadDisciplines }) => {
   );
 };
 
-export default QuestBanks;
+export default AddQuestionBanks;

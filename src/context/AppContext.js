@@ -11,7 +11,7 @@ import jquery from 'jquery';
 
 const AppContext = createContext({
   tests: [],
-  disciplinesData: { allDisciplines: [], userDisciplines: [], selectedDisciplines: [] },
+  disciplinesData: {},
   selectTest: () => {},
   addTest: () => {},
   deleteTest: () => {},
@@ -28,9 +28,15 @@ const AppProvider = ({ children }) => {
   const [editTestHighlight, setEditTestHighlight] = useState();
   const [selectedViewTest, setSelectedViewTest] = useState(null);
   const [isMigratedTests, setIsMigratedTests] = useState(false);
-  const [disciplinesData, setDisciplinesData] = useState({});
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [duplicateQuestion, setDuplicateQuestion] = useState(null);
+  const [disciplinesData, setDisciplinesData] = useState({
+    allDisciplines: [], // stores all disciplines
+    userDisciplines: [], // stores user disciplines
+    selectedDisciplines: [], // stores currently selected disciplines
+    userBooks: [], // stores user books
+    selectedBooks: [], // stores currently selected books
+  });
 
   const getQuestionFromDto = questionDto => {
     let question = questionDto;
@@ -227,15 +233,9 @@ const AppProvider = ({ children }) => {
       case 'UPDATE_SELECTED_TEST':
         setSelectedTest(payload.test);
         return;
-      case 'UPDATE_ALL_DISCIPLINES':
-        setDisciplinesData({ ...disciplinesData, allDisciplines: payload.disciplines });
-        return;
-      case 'UPDATE_USER_DISCIPLINES':
-        setDisciplinesData({ ...disciplinesData, userDisciplines: payload.disciplines });
-        return;
-      case 'UPDATE_SELECTED_DISCIPLINES':
-        setDisciplinesData({ ...disciplinesData, selectedDisciplines: payload.disciplines });
-        return;
+
+      case 'UPDATE_DISCIPLINES_DATA':
+        setDisciplinesData({ ...disciplinesData, ...payload });
       default:
         return;
     }
@@ -253,6 +253,8 @@ const AppProvider = ({ children }) => {
       setSelectedTest(untitled1Test);
     }
   }, []);
+
+  console.log('Disciplines Data:::', disciplinesData);
 
   return (
     <AppContext.Provider
