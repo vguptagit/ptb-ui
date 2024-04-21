@@ -1,84 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import SearchBox from '../SearchBox/SearchBox';
-import Loader from '../common/loader/Loader';
-import Toastify from '../common/Toastify';
-import { getAllDisciplines } from '../../services/discipline.service';
+import SearchBox from '../common/SearchBox/SearchBox';
 import { useAppContext } from '../../context/AppContext';
 import './AddDisciplinepopup.css';
 
 const AddDisciplinepopup = ({ handleNext }) => {
-  const [loading, setLoading] = useState(true);
-  const [allDisciplines, setAllDisciplines] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
   const {
-    disciplinesData: { userDisciplines, selectedDisciplines },
+    disciplinesData: { allDisciplines, userDisciplines, selectedDisciplines },
     dispatchEvent,
   } = useAppContext();
 
+  /**
+   * useEffect hook that sets the document title, initializes search results,
+   * and filters disciplines based on user selections.
+   */
   useEffect(() => {
     document.title = 'Choose Your Discipline';
 
-    loadDisciplinesData();
+    // Initialize search results
+    setSearchResults(allDisciplines);
+
+    // Check if there are any selected disciplines
+    if (selectedDisciplines?.length) {
+      return;
+    }
+
+    // If there are user disciplines, filter the results
+    if (userDisciplines?.length > 0) {
+      const filteredDisciplines = allDisciplines.filter(item => userDisciplines.includes(item));
+      dispatchEvent('UPDATE_DISCIPLINES_DATA', {
+        selectedDisciplines: filteredDisciplines,
+      });
+    }
   }, []);
 
-  const loadDisciplinesData = async () => {
-    setLoading(true);
-    try {
-      const disciplines = await getAllDisciplines();
-      setAllDisciplines(disciplines);
-      setSearchResults(disciplines);
-
-      if (selectedDisciplines?.length) {
-        return;
-      }
-
-      if (userDisciplines?.length > 0) {
-        const filteredDisciplines = disciplines.filter(item => userDisciplines.includes(item));
-
-        dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
-          disciplines: filteredDisciplines,
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      Toastify(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  /**
+   * Filters the allDisciplines array based on the provided search value and updates the searchResults state.
+   * @param {string} value - The search value to filter the allDisciplines array.
+   */
   const handleSearch = value => {
     const filteredResults = allDisciplines.filter(item => item.toLowerCase().includes(value.toLowerCase()));
 
     setSearchResults(filteredResults);
   };
 
+  /**
+   * Handles the selection of a discipline item.
+   * If the item is already selected, it will be removed from the selectedDisciplines array.
+   * If the item is not selected, it will be added to the selectedDisciplines array.
+   * @param {string} item - The discipline item to be selected or deselected.
+   */
   const handleSelectItem = item => {
-    let updatedSelection = [];
-    if (selectedDisciplines.includes(item)) {
-      updatedSelection = selectedDisciplines.filter(selectedItem => selectedItem !== item);
-    } else {
-      updatedSelection = [...selectedDisciplines, item];
-    }
+    const isSelected = selectedDisciplines.includes(item);
+    const updatedSelection = isSelected
+      ? selectedDisciplines.filter(selectedItem => selectedItem !== item)
+      : [...selectedDisciplines, item];
 
-    dispatchEvent('UPDATE_SELECTED_DISCIPLINES', {
-      disciplines: updatedSelection,
+    dispatchEvent('UPDATE_DISCIPLINES_DATA', {
+      selectedDisciplines: updatedSelection,
     });
   };
 
+  /**
+   * Handles the next step in the discipline selection process.
+   * If no disciplines are selected, the function does nothing.
+   * Otherwise, it calls the handleNext function.
+   */
   const handleNextStep = () => {
-    if (selectedDisciplines.length > 0) {
-      handleNext();
-    }
+    if (!selectedDisciplines.length) return;
+    handleNext();
   };
 
   return (
     <div className="disciplineaddpopup-container">
-      {loading ? (
-        <Loader show={true} />
-      ) : allDisciplines.length === 0 ? (
+      {allDisciplines.length === 0 ? (
         <div className="no-data-message">
           <FormattedMessage id="noDisciplinesAvailable" defaultMessage="No disciplines available" />
         </div>

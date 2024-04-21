@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useDebounce } from '../../hooks/useDebounce';
+import { useDebounce } from '../../../hooks/useDebounce';
 import './SearchBox.css';
 
 function SearchBox({ placeholder, searchText, onSearch }) {
