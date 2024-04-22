@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import Toastify from '../common/Toastify';
 import { exportTest, getPrintsettings, savePrintsettings } from '../../services/testcreate.service';
 import './Modalpopupexport.css';
@@ -57,6 +57,7 @@ function Modalpopupexport({
   keyboard,
   width,
 }) {
+  const intl = useIntl();
   const [selectedFormat, setSelectedFormat] = useState(exportFileFormats[0]);
   const [selectedAnswerArea, setSelectedAnswerArea] = useState(answerAreas[0]);
   const [selectedAnswerKey, setSelectedAnswerKey] = useState(answerKeys[0]);
@@ -64,7 +65,7 @@ function Modalpopupexport({
   const [selectedPageNumber, setSelectedPageNumber] = useState(pageNumbers[0]);
   const [isSaveSettingsAsDefault, setIsSaveSettingsAsDefault] = useState(false);
   const [showMSWordSetting, setShowMSWordSetting] = useState(true);
-  const [isIncludeRandomizedTest, setIsIncludeRandomizedTest] = useState(false);
+  // const [isIncludeRandomizedTest, setIsIncludeRandomizedTest] = useState(false);
   const [isIncludeStudentName, setIsIncludeStudentName] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -85,7 +86,7 @@ function Modalpopupexport({
 
           setSelectedMargin(margins.find(m => m.value === settings.topMargin) || margins[1]);
           setIsIncludeStudentName(settings.includeStudentName);
-          setIsIncludeRandomizedTest(settings.includeRandomizedTests);
+          // setIsIncludeRandomizedTest(settings.includeRandomizedTests);
           // Set other states as needed based on the fetched settings
         } catch (error) {
           console.error('Failed to fetch print settings:', error);
@@ -124,7 +125,7 @@ function Modalpopupexport({
       font: 'Helvetica, Arial',
       fontSize: '12', // assuming this is a static value
       exportFileFormat: selectedFormat.value,
-      includeRandomizedTests: isIncludeRandomizedTest,
+      includeRandomizedTests: false,
       includeStudentName: isIncludeStudentName,
       pageNumberDisplay: selectedPageNumber.value,
     };
@@ -139,12 +140,12 @@ function Modalpopupexport({
         await saveSettings();
         Toastify({
           type: 'success',
-          message: 'Export settings have been saved successfully',
+          message: intl.formatMessage({ id: 'success.exportTestSettings' }),
         });
       } catch (error) {
         Toastify({
           type: 'error',
-          message: `Export settings save failed! ${error.message}`,
+          message: intl.formatMessage({ id: 'error.exportTestSettings' }) + error.message,
         });
       }
     }
@@ -152,7 +153,7 @@ function Modalpopupexport({
     const options = {
       answerKey: selectedAnswerKey.value,
       answerArea: selectedAnswerArea.value,
-      includeRandomizedTests: isIncludeRandomizedTest,
+      includeRandomizedTests: false,
       includeStudentName: isIncludeStudentName,
       saveSettings: false,
       margin: selectedMargin.value,
@@ -164,7 +165,7 @@ function Modalpopupexport({
         downloadFile(blob, fileName);
         Toastify({
           type: 'success',
-          message: 'Document export successful...',
+          message: intl.formatMessage({ id: 'success.documentExport' }),
         });
         handleCloseModal();
       })
@@ -302,17 +303,17 @@ function Modalpopupexport({
 
                     <Form.Check
                       type="checkbox"
-                      label="Add student name label & space"
+                      label={intl.formatMessage({ id: 'exportTest.addStudentNameLabel&Space' })}
                       checked={isIncludeStudentName}
                       onChange={e => setIsIncludeStudentName(e.target.checked)}
                     />
 
-                    <Form.Check
+                    {/* <Form.Check
                       type="checkbox"
                       label="Include all test versions"
                       checked={isIncludeRandomizedTest}
                       onChange={e => setIsIncludeRandomizedTest(e.target.checked)}
-                    />
+                    /> */}
                   </Col>
                 </Form.Group>
               </>
