@@ -146,6 +146,10 @@ const AppProvider = ({ children }) => {
     updatedTest.questions.push(node);
     setSelectedTest(updatedTest);
   };
+  // const handleQuestionAddforquestionbank = node => {
+  //   console.log('adding question', node);
+  //   selectedTest.questions.push(node);
+  // };
 
   const makeTestQuestion = async node => {
     try {

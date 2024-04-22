@@ -17,6 +17,8 @@ import CustomQuestionsService from '../../services/CustomQuestionsService';
 import { getAllBooks, getAllBookNodes, getAllBookNodeSubNodes } from '../../services/book.service';
 import Loader from '../../components/common/loader/Loader';
 import './TreeView.css';
+import { Button } from 'react-bootstrap';
+import { useAppContext } from '../../context/AppContext';
 
 function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const [treeData, setTreeData] = useState([]);
@@ -30,10 +32,15 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const treeRef = useRef(null);
+  const { handleQuestionAdd, handleQuestionAddforquestionbank } = useAppContext();
 
   const handleDrop = newTree => {
     setTreeData(newTree);
     onDataUpdate(newTree);
+  };
+  const handleAdd = node => {
+    handleQuestionAdd(node);
+    console.log(node);
   };
 
   useEffect(() => {
@@ -217,7 +224,14 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             parent: node.id,
             droppable: false,
             questionGuid: question.guid,
-            text: <DraggableQuestion key={question.guid} question={question} index={index} />,
+            text: (
+              <div className="questionblock">
+                <DraggableQuestion key={question.guid} question={question} index={index} />
+                <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+                  <i className="bi bi-plus-lg darker-icon"></i>
+                </button>
+              </div>
+            ),
             type: 'question',
           }));
 
