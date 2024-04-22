@@ -24,6 +24,7 @@ const Header = () => {
             <Profile />
             <Nav.Link id="help-icon" aria-label="help button to activate press enter">
               <FormattedMessage id="helpText" />
+              &nbsp;
               <i className="bi bi-question-circle"></i>
             </Nav.Link>
           </Nav>
