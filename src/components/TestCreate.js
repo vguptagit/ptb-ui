@@ -333,187 +333,96 @@ const TestCreate = () => {
   };
 
   const DraggableQuestion = (question, index) => {
-    const key = question.data?.guid;
+    const key = question.data.guid;
     const questionIndex = index;
 
-    if (question.guid) {
-      switch (question.quizType) {
-        case CustomQuestionsService.MultipleChoice:
-          return (
-            <div key={key}>
-              <MultipleChoice
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.MultipleResponse:
-          return (
-            <div key={key}>
-              <MultipleResponse
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.TrueFalse:
-          return (
-            <div key={key}>
-              <TrueFalse
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.Matching:
-          return (
-            <div key={key}>
-              <Matching
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.FillInBlanks:
-          return (
-            <div key={key}>
-              <FillInBlanks
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.Essay:
-          return (
-            <div key={key}>
-              <Essay
-                questionNode={question}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.qtiModel}
-                questionNodeIsEdit={question.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        default:
-          return null;
-      }
-    } else if (question.data.guid) {
-      switch (question.data.quizType) {
-        case CustomQuestionsService.MultipleChoice:
-          return (
-            <div key={key}>
-              <MultipleChoice
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.MultipleResponse:
-          return (
-            <div key={key}>
-              <MultipleResponse
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.TrueFalse:
-          return (
-            <div key={key}>
-              <TrueFalse
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.Matching:
-          return (
-            <div key={key}>
-              <Matching
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.FillInBlanks:
-          return (
-            <div key={key}>
-              <FillInBlanks
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        case CustomQuestionsService.Essay:
-          return (
-            <div key={key}>
-              <Essay
-                questionNode={question.data}
-                questionNodeIndex={questionIndex}
-                qtiModel={question.data.qtiModel}
-                questionNodeIsEdit={question.data.qtiModel.EditOption}
-                printView={2}
-                onQuestionStateChange={handleQuestionState}
-                onQuestionDelete={handleQuestionDelete}
-              />
-            </div>
-          );
-        default:
-          return null;
-      }
+    switch (question.data.quizType) {
+      case CustomQuestionsService.MultipleChoice:
+        return (
+          <div key={key}>
+            <MultipleChoice
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      case CustomQuestionsService.MultipleResponse:
+        return (
+          <div key={key}>
+            <MultipleResponse
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      case CustomQuestionsService.TrueFalse:
+        return (
+          <div key={key}>
+            <TrueFalse
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      case CustomQuestionsService.Matching:
+        return (
+          <div key={key}>
+            <Matching
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      case CustomQuestionsService.FillInBlanks:
+        return (
+          <div key={key}>
+            <FillInBlanks
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      case CustomQuestionsService.Essay:
+        return (
+          <div key={key}>
+            <Essay
+              questionNode={question.data}
+              questionNodeIndex={questionIndex}
+              qtiModel={question.data.qtiModel}
+              questionNodeIsEdit={question.data.qtiModel.EditOption}
+              printView={2}
+              onQuestionStateChange={handleQuestionState}
+              onQuestionDelete={handleQuestionDelete}
+            />
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
