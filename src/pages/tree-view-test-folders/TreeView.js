@@ -153,7 +153,7 @@ function TreeView({
       }
       setSelectedFolder(folderTitle);
     }
-    const newHeight = `calc(80vh - 85px)`;
+    const newHeight = `calc(72vh - 85px)`;
     setHeight(newHeight);
   };
 
