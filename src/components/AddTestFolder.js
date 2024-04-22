@@ -91,7 +91,7 @@ const TestFolder = ({ userId }) => {
     if (!isEditing) {
       setFolderName('');
     }
-    const newHeight = `calc(80vh - 85px)`;
+    const newHeight = `calc(72vh - 85px)`;
     setHeight(newHeight);
   };
 
@@ -99,7 +99,7 @@ const TestFolder = ({ userId }) => {
     setShowTextBox(false);
     setFolderName('');
     setUpdateKey(updateKey + 1);
-    const newHeight = `calc(89vh - 85px)`;
+    const newHeight = `calc(81vh - 85px)`;
     setHeight(newHeight);
   };
 
@@ -137,7 +137,7 @@ const TestFolder = ({ userId }) => {
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: 'Folder updated successfully', type: 'success' });
-          const newHeight = `calc(89vh - 85px)`;
+          const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         } else {
           const newFolderData = {
@@ -152,7 +152,7 @@ const TestFolder = ({ userId }) => {
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
           Toastify({ message: 'Folder saved successfully', type: 'success' });
-          const newHeight = `calc(89vh - 85px)`;
+          const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         }
 

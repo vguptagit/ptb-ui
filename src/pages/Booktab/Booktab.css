@@ -9,7 +9,8 @@
 
 .treeview > ul {
   box-sizing: border-box;
-  padding: 5px 0px 30px;
+  padding: 5px 0px 0px;
+  margin-bottom: 0px;
 }
 
 .tree-node {
@@ -153,7 +154,7 @@
 }
 
 .your-test-list {
-  height: calc(89vh - 85px);
+  height: calc(81vh - 85px);
   overflow-x: auto;
 }
 
