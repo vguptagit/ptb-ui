@@ -150,5 +150,16 @@
   "notFoundErrorMessage": "404 Page not found",
   "duplicateQuestionModal": "You are about to add or copy a question that is already included in your test. Do you want to create a duplicate test question?",
   "duplicateQuestionModalOk": "Ok",
-  "duplicateQuestionModalCancel": "Cancel"
+  "duplicateQuestionModalCancel": "Cancel",
+  "exportTest.addStudentNameLabel&Space": "Add student name label & space",
+  "success.testSaved": "Test has been saved successfully!",
+  "success.exportTestSettings": "Export settings have been saved successfully",
+  "success.documentExport": "Document export successful...",
+  "warning.saveTestBeforeExport": "Please save the test before exporting!",
+  "warning.duplicateTest": "Test already exists with this name. Please save with another",
+  "warning.testNameEmpty": "Test name is empty. Please give test name",
+  "warning.noQuestionsOrNotInEditState": "There are no questions or one or more question(s) is(are) in edit state, Please add or save!",
+  "error.somethingWentWrong": "Something went wrong",
+  "error.testSave": "Failed to save Test",
+  "error.exportTestSettings": "Export settings save failed!"
 }

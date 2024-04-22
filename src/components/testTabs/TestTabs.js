@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useAppContext } from '../../context/AppContext';
 import Test from '../../entities/Test.Entity';
 import Button from 'react-bootstrap/Button';
@@ -17,6 +17,7 @@ import Modalpopupexport from './Modalpopupexport';
 import deepEqual from 'deep-equal';
 
 const TestTabs = () => {
+  const intl = useIntl();
   const {
     tests,
     addTest,
@@ -183,13 +184,12 @@ const TestTabs = () => {
     let testItems = tests.filter(item => item.id === activeTest.id);
     const test = testItems[0]; // This always exists
     let buttonName = e.target.name;
-    console.log(buttonName + ' Saving Test : ', test);
     // 1. Check for duplicate test
     // 2. Save questions
     // 3. Save tests
     if (!areQuestionsAvailable(test)) {
       Toastify({
-        message: 'There are no questions or one or more question(s) is(are) in edit state, Please add or save!',
+        message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
         type: 'warn',
       });
       return;
@@ -211,13 +211,13 @@ const TestTabs = () => {
     // When duplicate method fails because of server error dont proceed with test save
     if (isduplicateTest === null) {
       Toastify({
-        message: 'Something went wrong',
+        message: intl.formatMessage({ id: 'error.somethingWentWrong' }),
         type: 'Error',
       });
       return;
     } else if (isduplicateTest) {
       Toastify({
-        message: 'Test already exists with this name. Please save with another',
+        message: intl.formatMessage({ id: 'warning.duplicateTest' }),
         type: 'warn',
       });
     } else {
@@ -225,7 +225,7 @@ const TestTabs = () => {
       if (!test.title.trim()) {
         // If the test title is empty or only contains whitespace, set it to a default value
         Toastify({
-          message: 'Test name is empty. Please give test name',
+          message: intl.formatMessage({ id: 'warning.testNameEmpty' }),
           type: 'warn',
         });
         return;
@@ -279,7 +279,7 @@ const TestTabs = () => {
         dispatchEvent('UPDATE_SELECTED_TEST', { test });
 
         Toastify({
-          message: 'Test has been saved successfully!',
+          message: intl.formatMessage({ id: 'success.testSaved' }),
           type: 'success',
         });
         fetchUserFolders();
@@ -293,7 +293,7 @@ const TestTabs = () => {
           type: 'error',
         });
       } else {
-        Toastify({ message: 'Failed to save Test', type: 'error' });
+        Toastify({ message: intl.formatMessage({ id: 'error.testSave' }), type: 'error' });
       }
     }
     sessionStorage.removeItem('selectedFolderId');
@@ -331,7 +331,7 @@ const TestTabs = () => {
           type: 'error',
         });
       } else {
-        Toastify({ message: 'Failed to save Test', type: 'error' });
+        Toastify({ message: intl.formatMessage({ id: 'error.testSave' }), type: 'error' });
       }
     }
     return questionBindings;
@@ -442,7 +442,7 @@ const TestTabs = () => {
   const handleSaveAs = () => {
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
-        message: 'There are no questions or one or more question(s) is(are) in edit state, Please add or save!',
+        message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
         type: 'warn',
       });
       return;
@@ -457,7 +457,7 @@ const TestTabs = () => {
     } else {
       Toastify({
         type: 'warn',
-        message: 'Please save the test before exporting!',
+        message: intl.formatMessage({ id: 'warning.saveTestBeforeExport' }),
       });
     }
   };
@@ -466,7 +466,7 @@ const TestTabs = () => {
     // Open print modal
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
-        message: 'There are no questions or one or more question(s) is(are) in edit state, Please add or save!',
+        message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
         type: 'warn',
       });
       return;
