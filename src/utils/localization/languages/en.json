@@ -20,7 +20,7 @@
   "studentNamePrintTestTreeView": "Student Name :",
   "testtabs.export": "Export",
   "questionbanks.tips": " Questions Banks Tips",
-  "questionbanks.instructions.edit": "To Create a new test, select questions in Question Banks or Custom Questions, then click on the pencil icon or drag or drop the questions here.",
+  "questionbanks.instructions.edit": "To Create a new test, select questions in Question Banks or Custom Questions, then click on the pencil icon or drag and drop the questions here.",
   "questionbanks.instructions.create": "To edit one of your tests, open Your Tests and drag test here.",
   "questionbanks.instructions.automatic": "To create a test automatically from selected topics, select the Test Wizard button.",
   "yourtests.addfolder": "Add Folder",
@@ -34,7 +34,6 @@
   "booktab.steps.2": "Pick the Textbook or Topics on the right from which you create tests",
   "booktab.steps.3": "Topics are Question Banks drawn from multiple resourses",
   "booktab.steps.4": "You can select more than one Textbook by clicking,tap again to deselect",
-
   "yourquestions.addquestionfolder": "Add Question Folder",
   "questionbanks.addquestionsbanks": "Add Questions Banks",
   "testName": "Test Name",
