@@ -6,7 +6,7 @@ import './profile.css';
 import Toastify from '../../components/common/Toastify';
 import Loader from '../../components/common/loader/Loader';
 
-const hardcodedSettings = ['Difficulty', 'Topic', 'Objective', 'PageReference', 'Question ID', 'Skill'];
+const hardcodedSettings = ['Difficulty', 'QuestionID', 'Page reference', ' Topic', '  Skill', '  Objective'];
 
 const SettingsModal = ({ show, handleClose }) => {
   const [userProfileSettings, setUserProfileSettings] = useState([]);
@@ -32,11 +32,10 @@ const SettingsModal = ({ show, handleClose }) => {
     getUserProfilesettings()
       .then(data => {
         if (data) {
-          // Merge the API response with the hardcoded settings
           const mergedSettings = [...new Set([...data, ...hardcodedSettings])];
-          // Filter out settings that are not in the merged array
+
           const filteredSettings = mergedSettings.filter(setting => hardcodedSettings.includes(setting));
-          // Set selectedSettings to only include settings that are both in filteredSettings and data
+
           const defaultSelectedSettings = data.filter(setting => filteredSettings.includes(setting));
           setUserProfileSettings(filteredSettings);
           setSelectedSettings(defaultSelectedSettings);
