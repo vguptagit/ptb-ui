@@ -6,34 +6,9 @@
 
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
-
-  "[javascript]": {
-    "editor.formatOnSave": true
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": true
-  },
-  "[typescript]": {
-    "editor.formatOnSave": true
-  },
-  "[typescriptreact]": {
-    "editor.formatOnSave": true
-  },
-  "[json]": {
-    "editor.formatOnSave": true
-  },
-  "[jsonc]": {
-    "editor.formatOnSave": true
-  },
-  "[html]": {
-    "editor.formatOnSave": true
-  },
-  "[markdown]": {
-    "editor.formatOnSave": false
-  },
 
   "javascript.preferences.quoteStyle": "single",
   "javascript.format.semicolons": "insert",

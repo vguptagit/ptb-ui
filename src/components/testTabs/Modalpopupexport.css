@@ -24,3 +24,13 @@
   padding-left: 20px; /* Keep left padding */
   padding-right: 20px; /* Keep right padding */
 }
+
+.export-modal-popup form .row {
+  padding-bottom: 8px;
+}
+
+.action-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+}
