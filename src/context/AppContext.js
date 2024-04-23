@@ -27,9 +27,11 @@ const AppProvider = ({ children }) => {
   const [rootFolderGuid, setRootFolderGuid] = useState('');
   const [editTestHighlight, setEditTestHighlight] = useState();
   const [selectedViewTest, setSelectedViewTest] = useState(null);
+  const [selectedQuestionTest, setSelectedQuestionTest] = useState(null);
   const [isMigratedTests, setIsMigratedTests] = useState(false);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [duplicateQuestion, setDuplicateQuestion] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [disciplinesData, setDisciplinesData] = useState({
     allDisciplines: [], // stores all disciplines
     userDisciplines: [], // stores user disciplines
@@ -134,7 +136,7 @@ const AppProvider = ({ children }) => {
   const handleQuestionAdd = node => {
     console.log('adding question', node);
 
-    const isDuplicate = selectedTest.questions.some(existingNode => existingNode.id === node.id);
+    const isDuplicate = selectedTest.questions.some(existingNode => existingNode.guid === node.id);
 
     if (isDuplicate) {
       setDuplicateQuestion(node);
@@ -149,7 +151,7 @@ const AppProvider = ({ children }) => {
 
   const convertNodeToQuestion = node => {
     let question = {
-      guid: node.guid,
+      guid: node.id,
       qtiModel: node.data.qtiModel,
       quizType: node.data.quizType,
       qtixml: node.data.qtixml,
@@ -314,6 +316,10 @@ const AppProvider = ({ children }) => {
         handleShowDuplicateModal,
         showDuplicateModal,
         handleQuestion,
+        setSelectedQuestionTest,
+        selectedQuestionTest,
+        setLoading,
+        loading,
       }}
     >
       {children}

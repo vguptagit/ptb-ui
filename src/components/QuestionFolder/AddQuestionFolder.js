@@ -12,6 +12,7 @@ import Toastify from '../common/Toastify';
 import './AddQuestionFolder.css';
 import TreeViewQuestionFolder from './Treeview/TreeViewQuestionFolder';
 import QtiService from '../../utils/qti-converter';
+import { useAppContext } from '../../context/AppContext';
 
 const QuestionFolder = ({ userId }) => {
   const [showTextBox, setShowTextBox] = useState(false);
@@ -24,12 +25,15 @@ const QuestionFolder = ({ userId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
   const [height, setHeight] = useState();
+  const { setLoading } = useAppContext();
 
   async function fetchRootFolderGuid() {
     try {
       const rootFolder = await getUserQuestionFoldersRoot();
       setRootFolderGuid(rootFolder.guid);
+      setLoading(true);
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching root folder:', error);
     }
   }
@@ -57,8 +61,10 @@ const QuestionFolder = ({ userId }) => {
     try {
       const folders = await getUserQuestionFolders();
       setSavedFolders(folders);
+      setLoading(true);
       localStorage.setItem('savedFolders', JSON.stringify(folders));
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching user folders:', error);
     }
   };
@@ -176,13 +182,13 @@ const QuestionFolder = ({ userId }) => {
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">
-          <div className="flex-grow-1 mr-4">
+          <div className="flex-grow-1 mr-2">
             <Form.Control
               type="text"
               placeholder="Enter folder name"
               value={folderName}
               onChange={e => setFolderName(e.target.value)}
-              className="rounded"
+              className="rounded ml-1"
             />
           </div>
           <div className="d-flex">
@@ -199,7 +205,7 @@ const QuestionFolder = ({ userId }) => {
             </Button>
             <Button
               onClick={handleTextBoxClose}
-              className="closebtn"
+              className="closebtn ml-10"
               aria-label="close mark"
               style={{ color: 'black', backgroundColor: 'white' }}
             >

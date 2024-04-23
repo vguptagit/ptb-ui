@@ -26,12 +26,11 @@ function TreeViewQuestionFolder({
   selectedFolderGuid,
   setHeight,
 }) {
-  const { handleQuestionAdd } = useAppContext();
+  const { handleQuestionAdd, setSelectedQuestionTest, selectedQuestionTest, setLoading, loading } = useAppContext();
   const [treeData, setTreeData] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [savedQuestions, setSavedQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -194,7 +193,6 @@ function TreeViewQuestionFolder({
         setTreeData(updatedTreeData);
       } catch (error) {
         console.error('Error fetching saved questions:', error);
-        setLoading(false);
       }
     };
 
@@ -335,6 +333,7 @@ function TreeViewQuestionFolder({
 
   const handleAdd = node => {
     handleQuestionAdd(node);
+    setSelectedQuestionTest(node.data.guid);
     console.log(node);
   };
 
@@ -385,7 +384,10 @@ function TreeViewQuestionFolder({
                 </>
               )}
               {node.data.isQuestion && (
-                <button className="questionadd" onClick={() => handleAdd(node)}>
+                <button
+                  className={`questionadd ${selectedQuestionTest === node.data.guid ? 'selected' : ''}`}
+                  onClick={() => handleAdd(node)}
+                >
                   <i className="bi bi-plus-lg darker-icon"></i>
                 </button>
               )}
