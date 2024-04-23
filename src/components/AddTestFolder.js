@@ -303,12 +303,16 @@ const TestFolder = ({ userId }) => {
       )}
       <div className="your-test-list" style={{ height }}>
         <div className="maigratedtests">
-          <button className="testbtn" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
+          <div className="testbtn">
+            {isOpen ? (
+              <i className="fa fa-caret-down" onClick={() => setIsOpen(!isOpen)}></i>
+            ) : (
+              <i className="fa fa-caret-right" onClick={() => setIsOpen(!isOpen)}></i>
+            )}
             <span style={{ marginLeft: '9px' }}>
               <FormattedMessage id="migratedtests" />
             </span>
-          </button>
+          </div>
           {isOpen && bookTitles.length > 0 && (
             <div className="book-dropdown">
               {bookTitles.map((book, index) => (
@@ -319,12 +323,13 @@ const TestFolder = ({ userId }) => {
                     paddingBottom: '5px',
                   }}
                 >
-                  <button className="testbtn" onClick={() => handleBookClick(book.guid)}>
+                  <button className="testbtn">
                     {bookOpenStates[book.guid] ? (
-                      <i className="fa fa-caret-down"></i>
+                      <i className="fa fa-caret-down" onClick={() => handleBookClick(book.guid)}></i>
                     ) : (
-                      <i className="fa fa-caret-right"></i>
+                      <i className="fa fa-caret-right" onClick={() => handleBookClick(book.guid)}></i>
                     )}
+
                     <span style={{ marginLeft: '9px' }}>{book.title}</span>
                   </button>
                   {bookOpenStates[book.guid] && bookTests[book.guid] && bookTests[book.guid].length > 0 && (
@@ -353,6 +358,7 @@ const TestFolder = ({ userId }) => {
             </div>
           )}
         </div>
+
         <div className="root-folders-and-tests" id="folders-tests">
           {savedFolders && savedFolders.length > 0 && (
             <TreeView
