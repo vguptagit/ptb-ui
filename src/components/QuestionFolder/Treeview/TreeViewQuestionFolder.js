@@ -186,7 +186,7 @@ function TreeViewQuestionFolder({
               guid: question.guid,
               qtiModel: question.qtiModel,
               quizType: question.metadata.quizType,
-              qtixml: question.xml,
+              qtixml: question.qtixml,
               isQuestion: true,
             },
           })),
@@ -194,6 +194,7 @@ function TreeViewQuestionFolder({
         setTreeData(updatedTreeData);
       } catch (error) {
         console.error('Error fetching saved questions:', error);
+        setLoading(false);
       }
     };
 
@@ -264,10 +265,7 @@ function TreeViewQuestionFolder({
         const isDuplicate = newTree.some(
           node => node.text === nodeToBeUpdated.title && node.data.guid !== nodeToBeUpdated.guid
         );
-        const hasDuplicateInChildren = newTree.some(
-          node => node.parent === parentId && node.text === nodeToBeUpdated.title
-        );
-        if (isDuplicate || hasDuplicateInChildren) {
+        if (isDuplicate) {
           Toastify({
             message: 'Duplicate folder. Please choose a different name.',
             type: 'error',

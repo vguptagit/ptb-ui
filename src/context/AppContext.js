@@ -143,9 +143,35 @@ const AppProvider = ({ children }) => {
     }
 
     const updatedTest = { ...selectedTest };
-    updatedTest.questions.push(node);
+    updatedTest.questions.push(convertNodeToQuestion(node));
     setSelectedTest(updatedTest);
   };
+
+  const convertNodeToQuestion = node => {
+    let question = {
+      guid: node.guid,
+      qtiModel: node.data.qtiModel,
+      quizType: node.data.quizType,
+      qtixml: node.data.qtixml,
+      itemId: node.data.guid,
+      data: node.data.qtixml,
+    };
+
+    const questionTemplates = CustomQuestionsService.questionTemplates(question);
+
+    if (question.quizType === 'FillInBlanks') {
+      let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
+      question.textHTML = xmlToHtml;
+    } else {
+      let xmlToHtml = questionTemplates[0]?.textHTML;
+      question.textHTML = xmlToHtml;
+    }
+
+    question.spaceLine = 0;
+
+    return question;
+  };
+
   // const handleQuestionAddforquestionbank = node => {
   //   console.log('adding question', node);
   //   selectedTest.questions.push(node);
