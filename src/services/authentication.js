@@ -10,6 +10,7 @@ const callLoginEndpoint = async token => {
       headers: {
         AccessToken: token,
         UserId: sessionStorage.getItem('userId'),
+        SmsUserId: sessionStorage.getItem('SmsUserId'),
         Accept: 'application/json',
       },
     };
