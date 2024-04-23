@@ -37,12 +37,14 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const familyName = sessionStorage.getItem('familyName');
+    const givenName = sessionStorage.getItem('givenName');
     const emailAddress = sessionStorage.getItem('emailAddress');
 
     // If user details are available, log in the user directly and navigate to the welcome page
-    if (familyName && emailAddress) {
+    if (familyName && emailAddress && givenName) {
       const newUser = new User();
-      newUser.name = familyName;
+      newUser.lastname = familyName;
+      newUser.firstname = givenName;
       newUser.email = emailAddress;
       login(newUser);
     }

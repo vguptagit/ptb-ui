@@ -121,6 +121,9 @@ function TreeView({
         const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
         const updatedTreeData = [...newTree];
         updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
+        if (childFolders.length != 0) {
+          updatedTreeData.splice(updatedParentIndex + 1, 1);
+        }
         setTreeData(updatedTreeData);
       } catch (error) {
         console.error('Error fetching child test folders:', error);
