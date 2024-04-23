@@ -470,7 +470,7 @@ const TestCreate = () => {
         </div>
       </div>
       {showDuplicateModal && (
-        <Modal show={showDuplicateModal} onHide={handleHideDuplicateModal}>
+        <Modal show={showDuplicateModal} onHide={handleHideDuplicateModal} backdrop="static" keyboard={false}>
           <Modal.Body>
             <FormattedMessage id="duplicateQuestionModal" />
           </Modal.Body>
