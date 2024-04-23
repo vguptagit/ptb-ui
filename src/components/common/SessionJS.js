@@ -71,9 +71,14 @@ function SessionJS() {
             .then(response => {
               console.log('Login successful:', response);
               sessionStorage.setItem('familyName', response.familyName);
+              sessionStorage.setItem('givenName', response.givenName);
               sessionStorage.setItem('emailAddress', response.emailAddress);
 
-              setUserDetails({ name: response.familyName, email: response.emailAddress });
+              setUserDetails({
+                lastname: response.familyName,
+                email: response.emailAddress,
+                firstname: response.givenName,
+              });
             })
             .catch(error => {
               console.error('Error logging in:', error);

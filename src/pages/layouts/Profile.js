@@ -29,13 +29,15 @@ const Profile = () => {
       <NavDropdown
         title={
           <span>
-            <i className="bi bi-person-fill"></i> {user.name}
+            <i className="bi bi-person-fill"></i> {user.firstname} {user.lastname}
           </span>
         }
         id="nav-dropdown"
         className="profile-dropdown"
       >
-        <NavDropdown.Item className="profile-name">{user.name}</NavDropdown.Item>
+        <NavDropdown.Item className="profile-name">
+          {user.firstname} {user.lastname}
+        </NavDropdown.Item>
         <NavDropdown.Item className="profile-email">{user.email}</NavDropdown.Item>
         <NavDropdown.Divider />
         <div className="settings-and-sign-out">
