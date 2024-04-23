@@ -75,7 +75,9 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
           <div style={{ display: 'flex' }}>
             <div style={{ marginBlockStart: '5px' }}>
               {' '}
-              <h6>Save As:</h6>
+              <h6>
+                <FormattedMessage id="saveAsModalpopup" defaultMessage="Save As:" />
+              </h6>
             </div>
             <Form style={{ marginInlineStart: '6px' }}>
               <Form.Control

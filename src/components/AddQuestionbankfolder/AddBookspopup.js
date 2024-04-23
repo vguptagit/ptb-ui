@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import TreeView from './TreeView';
 import Loader from '../../components/common/loader/Loader';
 import Toastify from '../common/Toastify';
@@ -10,6 +10,7 @@ import { useAppContext } from '../../context/AppContext';
 import './AddBookspopup.css';
 
 const AddBookspopup = ({ handleBack, handleSave }) => {
+  const intl = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [treeData, setTreeData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +75,11 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      Toastify(error);
+
+      Toastify({
+        message: error.message,
+        type: 'warn',
+      });
     } finally {
       setLoading(false);
     }
@@ -120,29 +125,29 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       {loading ? (
         <Loader show="true" />
       ) : (
-        <>
-          <div className="top-containerbooks">
-            <h2 className="choose-your-books-or-topics">
-              <FormattedMessage id="addBooks" defaultMessage="Add Books" />
-            </h2>
-            <button className="booktab btn btn-secondary" onClick={handleBack}>
-              <FormattedMessage id="backButton" defaultMessage="Back" />
-            </button>
-            <button className="booktab btn btn-primary" disabled={selectedBooks?.length === 0} onClick={handleNext}>
-              <FormattedMessage id="saveButton" defaultMessage="Save" />
-            </button>
-          </div>
-          <SearchBox placeholder="Search Books" onSearch={handleSearch} />
-          <ul className="booktabaddpopup result-list mt-3">
-            <TreeView
-              selectedItems={selectedBooks || []}
-              onSelectItem={handleSelectItem}
-              searchTerm={searchTerm}
-              treeData={treeData}
-            />
-          </ul>
-        </>
-      )}
+          <>
+            <div className="top-containerbooks">
+              <h2 className="choose-your-books-or-topics">
+                <FormattedMessage id="addBooks" defaultMessage="Add Books" />
+              </h2>
+              <button className="booktab btn btn-secondary" onClick={handleBack}>
+                <FormattedMessage id="backButton" defaultMessage="Back" />
+              </button>
+              <button className="booktab btn btn-primary" disabled={selectedBooks ?.length === 0} onClick={handleNext}>
+                <FormattedMessage id="saveButton" defaultMessage="Save" />
+              </button>
+            </div>
+            <SearchBox placeholder="Search Books" onSearch={handleSearch} />
+            <ul className="booktabaddpopup result-list mt-3">
+              <TreeView
+                selectedItems={selectedBooks || []}
+                onSelectItem={handleSelectItem}
+                searchTerm={searchTerm}
+                treeData={treeData}
+              />
+            </ul>
+          </>
+        )}
     </div>
   );
 };

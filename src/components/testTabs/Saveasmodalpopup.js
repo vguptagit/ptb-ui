@@ -34,7 +34,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       })
       .catch(error => {
         console.error('Error getting root folders or folder tests:', error);
-        if (error?.message?.response?.request?.status === 409) {
+        if (error ?.message ?.response ?.request ?.status === 409) {
           Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
           Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
@@ -97,7 +97,9 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         <Modal.Title>
           <div style={{ display: 'flex' }}>
             <div style={{ marginBlockStart: '5px' }}>
-              <h6>Save As:</h6>
+              <h6>
+                <FormattedMessage id="saveAsModalpopuptext" defaultMessage="Save As:" />
+              </h6>
             </div>
             <Form style={{ marginInlineStart: '6px' }}>
               <Form.Control

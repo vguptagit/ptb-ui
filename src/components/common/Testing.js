@@ -52,7 +52,7 @@ function Testing() {
         <div className="row">
           <div class="col-sm" style={{ padding: '10px' }}>
             <Button variant="primary" onClick={handleConfirmation}>
-              Confirmation
+            <FormattedMessage id="confirmationTesting" />
             </Button>
             {confirmShow && (
               <Confirmation
@@ -64,7 +64,7 @@ function Testing() {
           </div>
           <div class="col-sm" style={{ padding: '10px' }}>
             <Button onClick={handleLoader} variant="primary">
-              Show Loader
+              <FormattedMessage id="showLoaderTesting" />
             </Button>
             {loader && <Loader show={loader} />}
           </div>
