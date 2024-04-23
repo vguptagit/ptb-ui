@@ -213,7 +213,7 @@ const TrueFalse = props => {
           <div className="w-100 mt-3">
             {formData.Options.map((value, index) => {
               return (
-                <div className="view-question">
+                <div key={index} className="view-question">
                   <div className="icon-section">
                     <span className="icon-ml"></span>
                   </div>
@@ -243,7 +243,7 @@ const TrueFalse = props => {
           <div className="w-100 mt-3">
             {formData.Options.map((value, index) => {
               return (
-                <div className="view-question">
+                <div key={index} className="view-question">
                   <div className="icon-section">
                     {formData.CorrectAnswer == index ? (
                       <i className="bi bi-check" style={{ color: 'green' }}></i>
@@ -285,7 +285,7 @@ const TrueFalse = props => {
           <div className="w-100 mt-3">
             {formData.Options.map((value, index) => {
               return (
-                <div className="view-question">
+                <div key={index} className="view-question">
                   <div className="icon-section">
                     {formData.CorrectAnswer == index ? (
                       <i className="bi bi-check" style={{ color: 'green' }}></i>

@@ -2,21 +2,19 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import Test from '../entities/Test.Entity';
 import { getTestQuestions } from '../services/testcreate.service';
-import QtiService from '../utils/qti-converter';
 import Toastify from '../components/common/Toastify';
 import { getUserTestFolders } from '../services/testfolder.service';
 import { getFolderTests, getRootTests } from '../services/testcreate.service';
-import CustomQuestionsService from '../services/CustomQuestionsService';
-import jquery from 'jquery';
+import { convertNodeToQuestion, getQuestionFromDto } from '../utils/questions-utils';
 
 const AppContext = createContext({
   tests: [],
   disciplinesData: {},
+  selectedTest: {},
   selectTest: () => {},
   addTest: () => {},
   deleteTest: () => {},
   dispatchEvent: () => {},
-  selectedTest: {},
 });
 
 const AppProvider = ({ children }) => {
@@ -29,7 +27,7 @@ const AppProvider = ({ children }) => {
   const [selectedViewTest, setSelectedViewTest] = useState(null);
   const [selectedQuestionTest, setSelectedQuestionTest] = useState(null);
   const [isMigratedTests, setIsMigratedTests] = useState(false);
-  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [showDuplicateTestConfimationModal, setShowDuplicateTestConfimationModal] = useState(false);
   const [duplicateQuestion, setDuplicateQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [disciplinesData, setDisciplinesData] = useState({
@@ -39,42 +37,6 @@ const AppProvider = ({ children }) => {
     userBooks: [], // stores user books
     selectedBooks: [], // stores currently selected books
   });
-
-  const getQuestionFromDto = questionDto => {
-    let question = questionDto;
-    var qtiModel = QtiService.getQtiModel(question.qtixml, question.metadata.quizType);
-    qtiModel.EditOption = false;
-    question.qtiModel = qtiModel;
-    question.masterData = JSON.parse(JSON.stringify(qtiModel));
-    question.itemId = questionDto.guid;
-    question.quizType = question.metadata.quizType;
-    question.data = question.qtixml;
-    const questionTemplates = CustomQuestionsService.questionTemplates(question);
-
-    if (question.quizType == 'FillInBlanks') {
-      let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
-      question.textHTML = xmlToHtml;
-    } else {
-      let xmlToHtml = questionTemplates[0].textHTML;
-      question.textHTML = xmlToHtml;
-    }
-    question.spaceLine = 0;
-    return question;
-  };
-
-  const getPrintModeFbCaption = Caption => {
-    try {
-      var htmlText = Caption.trim().replaceAll('&amp;nbsp;', ' ');
-      htmlText = htmlText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-      var element = jquery('<p></p>');
-      jquery(element).append(htmlText);
-      element.find('button').each(function (i, obj) {
-        let blankSpace = "<span class='blank'> _____________________ </span>";
-        jquery(obj).replaceWith(blankSpace);
-      });
-      return element[0].innerHTML;
-    } catch (e) {}
-  };
 
   const handleViewTest = node => {
     //setTestName(name.text);
@@ -114,12 +76,8 @@ const AppProvider = ({ children }) => {
     makeTestQuestion(node);
   };
 
-  const handleShowDuplicateModal = () => {
-    setShowDuplicateModal(true);
-  };
-
   const handleHideDuplicateModal = () => {
-    setShowDuplicateModal(false);
+    setShowDuplicateTestConfimationModal(false);
   };
 
   const handleQuestion = (addDuplicate = false) => {
@@ -127,7 +85,7 @@ const AppProvider = ({ children }) => {
       const updatedTest = { ...selectedTest };
       updatedTest.questions.push(duplicateQuestion);
       setSelectedTest(updatedTest);
-      setShowDuplicateModal(false);
+      setShowDuplicateTestConfimationModal(false);
     } else {
       setDuplicateQuestion(null);
     }
@@ -140,38 +98,17 @@ const AppProvider = ({ children }) => {
 
     if (isDuplicate) {
       setDuplicateQuestion(node);
-      handleShowDuplicateModal();
+      setShowDuplicateTestConfimationModal(true);
       return;
     }
 
-    const updatedTest = { ...selectedTest };
-    updatedTest.questions.push(convertNodeToQuestion(node));
-    setSelectedTest(updatedTest);
+    insertQuestionAtEnd(node);
   };
 
-  const convertNodeToQuestion = node => {
-    let question = {
-      guid: node.id,
-      qtiModel: node.data.qtiModel,
-      quizType: node.data.quizType,
-      qtixml: node.data.qtixml,
-      itemId: node.data.guid,
-      data: node.data.qtixml,
-    };
-
-    const questionTemplates = CustomQuestionsService.questionTemplates(question);
-
-    if (question.quizType === 'FillInBlanks') {
-      let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
-      question.textHTML = xmlToHtml;
-    } else {
-      let xmlToHtml = questionTemplates[0]?.textHTML;
-      question.textHTML = xmlToHtml;
-    }
-
-    question.spaceLine = 0;
-
-    return question;
+  const insertQuestionAtEnd = (node, isDuplicate = false) => {
+    const updatedTest = { ...selectedTest };
+    updatedTest.questions.push(convertNodeToQuestion(node, isDuplicate));
+    setSelectedTest(updatedTest);
   };
 
   // const handleQuestionAddforquestionbank = node => {
@@ -266,6 +203,17 @@ const AppProvider = ({ children }) => {
         setSelectedTest(payload.test);
         return;
 
+      case 'HIDE_DUPLICATE_TEST_MODAL':
+        setShowDuplicateTestConfimationModal(false);
+        return;
+      case 'SHOW_DUPLICATE_TEST_MODAL':
+        setShowDuplicateTestConfimationModal(true);
+        return;
+      case 'ADD_DUPLICATE_TEST':
+        insertQuestionAtEnd(duplicateQuestion, true);
+        setShowDuplicateTestConfimationModal(false);
+        return;
+
       case 'UPDATE_DISCIPLINES_DATA':
         setDisciplinesData({ ...disciplinesData, ...payload });
       default:
@@ -313,8 +261,7 @@ const AppProvider = ({ children }) => {
         handleQuestionAdd,
         disciplinesData,
         handleHideDuplicateModal,
-        handleShowDuplicateModal,
-        showDuplicateModal,
+        showDuplicateTestConfimationModal,
         handleQuestion,
         setSelectedQuestionTest,
         selectedQuestionTest,
