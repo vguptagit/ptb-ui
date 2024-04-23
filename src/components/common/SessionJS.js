@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import callLoginEndpoint from '../../services/authentication';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
   const loginurl = process.env.REACT_APP_AUTH_Login_URL;
+  const navigate = useNavigate();
 
   const { setUserDetails, logout } = useAuth();
 
@@ -80,6 +82,12 @@ function SessionJS() {
                 email: response.emailAddress,
                 firstname: response.givenName,
               });
+
+              if (response.loginCount === 1) {
+                navigate('/welcomescreen');
+              } else {
+                navigate('/home');
+              }
             })
             .catch(error => {
               console.error('Error logging in:', error);
