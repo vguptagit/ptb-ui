@@ -6,7 +6,7 @@ function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
   const loginurl = process.env.REACT_APP_AUTH_Login_URL;
 
-  const { setUserDetails } = useAuth();
+  const { setUserDetails, logout } = useAuth();
 
   useEffect(() => {
     console.log('sessionjs onmount');
@@ -54,6 +54,7 @@ function SessionJS() {
   const iesMxSessionGetToken = () => {
     if (window.piSession) {
       window.piSession.getToken((status, token) => {
+        sessionStorage.setItem('SmsUserId', window.piSession.smsUserId());
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('userId', window.piSession.userId());
         sessionStorage.setItem('tokenExpiry', window.piSession.currentTokenExpiry());
@@ -82,6 +83,9 @@ function SessionJS() {
             })
             .catch(error => {
               console.error('Error logging in:', error);
+              if (error.message.response.status === 403) {
+                logout();
+              }
             });
         } else {
           console.error('Error getting token:', status);
