@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage ,useIntl } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import {
   getUserQuestionFoldersRoot,
@@ -26,6 +26,8 @@ const QuestionFolder = ({ userId }) => {
   const [selectedFolderGuid, setSelectedFolderGuid] = useState(null);
   const [height, setHeight] = useState();
   const { setLoading } = useAppContext();
+  const intl = useIntl();
+
 
   async function fetchRootFolderGuid() {
     try {
@@ -113,7 +115,12 @@ const QuestionFolder = ({ userId }) => {
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
-          Toastify({ message: 'Folder updated successfully', type: 'success' });
+
+          Toastify({
+            message : intl.formatMessage({id :'success.FolderUpdatedSuccessfully'}),
+            type : 'success'
+          })
+
           const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         } else {
@@ -128,7 +135,12 @@ const QuestionFolder = ({ userId }) => {
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
-          Toastify({ message: 'Folder saved successfully', type: 'success' });
+
+          Toastify({
+            message : intl.formatMessage({id :'success.FolderSavedSuccessfully'}),
+            type : 'success'
+        });
+
           const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         }
@@ -141,16 +153,25 @@ const QuestionFolder = ({ userId }) => {
       } catch (error) {
         console.error('Error saving folder:', error);
         if (error?.message?.response?.request?.status === 409) {
+
           Toastify({
             message: error.message.response.data.message,
             type: 'error',
           });
+
         } else {
-          Toastify({ message: 'Failed to save folder', type: 'error' });
+          Toastify({
+            message : intl.formatMessage({id :'error.FailedToSaveFolder'}),
+            type: 'error'
+           });
         }
       }
+
     } else {
-      Toastify({ message: 'Folder name cannot be empty', type: 'error' });
+      Toastify({
+        message : intl.formatMessage({id :'error.FolderNameCannotBeEmpty'}),
+         type: 'error'
+         });
     }
   };
 
@@ -165,10 +186,20 @@ const QuestionFolder = ({ userId }) => {
   const onNodeUpdate = async changedNode => {
     try {
       await updateUserQuestionFolders(changedNode);
-      Toastify({ message: 'Folder rearranged successfully', type: 'success' });
-    } catch (error) {
+
+      Toastify({
+        message : intl.formatMessage({id :'success.FolderRearrangedSuccessfully'}),
+         type: 'success'
+    });
+
+    }
+      catch (error) {
       console.error('Error rearranging folder:', error);
-      Toastify({ message: 'Failed to rearrange folder', type: 'error' });
+
+      Toastify({
+        message : intl.formatMessage({id :'error.FailedToRearrangeFolder'}),
+         type: 'error'
+       });
     }
   };
 

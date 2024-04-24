@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import Toastify from '../common/Toastify';
 import TreeView from '../../pages/tree-view-test-folders/TreeView';
@@ -16,6 +16,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
   const [updateKey, setUpdateKey] = useState(0);
   const [savedFolders, setSavedFolders] = useState([]);
   const [rootFolderGuid, setRootFolderGuid] = useState('');
+  const intl = useIntl();
 
   useEffect(() => {
     const savedFoldersFromStorage = JSON.parse(localStorage.getItem('savedFolders'));
@@ -71,8 +72,14 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
-          Toastify({ message: 'Folder updated successfully', type: 'success' });
-        } else {
+
+          Toastify({
+            message: intl.formatMessage({ id: 'warning.testNameEmpty' }),
+            type: 'success'
+          });
+        }
+
+        else {
           const newFolderData = {
             parentId: rootFolderGuid,
             sequence: newSequence,
@@ -87,6 +94,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
+
           Toastify({ message: 'Folder saved successfully', type: 'success' });
         }
 
@@ -97,12 +105,13 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
         fetchUserFolders();
       } catch (error) {
         console.error('Error saving folder:', error);
-        if (error?.message?.response?.request?.status === 409) {
+        if (error ?.message ?.response ?.request ?.status === 409) {
           Toastify({
             message: error.message.response.data.message,
             type: 'error',
           });
         } else {
+
           Toastify({ message: 'Failed to save folder', type: 'error' });
         }
       }
@@ -120,16 +129,26 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
   const onNodeUpdate = async changedNode => {
     try {
       await updateTestFolder(changedNode);
-      Toastify({ message: 'Folder rearranged successfully', type: 'success' });
-    } catch (error) {
+
+      Toastify({
+
+        message: 'Folder rearranged successfully', type: 'success'
+      });
+    }
+
+    catch (error) {
       console.error('Error rearranging folder:', error);
-      if (error?.message?.response?.request?.status === 409) {
+      if (error ?.message ?.response ?.request ?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: 'error',
         });
-      } else {
-        Toastify({ message: 'Failed to rearrange folder', type: 'error' });
+      }
+
+      else {
+        Toastify({
+          message: 'Failed to rearrange folder', type: 'error'
+        });
       }
     }
   };
@@ -171,7 +190,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
             onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
-            // selectedFolderGuid={selectedFolderGuid}
+          // selectedFolderGuid={selectedFolderGuid}
           />
         )}
       </div>

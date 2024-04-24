@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import Toastify from '../common/Toastify';
 import TreeView from './TreeView';
 import Loader from '../../components/common/loader/Loader';
-import Toastify from '../common/Toastify';
 import SearchBox from '../common/SearchBox/SearchBox';
 import { getDisciplineBooks, saveUserBooks } from '../../services/book.service';
 import { saveUserDiscipline } from '../../services/discipline.service';
@@ -37,8 +37,8 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
 
     try {
       if (selectedDisciplines) {
-        let result = []; // Initialize an empty array to store the result
-        const availableBooks = []; // Initialize an empty array to store available books
+        let result = [];
+        const availableBooks = [];
 
         // Loop through each selected discipline
         for (const discipline of selectedDisciplines) {
@@ -71,7 +71,7 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
         const selection = selectedBooks.filter(book => availableBooks.includes(book));
         dispatchEvent('UPDATE_DISCIPLINES_DATA', { selectedBooks: selection });
 
-        setTreeData(result); // Set the tree data to the result array
+        setTreeData(result);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -94,9 +94,15 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       await saveUserBooks(selectedBooks, sessionStorage.getItem('userId'));
       await saveUserDiscipline(selectedDisciplines, sessionStorage.getItem('userId'));
       handleSave();
-      Toastify({ message: 'Books and Discipline  have been saved successfully!', type: 'success' });
+      Toastify({
+        message: intl.formatMessage({ id: 'booksAndDiscipline' }),
+        type: 'success',
+      }).showToast();
     } catch (error) {
-      Toastify(error);
+      Toastify({
+        message: intl.formatMessage({ id: 'errorSavingBooksAndDiscipline' }),
+        type: 'error',
+      }).showToast();
     }
   };
 
@@ -125,29 +131,29 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       {loading ? (
         <Loader show="true" />
       ) : (
-          <>
-            <div className="top-containerbooks">
-              <h2 className="choose-your-books-or-topics">
-                <FormattedMessage id="addBooks" defaultMessage="Add Books" />
-              </h2>
-              <button className="booktab btn btn-secondary" onClick={handleBack}>
-                <FormattedMessage id="backButton" defaultMessage="Back" />
-              </button>
-              <button className="booktab btn btn-primary" disabled={selectedBooks ?.length === 0} onClick={handleNext}>
-                <FormattedMessage id="saveButton" defaultMessage="Save" />
-              </button>
-            </div>
-            <SearchBox placeholder="Search Books" onSearch={handleSearch} />
-            <ul className="booktabaddpopup result-list mt-3">
-              <TreeView
-                selectedItems={selectedBooks || []}
-                onSelectItem={handleSelectItem}
-                searchTerm={searchTerm}
-                treeData={treeData}
-              />
-            </ul>
-          </>
-        )}
+        <>
+          <div className="top-containerbooks">
+            <h2 className="choose-your-books-or-topics">
+              <FormattedMessage id="addBooks" defaultMessage="Add Books" />
+            </h2>
+            <button className="booktab btn btn-secondary" onClick={handleBack}>
+              <FormattedMessage id="backButton" defaultMessage="Back" />
+            </button>
+            <button className="booktab btn btn-primary" disabled={selectedBooks?.length === 0} onClick={handleNext}>
+              <FormattedMessage id="saveButton" defaultMessage="Save" />
+            </button>
+          </div>
+          <SearchBox placeholder="Search Books" onSearch={handleSearch} />
+          <ul className="booktabaddpopup result-list mt-3">
+            <TreeView
+              selectedItems={selectedBooks || []}
+              onSelectItem={handleSelectItem}
+              searchTerm={searchTerm}
+              treeData={treeData}
+            />
+          </ul>
+        </>
+      )}
     </div>
   );
 };

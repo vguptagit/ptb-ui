@@ -17,6 +17,7 @@ import Essay from '../../questions/Essay';
 import QtiService from '../../../utils/qti-converter';
 import Loader from '../../common/loader/Loader';
 import { useAppContext } from '../../../context/AppContext';
+import {formattedMessage ,useIntl} from 'react-intl';
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -31,6 +32,7 @@ function TreeViewQuestionFolder({
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [savedQuestions, setSavedQuestions] = useState([]);
+  const intl = useIntl();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -236,8 +238,10 @@ function TreeViewQuestionFolder({
         updatedTreeData.splice(parentIndex + 1, 0, draggedNode);
         setTreeData(updatedTreeData);
       } catch (error) {
-        Toastify({ message: 'Failed to move question', type: 'error' });
-        console.error('Error swapping question between folders:', error);
+        Toastify({
+          message: Intl.formatMessage({id :'error.Failed to move questionTest'}),
+          type: 'error' });
+          console.error('Error swapping question between folders:', error);
       }
     } else {
       // Handle drag of a folder
@@ -265,7 +269,7 @@ function TreeViewQuestionFolder({
         );
         if (isDuplicate) {
           Toastify({
-            message: 'Duplicate folder. Please choose a different name.',
+            message: Intl.formatMessage({id :'error.duplicateFolderDifferentName'}),
             type: 'error',
           });
           return;
