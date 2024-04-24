@@ -14,32 +14,45 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
       id: node.itemId || node.guid || index,
       content: renderQuestions(node, index),
       children: node.children && node.children.length > 0 ? renderTreeNodes(node.children) : undefined,
+      parent: 0,
     }));
   };
 
-  const handleDrop = (draggedNode, dropTargetNode) => {
+  /**
+   * Handles the drop event when a node is dragged and dropped onto another node in the tree.
+   * @param {Object[]} nodes - The array of nodes in the tree.
+   * @param {Object} dragSourceId - The id of the node being dragged.
+   * @param {Object} dropTargetId - The id of the node being dropped onto.
+   */
+  const handleDrop = (nodes, { dragSourceId, dropTargetId }) => {
     const updatedTreeData = [...treeData];
-    const draggedNodeIndex = updatedTreeData.findIndex(node => node.id === draggedNode.id);
-    const draggedNodeItem = updatedTreeData.splice(draggedNodeIndex, 1)[0];
-    const dropTargetNodeIndex = updatedTreeData.findIndex(node => node.id === dropTargetNode.id);
-    let insertionIndex = dropTargetNodeIndex;
-    if (dropTargetNode.children) {
-      insertionIndex = 0;
-    } else if (draggedNodeIndex > dropTargetNodeIndex) {
-      insertionIndex = dropTargetNodeIndex;
-    } else {
-      insertionIndex = dropTargetNodeIndex + 1;
-    }
-    updatedTreeData.splice(insertionIndex, 0, draggedNodeItem);
+
+    // Find the indices of the drag source and drop target
+    const dragSourceIndex = updatedTreeData.findIndex(node => node.id === dragSourceId);
+    const dropTargetIndex = updatedTreeData.findIndex(node => node.id === dropTargetId);
+
+    // Get the drag source item
+    const dragSourceItem = { ...updatedTreeData[dragSourceIndex] };
+
+    // Remove the drag source item from the array
+    updatedTreeData.splice(dragSourceIndex, 1);
+
+    // Insert the drag source item at the drop target index
+    updatedTreeData.splice(dropTargetIndex, 0, dragSourceItem);
+
+    // Update the content and tree data
+    updateContent(updatedTreeData);
+    setTreeData(updatedTreeData);
+  };
+
+  const updateContent = updatedTreeData => {
     updatedTreeData.forEach((node, index) => {
       if (node.content.props.questionNodeIndex !== undefined) {
-        const updatedContentProps = { ...node.content.props };
-        updatedContentProps.questionNodeIndex = index;
+        const updatedContentProps = { ...node.content.props, questionNodeIndex: index };
         const updatedContent = React.cloneElement(node.content, updatedContentProps);
         node.content = updatedContent;
       }
     });
-    setTreeData(updatedTreeData);
   };
 
   return (
@@ -47,9 +60,11 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
       {treeData && (
         <Tree
           tree={treeData}
+          rootId={0}
           render={node => <div>{node.content}</div>}
           onDrop={handleDrop}
           canDrop={() => true}
+          sort={false}
           classes={{
             root: 'treeRoot',
             draggingSource: 'draggingSource',

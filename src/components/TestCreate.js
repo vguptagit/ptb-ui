@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
 import QuestionsBanksTips from './testTabs/QuestionsBanksTips/QuestionsBanksTips';
 import Essay from './questions/Essay';
@@ -11,22 +11,20 @@ import MultipleChoice from './questions/MultipleChoice';
 import MultipleResponse from './questions/MultipleResponse';
 import TrueFalse from './questions/TrueFalse';
 import CustomQuestionsService from '../services/CustomQuestionsService';
-import QtiService from '../utils/qti-converter';
+import TreeViewTestCreate from './TreeViewTestCreate';
+import DuplicateTestConfirmationModal from './modals/DuplicateTestConfirmationModal';
+import { getQuestionFromDto, transformQuestionTemplateToQuestion } from '../utils/questions-utils';
 import './TestCreate.css';
 import './_tables.css';
-import TreeViewTestCreate from './TreeViewTestCreate';
-import jquery from 'jquery';
 
 const TestCreate = () => {
-  const { selectedTest, dispatchEvent, setSelectedTest, handleHideDuplicateModal, showDuplicateModal, handleQuestion } =
-    useAppContext();
+  const { selectedTest, dispatchEvent, setSelectedTest } = useAppContext();
   const [tabTitle, setTabTitle] = useState(selectedTest?.title || '');
   const [initialTabTitle, setInitialTabTitle] = useState(selectedTest?.title || '');
   const [isEditing, setIsEditing] = useState(true);
   const [refreshChildren, setRefreshChildren] = useState(false);
   const [questionListSize, setQuestionListSize] = useState(0);
   const [formSubmittedOnce, setFormSubmittedOnce] = useState(false);
-  const [isTitleValid, setIsTitleValid] = useState(false);
 
   useEffect(() => {
     setTabTitle(selectedTest?.title || '');
@@ -53,7 +51,6 @@ const TestCreate = () => {
       dispatchEvent('UPDATE_TEST_TITLE', updatedSelectedTest);
     }
   };
-  console.log('updatedtitle', tabTitle);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -76,36 +73,16 @@ const TestCreate = () => {
       console.log('Dropped node:', item);
       let copyItem = JSON.parse(JSON.stringify(item));
       if (item.type === 'QUESTION_TEMPLATE') {
-        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
+        selectedTest.questions.push(transformQuestionTemplateToQuestion(copyItem.questionTemplate));
       } else if (item.type === 'TREE_NODE') {
-        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
+        selectedTest.questions.push(transformQuestionTemplateToQuestion(copyItem.questionTemplate));
       } else if (item.question) {
-        let question = copyItem.question;
-        var qtiModel = QtiService.getQtiModel(question.qtixml, question.metadata.quizType);
-        qtiModel.EditOption = false;
-        question.qtiModel = qtiModel;
-        question.masterData = JSON.parse(JSON.stringify(qtiModel)); //
-        question.itemId = copyItem.question.guid;
-        question.quizType = question.metadata.quizType;
-        question.data = question.qtixml; //
-        console.log(question);
-        const questionTemplates = CustomQuestionsService.questionTemplates(question);
-        if (question.quizType == 'FillInBlanks') {
-          let xmlToHtml = getPrintModeFbCaption(question.qtiModel.Caption);
-          console.log(xmlToHtml);
-          question.textHTML = xmlToHtml;
-        } else {
-          let xmlToHtml = questionTemplates[0].textHTML;
-          console.log(xmlToHtml);
-          question.textHTML = xmlToHtml;
-        }
-        question.spaceLine = 0;
+        const question = getQuestionFromDto(copyItem.question);
         selectedTest.questions.push(question);
       } else {
-        selectedTest.questions.push(getQuestion(copyItem.questionTemplate));
+        selectedTest.questions.push(transformQuestionTemplateToQuestion(copyItem.questionTemplate));
       }
 
-      dispatchEvent('SAVE_TEST_TAB', { id: selectedTest.id });
       setIsEditing(true);
     },
     collect: monitor => ({
@@ -113,31 +90,6 @@ const TestCreate = () => {
       canDrop: monitor.canDrop(),
     }),
   });
-
-  const getQuestion = questionNode => {
-    let question = questionNode;
-    var qtiModel = QtiService.getQtiModel(questionNode.data, questionNode.quizType);
-    qtiModel.EditOption = true;
-    question.qtiModel = qtiModel;
-    questionNode.itemId = Math.random().toString(36).slice(2);
-    console.log(question);
-    return question;
-  };
-
-  const getPrintModeFbCaption = Caption => {
-    try {
-      var htmlText = Caption.trim().replaceAll('&amp;nbsp;', ' ');
-      htmlText = htmlText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-      var element = jquery('<p></p>');
-      jquery(element).append(htmlText);
-      element.find('button').each(function (i, obj) {
-        let blankSpace = "<span class='blank'> _____________________ </span>";
-        jquery(obj).replaceWith(blankSpace);
-      });
-      return element[0].innerHTML;
-    } catch (e) {}
-  };
-
   const handleQuestionState = edit => {
     setRefreshChildren(!refreshChildren);
   };
@@ -332,100 +284,6 @@ const TestCreate = () => {
     }
   };
 
-  const DraggableQuestion = (question, index) => {
-    const key = question.data.guid;
-    const questionIndex = index;
-
-    switch (question.data.quizType) {
-      case CustomQuestionsService.MultipleChoice:
-        return (
-          <div key={key}>
-            <MultipleChoice
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      case CustomQuestionsService.MultipleResponse:
-        return (
-          <div key={key}>
-            <MultipleResponse
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      case CustomQuestionsService.TrueFalse:
-        return (
-          <div key={key}>
-            <TrueFalse
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      case CustomQuestionsService.Matching:
-        return (
-          <div key={key}>
-            <Matching
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      case CustomQuestionsService.FillInBlanks:
-        return (
-          <div key={key}>
-            <FillInBlanks
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      case CustomQuestionsService.Essay:
-        return (
-          <div key={key}>
-            <Essay
-              questionNode={question.data}
-              questionNodeIndex={questionIndex}
-              qtiModel={question.data.qtiModel}
-              questionNodeIsEdit={question.data.qtiModel.EditOption}
-              printView={2}
-              onQuestionStateChange={handleQuestionState}
-              onQuestionDelete={handleQuestionDelete}
-            />
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div>
       <div className="test-container">
@@ -452,11 +310,6 @@ const TestCreate = () => {
         {selectedTest && selectedTest.questions && (
           <TreeViewTestCreate data={selectedTest.questions} renderQuestions={renderQuestions} />
         )}
-        {selectedTest &&
-          selectedTest.questions &&
-          selectedTest.questions.map((question, index) => (
-            <div key={question.guid}>{DraggableQuestion(question, index)}</div>
-          ))}
       </div>
       <div ref={drop} className={`test-container ${canDrop && isOver && !isEditing ? 'drop-active' : ''}`}>
         <div>
@@ -469,21 +322,8 @@ const TestCreate = () => {
           )}
         </div>
       </div>
-      {showDuplicateModal && (
-        <Modal show={showDuplicateModal} onHide={handleHideDuplicateModal} backdrop="static" keyboard={false}>
-          <Modal.Body>
-            <FormattedMessage id="duplicateQuestionModal" />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={handleQuestion}>
-              <FormattedMessage id="Ok" />
-            </Button>
-            <Button variant="secondary" onClick={handleHideDuplicateModal}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+
+      <DuplicateTestConfirmationModal />
     </div>
   );
 };
