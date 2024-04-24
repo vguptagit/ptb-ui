@@ -52,22 +52,22 @@ export const transformCaptionToPrintFriendlyHtml = caption => {
 
 /**
  * Converts a node object to a question object.
- * @param {Object} node - The node object to convert.
+ * @param {Object} data - The node object to convert.
  * @returns {Object} A new question object with the qtiModel and itemId properties.
  */
-export const convertNodeToQuestion = (node, isDuplicate) => {
-  const itemId = isDuplicate ? Math.random().toString(36).slice(2) : node.data.guid;
+export const convertNodeToQuestion = (data, isDuplicate) => {
+  const itemId = isDuplicate ? Math.random().toString(36).slice(2) : data.guid;
   const question = {
-    qtiModel: node.data.qtiModel,
-    quizType: node.data.quizType,
-    qtixml: node.data.qtixml,
+    qtiModel: data.qtiModel,
+    quizType: data.quizType || data.metadata.quizType,
+    qtixml: data.qtixml,
     itemId,
-    data: node.data.qtixml,
+    data: data.qtixml,
     spaceLine: 0,
   };
 
   if (!isDuplicate) {
-    question.guid = node.id;
+    question.guid = data.guid;
   }
 
   const questionTemplates = CustomQuestionsService.questionTemplates(question);

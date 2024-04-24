@@ -32,7 +32,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
   const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const treeRef = useRef(null);
-  const { handleQuestionAdd, handleQuestionAddforquestionbank } = useAppContext();
+  const { handleQuestionAdd } = useAppContext();
 
   const handleDrop = newTree => {
     setTreeData(newTree);
@@ -224,14 +224,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
             parent: node.id,
             droppable: false,
             questionGuid: question.guid,
-            text: (
-              <div className="questionblock">
-                <DraggableQuestion key={question.guid} question={question} index={index} />
-                <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
-                  <i className="bi bi-plus-lg darker-icon"></i>
-                </button>
-              </div>
-            ),
+            text: <DraggableQuestion key={question.guid} question={question} index={index} />,
             type: 'question',
           }));
 
@@ -300,37 +293,55 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
     switch (question.metadata.quizType) {
       case CustomQuestionsService.MultipleChoice:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <MultipleChoice questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionsService.MultipleResponse:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <MultipleResponse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionsService.TrueFalse:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <TrueFalse questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionsService.Matching:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <Matching questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionsService.FillInBlanks:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <FillInBlanks questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );
       case CustomQuestionsService.Essay:
         return (
-          <div key={key} ref={drag}>
+          <div className="questionblock" key={key} ref={drag}>
+            <button className="questionaddforquestionbank" onClick={() => handleAdd(question)}>
+              <i className="bi bi-plus-lg darker-icon"></i>
+            </button>
             <Essay questionNode={question} questionNodeIndex={index} qtiModel={qtiModel} printView={3} />
           </div>
         );

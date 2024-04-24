@@ -54,7 +54,7 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
       }
     });
   };
-
+  console.log('rprint', treeData);
   return (
     <div className="tree-container">
       {treeData && (
