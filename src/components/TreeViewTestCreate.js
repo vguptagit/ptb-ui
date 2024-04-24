@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tree } from '@minoru/react-dnd-treeview';
 import './TreeViewTestCreate.css';
+import { useAppContext } from '../context/AppContext';
 
 const TreeViewTestCreate = ({ data, renderQuestions }) => {
+  const { dispatchEvent } = useAppContext();
   const [treeData, setTreeData] = useState([]);
+  const dragSourceIdRef = useRef(null);
 
   useEffect(() => {
     setTreeData(renderTreeNodes(data));
   }, [data, renderQuestions]);
 
+  /**
+   * Renders a tree of nodes as a list of objects with `id`, `content`, `children`, and `parent` properties.
+   * @param {Object[]} nodes - The array of nodes to render.
+   * @returns {Object[]} The rendered tree nodes.
+   */
   const renderTreeNodes = nodes => {
     return nodes.map((node, index) => ({
       id: node.itemId || node.guid || index,
@@ -21,40 +29,23 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
   /**
    * Handles the drop event when a node is dragged and dropped onto another node in the tree.
    * @param {Object[]} nodes - The array of nodes in the tree.
-   * @param {Object} dragSourceId - The id of the node being dragged.
    * @param {Object} dropTargetId - The id of the node being dropped onto.
    */
-  const handleDrop = (nodes, { dragSourceId, dropTargetId }) => {
-    const updatedTreeData = [...treeData];
-
-    // Find the indices of the drag source and drop target
-    const dragSourceIndex = updatedTreeData.findIndex(node => node.id === dragSourceId);
-    const dropTargetIndex = updatedTreeData.findIndex(node => node.id === dropTargetId);
-
-    // Get the drag source item
-    const dragSourceItem = { ...updatedTreeData[dragSourceIndex] };
-
-    // Remove the drag source item from the array
-    updatedTreeData.splice(dragSourceIndex, 1);
-
-    // Insert the drag source item at the drop target index
-    updatedTreeData.splice(dropTargetIndex, 0, dragSourceItem);
-
-    // Update the content and tree data
-    updateContent(updatedTreeData);
-    setTreeData(updatedTreeData);
-  };
-
-  const updateContent = updatedTreeData => {
-    updatedTreeData.forEach((node, index) => {
-      if (node.content.props.questionNodeIndex !== undefined) {
-        const updatedContentProps = { ...node.content.props, questionNodeIndex: index };
-        const updatedContent = React.cloneElement(node.content, updatedContentProps);
-        node.content = updatedContent;
-      }
+  const handleDrop = (nodes, { dropTargetId }) => {
+    dispatchEvent('REARRANGE_QUESTIONS', {
+      dragSourceId: dragSourceIdRef.current,
+      dropTargetId,
     });
   };
-  console.log('rprint', treeData);
+
+  /**
+   * Handles the drag start event for a drag source.
+   * @param {Object} dragSource - The drag source object that was dragged.
+   */
+  const handleDragStart = dragSource => {
+    dragSourceIdRef.current = dragSource.id;
+  };
+
   return (
     <div className="tree-container">
       {treeData && (
@@ -63,7 +54,10 @@ const TreeViewTestCreate = ({ data, renderQuestions }) => {
           rootId={0}
           render={node => <div>{node.content}</div>}
           onDrop={handleDrop}
-          canDrop={() => true}
+          canDrop={(currentTree, { dropTarget }) => {
+            return !!dropTarget;
+          }}
+          onDragStart={handleDragStart}
           sort={false}
           classes={{
             root: 'treeRoot',
