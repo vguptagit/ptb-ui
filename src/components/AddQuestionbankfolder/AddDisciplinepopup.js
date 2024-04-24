@@ -7,8 +7,6 @@ import './AddDisciplinepopup.css';
 const AddDisciplinepopup = ({ handleNext }) => {
   const [searchResults, setSearchResults] = useState([]);
 
-
-
   const {
     disciplinesData: { allDisciplines, userDisciplines, selectedDisciplines },
     dispatchEvent,
@@ -92,7 +90,7 @@ const AddDisciplinepopup = ({ handleNext }) => {
               onClick={handleNextStep}
               disabled={selectedDisciplines.length === 0}
             >
-             <FormattedMessage id="nextButtonAddDisciplinepopupText"/>
+              <FormattedMessage id="nextButtonAddDisciplinepopupText" />
             </button>
           </div>
 

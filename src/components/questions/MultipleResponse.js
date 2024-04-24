@@ -36,7 +36,7 @@ const MultipleResponse = props => {
 
   useEffect(() => {
     // Update the formData's CorrectAnswer with selected indexes
-    console.log("Updating correct Answer in useEffect " + formData.formInit);
+    console.log('Updating correct Answer in useEffect ' + formData.formInit);
     setFormData(prevFormData => ({
       ...prevFormData,
       CorrectAnswer: selectedIndexes,
@@ -64,15 +64,14 @@ const MultipleResponse = props => {
     setFormData({ ...formData, Options: tempOptions });
   };
 
-
-  const getCorrectAnsArray = (correctAnswers) => {
+  const getCorrectAnsArray = correctAnswers => {
     let correctAnswersArray = [false, false, false, false];
     correctAnswers.forEach((item, index) => {
       correctAnswersArray[item] = true;
     });
-    console.log("converted correct answers >> ", correctAnswersArray);
+    console.log('converted correct answers >> ', correctAnswersArray);
     return correctAnswersArray;
-  }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -292,8 +291,8 @@ const MultipleResponse = props => {
                     {formData.CorrectAnswer.includes(index) ? (
                       <i className="bi bi-check" style={{ color: 'green', marginRight: '2px' }}></i>
                     ) : (
-                        <span className="icon-ml"></span>
-                      )}
+                      <span className="icon-ml"></span>
+                    )}
                   </div>
                   <div className={formData.CorrectAnswer.includes(index) ? 'text-section checked' : 'text-section'}>
                     <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
@@ -335,8 +334,8 @@ const MultipleResponse = props => {
                     {formData.CorrectAnswer.includes(index) ? (
                       <i className="bi bi-check" style={{ color: 'green', marginRight: '2px' }}></i>
                     ) : (
-                        <span className="icon-ml"></span>
-                      )}
+                      <span className="icon-ml"></span>
+                    )}
                   </div>
                   <div className={formData.CorrectAnswer.includes(index) ? 'text-section checked' : 'text-section'}>
                     <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
