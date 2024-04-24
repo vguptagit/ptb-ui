@@ -181,5 +181,6 @@
   "success.FolderRearrangedSuccessfully": "Folder rearranged successfully",
   "error.FailedToRearrangeFolder": "Failed to rearrange folder",
   "error.FailedTogetRootFolder": "Failed to get root folders or folder tests",
-  "success.Folder.savedsuccessfully": "Folder saved successfully"
+  "success.Folder.savedsuccessfully": "Folder saved successfully",
+  "authenticating-user": "Authenticating user..."
 }

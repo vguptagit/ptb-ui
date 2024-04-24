@@ -265,10 +265,10 @@ const TestFolder = ({ userId }) => {
           <i className="fa-solid fa-plus"></i>&ensp;
           <FormattedMessage id="yourtests.addfolder" />
         </Button>
-        <Button className="color-black" variant="outline-light">
+        {/* <Button className="color-black" variant="outline-light">
           <i className="fa-solid fa-download"></i>&ensp;
           <FormattedMessage id="yourtests.import" />
-        </Button>
+        </Button> */}
       </div>
       {showTextBox && (
         <div className="text-box d-flex align-items-center p-2">

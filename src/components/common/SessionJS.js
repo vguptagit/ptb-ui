@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import callLoginEndpoint from '../../services/authentication';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Toastify from './Toastify';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
@@ -83,7 +84,7 @@ function SessionJS() {
                 firstname: response.givenName,
               });
 
-              if (response.loginCount === 1) {
+              if (response.loginCount == 1) {
                 navigate('/welcomescreen');
               } else {
                 navigate('/home');
@@ -92,8 +93,17 @@ function SessionJS() {
             .catch(error => {
               console.error('Error logging in:', error);
               if (error.message.response.status === 403) {
-                logout();
+                Toastify({
+                  message: 'User is not instructor.',
+                  type: 'warn',
+                });
+              } else {
+                Toastify({
+                  message: 'Something went wrong.',
+                  type: 'error',
+                });
               }
+              setInterval(logout(), 800);
             });
         } else {
           console.error('Error getting token:', status);
