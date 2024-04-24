@@ -332,7 +332,7 @@ function TreeViewQuestionFolder({
   };
 
   const handleAdd = node => {
-    handleQuestionAdd(node);
+    handleQuestionAdd(node.data);
     setSelectedQuestionTest(node.data.guid);
     console.log(node);
   };

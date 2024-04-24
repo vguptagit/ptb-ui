@@ -93,8 +93,9 @@ const AppProvider = ({ children }) => {
 
   const handleQuestionAdd = node => {
     console.log('adding question', node);
+    const test = { ...selectedTest };
 
-    const isDuplicate = selectedTest.questions.some(existingNode => existingNode.guid === node.id);
+    const isDuplicate = test.questions.some(existingNode => existingNode.guid === node.guid);
 
     if (isDuplicate) {
       setDuplicateQuestion(node);
@@ -110,11 +111,6 @@ const AppProvider = ({ children }) => {
     updatedTest.questions.push(convertNodeToQuestion(node, isDuplicate));
     setSelectedTest(updatedTest);
   };
-
-  // const handleQuestionAddforquestionbank = node => {
-  //   console.log('adding question', node);
-  //   selectedTest.questions.push(node);
-  // };
 
   const makeTestQuestion = async node => {
     try {
@@ -151,9 +147,9 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const addTest = newTest => {
-    setTests([...tests, newTest]);
-    setSelectedTest(newTest);
+  const addTest = async newTest => {
+    await setSelectedTest(newTest);
+    await setTests([...tests, newTest]);
   };
 
   const deleteTest = testSelected => {

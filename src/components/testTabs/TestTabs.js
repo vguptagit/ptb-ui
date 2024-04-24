@@ -134,7 +134,7 @@ const TestTabs = () => {
     addTest(newTest);
 
     // Select the new test
-    dispatchEvent('SELECT_TEST', newTest);
+    // dispatchEvent('SELECT_TEST', newTest);
   };
 
   const handleEditTestTab = editTest => {
