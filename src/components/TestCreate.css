@@ -134,9 +134,9 @@ a#dropdown-ellipsis {
   font-size: x-large;
 }
 
-.view-question .checked {
+/* .view-question .checked {
   margin-left: -0.5rem;
-}
+} */
 
 .fib-content-area {
   min-height: 80px;
