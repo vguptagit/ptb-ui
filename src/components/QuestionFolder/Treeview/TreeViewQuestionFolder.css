@@ -31,6 +31,10 @@
   margin-right: 10px;
 }
 
+.tree-node-text {
+  max-width: 555px;
+}
+
 .custom-drag-preview {
   font-size: 14px;
 }

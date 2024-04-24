@@ -252,9 +252,6 @@ function TreeViewQuestionFolder({
       } else {
         parentId = rootFolderGuid;
       }
-      if (dragSource.data.guid === parentId || dropTarget.parent === dragSource.id) {
-        return;
-      }
       const folderName = dragSource.text;
       const nodeToBeUpdated = {
         guid: dragSource.data.guid,
@@ -290,6 +287,9 @@ function TreeViewQuestionFolder({
         const updatedParentIndex = isChildNode ? parentIndex - 1 : parentIndex;
         const updatedTreeData = [...newTree];
         updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
+        if (childFolders.length != 0) {
+          updatedTreeData.splice(updatedParentIndex + 1, childFolders.length);
+        }
         setTreeData(updatedTreeData);
       } catch (error) {
         console.error('Error fetching child question folders:', error);
@@ -369,7 +369,7 @@ function TreeViewQuestionFolder({
                   {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
                 </span>
               )}
-              {node.text}
+              <div className="tree-node-text">{node.text}</div>
               {!node.data.isQuestion && (
                 <>
                   {selectedFolder === node.text && (
