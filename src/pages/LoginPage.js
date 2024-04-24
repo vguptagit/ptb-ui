@@ -1,56 +1,29 @@
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import User from '../entities/User.Entity';
 import { FormattedMessage } from 'react-intl';
+import Card from 'react-bootstrap/Card';
+import Spinner from 'react-bootstrap/Spinner';
 
 // Login and session logic goes here.
 const LoginPage = () => {
-  const { isAuthenticated, user, login, logout } = useAuth();
-  const navigate = useNavigate();
-  const [storedFamilyName, setStoredFamilyName] = useState('');
-  const [storedEmailAddress, setStoredEmailAddress] = useState('');
-
-  useEffect(() => {
-    const familyName = sessionStorage.getItem('familyName');
-    const emailAddress = sessionStorage.getItem('emailAddress');
-
-    setStoredFamilyName(familyName || '');
-    setStoredEmailAddress(emailAddress || '');
-  }, []);
-
-  useEffect(() => {
-    document.title = 'Pearson Sign In';
-  }, []);
-
-  const handleLogin = () => {
-    const newUser = new User();
-    newUser.name = storedFamilyName;
-    newUser.email = storedEmailAddress;
-    login(newUser);
-    navigate('/welcomescreen');
-  };
-
   return (
-    <>
-      {isAuthenticated ? (
-        <>
-          <button onClick={logout}>
-            <FormattedMessage id="logoutButtonText" />
-          </button>
-          <div>
-            <FormattedMessage id="userNameLabel" />: {user.name}
-          </div>
-          <div>
-            <FormattedMessage id="emailLabel" />: {user.email}
-          </div>
-        </>
-      ) : (
-        <button onClick={handleLogin}>
-          <FormattedMessage id="loginButtonText" />
-        </button>
-      )}
-    </>
+    <div className="authentication-message">
+      <Card>
+        <Card.Body className="login-card-container">
+          <Card.Text>
+            <FormattedMessage id="authenticating-user" />
+          </Card.Text>
+          <Card.Text className="text">
+            <div className="loading" aria-label="loading screen">
+              <Spinner className="spinner" animation="border" role="status" tabIndex="0">
+                <span className="visually-hidden">
+                  <FormattedMessage id="loading" defaultMessage="Loading..." />
+                </span>
+              </Spinner>
+            </div>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 

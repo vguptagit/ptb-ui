@@ -15,7 +15,7 @@ import Booktab from '../pages/Booktab/Booktab.js';
 
 const AppRoutes = (
   <Routes>
-    <Route path="/" element={<WelcomeScreen />} />
+    <Route path="/" element={<LoginPage />} />
     <Route path="/welcomescreen" element={<WelcomeScreen />} />
     <Route path="/" element={<FullLayout />}>
       <Route path="/" element={<Navigate to="/home" />} />

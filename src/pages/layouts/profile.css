@@ -98,3 +98,18 @@
   left: 0;
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
 }
+
+.authentication-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  padding-top: 80px;
+}
+
+.login-card-container {
+  width: 361px;
+  height: 178px;
+  box-shadow: 0px 0px 8px #c0c0c0;
+  overflow: hidden;
+}

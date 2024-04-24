@@ -122,7 +122,7 @@ function TreeView({
         const updatedTreeData = [...newTree];
         updatedTreeData.splice(updatedParentIndex + 1, 0, ...childNodes);
         if (childFolders.length != 0) {
-          updatedTreeData.splice(updatedParentIndex + 1, 1);
+          updatedTreeData.splice(updatedParentIndex + 1, childFolders.length);
         }
         setTreeData(updatedTreeData);
       } catch (error) {
