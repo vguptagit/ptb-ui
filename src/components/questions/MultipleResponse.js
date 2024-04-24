@@ -10,17 +10,33 @@ const MultipleResponse = props => {
   const [open, setOpen] = useState(false);
   const questionNode = props.questionNode;
   const questionNodeIndex = props.questionNodeIndex;
-  const initFormData = {
-    Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : '',
-    Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ['', '', '', ''],
-    CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : [],
-    Orientation: questionNode.qtiModel ? 'true' : 'false',
-  };
-  const [formData, setFormData] = useState(initFormData);
-  const [selectedIndexes, setSelectedIndexes] = useState([]);
+
+  const [formData, setFormData] = useState(() => {
+    const initFormData = {
+      Caption: questionNode.qtiModel ? questionNode.qtiModel.Caption : '',
+      Options: questionNode.qtiModel ? questionNode.qtiModel.Options : ['', '', '', ''],
+      CorrectAnswer: questionNode.qtiModel ? questionNode.qtiModel.CorrectAnswer : [],
+      Orientation: questionNode.qtiModel ? 'true' : 'false',
+    };
+    return initFormData;
+  });
+
+  const [selectedIndexes, setSelectedIndexes] = useState(() => {
+    if (formData.CorrectAnswer) {
+      let indexArray = [];
+      formData.CorrectAnswer.forEach((item, index) => {
+        if (item) {
+          indexArray.push(index);
+        }
+      });
+      formData.CorrectAnswer = indexArray;
+    }
+    return formData.CorrectAnswer;
+  });
 
   useEffect(() => {
     // Update the formData's CorrectAnswer with selected indexes
+    console.log("Updating correct Answer in useEffect " + formData.formInit);
     setFormData(prevFormData => ({
       ...prevFormData,
       CorrectAnswer: selectedIndexes,
@@ -48,12 +64,22 @@ const MultipleResponse = props => {
     setFormData({ ...formData, Options: tempOptions });
   };
 
+
+  const getCorrectAnsArray = (correctAnswers) => {
+    let correctAnswersArray = [false, false, false, false];
+    correctAnswers.forEach((item, index) => {
+      correctAnswersArray[item] = true;
+    });
+    console.log("converted correct answers >> ", correctAnswersArray);
+    return correctAnswersArray;
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
     if (questionNode) {
       questionNode.qtiModel.Caption = formData.Caption;
       questionNode.qtiModel.Options = formData.Options;
-      questionNode.qtiModel.CorrectAnswer = formData.CorrectAnswer;
+      questionNode.qtiModel.CorrectAnswer = getCorrectAnsArray(formData.CorrectAnswer);
       questionNode.qtiModel.Orientation = formData.Orientation;
       questionNode.qtiModel.EditOption = false;
       let jsonToXML = QtiService.getQtiXML(questionNode);
@@ -266,8 +292,8 @@ const MultipleResponse = props => {
                     {formData.CorrectAnswer.includes(index) ? (
                       <i className="bi bi-check" style={{ color: 'green', marginRight: '2px' }}></i>
                     ) : (
-                      <span className="icon-ml"></span>
-                    )}
+                        <span className="icon-ml"></span>
+                      )}
                   </div>
                   <div className={formData.CorrectAnswer.includes(index) ? 'text-section checked' : 'text-section'}>
                     <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
@@ -309,8 +335,8 @@ const MultipleResponse = props => {
                     {formData.CorrectAnswer.includes(index) ? (
                       <i className="bi bi-check" style={{ color: 'green', marginRight: '2px' }}></i>
                     ) : (
-                      <span className="icon-ml"></span>
-                    )}
+                        <span className="icon-ml"></span>
+                      )}
                   </div>
                   <div className={formData.CorrectAnswer.includes(index) ? 'text-section checked' : 'text-section'}>
                     <span className="ml-1">{String.fromCharCode(index + 'A'.charCodeAt(0))})</span>
