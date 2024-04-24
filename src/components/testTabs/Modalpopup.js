@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { getRootTests } from '../../services/testcreate.service';
 import { getUserTestFolders } from '../../services/testfolder.service';
 import Toastify from '../common/Toastify';
@@ -8,13 +8,14 @@ import Modalpopuplist from './Modalpopuplist';
 
 function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   console.log('shiw', show);
-  console.log('selcted title ', selectedTest?.title);
+  console.log('selcted title ', selectedTest ?.title);
   const [editFolderName, setEditFolderName] = useState('');
   const [rootFolders, setRootFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [doReload, setDoReload] = useState(false);
   const [rootFolderGuid, setRootFolderGuid] = useState('');
   const [savedFolders, setSavedFolders] = useState([]);
+  const intl = useIntl();
 
   useEffect(() => {
     document.title = 'Your Tests';
@@ -38,10 +39,14 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       })
       .catch(error => {
         console.error('Error getting root folders or folder tests:', error);
-        if (error?.message?.response?.request?.status === 409) {
+        if (error ?.message ?.response ?.request ?.status === 409) {
           Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
-          Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
+
+          Toastify({
+            message: intl.formatMessage({ id: 'error.FailedTogetRootFolder'}),
+            type: 'error'
+          });
         }
       });
   };
