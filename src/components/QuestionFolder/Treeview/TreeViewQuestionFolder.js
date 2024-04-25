@@ -377,18 +377,15 @@ function TreeViewQuestionFolder({
               {!node.data.isQuestion && (
                 <>
                   {selectedFolder === node.text && (
-                    <button className="editbutton selected" onClick={() => handleEditFolder(node.text)}>
+                    <button className="editbuttonQuestion selected" onClick={() => handleEditFolder(node.text)}>
                       <i className="bi bi-pencil-fill"></i>
                     </button>
                   )}
                   {selectedFolder !== node.text && (
-                    <button className="editbutton" onClick={() => handleEditFolder(node.text)}>
+                    <button className="editbuttonQuestion" onClick={() => handleEditFolder(node.text)}>
                       <i className="bi bi-pencil-fill"></i>
                     </button>
                   )}
-                  <button className="deletebutton" onClick={() => handleDeleteFolder(node.text)}>
-                    <i className="bi bi-trash"></i>
-                  </button>
                 </>
               )}
               {node.data.isQuestion && (

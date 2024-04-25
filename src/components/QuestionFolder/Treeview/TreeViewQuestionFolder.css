@@ -32,15 +32,14 @@
 }
 
 .tree-node-text {
-  max-width: 555px;
+  max-width: 580px;
 }
 
 .custom-drag-preview {
   font-size: 14px;
 }
 
-.editbutton,
-.deletebutton {
+.editbuttonQuestion {
   position: absolute;
   top: 1px;
   cursor: pointer;
@@ -50,21 +49,16 @@
   padding: 8px;
 }
 
-.editbutton {
-  right: 40px;
-}
-
-.deletebutton {
+.editbuttonQuestion {
   right: 2px;
 }
 
-.editbutton:hover,
-.deletebutton:hover {
+.editbuttonQuestion:hover {
   border-color: #007fa9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.editbutton.selected {
+.editbuttonQuestion.selected {
   border-color: #007fa9;
   background-color: #007fa9;
 }
