@@ -39,7 +39,7 @@ function Testing() {
             </Button>
           </div>
           <div class="col-sm">
-            <Button variant="warning" className="button-setting" onClick={() => notify('warn', 'warn message')}>
+            <Button variant="warning" className="button-setting" onClick={() => notify('warning', 'warning message')}>
               <FormattedMessage id="warningButton" defaultMessage="Warning" />
             </Button>
           </div>

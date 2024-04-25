@@ -189,7 +189,7 @@ const TestTabs = () => {
     if (!areQuestionsAvailable(test)) {
       Toastify({
         message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
-        type: 'warn',
+        type: 'warning',
       });
       return;
     }
@@ -217,7 +217,7 @@ const TestTabs = () => {
     } else if (isduplicateTest) {
       Toastify({
         message: intl.formatMessage({ id: 'warning.duplicateTest' }),
-        type: 'warn',
+        type: 'warning',
       });
     } else {
       // Proceed to save when its update or new test
@@ -225,7 +225,7 @@ const TestTabs = () => {
         // If the test title is empty or only contains whitespace, set it to a default value
         Toastify({
           message: intl.formatMessage({ id: 'warning.testNameEmpty' }),
-          type: 'warn',
+          type: 'warning',
         });
         return;
       }
@@ -442,7 +442,7 @@ const TestTabs = () => {
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
         message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
-        type: 'warn',
+        type: 'warning',
       });
       return;
     }
@@ -455,7 +455,7 @@ const TestTabs = () => {
       setShowModalExport(true);
     } else {
       Toastify({
-        type: 'warn',
+        type: 'warning',
         message: intl.formatMessage({ id: 'warning.saveTestBeforeExport' }),
       });
     }
@@ -466,7 +466,7 @@ const TestTabs = () => {
     if (!areQuestionsAvailable(selectedTest)) {
       Toastify({
         message: intl.formatMessage({ id: 'warning.noQuestionsOrNotInEditState' }),
-        type: 'warn',
+        type: 'warning',
       });
       return;
     }

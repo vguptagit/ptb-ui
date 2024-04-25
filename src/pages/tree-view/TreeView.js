@@ -52,7 +52,7 @@ function TreeView({ onDataUpdate, droppedNode, disciplines, searchTerm }) {
       const hasNodeTypes = searchableTreeData.some(node => node.type === 'node');
 
       if (!hasNodeTypes) {
-        Toastify({ message: 'User must select the books', type: 'warn' });
+        Toastify({ message: 'User must select the books', type: 'warning' });
         return;
       }
 
