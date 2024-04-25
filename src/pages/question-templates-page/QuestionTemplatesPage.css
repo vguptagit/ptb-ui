@@ -36,6 +36,7 @@ li[qstntemplate='true'] .printViewContainer .optionLabelView {
   max-width: 100% !important;
   vertical-align: inherit;
   cursor: move;
+  margin-top: 1px;
 }
 
 li[qstntemplate='true'] .matchOptionContainer {
@@ -98,6 +99,7 @@ li[qstntemplate='true'] .qti-itemBody > div.optionLabelView {
   height: 41px;
   line-height: 41px;
   font-size: 14px;
+  margin-top :2px;
 }
 
 li[qstntemplate='true'] .qti-itemBody:first-child blockquote > div.optionLabelView,
@@ -110,7 +112,9 @@ li[qstntemplate='true'][quiztype='FillInTheBlanks'] .qti-itemBody > blockquote >
   height: 41px;
   line-height: 41px;
   font-size: 14px;
+  margin-top: 2px;
 }
+
 
 li[qstntemplate='true'] .qti-itemBody > blockquote:first-child > div.optionLabelView {
   display: inline-block;
@@ -121,6 +125,7 @@ li[qstntemplate='true'] .qti-itemBody > blockquote:first-child > div.optionLabel
   height: 41px;
   line-height: 41px;
   font-size: 14px;
+  margin-top: 2px;
 }
 
 .plusIconQT {
