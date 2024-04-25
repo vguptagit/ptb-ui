@@ -17,7 +17,7 @@ import Essay from '../../questions/Essay';
 import QtiService from '../../../utils/qti-converter';
 import Loader from '../../common/loader/Loader';
 import { useAppContext } from '../../../context/AppContext';
-import {formattedMessage ,useIntl} from 'react-intl';
+import { formattedMessage, useIntl } from 'react-intl';
 
 function TreeViewQuestionFolder({
   onFolderSelect,
@@ -101,6 +101,9 @@ function TreeViewQuestionFolder({
           text: <DraggableQuestion key={question.guid} question={question} index={index} />,
           data: {
             guid: parentNode.data.guid,
+            qtiModel: question.qtiModel,
+            quizType: question.metadata.quizType,
+            qtixml: question.qtixml,
             isQuestion: true,
           },
         }));
@@ -239,9 +242,10 @@ function TreeViewQuestionFolder({
         setTreeData(updatedTreeData);
       } catch (error) {
         Toastify({
-          message: Intl.formatMessage({id :'error.Failed to move questionTest'}),
-          type: 'error' });
-          console.error('Error swapping question between folders:', error);
+          message: Intl.formatMessage({ id: 'error.Failed to move questionTest' }),
+          type: 'error',
+        });
+        console.error('Error swapping question between folders:', error);
       }
     } else {
       // Handle drag of a folder
@@ -266,7 +270,7 @@ function TreeViewQuestionFolder({
         );
         if (isDuplicate) {
           Toastify({
-            message: Intl.formatMessage({id :'error.duplicateFolderDifferentName'}),
+            message: Intl.formatMessage({ id: 'error.duplicateFolderDifferentName' }),
             type: 'error',
           });
           return;
@@ -337,7 +341,7 @@ function TreeViewQuestionFolder({
 
   const handleAdd = node => {
     handleQuestionAdd(node.data);
-    setSelectedQuestionTest(node.data.guid);
+    setSelectedQuestionTest(node.id);
     console.log(node);
   };
 
@@ -389,7 +393,7 @@ function TreeViewQuestionFolder({
               )}
               {node.data.isQuestion && (
                 <button
-                  className={`questionadd ${selectedQuestionTest === node.data.guid ? 'selected' : ''}`}
+                  className={`questionadd ${selectedQuestionTest === node.id ? 'selected' : ''}`}
                   onClick={() => handleAdd(node)}
                 >
                   <i className="bi bi-plus-lg darker-icon"></i>
