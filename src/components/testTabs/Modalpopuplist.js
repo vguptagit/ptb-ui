@@ -93,7 +93,10 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
 
-          Toastify({ message: 'Folder saved successfully', type: 'success' });
+          Toastify({
+            message: intl.formatMessage({ id: 'success.Folder.savedsuccessfully' }),
+            type: 'success'
+        });
         }
 
         setFolderName('');
@@ -109,7 +112,11 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
             type: 'error',
           });
         } else {
-          Toastify({ message: 'Failed to save folder', type: 'error' });
+
+          Toastify({
+            message: intl.formatMessage({ id: 'error.Failed.to.savefolder' }),
+             type: 'error'
+            });
         }
       }
     }
@@ -128,9 +135,10 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
       await updateTestFolder(changedNode);
 
       Toastify({
-        message: 'Folder rearranged successfully',
+        message: intl.formatMessage({ id: 'success.Folder.rearranged.successfully' }),
         type: 'success',
       });
+
     } catch (error) {
       console.error('Error rearranging folder:', error);
       if (error?.message?.response?.request?.status === 409) {
@@ -139,8 +147,9 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
           type: 'error',
         });
       } else {
+
         Toastify({
-          message: 'Failed to rearrange folder',
+          message: intl.formatMessage({ id: 'error.Failed.to.rearrangefolder' }),
           type: 'error',
         });
       }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { getRootTests } from '../../services/testcreate.service';
 import { getUserTestFolders } from '../../services/testfolder.service';
 import Toastify from '../common/Toastify';
@@ -18,6 +18,7 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   const [rootFolderGuid, setRootFolderGuid] = useState('');
   const [savedFolders, setSavedFolders] = useState([]);
   const [saving, setSaving] = useState(false); // State variable to track saving process
+  const intl = useIntl();
 
   useEffect(() => {
     document.title = 'Your Tests';
@@ -38,7 +39,10 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         if (error?.message?.response?.request?.status === 409) {
           Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
-          Toastify({ message: 'Failed to get root folders or folder tests', type: 'error' });
+          Toastify({
+            message: intl.formatMessage({ id: 'error.Failed.root.FoldersOrFolderTests' }),
+             type: 'error'
+            });
         }
       });
   };
@@ -76,7 +80,12 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         setSaving(false);
       } catch (error) {
         console.error('Error saving:', error);
-        Toastify({ message: 'Failed to save', type: 'error' });
+
+        Toastify({
+          message: intl.formatMessage({ id: 'error.Failed.to.save' }),
+           type: 'error'
+          });
+
         setSaving(false);
       }
     } else {
@@ -85,7 +94,12 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
         setSaving(false);
       } catch (error) {
         console.error('Error saving:', error);
-        Toastify({ message: 'Failed to save', type: 'error' });
+
+        Toastify({
+          message: intl.formatMessage({ id: 'errorfailedtosave' }),
+           type: 'error'
+           });
+
         setSaving(false);
       }
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage , useIntl } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import { saveTestFolder } from '../services/testfolder.service';
 import Toastify from './common/Toastify';
@@ -33,6 +33,8 @@ const TestFolder = ({ userId }) => {
   const [bookTitles, setBookTitles] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState();
+  const intl = useIntl();
+
   // async function fetchRootFolderGuid(){
   //   try{
   //     const rootFolder = await getRootTests();
@@ -109,10 +111,12 @@ const TestFolder = ({ userId }) => {
     if (folderName.trim() !== '') {
       try {
         if (folderNameLower === migratedTestsLower) {
+
           Toastify({
-            message: "Folder name 'Migrated Tests' cannot be used.",
+            message: intl.formatMessage({ id: 'error.Folder.name.MigratedTests' }),
             type: 'error',
           });
+
           return;
         }
         const maxSequence = savedFolders.reduce((max, folder) => {
@@ -136,7 +140,12 @@ const TestFolder = ({ userId }) => {
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
-          Toastify({ message: 'Folder updated successfully', type: 'success' });
+
+          Toastify({
+            message: intl.formatMessage({ id: 'success.folder.updated.successfully' }),
+            type: 'success'
+          });
+
           const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         } else {
@@ -151,7 +160,12 @@ const TestFolder = ({ userId }) => {
           setSavedFolders(updatedFolders);
           localStorage.setItem('savedFolders', JSON.stringify(updatedFolders));
           setUpdateKey(updateKey + 1);
-          Toastify({ message: 'Folder saved successfully', type: 'success' });
+
+          Toastify({
+            message: intl.formatMessage({ id: 'success.folder.savedsuccessfully' }),
+            type: 'success'
+          });
+
           const newHeight = `calc(81vh - 85px)`;
           setHeight(newHeight);
         }
@@ -164,12 +178,16 @@ const TestFolder = ({ userId }) => {
       } catch (error) {
         console.error('Error saving folder:', error);
         if (error?.message?.response?.request?.status === 409) {
+
           Toastify({
             message: error.message.response.data.message,
             type: 'error',
           });
+
         } else {
-          Toastify({ message: 'Failed to save folder', type: 'error' });
+          Toastify({
+            message: intl.formatMessage({ id: 'error.failedtosavefolder' }),
+            type: 'error' });
         }
       }
     }
@@ -186,7 +204,12 @@ const TestFolder = ({ userId }) => {
   const onNodeUpdate = async changedNode => {
     try {
       await updateTestFolder(changedNode);
-      Toastify({ message: 'Folder rearranged successfully', type: 'success' });
+
+      Toastify({
+        message: intl.formatMessage({ id: 'success.Folderrearrangedsuccessfully' }),
+         type: 'success'
+    });
+
     } catch (error) {
       console.error('Error rearranging folder:', error);
       if (error?.message?.response?.request?.status === 409) {
@@ -196,7 +219,10 @@ const TestFolder = ({ userId }) => {
         });
         fetchUserFolders();
       } else {
-        Toastify({ message: 'Failed to rearrange folder', type: 'error' });
+
+        Toastify({
+          message: intl.formatMessage({ id: 'error.failedtorearrangefolder' }),
+           type: 'error' });
       }
     }
   };
@@ -204,7 +230,12 @@ const TestFolder = ({ userId }) => {
   const onNodeUpdateTest = async (sourceId, destinationId, testId) => {
     try {
       await updateTest((sourceId = sourceId === 0 ? rootFolderGuid : sourceId), destinationId, testId);
-      Toastify({ message: 'Test rearranged successfully', type: 'success' });
+
+      Toastify({
+        message: intl.formatMessage({ id: 'success.Testrearranged.successfully' }),
+        type: 'success'
+      });
+
     } catch (error) {
       console.error('Error rearranging test:', error);
       if (error?.message?.response?.request?.status === 409) {
@@ -213,8 +244,13 @@ const TestFolder = ({ userId }) => {
           type: 'error',
         });
         fetchUserFolders();
-      } else {
-        Toastify({ message: 'Failed to rearrange test', type: 'error' });
+      }
+
+      else {
+        Toastify({
+          message: intl.formatMessage({ id: 'error.failed.To.rearrangetest' }),
+           type: 'error'
+          });
       }
     }
   };

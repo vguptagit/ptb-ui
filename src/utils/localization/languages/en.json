@@ -182,5 +182,22 @@
   "error.FailedToRearrangeFolder": "Failed to rearrange folder",
   "error.FailedTogetRootFolder": "Failed to get root folders or folder tests",
   "success.Folder.savedsuccessfully": "Folder saved successfully",
-  "authenticating-user": "Authenticating user..."
+  "authenticating-user": "Authenticating user...",
+  "error.Failed.to.savefolder": "Failed to save folder",
+  "success.Folder.rearranged.successfully": "Folder rearranged successfully",
+  "error.Failed.to.rearrangefolder": "Failed to rearrange folder",
+  "error.Failed.root.FoldersOrFolderTests": "Failed to get root folders or folder tests",
+  "error.Failed.to.save": "Failed to save",
+  "errorfailedtosave": "Failed to save",
+  "error.Folder.name.MigratedTests" : "Folder name 'Migrated Tests' cannot be used",
+  "success.folder.updated.successfully" : "Folder updated successfully",
+  "success.folder.savedsuccessfully" : " Folder saved successfully ",
+  "error.failedtosavefolder" : " Failed to save folder ",
+  "success.Folderrearrangedsuccessfully" : " Folder rearranged successfully ",
+  "error.failedtorearrangefolder" : " Failed to rearrange folder ",
+  "success.Testrearranged.successfully" : "Test rearranged successfully",
+  "error.failed.To.rearrangetest" : "Failed to rearrange test",
+  "error.Error.fetchingtest" : " Error while fetching test",
+  "error.Error.whileFetchingtest" : "Error while fetching test",
+  "error.FailedtogetRootfoldersorFoldertests" : "Failed to get root folders or folder tests"
 }
