@@ -3,11 +3,13 @@ import callLoginEndpoint from '../../services/authentication';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Toastify from './Toastify';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function SessionJS() {
   const url = process.env.REACT_APP_AUTH_Success_URL;
   const loginurl = process.env.REACT_APP_AUTH_Login_URL;
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const { setUserDetails, logout } = useAuth();
 
@@ -94,16 +96,17 @@ function SessionJS() {
               console.error('Error logging in:', error);
               if (error.message.response.status === 403) {
                 Toastify({
-                  message: 'User is not instructor.',
-                  type: 'warn',
+                  message: intl.formatMessage({ id: 'warning.UserisInvalid' }),
+                  type: 'warning',
                 });
+                setInterval(logout(), 800);
               } else {
                 Toastify({
-                  message: 'Something went wrong.',
+                  message: intl.formatMessage({ id: 'error.somethingWentWrongLogin' }),
                   type: 'error',
                 });
+                setInterval(logout(), 800);
               }
-              setInterval(logout(), 800);
             });
         } else {
           console.error('Error getting token:', status);

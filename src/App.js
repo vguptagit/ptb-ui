@@ -14,18 +14,18 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <>
-      <AuthProvider>
-        <SessionJS />
-        <AppProvider>
-          <IntlProvider locale={initLocale} messages={localeMessages}>
+      <IntlProvider locale={initLocale} messages={localeMessages}>
+        <AuthProvider>
+          <SessionJS />
+          <AppProvider>
             <DndProvider backend={MultiBackend} options={getBackendOptions()}>
               <div className="App">
                 <div>{AppRoutes}</div>
               </div>
             </DndProvider>
-          </IntlProvider>
-        </AppProvider>
-      </AuthProvider>
+          </AppProvider>
+        </AuthProvider>
+      </IntlProvider>
       <ToastContainer />
     </>
   );
