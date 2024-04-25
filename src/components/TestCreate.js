@@ -14,6 +14,7 @@ import CustomQuestionsService from '../services/CustomQuestionsService';
 import TreeViewTestCreate from './TreeViewTestCreate';
 import DuplicateTestConfirmationModal from './modals/DuplicateTestConfirmationModal';
 import { getQuestionFromDto, transformQuestionTemplateToQuestion } from '../utils/questions-utils';
+import { sanitizeTitle } from '../utils/test-utils';
 import './TestCreate.css';
 import './_tables.css';
 
@@ -32,11 +33,7 @@ const TestCreate = () => {
   }, [selectedTest]);
 
   const handleTitleChange = event => {
-    let newTitle = event.target.value;
-
-    // Allow all special characters, numbers, alphabets, and spaces
-    newTitle = newTitle.slice(0, 255); // Limiting the length to 255 characters as per your code
-    newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
+    let newTitle = sanitizeTitle(event.target.value);
 
     setTabTitle(newTitle);
     setIsEditing(true);

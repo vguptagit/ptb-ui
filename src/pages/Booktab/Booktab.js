@@ -252,10 +252,10 @@ const Booktab = () => {
               <FormattedMessage id="booktab.steps.1" />
             </h2>
             <button className="booktab btn btn-secondary" onClick={handleBack}>
-              <FormattedMessage id ="backBooktabtext" defaultMessage="Back"/>
+              <FormattedMessage id="backBooktabtext" defaultMessage="Back" />
             </button>
             <button className="booktab btn btn-primary" disabled={selectedBooks.length === 0} onClick={handleNext}>
-              <FormattedMessage id ="nextBooktabText"/>
+              <FormattedMessage id="nextBooktabText" />
             </button>
           </div>
           <div className="booktab d-flex justify-content-between">

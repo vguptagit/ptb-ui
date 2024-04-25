@@ -52,7 +52,7 @@ function Testing() {
         <div className="row">
           <div class="col-sm" style={{ padding: '10px' }}>
             <Button variant="primary" onClick={handleConfirmation}>
-            <FormattedMessage id="confirmationTesting" />
+              <FormattedMessage id="confirmationTesting" />
             </Button>
             {confirmShow && (
               <Confirmation

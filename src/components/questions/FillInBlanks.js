@@ -274,9 +274,9 @@ const FillInBlanks = props => {
               </Button>
             </div>
             <div className="fib-answers-area mt-3 clear-both">
-            <b>
-              <FormattedMessage id="correctAnswerFillInBlanks" defaultMessage="Correct Answer" />
-            </b>
+              <b>
+                <FormattedMessage id="correctAnswerFillInBlanks" defaultMessage="Correct Answer" />
+              </b>
               <div id="fbAnswerContainer" className="mb-1 mt-3 d-flex flex-wrap">
                 {formData.EditableCorrectAnswers.map((item, index) => {
                   return (

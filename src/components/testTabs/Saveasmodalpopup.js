@@ -7,6 +7,7 @@ import Toastify from '../common/Toastify';
 import Modalpopuplist from './Modalpopuplist';
 import { useAppContext } from '../../context/AppContext';
 import Loader from '../common/loader/Loader';
+import { sanitizeTitle } from '../../utils/test-utils';
 
 function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
   const { dispatchEvent } = useAppContext();
@@ -48,16 +49,15 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
     }
   }, [selectedTest, show]);
 
+  /**
+   * Handles changes to the title input field, ensuring it only contains allowed characters and is within the maximum length.
+   *
+   * @param {Event} event The event triggered by the input field change.
+   */
   const handleTitleChange = event => {
-    let newTitle = event.target.value;
+    let newTitle = sanitizeTitle(event.target.value);
 
-    newTitle = newTitle.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>\s]/g, '');
-
-    if (newTitle.length > 255) {
-      newTitle = newTitle.slice(0, 255);
-    }
-    newTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-
+    // Update the state with the new title value
     setTestTitle(newTitle);
   };
 
