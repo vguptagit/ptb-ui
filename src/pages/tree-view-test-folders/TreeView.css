@@ -231,3 +231,7 @@
   margin-top: 5px;
   cursor: pointer;
 }
+
+.test-name {
+  max-width: 580px;
+}

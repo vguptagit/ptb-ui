@@ -286,7 +286,7 @@ function TreeView({
                 {isOpen ? <i className="fa fa-caret-down"></i> : <i className="fa fa-caret-right"></i>}
               </span>
             )}
-            {node.text}
+            <div className="test-name">{node.text}</div>
             {selectedFolder === node.text && node.droppable && (
               <button className="editbutton selected" onClick={() => handleEditFolder(node.text)}>
                 <i className="bi bi-pencil-fill"></i>
