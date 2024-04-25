@@ -97,12 +97,12 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
       Toastify({
         message: intl.formatMessage({ id: 'booksAndDiscipline' }),
         type: 'success',
-      }).showToast();
+      });
     } catch (error) {
       Toastify({
         message: intl.formatMessage({ id: 'errorSavingBooksAndDiscipline' }),
         type: 'error',
-      }).showToast();
+      });
     }
   };
 

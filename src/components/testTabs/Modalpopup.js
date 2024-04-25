@@ -7,8 +7,6 @@ import Toastify from '../common/Toastify';
 import Modalpopuplist from './Modalpopuplist';
 
 function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
-  console.log('shiw', show);
-  console.log('selcted title ', selectedTest ?.title);
   const [editFolderName, setEditFolderName] = useState('');
   const [rootFolders, setRootFolders] = useState([]);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -39,13 +37,12 @@ function Modalpopup({ show, handleCloseModal, handleSave, selectedTest }) {
       })
       .catch(error => {
         console.error('Error getting root folders or folder tests:', error);
-        if (error ?.message ?.response ?.request ?.status === 409) {
+        if (error?.message?.response?.request?.status === 409) {
           Toastify({ message: error.message.response.data.message, type: 'error' });
         } else {
-
           Toastify({
-            message: intl.formatMessage({ id: 'error.FailedTogetRootFolder'}),
-            type: 'error'
+            message: intl.formatMessage({ id: 'error.FailedTogetRootFolder' }),
+            type: 'error',
           });
         }
       });

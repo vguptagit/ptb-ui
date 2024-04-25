@@ -75,11 +75,9 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
 
           Toastify({
             message: intl.formatMessage({ id: 'warning.testNameEmpty' }),
-            type: 'success'
+            type: 'success',
           });
-        }
-
-        else {
+        } else {
           const newFolderData = {
             parentId: rootFolderGuid,
             sequence: newSequence,
@@ -105,13 +103,12 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
         fetchUserFolders();
       } catch (error) {
         console.error('Error saving folder:', error);
-        if (error ?.message ?.response ?.request ?.status === 409) {
+        if (error?.message?.response?.request?.status === 409) {
           Toastify({
             message: error.message.response.data.message,
             type: 'error',
           });
         } else {
-
           Toastify({ message: 'Failed to save folder', type: 'error' });
         }
       }
@@ -131,23 +128,20 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
       await updateTestFolder(changedNode);
 
       Toastify({
-
-        message: 'Folder rearranged successfully', type: 'success'
+        message: 'Folder rearranged successfully',
+        type: 'success',
       });
-    }
-
-    catch (error) {
+    } catch (error) {
       console.error('Error rearranging folder:', error);
-      if (error ?.message ?.response ?.request ?.status === 409) {
+      if (error?.message?.response?.request?.status === 409) {
         Toastify({
           message: error.message.response.data.message,
           type: 'error',
         });
-      }
-
-      else {
+      } else {
         Toastify({
-          message: 'Failed to rearrange folder', type: 'error'
+          message: 'Failed to rearrange folder',
+          type: 'error',
         });
       }
     }
@@ -190,7 +184,7 @@ const Modalpopuplist = ({ doReload, rootFolders, setDoReload, selectedFolderId, 
             onFolderSelect={handleFolderSelect}
             onNodeUpdate={onNodeUpdate}
             rootFolderGuid={rootFolderGuid}
-          // selectedFolderGuid={selectedFolderGuid}
+            // selectedFolderGuid={selectedFolderGuid}
           />
         )}
       </div>
