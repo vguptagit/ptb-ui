@@ -94,3 +94,33 @@ export const transformQuestionTemplateToQuestion = questionTemplate => {
 
   return { ...questionTemplate, qtiModel, itemId };
 };
+
+/**
+ * Rearranges the questions array by moving the question with the given dragSourceId to the position of the question with the given dropTargetId.
+ *
+ * @param {Object[]} questions - The array of questions to be rearranged.
+ * @param {string} dragSourceId - The guid or itemId of the question to be moved.
+ * @param {string} dropTargetId - The guid or itemId of the question that the dragSource question will be moved to.
+ *
+ * @returns {Object[]} The rearranged questions array.
+ */
+export const rearrangeQuestions = (questions, dragSourceId, dropTargetId) => {
+  // Find the indices of the drag source and drop target
+  const dragSourceIndex = questions.findIndex(
+    question => question.guid === dragSourceId || question.itemId === dragSourceId
+  );
+  const dropTargetIndex = questions.findIndex(
+    question => question.guid === dropTargetId || question.itemId === dropTargetId
+  );
+
+  // Get the drag source item
+  const dragSourceItem = { ...questions[dragSourceIndex] };
+
+  // Remove the drag source item from the array
+  questions.splice(dragSourceIndex, 1);
+
+  // Insert the drag source item at the drop target index
+  questions.splice(dropTargetIndex, 0, dragSourceItem);
+
+  return questions;
+};

@@ -181,8 +181,7 @@ const TestTabs = () => {
   };
 
   const handleSave = async (e, activeTest, folderId, newTestName) => {
-    let testItems = tests.filter(item => item.id === activeTest.id);
-    const test = testItems[0]; // This always exists
+    const test = { ...activeTest };
     let buttonName = e.target.name;
     // 1. Check for duplicate test
     // 2. Save questions

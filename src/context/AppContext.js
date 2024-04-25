@@ -5,7 +5,7 @@ import { getTestQuestions } from '../services/testcreate.service';
 import Toastify from '../components/common/Toastify';
 import { getUserTestFolders } from '../services/testfolder.service';
 import { getFolderTests, getRootTests } from '../services/testcreate.service';
-import { convertNodeToQuestion, getQuestionFromDto } from '../utils/questions-utils';
+import { convertNodeToQuestion, getQuestionFromDto, rearrangeQuestions } from '../utils/questions-utils';
 
 const AppContext = createContext({
   tests: [],
@@ -209,6 +209,15 @@ const AppProvider = ({ children }) => {
         insertQuestionAtEnd(duplicateQuestion, true);
         setShowDuplicateTestConfimationModal(false);
         return;
+      case 'REARRANGE_QUESTIONS': {
+        const { dragSourceId, dropTargetId } = payload;
+        const questions = [...selectedTest.questions];
+
+        const updatedQuestions = rearrangeQuestions(questions, dragSourceId, dropTargetId);
+
+        setSelectedTest(current => ({ ...current, questions: updatedQuestions }));
+        return;
+      }
 
       case 'UPDATE_DISCIPLINES_DATA':
         setDisciplinesData({ ...disciplinesData, ...payload });
