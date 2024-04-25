@@ -78,7 +78,7 @@ const AddBookspopup = ({ handleBack, handleSave }) => {
 
       Toastify({
         message: error.message,
-        type: 'warn',
+        type: 'warning',
       });
     } finally {
       setLoading(false);
