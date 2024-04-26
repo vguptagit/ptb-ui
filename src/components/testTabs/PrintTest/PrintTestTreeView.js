@@ -7,7 +7,7 @@ const PrintTestTreeView = React.forwardRef(({ savedQuestions, addStudentName, is
   return (
     <div className={`p-3`} ref={ref} id="element">
       {addStudentName && (
-        <div className="">
+        <div className="student-name">
           <span>
             <FormattedMessage id="studentNamePrintTestTreeView" />
           </span>

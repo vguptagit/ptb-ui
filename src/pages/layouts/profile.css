@@ -1,9 +1,11 @@
 .profile-dropdown .dropdown-menu.show {
   min-width: 220px;
-  margin-left: -99px;
   line-height: 1em;
   border-radius: 5px;
   padding-bottom: 0px;
+  position: fixed !important;
+  top: 48px;
+  left: 1007px;
 }
 
 .profile-dropdown .profile-name {

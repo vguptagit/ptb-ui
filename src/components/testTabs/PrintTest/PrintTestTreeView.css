@@ -1,29 +1,12 @@
-#print-popup-container .tick {
-  display: none !important;
-}
-#print-popup-container .specFont {
-  margin-right: 10px;
-}
-#print-popup-container .qti-p {
-  display: inline-block;
-  padding: 0px 0px 0px 16px;
-  max-width: 100% !important;
-  vertical-align: inherit;
-  cursor: pointer;
-  width: 100%;
-}
-
-#print-popup-container .radio {
-  margin-left: 20px;
-}
-
 #print-popup-container .matchOptionContainer {
-  display: flex !important;
-  justify-content: space-between !important;
+  display: flex;
+  flex-wrap: wrap !important;
 }
 
-.left-side-margin {
-  margin-left: 60px;
+#print-popup-container .matchingOption {
+  width: 250px;
+  margin-right: 157px;
+  margin-bottom: 10px;
 }
 
 #print-popup-container {
@@ -31,43 +14,47 @@
 }
 
 #print-popup-container .rightMatchingOption {
-  position: relative;
-  top: 9px;
-  right: 52px;
-}
-
-#print-popup-container .qti-blockquote {
-  margin-bottom: -20px;
+  margin-top: 0px;
+  width: 250px;
+  margin-bottom: 10px;
+  white-space: normal;
 }
 
 #print-popup-container .qti-blockquote.matching {
-  bottom: 20px;
-  left: 20px;
-  margin-bottom: -35px;
-}
-
-#print-popup-container .__marker__ {
-  position: relative;
-  left: 11px;
-}
-
-#print-popup-container .checkbox {
-  position: relative;
-  left: 20px;
-}
-
-#print-preview-questions {
-  position: relative;
-  bottom: 40px;
+  width: 657px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+  min-height: 28px;
 }
 
 .student-name {
   position: relative;
-  left: 16px;
+  margin-bottom: 10px;
+  top: 14px;
+}
+
+#print-popup-container .indChar,
+.matchIndex,
+.mOptionLabel,
+.matchOptionImage {
+  display: inline;
+}
+
+#print-popup-container .optionLabelView {
+  left: 10px;
   margin-bottom: 10px;
 }
 
 .qti-choiceInteraction {
   margin-top: 5px;
   margin-bottom: 7px;
+}
+
+#print-popup-container .qti-assessmentItem {
+  margin-right: 0px;
+}
+
+#print-popup-container .tick {
+  display: none !important;
 }
